@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-namespace Catsland {
+namespace Catslandx {
   [RequireComponent(typeof(Rigidbody2D))]
   [RequireComponent(typeof(Animator))]
   public class CharacterController2D : MonoBehaviour, IRelayPointCatcher{

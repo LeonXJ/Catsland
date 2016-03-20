@@ -21,6 +21,7 @@ public class RelayPoint :MonoBehaviour {
   }
 
   void OnTriggerEnter(Collider other) {
+    /*
     CharacterController characterController = other.GetComponent<CharacterController>();
     if (characterController != null && characterController.supportRelay) {
       if (characterController.setRelay(this)) {
@@ -29,9 +30,11 @@ public class RelayPoint :MonoBehaviour {
         }
       }
     }
+    */
   }
 
   void OnTriggerExit(Collider other) {
+    /*
     CharacterController characterController = other.GetComponent<CharacterController>();
     if(characterController != null && characterController.supportRelay) {
       characterController.cancelRelay(this);
@@ -39,5 +42,6 @@ public class RelayPoint :MonoBehaviour {
         spriteRender.color = DISABLE_COLOR;
       }
     }
+    */
   }
 }

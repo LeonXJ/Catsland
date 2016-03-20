@@ -98,8 +98,10 @@ GameObject:
   - 61: {fileID: 54279421}
   - 58: {fileID: 54279420}
   - 50: {fileID: 54279422}
+  - 114: {fileID: 54279423}
+  - 114: {fileID: 54279424}
   m_Layer: 0
-  m_Name: figure_0
+  m_Name: dummy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -161,7 +163,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.943, y: 0.298, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 327582368}
   m_Father: {fileID: 0}
   m_RootOrder: 2
 --- !u!58 &54279420
@@ -209,6 +212,39 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &54279423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 54279416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db3e7e20f68993949886dccea02b2bb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundCheckPosition: {fileID: 327582368}
+  groundedRadius: 0.1
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  supportRelay: 1
+  maxDashSpeed: 4
+  maxGroundSpeed: 3
+  dashSlowdown: 0
+  minDashSpeed: 1
+  jumpForce: 10
+--- !u!114 &54279424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 54279416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aae6d4a87574dcd48acd50b0c473abbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &283508438
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,6 +306,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
+--- !u!1 &327582367
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 327582368}
+  m_Layer: 0
+  m_Name: ground_check_point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &327582368
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 327582367}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.161, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 54279419}
+  m_RootOrder: 0
 --- !u!1 &902948164
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,7 +487,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1694892919}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.638, y: -1.196, z: -9.96875}
+  m_LocalPosition: {x: -0.638, y: -1.196, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

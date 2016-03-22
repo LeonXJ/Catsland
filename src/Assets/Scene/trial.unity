@@ -211,7 +211,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &54279423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,7 +233,7 @@ MonoBehaviour:
   maxGroundSpeed: 3
   dashSlowdown: 0
   minDashSpeed: 1
-  jumpForce: 10
+  jumpForce: 200
 --- !u!114 &54279424
 MonoBehaviour:
   m_ObjectHideFlags: 0

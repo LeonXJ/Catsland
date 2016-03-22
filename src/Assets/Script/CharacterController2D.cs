@@ -114,7 +114,7 @@ namespace Catslandx {
       animator.SetFloat("speed", Mathf.Abs(rigidbody.velocity.x));
       animator.SetBool("isGrounded", isGrounded);
       animator.SetBool("isDash", isDash);
-      animator.SetBool("faceRight", isFaceRight);
+      //animator.SetBool("faceRight", isFaceRight);
       if (isFaceRight) {
         transform.localScale = Vector3.one;
       } else {

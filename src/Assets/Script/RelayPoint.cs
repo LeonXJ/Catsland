@@ -1,47 +1,44 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(Collider))]
-public class RelayPoint :MonoBehaviour {
 
-  private Collider collider;
-  private SpriteRenderer spriteRender;
+namespace Catslandx {
+  [RequireComponent(typeof(Collider2D))]
+  public class RelayPoint : MonoBehaviour {
 
-  private static Color ENABLE_COLOR = Color.red;
-  private static Color DISABLE_COLOR = Color.white;
-  // Use this for initialization
-  void Start() {
-    collider = GetComponent<Collider>();
-    spriteRender = GetComponent<SpriteRenderer>();
-  }
+    private SpriteRenderer spriteRender;
 
-  // Update is called once per frame
-  void Update() {
+    private static Color ENABLE_COLOR = Color.red;
+    private static Color DISABLE_COLOR = Color.white;
+    // Use this for initialization
+    void Start() {
+      spriteRender = GetComponent<SpriteRenderer>();
+    }
 
-  }
+    // Update is called once per frame
+    void Update() {
 
-  void OnTriggerEnter(Collider other) {
-    /*
-    CharacterController characterController = other.GetComponent<CharacterController>();
-    if (characterController != null && characterController.supportRelay) {
-      if (characterController.setRelay(this)) {
-        if (spriteRender != null) {
-          spriteRender.color = ENABLE_COLOR;
+    }
+
+    void OnTriggerEnter2D(Collider2D other) {
+      IRelayPointCatcher catcher = other.GetComponent<IRelayPointCatcher>();
+      if(catcher != null && catcher.isSupportRelay()) {
+        if(catcher.setRelayPoint(this)) {
+          if(spriteRender != null) {
+            spriteRender.color = ENABLE_COLOR;
+          }
         }
       }
     }
-    */
-  }
 
-  void OnTriggerExit(Collider other) {
-    /*
-    CharacterController characterController = other.GetComponent<CharacterController>();
-    if(characterController != null && characterController.supportRelay) {
-      characterController.cancelRelay(this);
-      if (spriteRender != null) {
-        spriteRender.color = DISABLE_COLOR;
+    void OnTriggerExit2D(Collider2D other) {
+      IRelayPointCatcher catcher = other.GetComponent<IRelayPointCatcher>();
+      if(catcher != null && catcher.isSupportRelay()) {
+        catcher.cancelRelayPoint(this);
+        if (spriteRender != null) {
+          spriteRender.color = DISABLE_COLOR;
+        }
       }
     }
-    */
   }
 }

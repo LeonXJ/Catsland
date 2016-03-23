@@ -7,7 +7,6 @@ namespace Catslandx {
   [RequireComponent(typeof(Animator))]
   public class CharacterController2D : MonoBehaviour, IRelayPointCatcher{
 
-    public Transform groundCheckPosition;
     public float groundedRadius;
     public LayerMask whatIsGround;
     public bool supportRelay = true;
@@ -24,15 +23,18 @@ namespace Catslandx {
 
     private Rigidbody2D rigidbody;
     private Animator animator;
+    private CircleCollider2D circleCollider2D;
 
     private void Awake() {
       rigidbody = GetComponent<Rigidbody2D>();
       animator = GetComponent<Animator>();
+      circleCollider2D = GetComponent<CircleCollider2D>();
     }
 
     private void FixedUpdate() {
       isGrounded = false;
-      Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheckPosition.position, groundedRadius, whatIsGround);
+      Collider2D[] colliders = Physics2D.OverlapCircleAll(
+        circleCollider2D.transform.position + new Vector3(0.0f, -circleCollider2D.radius, 0.0f), groundedRadius, whatIsGround);
       for (int i=0; i<colliders.Length; ++i) {
         if (colliders[i].gameObject != gameObject) {
           isGrounded = true;
@@ -40,7 +42,7 @@ namespace Catslandx {
       }
     }
 
-    public void move(float move, bool crouch, bool jump, bool dash) {
+    public void move(float move, bool jump, bool dash, bool crouch) {
       if (isDash) {
         handleDashMovement(move, jump, dash);
       } else {
@@ -59,7 +61,7 @@ namespace Catslandx {
         handleAirboneMovement(move, jump, dash);
       } else {
         rigidbody.velocity = Vector2.Lerp(rigidbody.velocity, Vector2.zero, dashSlowdown);
-        if (rigidbody.velocity.x < minDashSpeed) {
+        if (Mathf.Abs(rigidbody.velocity.x) < minDashSpeed) {
           rigidbody.gravityScale = 1.0f;
           isDash = false;
         }
@@ -70,7 +72,8 @@ namespace Catslandx {
       // not support crouch so far
       rigidbody.velocity = new Vector2(move * maxGroundSpeed, rigidbody.velocity.y);
       if (jump) {
-        rigidbody.AddForce(new Vector2(0.0f, jumpForce));
+        //rigidbody.AddForce(new Vector2(0.0f, jumpForce));
+        rigidbody.velocity = new Vector2(move * maxGroundSpeed, jumpForce);
       }
     }
 
@@ -82,8 +85,8 @@ namespace Catslandx {
             rigidbody.gravityScale = 1.0f;
             isDash = false;
           }
-          rigidbody.velocity = new Vector2(move * maxGroundSpeed, rigidbody.velocity.y);
-          rigidbody.AddForce(new Vector2(0.0f, jumpForce));
+          rigidbody.velocity = new Vector2(move * maxGroundSpeed, jumpForce);
+          //rigidbody.AddForce(new Vector2(0.0f, jumpForce));
         } else if (dash) {
           // enter dash
           rigidbody.gravityScale = 0.0f;
@@ -114,11 +117,10 @@ namespace Catslandx {
       animator.SetFloat("speed", Mathf.Abs(rigidbody.velocity.x));
       animator.SetBool("isGrounded", isGrounded);
       animator.SetBool("isDash", isDash);
-      //animator.SetBool("faceRight", isFaceRight);
-      if (isFaceRight) {
-        transform.localScale = Vector3.one;
-      } else {
-        transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+      if ((isFaceRight && transform.localScale.x < 0.0f)
+        || (!isFaceRight && transform.localScale.x > 0.0f)) {
+        transform.localScale = new Vector3(
+          -transform.localScale.x, transform.localScale.y, transform.localScale.z);
       }
     }
 
@@ -131,6 +133,10 @@ namespace Catslandx {
 	void Update () {
 	
 	}
+
+    public bool isSupportRelay() {
+      return supportRelay;
+    }
 
     public bool setRelayPoint(RelayPoint relayPoint) {
       this.relayPoint = relayPoint;

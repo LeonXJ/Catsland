@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 124cace96a5f6ea49a472f9262e06f6e
-timeCreated: 1458429998
+timeCreated: 1459099793
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -12,6 +12,11 @@ TextureImporter:
     21300010: figure_5
     21300012: figure_6
     21300014: figure_7
+    21300016: crouch_still
+    21300018: crouch_walk0
+    21300020: crouch_walk1
+    21300022: crouch_walk2
+    21300024: crouch_walk3
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -142,6 +147,61 @@ TextureImporter:
         y: 14
         width: 55
         height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: crouch_still
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 0
+        width: 20
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: crouch_walk0
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 0
+        width: 20
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: crouch_walk1
+      rect:
+        serializedVersion: 2
+        x: 254
+        y: 0
+        width: 16
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: crouch_walk2
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 0
+        width: 20
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: crouch_walk3
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 0
+        width: 16
+        height: 36
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

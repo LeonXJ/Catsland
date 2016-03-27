@@ -15,20 +15,24 @@ namespace Catslandx {
     public float dashSlowdown = 0.05f;
     public float minDashSpeed = 1.0f;
     public float jumpForce = 1.0f;
+    public float maxCrouchSpeed = 1.0f;
 
     private bool isGrounded;
     private bool isDash;
+    private bool isCrouch;
     private RelayPoint relayPoint;
     private bool isFaceRight = true;
 
     private Rigidbody2D rigidbody;
     private Animator animator;
     private CircleCollider2D circleCollider2D;
+    private BoxCollider2D boxCollider2D;
 
     private void Awake() {
       rigidbody = GetComponent<Rigidbody2D>();
       animator = GetComponent<Animator>();
       circleCollider2D = GetComponent<CircleCollider2D>();
+      boxCollider2D = GetComponent<BoxCollider2D>();
     }
 
     private void FixedUpdate() {
@@ -69,15 +73,19 @@ namespace Catslandx {
     }
 
     private void handleGroundedMovement(float move, bool crouch, bool jump) {
-      // not support crouch so far
-      rigidbody.velocity = new Vector2(move * maxGroundSpeed, rigidbody.velocity.y);
-      if (jump) {
-        //rigidbody.AddForce(new Vector2(0.0f, jumpForce));
-        rigidbody.velocity = new Vector2(move * maxGroundSpeed, jumpForce);
+      if (isHeadOnCeiling()) {
+        crouch = true;
+      }
+      isCrouch = crouch;
+      float maxSpeed = crouch ? maxCrouchSpeed : maxGroundSpeed;
+      rigidbody.velocity = new Vector2(move * maxSpeed, rigidbody.velocity.y);
+      if (jump && !crouch) {
+        rigidbody.velocity = new Vector2(move * maxSpeed, jumpForce);
       }
     }
 
     private void handleAirboneMovement(float move, bool jump, bool dash) {
+      isCrouch = false;
       if (supportRelay && relayPoint != null) {
         if (jump) {
           if (isDash) {
@@ -117,11 +125,27 @@ namespace Catslandx {
       animator.SetFloat("speed", Mathf.Abs(rigidbody.velocity.x));
       animator.SetBool("isGrounded", isGrounded);
       animator.SetBool("isDash", isDash);
+      animator.SetBool("isCrouch", isCrouch);
       if ((isFaceRight && transform.localScale.x < 0.0f)
         || (!isFaceRight && transform.localScale.x > 0.0f)) {
         transform.localScale = new Vector3(
           -transform.localScale.x, transform.localScale.y, transform.localScale.z);
       }
+    }
+
+    private bool isHeadOnCeiling() {
+      bool hitCeiling = false;
+
+      Collider2D[] colliders = Physics2D.OverlapCircleAll(
+        boxCollider2D.transform.position + new Vector3(0.0f, boxCollider2D.size.y / 2.0f, 0.0f),
+        groundedRadius, whatIsGround);
+
+      for(int i = 0; i < colliders.Length; ++i) {
+        if(colliders[i].gameObject != gameObject) {
+          hitCeiling = true;
+        }
+      }
+      return hitCeiling;
     }
 
 	// Use this for initialization

@@ -24,8 +24,9 @@ namespace Catslandx {
 
     private void FixedUpdate() {
       float h = Input.GetAxis("Horizontal");
+      bool crouch = Input.GetAxis("Vertical") < -0.01f;
       
-      characterController.move(h, jump, dash, false);
+      characterController.move(h, jump, dash, crouch);
       
       jump = false;
       dash = false;

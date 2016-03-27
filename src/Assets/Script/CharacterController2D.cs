@@ -16,12 +16,14 @@ namespace Catslandx {
     public float minDashSpeed = 1.0f;
     public float jumpForce = 1.0f;
     public float maxCrouchSpeed = 1.0f;
+    public float dizzyDuration = 2.0f;
 
     private bool isGrounded;
     private bool isDash;
     private bool isCrouch;
     private RelayPoint relayPoint;
     private bool isFaceRight = true;
+    private float dizzyTimeLeft = 0.0f;
 
     private Rigidbody2D rigidbody;
     private Animator animator;
@@ -44,16 +46,31 @@ namespace Catslandx {
           isGrounded = true;
         }
       }
+      if (dizzyTimeLeft > 0.0f) {
+        dizzyTimeLeft -= Time.fixedDeltaTime;
+      }
+    }
+
+    public void getHurt(int hurtPoint) {
+      if(!isDash) {
+        dizzyTimeLeft = dizzyDuration;
+      }
+    }
+
+    public bool isDizzy() {
+      return dizzyTimeLeft > 0.0f;
     }
 
     public void move(float move, bool jump, bool dash, bool crouch) {
-      if (isDash) {
-        handleDashMovement(move, jump, dash);
-      } else {
-        if (isGrounded) {
-          handleGroundedMovement(move, crouch, jump);
+      if(!isDizzy()) {
+        if(isDash) {
+          handleDashMovement(move, jump, dash);
         } else {
-          handleAirboneMovement(move, jump, dash);
+          if(isGrounded) {
+            handleGroundedMovement(move, crouch, jump);
+          } else {
+            handleAirboneMovement(move, jump, dash);
+          }
         }
       }
       updateOrientation(move);

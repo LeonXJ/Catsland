@@ -29,12 +29,14 @@ namespace Catslandx {
     private Animator animator;
     private CircleCollider2D circleCollider2D;
     private BoxCollider2D boxCollider2D;
+    private CharacterVulnerable characterVulnerable;
 
     private void Awake() {
       rigidbody = GetComponent<Rigidbody2D>();
       animator = GetComponent<Animator>();
       circleCollider2D = GetComponent<CircleCollider2D>();
       boxCollider2D = GetComponent<BoxCollider2D>();
+      characterVulnerable = GetComponent<CharacterVulnerable>();
     }
 
     private void FixedUpdate() {
@@ -83,9 +85,24 @@ namespace Catslandx {
       } else {
         rigidbody.velocity = Vector2.Lerp(rigidbody.velocity, Vector2.zero, dashSlowdown);
         if (Mathf.Abs(rigidbody.velocity.x) < minDashSpeed) {
-          rigidbody.gravityScale = 1.0f;
-          isDash = false;
+          exitDash();
         }
+      }
+    }
+
+    private void enterDash() {
+      isDash = true;
+      rigidbody.gravityScale = 0.0f;
+      if(characterVulnerable != null) {
+        characterVulnerable.setCanGetHurt(false);
+      }
+    }
+
+    private void exitDash() {
+      isDash = false;
+      rigidbody.gravityScale = 1.0f;
+      if (characterVulnerable != null) {
+        characterVulnerable.setCanGetHurt(true);
       }
     }
 
@@ -107,15 +124,13 @@ namespace Catslandx {
         if (jump) {
           if (isDash) {
             // exit dash
-            rigidbody.gravityScale = 1.0f;
-            isDash = false;
+            exitDash();
           }
           rigidbody.velocity = new Vector2(move * maxGroundSpeed, jumpForce);
           //rigidbody.AddForce(new Vector2(0.0f, jumpForce));
         } else if (dash) {
           // enter dash
-          rigidbody.gravityScale = 0.0f;
-          isDash = true;
+          enterDash();
           // decide the dash direction
           float dashHorizontalSpeed = maxDashSpeed;
           if (move > 0.0f) {

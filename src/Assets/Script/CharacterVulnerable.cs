@@ -12,7 +12,11 @@ namespace Catslandx {
     private Rigidbody2D rigidbody2D;
     private CharacterController2D characterController;
 
-    public bool canGetHurt() {
+    public void setCanGetHurt(bool canGetHurt) {
+      isCanGetHurt = canGetHurt;
+    } 
+
+    public bool getCanGetHurt() {
       return isCanGetHurt;
     }
 

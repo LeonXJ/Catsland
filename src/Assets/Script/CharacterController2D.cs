@@ -17,6 +17,7 @@ namespace Catslandx {
     public float jumpForce = 1.0f;
     public float maxCrouchSpeed = 1.0f;
     public float dizzyDuration = 2.0f;
+    public float airAdjustmentScale = 0.5f;
 
     private bool isGrounded;
     private bool isDash;
@@ -127,7 +128,7 @@ namespace Catslandx {
             exitDash();
           }
           rigidbody.velocity = new Vector2(move * maxGroundSpeed, jumpForce);
-          //rigidbody.AddForce(new Vector2(0.0f, jumpForce));
+          return;
         } else if (dash) {
           // enter dash
           enterDash();
@@ -141,8 +142,11 @@ namespace Catslandx {
             dashHorizontalSpeed = isFaceRight ? maxDashSpeed : -maxDashSpeed;
           }
           rigidbody.velocity = new Vector2(dashHorizontalSpeed, 0.0f);
+          return;
         }
       }
+      // normal air adjustment
+      rigidbody.position += Vector2.right * move * airAdjustmentScale * Time.deltaTime;
     }
 
     private void updateOrientation(float move) {

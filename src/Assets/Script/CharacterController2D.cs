@@ -18,6 +18,7 @@ namespace Catslandx {
     public float maxCrouchSpeed = 1.0f;
     public float dizzyDuration = 2.0f;
     public float airAdjustmentScale = 0.5f;
+    public float jumpHorizontalSpeedDump = 0.5f;
 
     private bool isGrounded;
     private bool isDash;
@@ -115,7 +116,7 @@ namespace Catslandx {
       float maxSpeed = crouch ? maxCrouchSpeed : maxGroundSpeed;
       rigidbody.velocity = new Vector2(move * maxSpeed, rigidbody.velocity.y);
       if (jump && !crouch) {
-        rigidbody.velocity = new Vector2(move * maxSpeed, jumpForce);
+        rigidbody.velocity = new Vector2(move * maxSpeed * jumpHorizontalSpeedDump, jumpForce);
       }
     }
 

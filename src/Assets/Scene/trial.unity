@@ -235,13 +235,14 @@ MonoBehaviour:
     m_Bits: 4294967039
   supportRelay: 1
   maxDashSpeed: 5
-  maxGroundSpeed: 2
+  maxGroundSpeed: 1.6
   dashSlowdown: 0.05
   minDashSpeed: 1
   jumpForce: 4
   maxCrouchSpeed: 1
   dizzyDuration: 0.5
   airAdjustmentScale: 1
+  jumpHorizontalSpeedDump: 0.8
 --- !u!114 &54279424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,7 +430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 54279419}
   damping: 0.2
-  lookAheadFactor: 1
+  lookAheadFactor: 0.1
   lookAheadReturnSpeed: 0.5
   lookAheadMoveThreshold: 0.1
 --- !u!1 &1226882883
@@ -638,6 +639,14 @@ Prefab:
     - target: {fileID: 11402144, guid: a72a0f8c20b600e4ba076c721fd965bb, type: 2}
       propertyPath: airAdjustmentScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11402144, guid: a72a0f8c20b600e4ba076c721fd965bb, type: 2}
+      propertyPath: maxGroundSpeed
+      value: 1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 11402144, guid: a72a0f8c20b600e4ba076c721fd965bb, type: 2}
+      propertyPath: jumpHorizontalSpeedDump
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a72a0f8c20b600e4ba076c721fd965bb, type: 2}

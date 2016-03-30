@@ -65,6 +65,10 @@ namespace Catslandx {
       return dizzyTimeLeft > 0.0f;
     }
 
+    public bool getIsFaceRight() {
+      return isFaceRight;
+    }
+
     public void move(float move, bool jump, bool dash, bool crouch) {
       if(!isDizzy()) {
         if(isDash) {
@@ -78,7 +82,7 @@ namespace Catslandx {
         }
       }
       updateOrientation(move);
-      updateAnimation();
+
     }
 
     private void handleDashMovement(float move, bool jump, bool dash) {
@@ -192,8 +196,8 @@ namespace Catslandx {
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
+      updateAnimation();
+    }
 
     public bool isSupportRelay() {
       return supportRelay;

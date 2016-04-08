@@ -10,7 +10,7 @@ namespace Catslandx {
     public bool isCanGetRepel = true;
 
     private Rigidbody2D rigidbody2D;
-    private CharacterController2D characterController;
+    private ICharacterController2D characterController;
 
     public void setCanGetHurt(bool canGetHurt) {
       isCanGetHurt = canGetHurt;
@@ -36,7 +36,7 @@ namespace Catslandx {
     // Use this for initialization
     void Start() {
       rigidbody2D = GetComponent<Rigidbody2D>();
-      characterController = GetComponent<CharacterController2D>();
+      characterController = GetComponent<ICharacterController2D>();
     }
 
     // Update is called once per frame

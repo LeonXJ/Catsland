@@ -2,14 +2,14 @@
 using System.Collections;
 
 namespace Catslandx {
-  [RequireComponent(typeof(CharacterController2D))]
+  [RequireComponent(typeof(ICharacterController2D))]
   public class UserController :MonoBehaviour {
-    private CharacterController2D characterController;
+    private ICharacterController2D characterController;
     private bool jump = false;
     private bool dash = false;
     // Use this for initialization
     void Start() {
-      characterController = GetComponent<CharacterController2D>();
+      characterController = GetComponent<ICharacterController2D>();
     }
 
     // Update is called once per frame

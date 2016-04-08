@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 4e6497fcdc556544a8a3c980b02f3649
-timeCreated: 1460005148
+timeCreated: 1460093948
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -63,8 +63,8 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 27
-        height: 16
+        width: 29
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -72,10 +72,10 @@ TextureImporter:
     - name: crouch-ninja_1
       rect:
         serializedVersion: 2
-        x: 27
+        x: 29
         y: 0
-        width: 27
-        height: 16
+        width: 29
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -83,10 +83,10 @@ TextureImporter:
     - name: crouch-ninja_2
       rect:
         serializedVersion: 2
-        x: 54
+        x: 58
         y: 0
-        width: 27
-        height: 16
+        width: 29
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -94,10 +94,10 @@ TextureImporter:
     - name: crouch-ninja_3
       rect:
         serializedVersion: 2
-        x: 81
+        x: 87
         y: 0
-        width: 27
-        height: 16
+        width: 29
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -105,10 +105,10 @@ TextureImporter:
     - name: crouch-ninja_4
       rect:
         serializedVersion: 2
-        x: 108
+        x: 116
         y: 0
-        width: 27
-        height: 16
+        width: 29
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -116,10 +116,10 @@ TextureImporter:
     - name: crouch-ninja_5
       rect:
         serializedVersion: 2
-        x: 135
+        x: 145
         y: 0
-        width: 27
-        height: 16
+        width: 29
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -127,10 +127,10 @@ TextureImporter:
     - name: crouch-ninja_6
       rect:
         serializedVersion: 2
-        x: 162
+        x: 174
         y: 0
-        width: 27
-        height: 16
+        width: 29
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -138,10 +138,10 @@ TextureImporter:
     - name: crouch-ninja_7
       rect:
         serializedVersion: 2
-        x: 189
+        x: 203
         y: 0
-        width: 27
-        height: 16
+        width: 29
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: ae69707eac89a584aa0a7fc8d8ad56de
-timeCreated: 1460005271
+timeCreated: 1460094052
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -67,8 +67,8 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 20
-        height: 33
+        width: 22
+        height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -76,10 +76,10 @@ TextureImporter:
     - name: run-ninja_1
       rect:
         serializedVersion: 2
-        x: 20
+        x: 22
         y: 0
-        width: 20
-        height: 33
+        width: 22
+        height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -87,10 +87,10 @@ TextureImporter:
     - name: run-ninja_2
       rect:
         serializedVersion: 2
-        x: 40
+        x: 44
         y: 0
-        width: 20
-        height: 33
+        width: 22
+        height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -98,10 +98,10 @@ TextureImporter:
     - name: run-ninja_3
       rect:
         serializedVersion: 2
-        x: 60
+        x: 66
         y: 0
-        width: 19
-        height: 33
+        width: 22
+        height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -109,10 +109,10 @@ TextureImporter:
     - name: run-ninja_4
       rect:
         serializedVersion: 2
-        x: 79
+        x: 88
         y: 0
-        width: 21
-        height: 33
+        width: 22
+        height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -120,10 +120,10 @@ TextureImporter:
     - name: run-ninja_5
       rect:
         serializedVersion: 2
-        x: 100
+        x: 110
         y: 0
-        width: 20
-        height: 33
+        width: 22
+        height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,10 +131,10 @@ TextureImporter:
     - name: run-ninja_6
       rect:
         serializedVersion: 2
-        x: 120
+        x: 132
         y: 0
-        width: 20
-        height: 33
+        width: 22
+        height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -142,10 +142,10 @@ TextureImporter:
     - name: run-ninja_7
       rect:
         serializedVersion: 2
-        x: 140
+        x: 154
         y: 0
-        width: 20
-        height: 33
+        width: 22
+        height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,10 +153,10 @@ TextureImporter:
     - name: run-ninja_8
       rect:
         serializedVersion: 2
-        x: 160
+        x: 176
         y: 0
-        width: 20
-        height: 33
+        width: 22
+        height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -164,10 +164,10 @@ TextureImporter:
     - name: run-ninja_9
       rect:
         serializedVersion: 2
-        x: 180
+        x: 198
         y: 0
-        width: 19
-        height: 33
+        width: 22
+        height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -175,10 +175,10 @@ TextureImporter:
     - name: run-ninja_10
       rect:
         serializedVersion: 2
-        x: 199
+        x: 220
         y: 0
-        width: 21
-        height: 33
+        width: 22
+        height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -186,10 +186,10 @@ TextureImporter:
     - name: run-ninja_11
       rect:
         serializedVersion: 2
-        x: 220
+        x: 242
         y: 0
-        width: 20
-        height: 33
+        width: 22
+        height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

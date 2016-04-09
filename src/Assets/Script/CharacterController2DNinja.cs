@@ -34,6 +34,10 @@ namespace Catslandx {
     private BoxCollider2D boxCollider2D;
     private CharacterVulnerable characterVulnerable;
 
+    public float runSoundRippleCycleSecond = 0.7f;
+    public float runVolume = 1.0f;
+    private float currentSoundRippleCycleSecond = 0.0f;
+
     private void Awake() {
       rigidbody = GetComponent<Rigidbody2D>();
       animator = GetComponent<Animator>();
@@ -53,6 +57,7 @@ namespace Catslandx {
       if (dizzyTimeLeft > 0.0f) {
         dizzyTimeLeft -= Time.fixedDeltaTime;
       }
+      updateSound();
     }
 
     public void getHurt(int hurtPoint) {
@@ -218,6 +223,21 @@ namespace Catslandx {
         return true;
       } else {
         return false;
+      }
+    }
+
+    private void updateSound() {
+      if (isGrounded) {
+        if(!isCrouch && Mathf.Abs(rigidbody.velocity.x) > 0.1f) {
+          currentSoundRippleCycleSecond -= Time.deltaTime;
+          if (currentSoundRippleCycleSecond < 0.0f) {
+            SoundRipple.createRipple(
+              runVolume,
+              boxCollider2D.transform.position + new Vector3(0.0f, -boxCollider2D.size.y * transform.localScale.y / 2.0f, 0.0f),
+              gameObject);
+            currentSoundRippleCycleSecond += runSoundRippleCycleSecond;
+          }
+        }
       }
     }
   }

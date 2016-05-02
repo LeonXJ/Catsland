@@ -35,7 +35,8 @@ namespace Catslandx {
     private CharacterVulnerable characterVulnerable;
 
     public float runSoundRippleCycleSecond = 0.7f;
-    public float runVolume = 1.0f;
+    public float runVolume = 0.8f;
+    public float landVolume = 1.0f;
     private float currentSoundRippleCycleSecond = 0.0f;
 
     private void Awake() {
@@ -46,18 +47,28 @@ namespace Catslandx {
     }
 
     private void FixedUpdate() {
-      isGrounded = false;
+      bool tempIsGrounded = false;
       Collider2D[] colliders = Physics2D.OverlapCircleAll(
         groundCheckPoint.position, groundedRadius, whatIsGround);
       for (int i=0; i<colliders.Length; ++i) {
         if (colliders[i].gameObject != gameObject) {
-          isGrounded = true;
+          tempIsGrounded = true;
+          break;
         }
       }
+      if (tempIsGrounded && !isGrounded) {
+        land();
+      } else if (!tempIsGrounded && isGrounded) {
+        takeOff();
+      }
+      isGrounded = tempIsGrounded;
+
+
+
       if (dizzyTimeLeft > 0.0f) {
         dizzyTimeLeft -= Time.fixedDeltaTime;
       }
-      updateSound();
+      updateLoopSound();
     }
 
     public void getHurt(int hurtPoint) {
@@ -226,7 +237,20 @@ namespace Catslandx {
       }
     }
 
-    private void updateSound() {
+    private void land() {
+      // make a sound
+      SoundRipple.createRipple(
+        landVolume,
+        boxCollider2D.transform.position + new Vector3(0.0f, -boxCollider2D.size.y * transform.localScale.y / 2.0f, 0.0f),
+        gameObject);
+      currentSoundRippleCycleSecond += runSoundRippleCycleSecond;
+    }
+
+    private void takeOff() {
+
+    }
+
+    private void updateLoopSound() {
       if (isGrounded) {
         if(!isCrouch && Mathf.Abs(rigidbody.velocity.x) > 0.1f) {
           currentSoundRippleCycleSecond -= Time.deltaTime;

@@ -11,8 +11,8 @@ namespace Catslandx {
 
     public static bool isAudioSystemFrozen = false;
     public static float transmitSpeedSecond = 1.8f;
-    public static float attenuationSecond = 0.4f;
-    public static LayerMask soundReceiverLayer;
+    public static float attenuationSecond = 0.8f;
+    public static LayerMask soundReceiverLayer = LayerMask.GetMask("SoundReceiver");
     public static Color rippleColor = Color.blue;
     public static int segments = 32;
 
@@ -29,8 +29,7 @@ namespace Catslandx {
     void Start () {
       lineRenderer = gameObject.AddComponent(typeof(LineRenderer)) as LineRenderer;
       lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
-      lineRenderer.SetColors(rippleColor, rippleColor);
-      lineRenderer.SetWidth(0.1f, 0.1f);
+      lineRenderer.SetWidth(0.01f, 0.01f);
       lineRenderer.SetVertexCount(segments + 1);
     }
 
@@ -70,7 +69,7 @@ namespace Catslandx {
       GameObject ripple = new GameObject("Sound Ripple");
       ripple.transform.position = position;
       SoundRipple soundRipple = ripple.AddComponent(typeof(SoundRipple)) as SoundRipple;
-      soundRipple.initiate(volume, new SoundPackageInformation(soundMaker));
+      soundRipple.initiate(volume, new SoundPackageInformation(position, soundMaker));
       return soundRipple;  
     }
 
@@ -81,7 +80,9 @@ namespace Catslandx {
         float x = position.x + radius * Mathf.Cos(angle);
         float y = position.y + radius * Mathf.Sin(angle);
         lineRenderer.SetPosition(segment, new Vector3(x, y, 0.0f));
-      } 
+      }
+      rippleColor.a = currentVolume;
+      lineRenderer.SetColors(rippleColor, rippleColor);
     }
   }
 }

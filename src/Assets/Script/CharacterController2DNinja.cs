@@ -21,6 +21,7 @@ namespace Catslandx {
     public float jumpHorizontalSpeedDump = 0.5f;
     public Transform standHeadCheckPoint;
     public Transform groundCheckPoint;
+    public ParticleSystem particalSystem;
 
     private bool isGrounded;
     private bool isDash;
@@ -28,6 +29,7 @@ namespace Catslandx {
     private RelayPoint relayPoint;
     private bool isFaceRight = true;
     private float dizzyTimeLeft = 0.0f;
+    private GameObject groundObject;
 
     private Rigidbody2D rigidbody;
     private Animator animator;
@@ -53,6 +55,7 @@ namespace Catslandx {
       for (int i=0; i<colliders.Length; ++i) {
         if (colliders[i].gameObject != gameObject) {
           tempIsGrounded = true;
+          groundObject = colliders[i].gameObject;
           break;
         }
       }
@@ -60,15 +63,32 @@ namespace Catslandx {
         land();
       } else if (!tempIsGrounded && isGrounded) {
         takeOff();
+        groundObject = null;
       }
       isGrounded = tempIsGrounded;
-
-
-
       if (dizzyTimeLeft > 0.0f) {
         dizzyTimeLeft -= Time.fixedDeltaTime;
       }
       updateLoopSound();
+      updateParticle();
+    }
+  
+    private void updateParticle() {
+      if (particalSystem != null) {
+        if (isGrounded && groundObject != null) {
+          GroundMaterial groundMaterial = groundObject.GetComponent<GroundMaterial>();
+          if (groundMaterial != null) {
+            particalSystem.enableEmission = true;
+            particalSystem.startColor = groundMaterial.dustColor;
+            ParticleSystem.EmissionModule emission =  particalSystem.emission;
+            emission.rate = new ParticleSystem.MinMaxCurve(groundMaterial.dustRate);
+            emission.SetBursts(new ParticleSystem.Burst[] {
+              new ParticleSystem.Burst(0.0f, groundMaterial.minDustBurst, groundMaterial.maxDustBurst) });
+            return;
+          }
+        }
+        particalSystem.enableEmission = false;
+      }
     }
 
     public void getHurt(int hurtPoint) {
@@ -243,6 +263,9 @@ namespace Catslandx {
         landVolume,
         boxCollider2D.transform.position + new Vector3(0.0f, -boxCollider2D.size.y * transform.localScale.y / 2.0f, 0.0f),
         gameObject);
+      if (particalSystem != null) {
+        particalSystem.Play();
+      }
       currentSoundRippleCycleSecond += runSoundRippleCycleSecond;
     }
 
@@ -259,6 +282,9 @@ namespace Catslandx {
               runVolume,
               boxCollider2D.transform.position + new Vector3(0.0f, -boxCollider2D.size.y * transform.localScale.y / 2.0f, 0.0f),
               gameObject);
+            if (particalSystem != null) {
+              particalSystem.Play();
+            }
             currentSoundRippleCycleSecond += runSoundRippleCycleSecond;
           }
         }

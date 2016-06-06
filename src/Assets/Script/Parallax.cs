@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Catsland {
+namespace Catslandx {
   public class Parallax : MonoBehaviour {
     
     public Vector2 scale = Vector2.one;

@@ -1,10 +1,11 @@
 fileFormatVersion: 2
 guid: 308d3f52545575b488faf51bbf39c3cb
-timeCreated: 1464240411
+timeCreated: 1465149599
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: light_32x32group_0
+    21300002: light_32x32group_1
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -58,6 +59,17 @@ TextureImporter:
         y: 7
         width: 18
         height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: light_32x32group_1
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 3
+        width: 29
+        height: 27
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

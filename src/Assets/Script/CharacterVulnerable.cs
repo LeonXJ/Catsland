@@ -24,7 +24,7 @@ namespace Catslandx {
       if (isCanGetHurt) {
         life -= hurtPoint;
         // get repel
-        if (isCanGetRepel && rigidbody2D != null) {
+        if (isCanGetRepel && rigidbody2D != null && characterController != null) {
           characterController.getHurt(hurtPoint);
           //rigidbody2D.AddForce(repelForce);
           rigidbody2D.velocity = repelForce;

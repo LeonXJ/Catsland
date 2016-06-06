@@ -19,6 +19,7 @@ namespace Catslandx {
     public float dizzyDuration = 2.0f;
     public float airAdjustmentScale = 0.5f;
     public float jumpHorizontalSpeedDump = 0.5f;
+    public float relayTimeScale = 0.3f;
     public Transform standHeadCheckPoint;
     public Transform groundCheckPoint;
     public ParticleSystem particalSystem;
@@ -168,6 +169,7 @@ namespace Catslandx {
             // exit dash
             exitDash();
           }
+          relayPoint.jumpOnRelay(gameObject);
           rigidbody.velocity = new Vector2(move * maxGroundSpeed, jumpForce);
           return;
         } else if (dash) {
@@ -182,6 +184,7 @@ namespace Catslandx {
           } else {
             dashHorizontalSpeed = isFaceRight ? maxDashSpeed : -maxDashSpeed;
           }
+          relayPoint.dashOnRelay(gameObject);
           rigidbody.velocity = new Vector2(dashHorizontalSpeed, 0.0f);
           return;
         }
@@ -245,12 +248,14 @@ namespace Catslandx {
 
     public bool setRelayPoint(RelayPoint relayPoint) {
       this.relayPoint = relayPoint;
+      Time.timeScale = relayTimeScale;
       return true;
     }
 
     public bool cancelRelayPoint(RelayPoint relayPoint) {
       if (this.relayPoint == relayPoint) {
         this.relayPoint = null;
+        Time.timeScale = 1.0f;
         return true;
       } else {
         return false;

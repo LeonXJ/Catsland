@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e847f0eb7bf18114890b6879ee0e3171
-timeCreated: 1462148915
+timeCreated: 1465191816
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -11,6 +11,9 @@ TextureImporter:
     21300008: greengrass_d
     21300010: greengrass_dr
     21300012: greengrass_solid
+    21300014: leaf
+    21300016: greengrass_16x16group_0
+    21300018: greengrass_16x16group_1
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -130,6 +133,39 @@ TextureImporter:
         y: 1
         width: 16
         height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: leaf
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 2
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: greengrass_16x16group_0
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 2
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: greengrass_16x16group_1
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 2
+        width: 13
+        height: 13
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

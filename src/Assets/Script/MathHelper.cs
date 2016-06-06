@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Catsland {
+namespace Catslandx {
   public class MathHelper {
 
     public static Vector2 multiple(Vector2 a, Vector2 b) {

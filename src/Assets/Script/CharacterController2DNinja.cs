@@ -23,10 +23,12 @@ namespace Catslandx {
     public Transform standHeadCheckPoint;
     public Transform groundCheckPoint;
     public ParticleSystem particalSystem;
+    public GameObject deathLightPrefab;
 
     private bool isGrounded;
     private bool isDash;
     private bool isCrouch;
+    private bool isDead;
     private RelayPoint relayPoint;
     private bool isFaceRight = true;
     private float dizzyTimeLeft = 0.0f;
@@ -41,12 +43,14 @@ namespace Catslandx {
     public float runVolume = 0.8f;
     public float landVolume = 1.0f;
     private float currentSoundRippleCycleSecond = 0.0f;
+    private IRespawn respawn;
 
     private void Awake() {
       rigidbody = GetComponent<Rigidbody2D>();
       animator = GetComponent<Animator>();
       boxCollider2D = GetComponent<BoxCollider2D>();
       characterVulnerable = GetComponent<CharacterVulnerable>();
+      respawn = GetComponent<IRespawn>();
     }
 
     private void FixedUpdate() {
@@ -218,6 +222,23 @@ namespace Catslandx {
       }
     }
     
+    public void die() {
+      if(!isDead) {
+        if(deathLightPrefab != null) {
+          GameObject deathLight = Instantiate(deathLightPrefab);
+          deathLight.transform.position = transform.position;
+          ParticleSystem particle = deathLight.GetComponent<ParticleSystem>();
+          if(particle != null) {
+            particle.Play();
+          }
+        }
+        if(respawn != null) {
+          respawn.doRespawn();
+        }
+        isDead = true;
+      }
+    }
+
     private bool isHeadOnCeiling() {
       bool hitCeiling = false;
 
@@ -234,9 +255,9 @@ namespace Catslandx {
 
 	// Use this for initialization
 	void Start () {
-	
+      reset();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
       updateAnimation();
@@ -294,6 +315,10 @@ namespace Catslandx {
           }
         }
       }
+    }
+
+    public void reset() {
+      isDead = false;
     }
   }
 }

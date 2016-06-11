@@ -5,6 +5,7 @@ namespace Catslandx {
   public interface IVulnerable {
     bool getCanGetHurt();
     int getHurt(int hurtPoint, Vector2 repelForce);
+    void respawn();
   }
 }
 

@@ -159,10 +159,12 @@ namespace Catslandx {
       }
       isCrouch = crouch;
       float maxSpeed = crouch ? maxCrouchSpeed : maxGroundSpeed;
-      rigidbody.velocity = new Vector2(move * maxSpeed, rigidbody.velocity.y);
+      float horizontalSpeed = move * maxSpeed;
+      float verticalTargetSpeed = rigidbody.velocity.y;
       if (jump && !crouch) {
-        rigidbody.velocity = new Vector2(move * maxSpeed * jumpHorizontalSpeedDump, jumpForce);
+        verticalTargetSpeed = jumpForce;
       }
+      rigidbody.velocity = new Vector2(horizontalSpeed, verticalTargetSpeed);
     }
 
     private void handleAirboneMovement(float move, bool jump, bool dash) {
@@ -194,7 +196,9 @@ namespace Catslandx {
         }
       }
       // normal air adjustment
-      rigidbody.position += Vector2.right * move * airAdjustmentScale * Time.deltaTime;
+
+      //rigidbody.position += Vector2.right * move * airAdjustmentScale * Time.deltaTime;
+      rigidbody.velocity = new Vector2(move * maxGroundSpeed, rigidbody.velocity.y);
     }
 
     private void updateOrientation(float move) {

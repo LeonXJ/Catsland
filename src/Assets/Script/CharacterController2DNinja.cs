@@ -110,7 +110,7 @@ namespace Catslandx {
       return isFaceRight;
     }
 
-    public void move(float move, bool jump, bool dash, bool crouch) {
+    public void move(Vector2 move, bool jump, bool dash, bool crouch) {
       if(!isDizzy()) {
         if(isDash) {
           handleDashMovement(move, jump, dash);
@@ -126,12 +126,12 @@ namespace Catslandx {
 
     }
 
-    private void handleDashMovement(float move, bool jump, bool dash) {
+    private void handleDashMovement(Vector2 move, bool jump, bool dash) {
       if (supportRelay && relayPoint != null && (jump || dash)) {
         handleAirboneMovement(move, jump, dash);
       } else {
         rigidbody.velocity = Vector2.Lerp(rigidbody.velocity, Vector2.zero, dashSlowdown);
-        if (Mathf.Abs(rigidbody.velocity.x) < minDashSpeed) {
+		if (rigidbody.velocity.sqrMagnitude < minDashSpeed * minDashSpeed) {
           exitDash();
         }
       }
@@ -153,7 +153,7 @@ namespace Catslandx {
       }
     }
 
-    private void handleGroundedMovement(float move, bool crouch, bool jump) {
+    private void handleGroundedMovement(Vector2 move, bool crouch, bool jump) {
       if (isHeadOnCeiling()) {
         crouch = true;
       }
@@ -167,7 +167,7 @@ namespace Catslandx {
       rigidbody.velocity = new Vector2(horizontalSpeed, verticalTargetSpeed);
     }
 
-    private void handleAirboneMovement(float move, bool jump, bool dash) {
+    private void handleAirboneMovement(Vector2 move, bool jump, bool dash) {
       isCrouch = false;
       if (supportRelay && relayPoint != null) {
         if (jump) {
@@ -176,38 +176,45 @@ namespace Catslandx {
             exitDash();
           }
           relayPoint.jumpOnRelay(gameObject);
-          rigidbody.velocity = new Vector2(move * maxGroundSpeed, jumpForce);
+          rigidbody.velocity = new Vector2(move.x * maxGroundSpeed, jumpForce);
           return;
         } else if (dash) {
           // enter dash
           enterDash();
           // decide the dash direction
-          float dashHorizontalSpeed = maxDashSpeed;
-          if (move > 0.0f) {
-            dashHorizontalSpeed = maxDashSpeed;
-          } else if (move < 0.0f) {
-            dashHorizontalSpeed = -maxDashSpeed;
-          } else {
-            dashHorizontalSpeed = isFaceRight ? maxDashSpeed : -maxDashSpeed;
-          }
-          relayPoint.dashOnRelay(gameObject);
-          rigidbody.velocity = new Vector2(dashHorizontalSpeed, 0.0f);
-          return;
+										if (move.y * move.y > move.x * move.x) {
+												// vertical dash
+												relayPoint.dashOnRelay (gameObject);
+												rigidbody.velocity = new Vector2 (0.0f, Mathf.Sign (move.y) * maxDashSpeed);
+												return;
+
+										} else {
+												float dashHorizontalSpeed = maxDashSpeed;
+												if (move.x > 0.0f) {
+														dashHorizontalSpeed = maxDashSpeed;
+												} else if (move.x < 0.0f) {
+														dashHorizontalSpeed = -maxDashSpeed;
+												} else {
+														dashHorizontalSpeed = isFaceRight ? maxDashSpeed : -maxDashSpeed;
+												}
+												relayPoint.dashOnRelay (gameObject);
+												rigidbody.velocity = new Vector2 (dashHorizontalSpeed, 0.0f);
+												return;
+										}
         }
       }
       // normal air adjustment
-
       //rigidbody.position += Vector2.right * move * airAdjustmentScale * Time.deltaTime;
       rigidbody.velocity = new Vector2(move * maxGroundSpeed, rigidbody.velocity.y);
     }
 
-    private void updateOrientation(float move) {
+    private void updateOrientation(Vector2 move) {
       if (isDash) {
         isFaceRight = rigidbody.velocity.x > 0.0f;
       } else {
-        if (move > 0.01f) {
+        if (move.x > 0.01f) {
           isFaceRight = true;
-        } else if (move < -0.01f) {
+        } else if (move.x < -0.01f) {
           isFaceRight = false;
         }
       }

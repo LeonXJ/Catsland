@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
+using System.Collections.Generic;
 
 namespace Catslandx {
-  [RequireComponent(typeof(Rigidbody2D))]
-  [RequireComponent(typeof(Animator))]
-  public class CharacterController2DNinja :MonoBehaviour, IRelayPointCatcher, ICharacterController2D {
 
+  public class NinjiaController: AbstractCharacterController {
+    
     public float groundedRadius;
     public LayerMask whatIsGround;
     public bool supportRelay = true;
@@ -37,7 +35,25 @@ namespace Catslandx {
     private Rigidbody2D rigidbody;
     private Animator animator;
     private BoxCollider2D boxCollider2D;
+
+    /// input
+    private ICharacterInput characterInput;
+
+    /// sensors
+    private Dictionary<SensorEnum, ISensor> sensors;
+
+    /// <summary>
+    /// Abilities
+    /// </summary>
+    // deprecated
     private CharacterVulnerable characterVulnerable;
+    private HealthAbility healthAbility;
+
+    /// <summary>
+    /// inside controller
+    /// </summary>
+    private IState currentState;
+    
 
     public float runSoundRippleCycleSecond = 0.7f;
     public float runVolume = 0.8f;
@@ -49,11 +65,19 @@ namespace Catslandx {
       rigidbody = GetComponent<Rigidbody2D>();
       animator = GetComponent<Animator>();
       boxCollider2D = GetComponent<BoxCollider2D>();
+
+      characterInput = GetComponent<ICharacterInput>();
+
+      // deprecated
       characterVulnerable = GetComponent<CharacterVulnerable>();
+      healthAbility = GetComponent<HealthAbility>();
+
+      // TODO: whether it is ability?
       respawn = GetComponent<IRespawn>();
     }
 
-    private void FixedUpdate() {
+    protected void updateSensor() {
+      // TODO: whether to extract it as ISensor
       bool tempIsGrounded = false;
       Collider2D[] colliders = Physics2D.OverlapCircleAll(
         groundCheckPoint.position, groundedRadius, whatIsGround);
@@ -64,6 +88,7 @@ namespace Catslandx {
           break;
         }
       }
+      // TODO: should move out of this function
       if(tempIsGrounded && !isGrounded) {
         land();
       } else if(!tempIsGrounded && isGrounded) {
@@ -76,8 +101,14 @@ namespace Catslandx {
       }
       updateLoopSound();
       updateParticle();
+
     }
 
+    private void FixedUpdate() {
+      updateSensor();
+    }
+
+    // TODO: should not be in this class 
     private void updateParticle() {
       if(particalSystem != null) {
         if(isGrounded && groundObject != null) {
@@ -108,6 +139,23 @@ namespace Catslandx {
 
     public bool getIsFaceRight() {
       return isFaceRight;
+    }
+
+    public void update() {
+      updateMovement(Time.deltaTime);
+    }
+
+    protected void updateMovement(float deltaTime) {
+      IState nextState = currentState.update(characterInput, deltaTime);
+      if(nextState != currentState) {
+        currentState.onExit(nextState);
+        nextState.onEnter(currentState);
+        currentState = nextState;
+      }
+    }
+
+    public void transitToState(IState state) {
+      // TODO
     }
 
     public void move(Vector2 move, bool jump, bool dash, bool crouch) {
@@ -271,6 +319,11 @@ namespace Catslandx {
 
     // Update is called once per frame
     void Update() {
+
+      float deltaTime = Time.deltaTime;
+
+      updateMovement();
+
       updateAnimation();
     }
 

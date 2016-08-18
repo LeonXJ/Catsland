@@ -30,9 +30,12 @@ namespace Catslandx {
       if (player != null) {
         Vector2 delta = player.transform.position - transform.position;
         float diviateDistance = transform.position.x - initialPosition.x;
-        if ((diviateDistance >= maxPursueDistance && delta.x > reachDistance)
+        // can distance attack?
+        if (delta.x * delta.x < 1f * 1f) {
+          // melee attack
+          characterController.attack();
+        } else if ((diviateDistance >= maxPursueDistance && delta.x > reachDistance)
           || (diviateDistance <= -maxPursueDistance && delta.x < reachDistance)) {
-          // just stand and watch
         } else {
           characterController.move(delta.x > 0.0f ? 1.0f : -1.0f, false, false, false);
         }

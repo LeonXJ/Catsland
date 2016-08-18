@@ -32,6 +32,7 @@ namespace Catslandx {
     private CircleCollider2D circleCollider2D;
     private BoxCollider2D boxCollider2D;
     private CharacterVulnerable characterVulnerable;
+    private Attack attackComponent;
 
     private void Awake() {
       rigidbody = GetComponent<Rigidbody2D>();
@@ -39,6 +40,7 @@ namespace Catslandx {
       circleCollider2D = GetComponent<CircleCollider2D>();
       boxCollider2D = GetComponent<BoxCollider2D>();
       characterVulnerable = GetComponent<CharacterVulnerable>();
+      attackComponent = GetComponent<Attack>();
     }
 
     private void FixedUpdate() {
@@ -82,7 +84,12 @@ namespace Catslandx {
         }
       }
       updateOrientation(move);
+    }
 
+    public void attack() {
+      if (attackComponent != null && isGrounded) {
+        attackComponent.activate(Vector2.zero);
+      }
     }
 
     private void handleDashMovement(float move, bool jump, bool dash) {

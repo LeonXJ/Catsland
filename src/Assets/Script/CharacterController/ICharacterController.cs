@@ -1,15 +1,18 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿namespace Catslandx.Script.CharacterController {
 
-namespace Catslandx {
+  /** The interface of character controller. */
   public interface ICharacterController {
 
-    IState transitToState();
+    // Transits to a status.
+    IStatus transitToStatus();
 
-    IState innerTransteToState();
+    // TODO: how is it used ????
+    IStatus innerTransteToState();
 
-    IState getCurrentState();
+    // Returns the current status.
+    IStatus getCurrentState();
 
-    IState reset();
+    // Reset to initial.
+    IStatus reset();
   }
 }

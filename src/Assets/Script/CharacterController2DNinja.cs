@@ -34,7 +34,7 @@ namespace Catslandx {
     private float dizzyTimeLeft = 0.0f;
     private GameObject groundObject;
 
-    private Rigidbody2D rigidbody;
+    private new Rigidbody2D rigidbody;
     private Animator animator;
     private BoxCollider2D boxCollider2D;
     private CharacterVulnerable characterVulnerable;

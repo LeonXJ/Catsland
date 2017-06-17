@@ -10,7 +10,7 @@ namespace Catslandx {
     public bool isCanGetHurt = true;
     public bool isCanGetRepel = true;
 
-    private Rigidbody2D rigidbody2D;
+    private new Rigidbody2D rigidbody2D;
     private ICharacterController2D characterController;
 
     public void setCanGetHurt(bool canGetHurt) {

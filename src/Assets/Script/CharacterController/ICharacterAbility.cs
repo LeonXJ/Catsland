@@ -1,8 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿namespace Catslandx.Script.CharacterController {
 
-namespace Catslandx {
-  public interface ICharacterAbility {
-
-  }
+  /** Interface represents the ablitiy of the character. */
+  public interface ICharacterAbility {}
 }

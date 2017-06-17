@@ -2,8 +2,11 @@
 using System.Collections;
 
 namespace Catslandx {
+  
+  /** Attack generator which instantiates a attack object from proto-type. */
   public class Attack :MonoBehaviour {
 
+    // status of performing the attack.
     public enum Status {
       INACTIVE = 0,
       PRELOAD = 1,
@@ -55,7 +58,7 @@ namespace Catslandx {
       this.offset = offset;
     }
 
-	void Update () {
+	public void Update () {
       if (isTriggerred) {
         currentTimeS += Time.deltaTime;
         if (!hasAttack && status != Status.INACTIVE && status != Status.PRELOAD) {
@@ -68,7 +71,9 @@ namespace Catslandx {
       }
 	}
 
-    void attack() {
+    // Triggers the attack behavior.
+    // TODO: need to check status
+    public void attack() {
       if (attackGameObjectPrototype != null) {
         GameObject attackGameObject = Instantiate(attackGameObjectPrototype);
         if (attackGameObject != null) {
@@ -82,6 +87,7 @@ namespace Catslandx {
       }
     }
 
+    // Interrupts the attack behavior.
     public void interrupt() {
       // if is attacking and now in cooldown, directly jump to cooldown
       if (isTriggerred && status != Status.INACTIVE && status != Status.COOLDOWN) {

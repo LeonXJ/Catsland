@@ -8,7 +8,7 @@ namespace Catslandx {
     public float delayInS = 1.0f;
     public GameObject respawnPosition = null;
     private CharacterVulnerable characterVulnerable;
-    private SpriteRenderer renderer;
+    private new SpriteRenderer renderer;
     private ICharacterController2D controller;
 
     private float currentTimeToRespawn = -1.0f;

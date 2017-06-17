@@ -27,7 +27,7 @@ namespace Catslandx {
     private bool isFaceRight = true;
     private float dizzyTimeLeft = 0.0f;
 
-    private Rigidbody2D rigidbody;
+    private new Rigidbody2D rigidbody;
     private Animator animator;
     private CircleCollider2D circleCollider2D;
     private BoxCollider2D boxCollider2D;

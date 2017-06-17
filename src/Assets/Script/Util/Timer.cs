@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-using Catslandx.Exception;
+using Catslandx.Script.Exception;
 
 namespace Catslandx.Util {
   public class Timer {

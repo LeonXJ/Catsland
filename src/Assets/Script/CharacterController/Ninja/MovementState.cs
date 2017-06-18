@@ -53,10 +53,14 @@ namespace Catslandx.Script.CharacterController.Ninja {
         // jump
         rigidBody.velocity = new Vector2(horizontalSpeed, movementAbility.jumpInitialSpeed);
         return getStateFactory().getState<JumpState>();
-      } else {
-        rigidBody.velocity = new Vector2(horizontalSpeed, rigidBody.velocity.y);
-        return this;
+      } else if(input.wantAttack()) {
+        IStatus meleeStatus = getStateFactory().getState<MeleeStatus>();
+        if(meleeStatus.isEligible()) {
+          return meleeStatus;
+        }
       }
+      rigidBody.velocity = new Vector2(horizontalSpeed, rigidBody.velocity.y);
+      return this;
     }
 
     private MovementAbility.Orientation getOrientation(float horizontalSpeed) {

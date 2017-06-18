@@ -7,6 +7,9 @@ namespace Catslandx.Script.CharacterController {
   /** The status of the character. */
   public interface IStatus {
 
+    /** Whether can enter this status. */
+    bool isEligible();
+
     /** Performs on enter this status. */
     void onEnter(IStatus previousStatus);
 

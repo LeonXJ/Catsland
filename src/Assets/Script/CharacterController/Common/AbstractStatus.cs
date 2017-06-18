@@ -30,6 +30,10 @@ namespace Catslandx.Script.CharacterController.Common {
       return gameObject.GetComponent<T>();
     }
 
+    public virtual bool isEligible() {
+      return true;
+    }
+
     public virtual void onEnter(IStatus previousStatus) {}
 
     public virtual IStatus update(

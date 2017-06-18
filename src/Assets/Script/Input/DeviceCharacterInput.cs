@@ -9,8 +9,9 @@ namespace Catslandx.Script.Input {
       wantDirection = new Vector2(
         UnityEngine.Input.GetAxis("Horizontal"), UnityEngine.Input.GetAxis ("Vertical"));
       // TODO: do not use specific keycode, use key mapping instead.
-      wantJump = UnityEngine.Input.GetKeyDown(KeyCode.J);
-      wantDash = UnityEngine.Input.GetKeyDown(KeyCode.K);
+      wantAttack = UnityEngine.Input.GetKeyDown(KeyCode.J);
+      wantJump = UnityEngine.Input.GetKeyDown(KeyCode.K);
+      wantDash = UnityEngine.Input.GetKeyDown(KeyCode.L);
     }
   }
 }

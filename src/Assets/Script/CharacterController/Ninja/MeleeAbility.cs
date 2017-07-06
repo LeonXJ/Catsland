@@ -19,6 +19,8 @@ namespace Catslandx.Script.CharacterController.Ninja {
     public float meleeFinishInMs;
     public float meleeCooldownInMs;
 
+    public GameObject meleePrototype;
+
     private AttackStage meleeStage;
     private float stageElipsisInMs;
 
@@ -32,6 +34,10 @@ namespace Catslandx.Script.CharacterController.Ninja {
 
     public float getStageElipsisInMs() {
       return stageElipsisInMs;
+    }
+
+    public GameObject getMeleePrototype() {
+      return meleePrototype;
     }
 
     public void setStageElipsisInMs(float stageElipsisInMs) {

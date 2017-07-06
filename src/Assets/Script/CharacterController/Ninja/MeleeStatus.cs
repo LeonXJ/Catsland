@@ -14,9 +14,11 @@ namespace Catslandx.Script.CharacterController.Ninja {
   public class MeleeStatus :AbstractStatus {
 
     private MeleeAbility attackAbility;
+    private Rigidbody2D rigidBody;
 
     public MeleeStatus(GameObject gameObject, StatusFactory stateFactory) : base(gameObject, stateFactory) {
       attackAbility = getComponent<MeleeAbility>();
+      rigidBody = getComponent<Rigidbody2D>();
     }
 
     public override bool isEligible() {
@@ -27,13 +29,13 @@ namespace Catslandx.Script.CharacterController.Ninja {
         Dictionary<SensorEnum, ISensor> sensors,
         ICharacterInput input,
         float deltaTime) {
+      
+      rigidBody.velocity = new Vector2(0.0f, rigidBody.velocity.y);
       MeleeAbility.AttackStage stage = attackAbility.getMeleeStage();
-      float remainingTime = deltaTime;
-      float stageElipsisInMs = attackAbility.getStageElipsisInMs();
-      while(remainingTime > 0.0f) {
-        float stageTimeInMs = attackAbility.getStageTimeInMs(stage);
-        remainingTime = stageElipsisInMs + remainingTime - stageTimeInMs;
-        if(remainingTime > 0.0f) {
+      float stageElipsisInMs = attackAbility.getStageElipsisInMs() + deltaTime;
+      float stageTimeInMs = attackAbility.getStageTimeInMs(stage);
+      while(stageElipsisInMs > stageTimeInMs) {
+        stageElipsisInMs -= stageTimeInMs;
           // next stage
           switch(stage) {
             case MeleeAbility.AttackStage.STANDBY:
@@ -51,13 +53,11 @@ namespace Catslandx.Script.CharacterController.Ninja {
             case MeleeAbility.AttackStage.FINISH:
             case MeleeAbility.AttackStage.COOLDOWN:
               // Leave Cooldown to AttackAbility
-              attackAbility.setStageElipsisInMs(remainingTime);
+              attackAbility.setStageElipsisInMs(stageElipsisInMs);
               attackAbility.setMeleeStage(MeleeAbility.AttackStage.COOLDOWN);
               return getStateFactory().getState<MovementStatus>();
           }
-        } else {
-          stageElipsisInMs = -remainingTime;
-        }
+        stageTimeInMs = attackAbility.getStageTimeInMs(stage);
       }
       attackAbility.setStageElipsisInMs(stageElipsisInMs);
       attackAbility.setMeleeStage(stage);
@@ -66,6 +66,9 @@ namespace Catslandx.Script.CharacterController.Ninja {
 
     private void doMelee() {
       System.Console.Out.WriteLine("DEBUG >>> doMelee");
+      GameObject prototype = attackAbility.getMeleePrototype();
+      GameObject meleeObject = GameObject.Instantiate(prototype, getGameObject().transform);
+      meleeObject.transform.position = getGameObject().transform.position;
     }
 
     private void doFinish() {

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
+using Catslandx.Script.Common;
 
 namespace Catslandx {
   public class Melee : MonoBehaviour, IAttackObject {

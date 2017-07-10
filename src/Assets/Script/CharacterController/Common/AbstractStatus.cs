@@ -10,11 +10,13 @@ namespace Catslandx.Script.CharacterController.Common {
 
     private GameObject gameObject;
     private StatusFactory stateFactory;
+    protected ICharacterController characterController;
 
     public AbstractStatus(
         GameObject gameObject, StatusFactory stateFactory) {
       this.gameObject = gameObject;
       this.stateFactory = stateFactory;
+      this.characterController = getComponent<ICharacterController>();
     }
 
     protected GameObject getGameObject() {

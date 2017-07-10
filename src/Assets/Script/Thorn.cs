@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using Catslandx.Script.Common;
 
 namespace Catslandx {
   [RequireComponent(typeof(Collider2D))]

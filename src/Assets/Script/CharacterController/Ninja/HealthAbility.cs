@@ -3,5 +3,9 @@
 namespace Catslandx.Script.CharacterController.Ninja {
 
   /** The charater can be damaged with this ability. */
-  public class HealthAbility : AbstractCharacterAbility { }
+  public class HealthAbility : AbstractCharacterAbility {
+
+
+
+  }
 }

@@ -10,6 +10,7 @@ namespace Catslandx.Script.CharacterController.Common {
   [RequireComponent(typeof(AbstractCharacterInput))]
   public abstract class AbstractCharacterController :MonoBehaviour, ICharacterController {
 
+
     // Senseros
     protected Dictionary<SensorEnum, ISensor> sensors =
         new Dictionary<SensorEnum, ISensor>();
@@ -20,6 +21,9 @@ namespace Catslandx.Script.CharacterController.Common {
     // Status
     protected StatusFactory stateFactory;
     protected IStatus currentStatus;
+
+    // Additional info
+    private Orientation orientation;
 
     // Initializations
 
@@ -89,6 +93,17 @@ namespace Catslandx.Script.CharacterController.Common {
     /** Update the animation. */
     protected virtual void updateAnimation(float deltaTime) {}
 
+    public void setOrientation(Orientation orientation) {
+      this.orientation = orientation;
+    }
+
+    public Orientation getOrientation() {
+      return orientation;
+    }
+
+    public Vector2 transformRightOrientationVectorToCurrentOrientation(Vector2 rightOrientationVector) {
+      return orientation == Orientation.Right ? rightOrientationVector : new Vector2(-rightOrientationVector.x, rightOrientationVector.y);
+    }
 
     IStatus ICharacterController.getCurrentState() {
       throw new NotImplementedException();

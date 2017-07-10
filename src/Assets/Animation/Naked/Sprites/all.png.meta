@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: dd17edcc8b03ffe4db96e5605d348164
-timeCreated: 1499321310
+timeCreated: 1499637734
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -23,6 +23,28 @@ TextureImporter:
     21300032: all_attack2_0
     21300034: all_attack2_1
     21300036: all_defense_0
+    21300038: all 0
+    21300040: all 1
+    21300042: all 2
+    21300044: all 3
+    21300046: all 4
+    21300048: all 5
+    21300050: all 6
+    21300052: all 7
+    21300054: all 8
+    21300056: all 9
+    21300058: all 10
+    21300060: all 11
+    21300062: all 12
+    21300064: all 13
+    21300066: all 14
+    21300068: all 15
+    21300070: all 16
+    21300072: all 17
+    21300074: all 18
+    21300076: all_jumpup_0
+    21300078: all_ontop_0
+    21300080: all_fall_0
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -224,7 +246,7 @@ TextureImporter:
       outline: []
       tessellationDetail: -1
     - serializedVersion: 2
-      name: all_jump_0
+      name: all_jumpup_0
       rect:
         serializedVersion: 2
         x: 96
@@ -237,7 +259,7 @@ TextureImporter:
       outline: []
       tessellationDetail: -1
     - serializedVersion: 2
-      name: all_jump_1
+      name: all_ontop_0
       rect:
         serializedVersion: 2
         x: 128
@@ -250,7 +272,7 @@ TextureImporter:
       outline: []
       tessellationDetail: -1
     - serializedVersion: 2
-      name: all_jump_2
+      name: all_fall_0
       rect:
         serializedVersion: 2
         x: 160

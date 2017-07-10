@@ -13,6 +13,7 @@ namespace Catslandx.Script.CharacterController.Ninja {
     private static class AnimatorValue {
       public static string horizontalSpeed = "horizontalAbsSpeed";
       public static string isGrounded = "isGrounded";
+      public static string isAttacking = "isAttacking";
     }
 
     public float minDashSpeed = 1.0f;
@@ -98,6 +99,7 @@ namespace Catslandx.Script.CharacterController.Ninja {
       animator.SetBool("isDashing", isDash);
       animator.SetBool("isCrouching", movementAbility.getIsCrouch());
       animator.SetFloat("verticalSpeed", rigidbody.velocity.y);
+      animator.SetBool(AnimatorValue.isAttacking, currentStatus.GetType() == typeof(MeleeStatus));
 
       // Sets isGrounded.
       ISensor groundSensor = sensors[SensorEnum.ON_GROUND_SENSOR];
@@ -109,9 +111,9 @@ namespace Catslandx.Script.CharacterController.Ninja {
       }
 
       // Sets orientation.
-      if((movementAbility.getOrientation() == MovementAbility.Orientation.Right 
+      if((getOrientation() == Orientation.Right 
         && transform.localScale.x < 0.0f)
-        || (movementAbility.getOrientation() == MovementAbility.Orientation.Left 
+        || (getOrientation() == Orientation.Left 
         && transform.localScale.x > 0.0f)) {
         transform.localScale = new Vector3(
           -transform.localScale.x, transform.localScale.y, transform.localScale.z);

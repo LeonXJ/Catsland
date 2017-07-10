@@ -1,77 +1,50 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Catslandx.Script.CharacterController.Common;
-using System.Collections.Generic;
 
 namespace Catslandx.Script.CharacterController.Ninja {
+
+  [RequireComponent(typeof(ICharacterController))]
   public class MeleeAbility :AbstractCharacterAbility {
 
-    public enum AttackStage {
+    public enum AttackSubstatus {
       STANDBY,
       PREPARE,
       PERFORM,
-      FINISH,
-      COOLDOWN
     }
 
     public float meleePrepreInMs;
     public float meleePerformInMs;
-    public float meleeFinishInMs;
-    public float meleeCooldownInMs;
-
+    public Vector2 positionOffset;
     public GameObject meleePrototype;
 
-    private AttackStage meleeStage;
-    private float stageElipsisInMs;
+    private ICharacterController characterController;
 
-    public AttackStage getMeleeStage() {
-      return meleeStage;
+    void Awake() {
+      characterController = GetComponent<ICharacterController>();
     }
 
-    public void setMeleeStage(AttackStage attackStage) {
-      meleeStage = attackStage;
+    public GameObject createMeleeGO() {
+      Vector2 position = MathHelper.applyOffset(
+        transform.position,
+        characterController.transformRightOrientationVectorToCurrentOrientation(positionOffset));
+      GameObject meleeObject = GameObject.Instantiate(meleePrototype, transform);
+      meleeObject.transform.position = position;
+
+      BulletHead bulletHead = meleeObject.GetComponent<BulletHead>();
+      if(bulletHead != null) {
+        bulletHead.fire(gameObject);
+      }
+      return meleeObject;
     }
 
-    public float getStageElipsisInMs() {
-      return stageElipsisInMs;
-    }
-
-    public GameObject getMeleePrototype() {
-      return meleePrototype;
-    }
-
-    public void setStageElipsisInMs(float stageElipsisInMs) {
-      this.stageElipsisInMs = stageElipsisInMs;
-    }
-
-    public float getStageTimeInMs(AttackStage attackStage) {
-      switch(attackStage) {
-        case AttackStage.PREPARE:
+    public float getSubstatusTimeInMs(AttackSubstatus substatus) {
+      switch(substatus) {
+        case AttackSubstatus.PREPARE:
           return meleePrepreInMs;
-        case AttackStage.PERFORM:
+        case AttackSubstatus.PERFORM:
           return meleePerformInMs;
-        case AttackStage.FINISH:
-          return meleeFinishInMs;
-        case AttackStage.COOLDOWN:
-          return meleeCooldownInMs;
-        default:
-          return 0.0f;
       }
-    }
-
-    public void Update() {
-      float time = Time.deltaTime;
-      if(meleeStage == AttackStage.COOLDOWN) {
-        stageElipsisInMs += time;
-        if(stageElipsisInMs > meleeCooldownInMs) {
-          resetMelee();
-        }
-      }
-    }
-
-    private void resetMelee() {
-      stageElipsisInMs = 0.0f;
-      meleeStage = AttackStage.STANDBY;
+      return 0.0f;
     }
   }
 }

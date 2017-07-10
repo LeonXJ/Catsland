@@ -29,7 +29,7 @@ namespace Catslandx.Script.CharacterController.Ninja {
         float deltaTime) {
       // orientation
       if(Mathf.Abs(input.wantDirection().x) > Mathf.Epsilon) {
-        movementAbility.setOrientation(getOrientation(input.wantDirection().x));
+        characterController.setOrientation(getOrientation(input.wantDirection().x));
       }
       // check ground sensor
       ISensor groundSensor = sensors[SensorEnum.ON_GROUND_SENSOR];
@@ -63,10 +63,10 @@ namespace Catslandx.Script.CharacterController.Ninja {
       return this;
     }
 
-    private MovementAbility.Orientation getOrientation(float horizontalSpeed) {
+    private Orientation getOrientation(float horizontalSpeed) {
       return horizontalSpeed > 0.0f
-          ? MovementAbility.Orientation.Right
-          : MovementAbility.Orientation.Left;
+          ? Orientation.Right
+          : Orientation.Left;
     }
   }
 }

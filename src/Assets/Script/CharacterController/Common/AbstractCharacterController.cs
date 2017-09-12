@@ -7,7 +7,6 @@ using UnityEngine;
 namespace Catslandx.Script.CharacterController.Common {
 
   /** Abstract implementation of CharacterController. */
-  [RequireComponent(typeof(AbstractCharacterInput))]
   public abstract class AbstractCharacterController :MonoBehaviour, ICharacterController {
 
 
@@ -16,7 +15,7 @@ namespace Catslandx.Script.CharacterController.Common {
         new Dictionary<SensorEnum, ISensor>();
 
     // Inputs
-    protected AbstractCharacterInput characterInput;
+    protected ICharacterInput characterInput;
 
     // Status
     protected StatusFactory stateFactory;
@@ -49,7 +48,7 @@ namespace Catslandx.Script.CharacterController.Common {
 
     /** Initializes the input. */
     protected virtual void initializeInput() { 
-      characterInput = GetComponent<AbstractCharacterInput>();
+      characterInput = GetComponent<ICharacterInput>();
     }
 
     // Updates
@@ -77,7 +76,9 @@ namespace Catslandx.Script.CharacterController.Common {
 
     /** Updates inputs. */
     protected virtual void updateInput(float deltaTime) {
-      characterInput.updateInput(deltaTime);
+	  if(characterInput != null) {
+		characterInput.updateInput(deltaTime);
+	  }
     }
 
     /** Updates the character movement. */
@@ -117,8 +118,14 @@ namespace Catslandx.Script.CharacterController.Common {
       throw new NotImplementedException();
     }
 
-    public IStatus transitToStatus() {
-      throw new NotImplementedException();
+    public IStatus transitToStatus<T> () where T : IStatus {
+      IStatus newStatus = stateFactory.getState<T>();
+      if(currentStatus != newStatus) {
+        currentStatus.onExit(newStatus);
+        newStatus.onEnter(currentStatus);
+        currentStatus = newStatus;
+      }
+      return currentStatus;
     }
   }
 }

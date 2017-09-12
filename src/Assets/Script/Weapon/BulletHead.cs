@@ -36,7 +36,10 @@ public class BulletHead :MonoBehaviour {
     if(!fired) {
       return;
     }
-    if(canHurtOwner || other.gameObject != other) {
+    if(other.gameObject == this.gameObject) {
+      return;
+    }
+    if(canHurtOwner || other.gameObject != owner) {
       IVulnerable vulerable = other.GetComponent<IVulnerable>();
       if(vulerable != null) {
         vulerable.getHurt(damage, other.transform.position - gameObject.transform.position);

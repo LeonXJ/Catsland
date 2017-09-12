@@ -1,6 +1,7 @@
 ﻿using Catslandx.Script.Input;
 using Catslandx.Script.Sensor;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Catslandx.Script.CharacterController {
 
@@ -21,5 +22,7 @@ namespace Catslandx.Script.CharacterController {
 
     /** Performs on exit this status. */
     void onExit(IStatus nextStatus);
+
+    void applyAnimation(Animator animator);
   }
 }

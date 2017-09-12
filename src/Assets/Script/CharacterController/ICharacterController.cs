@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 namespace Catslandx.Script.CharacterController {
 
@@ -6,7 +7,7 @@ namespace Catslandx.Script.CharacterController {
   public interface ICharacterController {
 
     // Transits to a status.
-    IStatus transitToStatus();
+    IStatus transitToStatus<T>() where T : IStatus;
 
     // TODO: how is it used ????
     IStatus innerTransteToState();

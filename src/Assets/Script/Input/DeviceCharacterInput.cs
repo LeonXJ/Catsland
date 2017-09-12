@@ -10,8 +10,9 @@ namespace Catslandx.Script.Input {
         UnityEngine.Input.GetAxis("Horizontal"), UnityEngine.Input.GetAxis ("Vertical"));
       // TODO: do not use specific keycode, use key mapping instead.
       wantAttack = UnityEngine.Input.GetKeyDown(KeyCode.J);
-      wantJump = UnityEngine.Input.GetKeyDown(KeyCode.K);
-      wantDash = UnityEngine.Input.GetKeyDown(KeyCode.L);
+      wantShoot = UnityEngine.Input.GetKeyDown(KeyCode.K);
+      wantJump = UnityEngine.Input.GetKeyDown(KeyCode.L);
+      wantDash = UnityEngine.Input.GetKeyDown(KeyCode.H);
     }
   }
 }

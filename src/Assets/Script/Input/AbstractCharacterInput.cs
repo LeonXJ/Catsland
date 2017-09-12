@@ -9,6 +9,7 @@ namespace Catslandx.Script.Input {
     protected bool wantAttack;
     protected bool wantJump;
     protected bool wantDash;
+    protected bool wantShoot;
     protected bool wantInteract;
 
     Vector2 ICharacterInput.wantDirection() {
@@ -29,6 +30,10 @@ namespace Catslandx.Script.Input {
 
     bool ICharacterInput.wantInteract() {
       return wantInteract;
+    }
+
+    bool ICharacterInput.wantShoot() {
+      return wantShoot;
     }
 
     public abstract void updateInput(float deltaTime);

@@ -13,5 +13,6 @@ namespace Catslandx.Script.Input {
     bool wantJump();
     bool wantDash();
     bool wantInteract();
+    bool wantShoot();
   }
 }

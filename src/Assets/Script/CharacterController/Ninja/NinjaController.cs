@@ -7,13 +7,16 @@ namespace Catslandx.Script.CharacterController.Ninja {
   /** Ninja's controller. */
   [RequireComponent(typeof(Rigidbody2D))]
   [RequireComponent(typeof(Animator))]
-  [RequireComponent(typeof(BoxCollider2D))]
+  [RequireComponent(typeof(Collider2D))]
   public class NinjaController: AbstractCharacterController {
 
-    private static class AnimatorValue {
+    public static class AnimatorValue {
       public static string horizontalSpeed = "horizontalAbsSpeed";
       public static string isGrounded = "isGrounded";
       public static string isAttacking = "isAttacking";
+      public static string meleeLevel = "meleeLevel";
+      public static string isHurted = "isHurted";
+      public static string isShooting = "isShooting";
     }
 
     public float minDashSpeed = 1.0f;
@@ -38,12 +41,14 @@ namespace Catslandx.Script.CharacterController.Ninja {
 
     private new Rigidbody2D rigidbody;
     private Animator animator;
-    private BoxCollider2D boxCollider2D;
+    private Collider2D collider2D;
 
     /// sensors
     public GameObject groundSensorGO;
     public GameObject headSensorGO;
     public GameObject relaySensorGO;
+	public GameObject rearSensorGO;
+	public GameObject frontSensorGO;
 
     // Ablilities
     private MovementAbility movementAbility;
@@ -65,7 +70,7 @@ namespace Catslandx.Script.CharacterController.Ninja {
     private void Awake() {
       rigidbody = GetComponent<Rigidbody2D>();
       animator = GetComponent<Animator>();
-      boxCollider2D = GetComponent<BoxCollider2D>();
+      collider2D = GetComponent<Collider2D>();
       movementAbility = GetComponent<MovementAbility>();
     }
 
@@ -92,6 +97,20 @@ namespace Catslandx.Script.CharacterController.Ninja {
           headSensorGO.GetComponent<PreCalculateSensor>();
         sensors.Add(SensorEnum.RELAY_SENSOR, relaySensor);
       }
+
+	  // Left sensor
+	  if(rearSensorGO != null) {
+		IPreCalculateSensor rearSensor =
+		  rearSensorGO.GetComponent<PreCalculateSensor>();
+		sensors.Add(SensorEnum.REAR_SENSOR, rearSensor);
+	  }
+
+	  // Right sensor
+	  if(frontSensorGO != null) {
+		IPreCalculateSensor frontSensor =
+		  frontSensorGO.GetComponent<PreCalculateSensor>();
+		sensors.Add(SensorEnum.FRONT_SENSOR, frontSensor);
+	  }
     }
 
     protected override void updateAnimation(float deltaTime) {
@@ -100,11 +119,12 @@ namespace Catslandx.Script.CharacterController.Ninja {
       animator.SetBool("isCrouching", movementAbility.getIsCrouch());
       animator.SetFloat("verticalSpeed", rigidbody.velocity.y);
       animator.SetBool(AnimatorValue.isAttacking, currentStatus.GetType() == typeof(MeleeStatus));
+      animator.SetBool(AnimatorValue.isHurted, currentStatus.GetType() == typeof(HurtStatus));
+      animator.SetBool(AnimatorValue.isShooting, currentStatus.GetType() == typeof(ShootStatus));
 
       // Sets isGrounded.
       ISensor groundSensor = sensors[SensorEnum.ON_GROUND_SENSOR];
       if(groundSensor != null) {
-        //bool onGround = groundSensor.isInTrigger();
         animator.SetBool(AnimatorValue.isGrounded, groundSensor.isInTrigger());
       } else {
         animator.SetBool(AnimatorValue.isGrounded, false);
@@ -118,6 +138,8 @@ namespace Catslandx.Script.CharacterController.Ninja {
         transform.localScale = new Vector3(
           -transform.localScale.x, transform.localScale.y, transform.localScale.z);
       }
+
+      currentStatus.applyAnimation(animator);
     }
   }
 }

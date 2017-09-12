@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: dd17edcc8b03ffe4db96e5605d348164
-timeCreated: 1499637734
+timeCreated: 1502673501
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -45,6 +45,38 @@ TextureImporter:
     21300076: all_jumpup_0
     21300078: all_ontop_0
     21300080: all_fall_0
+    21300082: all 19
+    21300084: all 20
+    21300086: all 21
+    21300088: all 22
+    21300090: all 23
+    21300092: all 24
+    21300094: all_deprecated_0
+    21300096: all_deprecated_1
+    21300098: all_shoot_0
+    21300100: all_shoot_1
+    21300102: all_shoot_2
+    21300104: all_shoot_3
+    21300106: all_shoot_4
+    21300108: all_shoot_5
+    21300110: all_shoot_6
+    21300112: all_shoot_7
+    21300114: all_crouch_0
+    21300116: all_crouch_1
+    21300118: all_crouch_2
+    21300120: all_crouch_3
+    21300122: all_crouch_4
+    21300124: all_crouch_5
+    21300126: all 25
+    21300128: all 26
+    21300130: all 27
+    21300132: all 28
+    21300134: all 29
+    21300136: all 30
+    21300138: all 31
+    21300140: all 32
+    21300142: all 33
+    21300144: all_crouch_still_0
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -107,7 +139,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 96
+        y: 224
         width: 32
         height: 32
       alignment: 0
@@ -120,7 +152,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
-        y: 96
+        y: 224
         width: 32
         height: 32
       alignment: 0
@@ -133,7 +165,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 64
-        y: 96
+        y: 224
         width: 32
         height: 32
       alignment: 0
@@ -146,7 +178,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 96
-        y: 96
+        y: 224
         width: 32
         height: 32
       alignment: 0
@@ -159,7 +191,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 128
-        y: 96
+        y: 224
         width: 32
         height: 32
       alignment: 0
@@ -172,7 +204,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 160
-        y: 96
+        y: 224
         width: 32
         height: 32
       alignment: 0
@@ -185,7 +217,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 192
-        y: 96
+        y: 224
         width: 32
         height: 32
       alignment: 0
@@ -198,7 +230,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 224
-        y: 96
+        y: 224
         width: 32
         height: 32
       alignment: 0
@@ -211,7 +243,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 64
+        y: 192
         width: 32
         height: 32
       alignment: 0
@@ -224,7 +256,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
-        y: 64
+        y: 192
         width: 32
         height: 32
       alignment: 0
@@ -237,7 +269,98 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 64
-        y: 64
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_crouch_still_0
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_crouch_0
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_crouch_1
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_crouch_2
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_crouch_3
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_crouch_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_crouch_5
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 160
         width: 32
         height: 32
       alignment: 0
@@ -249,8 +372,8 @@ TextureImporter:
       name: all_jumpup_0
       rect:
         serializedVersion: 2
-        x: 96
-        y: 64
+        x: 64
+        y: 160
         width: 32
         height: 32
       alignment: 0
@@ -262,8 +385,8 @@ TextureImporter:
       name: all_ontop_0
       rect:
         serializedVersion: 2
-        x: 128
-        y: 64
+        x: 96
+        y: 160
         width: 32
         height: 32
       alignment: 0
@@ -275,8 +398,8 @@ TextureImporter:
       name: all_fall_0
       rect:
         serializedVersion: 2
-        x: 160
-        y: 64
+        x: 128
+        y: 160
         width: 32
         height: 32
       alignment: 0
@@ -288,8 +411,8 @@ TextureImporter:
       name: all_attack1_0
       rect:
         serializedVersion: 2
-        x: 192
-        y: 64
+        x: 160
+        y: 160
         width: 32
         height: 32
       alignment: 0
@@ -301,8 +424,8 @@ TextureImporter:
       name: all_attack1_1
       rect:
         serializedVersion: 2
-        x: 224
-        y: 64
+        x: 192
+        y: 160
         width: 32
         height: 32
       alignment: 0
@@ -314,8 +437,8 @@ TextureImporter:
       name: all_attack2_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 32
+        x: 224
+        y: 160
         width: 32
         height: 32
       alignment: 0
@@ -327,8 +450,8 @@ TextureImporter:
       name: all_attack2_1
       rect:
         serializedVersion: 2
-        x: 32
-        y: 32
+        x: 0
+        y: 128
         width: 32
         height: 32
       alignment: 0
@@ -337,11 +460,128 @@ TextureImporter:
       outline: []
       tessellationDetail: -1
     - serializedVersion: 2
-      name: all_defense_0
+      name: all_deprecated_0
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_deprecated_1
       rect:
         serializedVersion: 2
         x: 64
-        y: 32
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_shoot_0
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_shoot_1
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_shoot_2
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_shoot_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_shoot_4
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 128
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_shoot_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_shoot_6
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 96
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: all_shoot_7
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 96
         width: 32
         height: 32
       alignment: 0

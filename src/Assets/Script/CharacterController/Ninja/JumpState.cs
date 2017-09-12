@@ -12,44 +12,51 @@ namespace Catslandx.Script.CharacterController.Ninja {
    * - MovementAbility
    * - RigidBody2D
    */
-  public class JumpState : AbstractStatus {
+  public class JumpState :AbstractStatus {
 
-    private MovementAbility movementAbility;
-    private Rigidbody2D rigidBody;
+	private MovementAbility movementAbility;
+	private Rigidbody2D rigidBody;
 
-    public JumpState(GameObject gameObject, StatusFactory stateFactory)
-        : base(gameObject, stateFactory) {
-      movementAbility = getComponent<MovementAbility>();
-      rigidBody = getComponent<Rigidbody2D>();
-    }
+	public JumpState(GameObject gameObject, StatusFactory stateFactory)
+		: base(gameObject, stateFactory) {
+	  movementAbility = getComponent<MovementAbility>();
+	  rigidBody = getComponent<Rigidbody2D>();
+	}
 
-    public override IStatus update(
-        Dictionary<SensorEnum, ISensor> sensors,
-        ICharacterInput input,
-        float deltaTime) {
-      // check ground sensor
-      ISensor groundSensor;
-      if (sensors.TryGetValue(SensorEnum.ON_GROUND_SENSOR, out groundSensor)
-          && groundSensor.isInTrigger()) {
-        // on ground
-        return getStateFactory().getState<MovementStatus>();
-      }
-      // check relay
-      float velticalSpeed = rigidBody.velocity.y;
-      ISensor relaySensor;
-      if (sensors.TryGetValue(SensorEnum.RELAY_SENSOR, out relaySensor)
-          && relaySensor.isInTrigger()) {
-        if (input.wantDash()) {
-          // return dash status
-        }
-        if (input.wantJump()) {
-          velticalSpeed = movementAbility.jumpInitialSpeed;
-        }
-      }
-      // horizontal speed
-      float horizontalSpeed = input.wantDirection().x * movementAbility.maxRunSpeed;
-      rigidBody.velocity = new Vector2(horizontalSpeed, velticalSpeed);
-      return this;
-    }
+	public override IStatus update(
+		Dictionary<SensorEnum, ISensor> sensors,
+		ICharacterInput input,
+		float deltaTime) {
+	  // check ground sensor
+	  ISensor groundSensor;
+	  if(sensors.TryGetValue(SensorEnum.ON_GROUND_SENSOR, out groundSensor)
+		  && groundSensor.isInTrigger()) {
+		// on ground
+		return getStateFactory().getState<MovementStatus>();
+	  }
+	  // check relay
+	  float velticalSpeed = rigidBody.velocity.y;
+	  ISensor relaySensor;
+	  if(sensors.TryGetValue(SensorEnum.RELAY_SENSOR, out relaySensor)
+		  && relaySensor.isInTrigger()) {
+		if(input.wantDash()) {
+		  // return dash status
+		}
+		if(input.wantJump()) {
+		  velticalSpeed = movementAbility.jumpInitialSpeed;
+		}
+	  }
+	  // horizontal speed
+	  ISensor rearSensor = getSensorOrNull(sensors, SensorEnum.REAR_SENSOR);
+	  ISensor frontSensor = getSensorOrNull(sensors, SensorEnum.FRONT_SENSOR);
+	  float horizontalSpeed =
+		CharacterHelper.getHorizontalSpeed(input.wantDirection().x,
+		characterController.getOrientation(),
+		frontSensor != null ? frontSensor.isInTrigger() : false,
+		rearSensor != null ? rearSensor.isInTrigger() : false,
+		movementAbility.maxRunSpeed);
+	  rigidBody.velocity = new Vector2(horizontalSpeed, velticalSpeed);
+	  return this;
+	}
   }
 }

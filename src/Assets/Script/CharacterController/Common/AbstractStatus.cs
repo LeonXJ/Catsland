@@ -45,6 +45,12 @@ namespace Catslandx.Script.CharacterController.Common {
       return this;
     }
 
+	protected ISensor getSensorOrNull(Dictionary<SensorEnum, ISensor> sensors, SensorEnum sensorEnum) {
+	  return Dictionaries<SensorEnum, ISensor>.getOrDefault(sensors, sensorEnum, null);
+	}
+
     public virtual void onExit(IStatus nextStatus) {}
+
+    public virtual void applyAnimation(Animator animator) {}
   }
 }

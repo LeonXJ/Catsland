@@ -10,5 +10,11 @@
 
     // Detect the relay point.
     RELAY_SENSOR,
+
+	// Detect the left side.
+	REAR_SENSOR,
+
+	// Detect the right side.
+	FRONT_SENSOR,
   }
 }

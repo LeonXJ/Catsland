@@ -4,7 +4,7 @@ namespace Catsland.Scripts.CharacterController {
   public class DeviceInput :MonoBehaviour, IInput {
 
 	public bool attack() {
-	  return Input.GetKey("Attack");
+	  return Input.GetButton("Fire1");
 	}
 
 	public float getHorizontal() {

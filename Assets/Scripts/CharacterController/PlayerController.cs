@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace Catsland.Scripts.CharacterController {
 
@@ -13,10 +14,15 @@ namespace Catsland.Scripts.CharacterController {
 
 
     // Attack
+    public float arrowSpeed = 5.0f;
     public bool isDrawing = false;
+    public float shootingCd = 0.5f;
+    public bool isShooting = false;
 
     // References
     public GameObject groundSensorGO;
+    public GameObject arrowPrefab;
+    public Transform shootPoint;
     private ISensor groundSensor;
     private IInput input;
     private Rigidbody2D rb2d;
@@ -39,8 +45,15 @@ namespace Catsland.Scripts.CharacterController {
       float desiredSpeed = input.getHorizontal();
 
 
-      // Attack
-      isDrawing = groundSensor.isStay() && input.attack();
+      // Draw and shoot 
+      bool currentIsDrawing =
+        groundSensor.isStay() && input.attack() && !isShooting;
+      // Shoot if string is released
+      if(isDrawing && !currentIsDrawing) {
+        StartCoroutine(shoot());
+      }
+      isDrawing = currentIsDrawing;
+      // Update shooting cd
 
       // Movement
       if(groundSensor.isStay()) {
@@ -58,7 +71,7 @@ namespace Catsland.Scripts.CharacterController {
       }
 
       // Update facing
-      float orientation = getOrientation();
+      float orientation = rb2d.velocity.x;
       if(orientation > 0.0f) {
         transform.localScale = new Vector3(
           Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
@@ -75,9 +88,23 @@ namespace Catsland.Scripts.CharacterController {
       animator.SetBool(DRAWING, isDrawing);
     }
 
+    private IEnumerator shoot() {
+      Debug.Assert(arrowPrefab != null, "Arrow prefab is not set");
+      Debug.Assert(shootPoint != null, "Shoot point is not set");
 
-    private float getOrientation() {
-      return rb2d.velocity.x;
+      GameObject arrow = Instantiate(arrowPrefab, shootPoint.position, shootPoint.rotation);
+      arrow.transform.localScale = new Vector2(
+        transform.localScale.x > 0.0f
+            ? Mathf.Abs(arrow.transform.localScale.x)
+            : -Mathf.Abs(arrow.transform.localScale.x),
+        arrow.transform.localScale.y);
+      Rigidbody2D arrowRd2d = arrow.GetComponent<Rigidbody2D>();
+      arrowRd2d.velocity = new Vector2(
+        transform.localScale.x > 0.0f ? arrowSpeed : -arrowSpeed,
+        0.0f);
+      isShooting = true;
+      yield return new WaitForSeconds(shootingCd);
+      isShooting = false;
     }
   }
 }

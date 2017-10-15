@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Catsland.Scripts.CharacterController {
 
   [RequireComponent(typeof(IInput))]
+  [RequireComponent(typeof(Animator))]
   public class PlayerController :MonoBehaviour {
 
     // Locomoation
@@ -14,15 +13,21 @@ namespace Catsland.Scripts.CharacterController {
 
     // References
     public GameObject groundSensorGO;
-
     private ISensor groundSensor;
     private IInput input;
     private Rigidbody2D rb2d;
+    private Animator animator;
+
+    // Animation
+    private const string H_SPEED = "HSpeed";
+    private const string V_SPEED = "VSpeed";
+    private const string GROUNDED = "Grounded";
 
     public void Awake() {
       input = GetComponent<IInput>();
       rb2d = GetComponent<Rigidbody2D>();
       groundSensor = groundSensorGO.GetComponent<ISensor>();
+      animator = GetComponent<Animator>();
     }
 
     public void Update() {
@@ -55,12 +60,15 @@ namespace Catsland.Scripts.CharacterController {
         transform.localScale = new Vector3(
           -Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
       }
+
+      // Update animation
+      animator.SetBool(GROUNDED, groundSensor.isStay());
+      animator.SetFloat(H_SPEED, Mathf.Abs(rb2d.velocity.x));
+      animator.SetFloat(V_SPEED, rb2d.velocity.y);
     }
 
     private float getOrientation() {
       return rb2d.velocity.x;
     }
-
-
   }
 }

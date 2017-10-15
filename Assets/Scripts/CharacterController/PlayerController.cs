@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+using Catsland.Scripts.Bullets;
+
 namespace Catsland.Scripts.CharacterController {
 
   [RequireComponent(typeof(IInput))]
@@ -93,15 +95,9 @@ namespace Catsland.Scripts.CharacterController {
       Debug.Assert(shootPoint != null, "Shoot point is not set");
 
       GameObject arrow = Instantiate(arrowPrefab, shootPoint.position, shootPoint.rotation);
-      arrow.transform.localScale = new Vector2(
-        transform.localScale.x > 0.0f
-            ? Mathf.Abs(arrow.transform.localScale.x)
-            : -Mathf.Abs(arrow.transform.localScale.x),
-        arrow.transform.localScale.y);
-      Rigidbody2D arrowRd2d = arrow.GetComponent<Rigidbody2D>();
-      arrowRd2d.velocity = new Vector2(
-        transform.localScale.x > 0.0f ? arrowSpeed : -arrowSpeed,
-        0.0f);
+      ArrowCarrier arrowCarrier = arrow.GetComponent<ArrowCarrier>();
+      StartCoroutine(arrowCarrier.fire(
+        new Vector2(transform.localScale.x > 0.0f ? arrowSpeed : -arrowSpeed, 0.0f), 10.0f));
       isShooting = true;
       yield return new WaitForSeconds(shootingCd);
       isShooting = false;

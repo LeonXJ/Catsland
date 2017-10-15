@@ -12,7 +12,7 @@ namespace Catsland.Scripts.CharacterController {
 	}
 
 	public bool jump() {
-	  return Input.GetKeyDown("Jump");
+	  return Input.GetButtonDown("Jump");
 	}
   }
 }

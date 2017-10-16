@@ -17,9 +17,10 @@ namespace Catsland.Scripts.CharacterController {
 
     // Attack
     public float arrowSpeed = 5.0f;
-    public bool isDrawing = false;
-    public float shootingCd = 0.5f;
-    public bool isShooting = false;
+    public float arrowLifetime = 3.0f;
+    private bool isDrawing = false;
+    private float shootingCd = 0.5f;
+    private bool isShooting = false;
 
     // References
     public GameObject groundSensorGO;
@@ -45,7 +46,6 @@ namespace Catsland.Scripts.CharacterController {
 
     public void Update() {
       float desiredSpeed = input.getHorizontal();
-
 
       // Draw and shoot 
       bool currentIsDrawing =
@@ -97,7 +97,9 @@ namespace Catsland.Scripts.CharacterController {
       GameObject arrow = Instantiate(arrowPrefab, shootPoint.position, shootPoint.rotation);
       ArrowCarrier arrowCarrier = arrow.GetComponent<ArrowCarrier>();
       StartCoroutine(arrowCarrier.fire(
-        new Vector2(transform.localScale.x > 0.0f ? arrowSpeed : -arrowSpeed, 0.0f), 10.0f));
+        new Vector2(transform.localScale.x > 0.0f ? arrowSpeed : -arrowSpeed, 0.0f),
+        arrowLifetime,
+        gameObject.tag));
       isShooting = true;
       yield return new WaitForSeconds(shootingCd);
       isShooting = false;

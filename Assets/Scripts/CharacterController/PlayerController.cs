@@ -90,6 +90,12 @@ namespace Catsland.Scripts.CharacterController {
       animator.SetBool(DRAWING, isDrawing);
     }
 
+    public void damage(DamageInfo damageInfo) {
+      Debug.Log("DEBUG>>> take damage");
+      rb2d.AddForce(damageInfo.repelDirection * damageInfo.repelIntense);
+
+    }
+
     private IEnumerator shoot() {
       Debug.Assert(arrowPrefab != null, "Arrow prefab is not set");
       Debug.Assert(shootPoint != null, "Shoot point is not set");

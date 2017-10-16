@@ -6,6 +6,9 @@ namespace Catsland.Scripts.Bullets {
   [RequireComponent(typeof(Rigidbody2D))]
   public class ArrowCarrier :MonoBehaviour {
 
+
+    public int damage = 1;
+    public float repelIntensive = 1.0f;
     public string tagForAttachable = "";
     private bool isAttached = false;
     private string tagForOwner;
@@ -41,10 +44,13 @@ namespace Catsland.Scripts.Bullets {
         if(collision.gameObject.CompareTag(tagForAttachable)) {
           isAttached = true;
           rb2d.isKinematic = true;
-          return;
-        }
-        if(!collision.gameObject.CompareTag(tagForOwner)) {
-          safeDestroy();
+        } else {
+          if(!collision.gameObject.CompareTag(tagForOwner)) {
+            collision.gameObject.SendMessage(
+              BulletConstants.DAMAGE_FUNCTION,
+              new DamageInfo(damage, rb2d.velocity, repelIntensive));
+            safeDestroy();
+          }
         }
       }
     }

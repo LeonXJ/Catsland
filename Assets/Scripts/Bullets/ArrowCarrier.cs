@@ -55,11 +55,14 @@ namespace Catsland.Scripts.Bullets {
           rb2d.velocity = Vector2.zero;
           // attach to the object
           gameObject.transform.parent = collision.gameObject.transform;
+          // enable one side platform
+          GetComponent<Collider2D>().usedByEffector = true;
         } else {
           if(!collision.gameObject.CompareTag(tagForOwner)) {
             collision.gameObject.SendMessage(
               BulletConstants.DAMAGE_FUNCTION,
-              new DamageInfo(damage, rb2d.velocity, repelIntensive));
+              new DamageInfo(damage, rb2d.velocity, repelIntensive),
+              SendMessageOptions.DontRequireReceiver);
             safeDestroy();
           }
         }

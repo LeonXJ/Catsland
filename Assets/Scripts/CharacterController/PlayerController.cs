@@ -75,14 +75,17 @@ namespace Catsland.Scripts.CharacterController {
       }
 
       // Update facing
-      float orientation = rb2d.velocity.x;
-      if(orientation > 0.0f) {
-        transform.localScale = new Vector3(
-          Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-      }
-      if(orientation < 0.0f) {
-        transform.localScale = new Vector3(
-          -Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+      if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon) {
+        float parentLossyScale = gameObject.transform.parent != null 
+            ? gameObject.transform.parent.lossyScale.x : 1.0f;
+        if(desiredSpeed * parentLossyScale > 0.0f) {
+          transform.localScale = new Vector3(
+            Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+        if(desiredSpeed * parentLossyScale < 0.0f) {
+          transform.localScale = new Vector3(
+            -Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
       }
 
       // Update animation
@@ -103,8 +106,9 @@ namespace Catsland.Scripts.CharacterController {
 
       GameObject arrow = Instantiate(arrowPrefab, shootPoint.position, shootPoint.rotation);
       ArrowCarrier arrowCarrier = arrow.GetComponent<ArrowCarrier>();
+      Debug.Log("Lossy Scale X: " + transform.lossyScale.x);
       StartCoroutine(arrowCarrier.fire(
-        new Vector2(transform.localScale.x > 0.0f ? arrowSpeed : -arrowSpeed, 0.0f),
+        new Vector2(transform.lossyScale.x > 0.0f ? arrowSpeed : -arrowSpeed, 0.0f),
         arrowLifetime,
         gameObject.tag));
       isShooting = true;

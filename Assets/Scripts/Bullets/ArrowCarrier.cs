@@ -10,9 +10,10 @@ namespace Catsland.Scripts.Bullets {
     public int damage = 1;
     public float repelIntensive = 1.0f;
     public string tagForAttachable = "";
-    private bool isAttached = false;
+    public bool isAttached = false;
     private string tagForOwner;
     private bool isDestroyed = false;
+    private Vector2 velocity;
 
     // References
     private Rigidbody2D rb2d;
@@ -21,11 +22,18 @@ namespace Catsland.Scripts.Bullets {
       rb2d = GetComponent<Rigidbody2D>();
     }
 
+    public void Update() {
+      if(!isAttached) {
+        rb2d.velocity = velocity;
+      }
+    }
+
     public IEnumerator fire(Vector2 direction, float lifetime, string tagForOwner = "") {
       this.tagForOwner = tagForOwner;
 
       // velocity and orientation
       rb2d.velocity = direction;
+      velocity = direction;
       transform.localScale = new Vector2(
         direction.x > 0.0f
             ? Mathf.Abs(transform.localScale.x)
@@ -44,6 +52,7 @@ namespace Catsland.Scripts.Bullets {
         if(collision.gameObject.CompareTag(tagForAttachable)) {
           isAttached = true;
           rb2d.isKinematic = true;
+          rb2d.velocity = Vector2.zero;
           // attach to the object
           gameObject.transform.parent = collision.gameObject.transform;
         } else {

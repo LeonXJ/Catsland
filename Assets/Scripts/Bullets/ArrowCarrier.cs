@@ -44,6 +44,8 @@ namespace Catsland.Scripts.Bullets {
         if(collision.gameObject.CompareTag(tagForAttachable)) {
           isAttached = true;
           rb2d.isKinematic = true;
+          // attach to the object
+          gameObject.transform.parent = collision.gameObject.transform;
         } else {
           if(!collision.gameObject.CompareTag(tagForOwner)) {
             collision.gameObject.SendMessage(

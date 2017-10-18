@@ -63,6 +63,8 @@ namespace Catsland.Scripts.CharacterController {
           rb2d.AddForce(new Vector2(0.0f, jumpForce));
         }
       }
+      gameObject.transform.parent =
+        groundSensor.isStay() ? groundSensor.getTriggerGO().transform : null;
       if(!isDrawing && Mathf.Abs(desiredSpeed) > Mathf.Epsilon) {
         rb2d.AddForce(new Vector2(acceleration * desiredSpeed, 0.0f));
         rb2d.velocity = new Vector2(
@@ -93,7 +95,6 @@ namespace Catsland.Scripts.CharacterController {
     public void damage(DamageInfo damageInfo) {
       Debug.Log("DEBUG>>> take damage");
       rb2d.AddForce(damageInfo.repelDirection * damageInfo.repelIntense);
-
     }
 
     private IEnumerator shoot() {

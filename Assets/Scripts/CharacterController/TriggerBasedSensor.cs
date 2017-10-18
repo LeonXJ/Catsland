@@ -6,21 +6,29 @@ namespace Catsland.Scripts.CharacterController {
     public LayerMask layerMask;
 
     private bool isTriggered = false;
+    private GameObject triggerGO;
 
     public void OnTriggerEnter2D(Collider2D collision) {
       isTriggered = isCollisionWhitelisted(collision);
+      triggerGO = isTriggered ? collision.gameObject : null;
     }
 
     public void OnTriggerStay2D(Collider2D collision) {
       isTriggered = isCollisionWhitelisted(collision);
+      triggerGO = isTriggered ? collision.gameObject : null;
     }
 
     public void OnTriggerExit2D(Collider2D collision) {
       isTriggered = !isCollisionWhitelisted(collision);
+      triggerGO = isTriggered ? collision.gameObject : null;
     }
 
     public bool isStay() {
       return isTriggered;
+    }
+
+    public GameObject getTriggerGO() {
+      return triggerGO;
     }
 
     private bool isCollisionWhitelisted(Collider2D collision) {

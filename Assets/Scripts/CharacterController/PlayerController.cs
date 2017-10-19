@@ -46,10 +46,12 @@ namespace Catsland.Scripts.CharacterController {
 
     public void Update() {
       float desiredSpeed = input.getHorizontal();
+      float currentVerticleVolocity = rb2d.velocity.y;
+      bool verticleStable = Mathf.Abs(currentVerticleVolocity) < 0.1f;
 
       // Draw and shoot 
       bool currentIsDrawing =
-        groundSensor.isStay() && input.attack() && !isShooting;
+        groundSensor.isStay() && verticleStable && input.attack() && !isShooting;
       // Shoot if string is released
       if(isDrawing && !currentIsDrawing) {
         StartCoroutine(shoot());
@@ -58,7 +60,7 @@ namespace Catsland.Scripts.CharacterController {
       // Update shooting cd
 
       // Movement
-      if(groundSensor.isStay()) {
+      if(groundSensor.isStay() && verticleStable) {
         if(input.jump()) {
           rb2d.AddForce(new Vector2(0.0f, jumpForce));
         }

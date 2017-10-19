@@ -48,6 +48,10 @@ namespace Catsland.Scripts.Bullets {
     }
 
     public void OnCollisionEnter2D(Collision2D collision) {
+      // bullet will not distroy bullet
+      if(collision.gameObject.layer == gameObject.layer) {
+        return;
+      }
       if(!isAttached) {
         if(collision.gameObject.CompareTag(tagForAttachable)) {
           isAttached = true;

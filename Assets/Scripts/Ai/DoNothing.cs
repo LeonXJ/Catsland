@@ -13,6 +13,10 @@ namespace Catsland.Scripts.Ai {
       return 0.0f;
     }
 
+    public float getVertical() {
+      return 0.0f;
+    }
+
     public bool jump() {
       return false;
     }

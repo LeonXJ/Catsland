@@ -1,10 +1,12 @@
 ﻿namespace Catsland.Scripts.CharacterController {
-  interface IInput  {
+  interface IInput {
 
-  float getHorizontal();
+    float getHorizontal();
 
-  bool jump();
+    float getVertical();
 
-  bool attack();
+    bool jump();
+
+    bool attack();
   }
 }

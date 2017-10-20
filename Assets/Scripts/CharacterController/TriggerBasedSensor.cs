@@ -19,8 +19,10 @@ namespace Catsland.Scripts.CharacterController {
     }
 
     public void OnTriggerExit2D(Collider2D collision) {
-      isTriggered = !isCollisionWhitelisted(collision);
-      triggerGO = isTriggered ? collision.gameObject : null;
+      if(isCollisionWhitelisted(collision)) {
+        isTriggered = false;
+        triggerGO = null;
+      }
     }
 
     public bool isStay() {

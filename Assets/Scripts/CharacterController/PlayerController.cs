@@ -2,6 +2,7 @@
 using UnityEngine;
 
 using Catsland.Scripts.Bullets;
+using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.CharacterController {
 
@@ -57,12 +58,19 @@ namespace Catsland.Scripts.CharacterController {
         StartCoroutine(shoot());
       }
       isDrawing = currentIsDrawing;
-      // Update shooting cd
 
       // Movement
       if(groundSensor.isStay() && verticleStable) {
         if(input.jump()) {
-          rb2d.AddForce(new Vector2(0.0f, jumpForce));
+          // jump down
+          if(input.getVertical() < -0.1f) {
+            if(groundSensor.getTriggerGO().CompareTag(Tags.ONESIDE)) {
+              StartCoroutine(jumpDown(groundSensor.getTriggerGO()));
+            }
+          } else {
+            // jump up
+            rb2d.AddForce(new Vector2(0.0f, jumpForce));
+          }
         }
       }
       gameObject.transform.parent =
@@ -116,6 +124,14 @@ namespace Catsland.Scripts.CharacterController {
       isShooting = true;
       yield return new WaitForSeconds(shootingCd);
       isShooting = false;
+    }
+
+    private IEnumerator jumpDown(GameObject onesideGO) {
+      Collider2D collider = onesideGO.GetComponent<Collider2D>();
+      collider.enabled = false;
+      yield return new WaitForSeconds(1.0f);
+      collider.enabled = true;
+
     }
   }
 }

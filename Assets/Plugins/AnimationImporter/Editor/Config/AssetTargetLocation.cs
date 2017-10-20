@@ -1,9 +1,8 @@
 ﻿using System.IO;
 using UnityEngine;
 
-namespace AnimationImporter
-{
-	[System.Serializable]
+namespace AnimationImporter {
+  [System.Serializable]
 	public class AssetTargetLocation
 	{
 		[SerializeField]

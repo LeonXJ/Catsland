@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-using Catsland.Scripts.CharacterController;
+using Catsland.Scripts.Controller;
 
 namespace Catsland.Scripts.Ai {
   public class DoNothing :MonoBehaviour, IInput {

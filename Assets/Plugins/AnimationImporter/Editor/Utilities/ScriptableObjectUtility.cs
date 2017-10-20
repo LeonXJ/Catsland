@@ -1,14 +1,10 @@
-﻿using System.Collections;
-using System.IO;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace AnimationImporter
-{
-	/// <summary>
-	/// Utility functions for ScriptableObjects.
-	/// </summary>
-	public static class ScriptableObjectUtility
+namespace AnimationImporter {
+  /// <summary>
+  /// Utility functions for ScriptableObjects.
+  /// </summary>
+  public static class ScriptableObjectUtility
 	{
 		/// <summary>
 		/// Loads the save data from a Unity relative path. Returns null if the data doesn't exist.

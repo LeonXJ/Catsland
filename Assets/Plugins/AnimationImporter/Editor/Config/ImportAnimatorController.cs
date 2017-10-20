@@ -1,7 +1,6 @@
 ﻿
-namespace AnimationImporter
-{
-	public enum ImportAnimatorController
+namespace AnimationImporter {
+  public enum ImportAnimatorController
 	{
 		None,
 		AnimatorController,

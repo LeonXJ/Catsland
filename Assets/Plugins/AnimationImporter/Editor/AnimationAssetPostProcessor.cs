@@ -1,13 +1,9 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using Random = UnityEngine.Random;
 using UnityEditor;
 
-namespace AnimationImporter
-{
-	public class AnimationAssetPostprocessor : AssetPostprocessor
+namespace AnimationImporter {
+  public class AnimationAssetPostprocessor : AssetPostprocessor
 	{
 		private static List<string> _assetsMarkedForImport = new List<string>();
 		private static EditorApplication.CallbackFunction _importDelegate;

@@ -1,13 +1,12 @@
+using System.IO;
 using UnityEditor;
 using UnityEngine;
-using System.IO;
 
-namespace AnimationImporter
-{
-	/// <summary>
-	/// Utilities for Unity's built in AssetDatabase class
-	/// </summary>
-	public static class AssetDatabaseUtility
+namespace AnimationImporter {
+  /// <summary>
+  /// Utilities for Unity's built in AssetDatabase class
+  /// </summary>
+  public static class AssetDatabaseUtility
 	{
 		public const char UnityDirectorySeparator = '/';
 		public const string ResourcesFolderName = "Resources";

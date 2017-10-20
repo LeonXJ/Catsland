@@ -1,16 +1,13 @@
-using UnityEngine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using System.IO;
-using UnityEditor.Animations;
-using System.Linq;
 using AnimationImporter.Aseprite;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
+using UnityEditor.Animations;
+using UnityEngine;
 
-namespace AnimationImporter
-{
-	public class AnimationImporter
+namespace AnimationImporter {
+  public class AnimationImporter
 	{
 		// ================================================================================
 		//	Singleton

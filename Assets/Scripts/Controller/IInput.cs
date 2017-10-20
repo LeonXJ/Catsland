@@ -1,4 +1,4 @@
-﻿namespace Catsland.Scripts.CharacterController {
+﻿namespace Catsland.Scripts.Controller {
   interface IInput {
 
     float getHorizontal();

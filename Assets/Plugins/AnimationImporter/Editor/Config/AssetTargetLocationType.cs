@@ -1,7 +1,6 @@
 ﻿
-namespace AnimationImporter
-{
-	public enum AssetTargetLocationType : int
+namespace AnimationImporter {
+  public enum AssetTargetLocationType : int
 	{
 		SameDirectory,
 		SubDirectory,

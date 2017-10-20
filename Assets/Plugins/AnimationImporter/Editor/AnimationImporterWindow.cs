@@ -1,17 +1,10 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Random = UnityEngine.Random;
-using UnityEditor;
+﻿using System.Collections.Generic;
 using System.IO;
-using AnimationImporter.Boomlagoon.JSON;
-using UnityEditor.Animations;
-using System.Linq;
+using UnityEditor;
+using UnityEngine;
 
-namespace AnimationImporter
-{
-	public class AnimationImporterWindow : EditorWindow
+namespace AnimationImporter {
+  public class AnimationImporterWindow : EditorWindow
 	{
 		// ================================================================================
 		//  private

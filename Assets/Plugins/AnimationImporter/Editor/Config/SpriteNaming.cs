@@ -1,9 +1,7 @@
 ﻿using System;
-using UnityEngine;
 
-namespace AnimationImporter
-{
-	public enum SpriteNamingScheme : int
+namespace AnimationImporter {
+  public enum SpriteNamingScheme : int
 	{
 		Classic,			// hero 0
 		FileAnimationZero,	// hero_idle_0, ...

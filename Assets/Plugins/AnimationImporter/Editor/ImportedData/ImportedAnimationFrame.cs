@@ -1,10 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
-namespace AnimationImporter
-{
-	public class ImportedAnimationFrame
+namespace AnimationImporter {
+  public class ImportedAnimationFrame
 	{
 		// ================================================================================
 		//  naming

@@ -1,10 +1,9 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
-using System.Collections.Generic;
 
-namespace AnimationImporter
-{
-	public class AnimationImporterSharedConfig : ScriptableObject
+namespace AnimationImporter {
+  public class AnimationImporterSharedConfig : ScriptableObject
 	{
 		private const string PREFS_PREFIX = "ANIMATION_IMPORTER_";
 

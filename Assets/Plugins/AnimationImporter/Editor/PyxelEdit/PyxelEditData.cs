@@ -1,12 +1,9 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
+﻿using AnimationImporter.Boomlagoon.JSON;
 using System.Collections.Generic;
-using AnimationImporter.Boomlagoon.JSON;
+using UnityEngine;
 
-namespace AnimationImporter.PyxelEdit
-{
-	public class PyxelEditData
+namespace AnimationImporter.PyxelEdit {
+  public class PyxelEditData
 	{
 		public Tileset tileset = new Tileset();
 		public Canvas canvas = new Canvas();

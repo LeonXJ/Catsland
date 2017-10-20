@@ -1,14 +1,11 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
-using System.Linq;
+using UnityEngine;
 
-namespace AnimationImporter
-{
-	public class ImportedAnimationSheet
+namespace AnimationImporter {
+  public class ImportedAnimationSheet
 	{
 		public string name { get; set; }
 		public string assetDirectory { get; set; }

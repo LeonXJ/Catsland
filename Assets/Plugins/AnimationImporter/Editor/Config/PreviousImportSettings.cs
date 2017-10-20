@@ -1,13 +1,8 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Random = UnityEngine.Random;
-using UnityEditor;
+﻿using UnityEditor;
+using UnityEngine;
 
-namespace AnimationImporter
-{
-	public class PreviousImportSettings
+namespace AnimationImporter {
+  public class PreviousImportSettings
 	{
 		private SpriteMetaData? _previousFirstSprite = null;
 

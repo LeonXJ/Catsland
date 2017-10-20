@@ -51,12 +51,10 @@ using UnityEngine;
 using System.Diagnostics;
 #endif
 
-namespace AnimationImporter
-{
-	namespace Boomlagoon.JSON
-	{
+namespace AnimationImporter {
+  namespace Boomlagoon.JSON {
 
-		public static class Extensions
+    public static class Extensions
 		{
 			public static T Pop<T>(this List<T> list)
 			{

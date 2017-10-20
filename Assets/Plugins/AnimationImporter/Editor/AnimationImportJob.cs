@@ -1,13 +1,7 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using System.IO;
+﻿using System.IO;
 
-namespace AnimationImporter
-{
-	public class AnimationImportJob
+namespace AnimationImporter {
+  public class AnimationImportJob
 	{
 		private string _assetPath;
 

@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Common;
 
-namespace Catsland.Scripts.CharacterController {
+namespace Catsland.Scripts.Controller {
 
   [RequireComponent(typeof(IInput))]
   [RequireComponent(typeof(Animator))]
@@ -15,13 +16,16 @@ namespace Catsland.Scripts.CharacterController {
     public float acceleration = 1.0f;
     public float jumpForce = 5.0f;
 
-
     // Attack
     public float arrowSpeed = 5.0f;
     public float arrowLifetime = 3.0f;
     private bool isDrawing = false;
     private float shootingCd = 0.5f;
     private bool isShooting = false;
+
+    // Health
+    public int maxHealth = 3;
+    public int currentHealth;
 
     // References
     public GameObject groundSensorGO;
@@ -43,6 +47,10 @@ namespace Catsland.Scripts.CharacterController {
       rb2d = GetComponent<Rigidbody2D>();
       groundSensor = groundSensorGO.GetComponent<ISensor>();
       animator = GetComponent<Animator>();
+    }
+
+    public void Start() {
+      currentHealth = maxHealth;
     }
 
     public void Update() {
@@ -106,8 +114,13 @@ namespace Catsland.Scripts.CharacterController {
     }
 
     public void damage(DamageInfo damageInfo) {
-      Debug.Log("DEBUG>>> take damage");
       rb2d.AddForce(damageInfo.repelDirection * damageInfo.repelIntense);
+      currentHealth -= damageInfo.damage;
+      if(currentHealth <= 0) {
+        // Die
+        Debug.Log("Debug>>> Die");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+      }
     }
 
     private IEnumerator shoot() {

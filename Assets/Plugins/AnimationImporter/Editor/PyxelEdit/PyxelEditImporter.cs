@@ -1,14 +1,13 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using AnimationImporter.Boomlagoon.JSON;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using AnimationImporter.Boomlagoon.JSON;
+using UnityEditor;
+using UnityEngine;
 
-namespace AnimationImporter.PyxelEdit
-{
-	[InitializeOnLoad]
+namespace AnimationImporter.PyxelEdit {
+  [InitializeOnLoad]
 	public class PyxelEditImporter : IAnimationImporterPlugin
 	{
 		private static PyxelEditData _latestData = null;

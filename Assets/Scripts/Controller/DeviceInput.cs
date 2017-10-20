@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Catsland.Scripts.CharacterController {
+namespace Catsland.Scripts.Controller {
   public class DeviceInput :MonoBehaviour, IInput {
 
     public bool attack() {

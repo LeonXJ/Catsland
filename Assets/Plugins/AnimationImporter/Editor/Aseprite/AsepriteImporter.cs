@@ -1,15 +1,10 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Random = UnityEngine.Random;
-using AnimationImporter.Boomlagoon.JSON;
-using UnityEditor;
+﻿using AnimationImporter.Boomlagoon.JSON;
 using System.IO;
+using UnityEditor;
+using UnityEngine;
 
-namespace AnimationImporter.Aseprite
-{
-	[InitializeOnLoad]
+namespace AnimationImporter.Aseprite {
+  [InitializeOnLoad]
 	public class AsepriteImporter : IAnimationImporterPlugin
 	{
 		// ================================================================================

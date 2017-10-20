@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using UnityEditor;
-using UnityEditor.Animations;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AnimationImporter
-{
-	public static class AnimationClipUtility
+namespace AnimationImporter {
+  public static class AnimationClipUtility
 	{
 		class AnimationClipSettings
 		{

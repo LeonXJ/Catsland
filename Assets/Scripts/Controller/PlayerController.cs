@@ -26,6 +26,8 @@ namespace Catsland.Scripts.Controller {
     // Health
     public int maxHealth = 3;
     public int currentHealth;
+    public float dizzyTime = 1.0f;
+    private bool isDizzy = false;
 
     // References
     public GameObject groundSensorGO;
@@ -41,6 +43,7 @@ namespace Catsland.Scripts.Controller {
     private const string V_SPEED = "VSpeed";
     private const string GROUNDED = "Grounded";
     private const string DRAWING = "Drawing";
+    private const string DIZZY = "Dizzy";
 
     public void Awake() {
       input = GetComponent<IInput>();
@@ -60,15 +63,19 @@ namespace Catsland.Scripts.Controller {
 
       // Draw and shoot 
       bool currentIsDrawing =
-        groundSensor.isStay() && verticleStable && input.attack() && !isShooting;
+        groundSensor.isStay()
+        && verticleStable
+        && input.attack()
+        && !isShooting
+        && !isDizzy;
       // Shoot if string is released
-      if(isDrawing && !currentIsDrawing) {
+      if(isDrawing && !currentIsDrawing && !isDizzy) {
         StartCoroutine(shoot());
       }
       isDrawing = currentIsDrawing;
 
       // Movement
-      if(groundSensor.isStay() && verticleStable) {
+      if(groundSensor.isStay() && verticleStable && !isDizzy) {
         if(input.jump()) {
           // jump down
           if(input.getVertical() < -0.1f) {
@@ -83,18 +90,24 @@ namespace Catsland.Scripts.Controller {
       }
       gameObject.transform.parent =
         groundSensor.isStay() ? groundSensor.getTriggerGO().transform : null;
-      if(!isDrawing && Mathf.Abs(desiredSpeed) > Mathf.Epsilon) {
-        rb2d.AddForce(new Vector2(acceleration * desiredSpeed, 0.0f));
-        rb2d.velocity = new Vector2(
-          Mathf.Clamp(rb2d.velocity.x, -maxHorizontalSpeed, maxHorizontalSpeed),
-          rb2d.velocity.y);
+      if(!isDizzy) {
+        if(!isDrawing && Mathf.Abs(desiredSpeed) > Mathf.Epsilon) {
+          rb2d.AddForce(new Vector2(acceleration * desiredSpeed, 0.0f));
+          rb2d.velocity = new Vector2(
+            Mathf.Clamp(rb2d.velocity.x, -maxHorizontalSpeed, maxHorizontalSpeed),
+            rb2d.velocity.y);
+        } else {
+          rb2d.velocity = new Vector2(0.0f, rb2d.velocity.y);
+        }
       } else {
-        rb2d.velocity = new Vector2(0.0f, rb2d.velocity.y);
+        // dizzy, damp on horizontal speed
+        rb2d.velocity =
+          new Vector2(rb2d.velocity.x * 0.8f, rb2d.velocity.y);
       }
 
       // Update facing
-      if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon) {
-        float parentLossyScale = gameObject.transform.parent != null 
+      if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon && !isDizzy) {
+        float parentLossyScale = gameObject.transform.parent != null
             ? gameObject.transform.parent.lossyScale.x : 1.0f;
         if(desiredSpeed * parentLossyScale > 0.0f) {
           transform.localScale = new Vector3(
@@ -111,6 +124,7 @@ namespace Catsland.Scripts.Controller {
       animator.SetFloat(H_SPEED, Mathf.Abs(rb2d.velocity.x));
       animator.SetFloat(V_SPEED, rb2d.velocity.y);
       animator.SetBool(DRAWING, isDrawing);
+      animator.SetBool(DIZZY, isDizzy);
     }
 
     public void damage(DamageInfo damageInfo) {
@@ -118,8 +132,10 @@ namespace Catsland.Scripts.Controller {
       currentHealth -= damageInfo.damage;
       if(currentHealth <= 0) {
         // Die
-        Debug.Log("Debug>>> Die");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+      } else {
+        // Dizzy
+        StartCoroutine(dizzy());
       }
     }
 
@@ -144,7 +160,12 @@ namespace Catsland.Scripts.Controller {
       collider.enabled = false;
       yield return new WaitForSeconds(1.0f);
       collider.enabled = true;
+    }
 
+    private IEnumerator dizzy() {
+      isDizzy = true;
+      yield return new WaitForSeconds(dizzyTime);
+      isDizzy = false;
     }
   }
 }

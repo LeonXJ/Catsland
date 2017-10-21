@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+using Catsland.Scripts.Common;
+
 namespace Catsland.Scripts.Bullets {
 
   [RequireComponent(typeof(Rigidbody2D))]
@@ -64,7 +66,7 @@ namespace Catsland.Scripts.Bullets {
         } else {
           if(!collision.gameObject.CompareTag(tagForOwner)) {
             collision.gameObject.SendMessage(
-              BulletConstants.DAMAGE_FUNCTION,
+              MessageNames.DAMAGE_FUNCTION,
               new DamageInfo(damage, rb2d.velocity, repelIntensive),
               SendMessageOptions.DontRequireReceiver);
             safeDestroy();

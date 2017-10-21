@@ -18,10 +18,13 @@ namespace Catsland.Scripts.Controller {
 
     // Attack
     public float arrowSpeed = 5.0f;
-    public float arrowLifetime = 3.0f;
+    public float maxArrowLifetime = 3.0f;
+    public float maxRepelForce = 50f;
+    public float maxDrawingTime = 1.0f;
     private bool isDrawing = false;
     private float shootingCd = 0.5f;
     private bool isShooting = false;
+    private float currentDrawingTime = 0.0f;
 
     // Health
     public int maxHealth = 3;
@@ -71,6 +74,12 @@ namespace Catsland.Scripts.Controller {
       // Shoot if string is released
       if(isDrawing && !currentIsDrawing && !isDizzy) {
         StartCoroutine(shoot());
+      }
+      // Set drawing time
+      if(currentIsDrawing) {
+        currentDrawingTime += Time.deltaTime;
+      } else {
+        currentDrawingTime = 0.0f;
       }
       isDrawing = currentIsDrawing;
 
@@ -145,10 +154,12 @@ namespace Catsland.Scripts.Controller {
 
       GameObject arrow = Instantiate(arrowPrefab, shootPoint.position, shootPoint.rotation);
       ArrowCarrier arrowCarrier = arrow.GetComponent<ArrowCarrier>();
-      Debug.Log("Lossy Scale X: " + transform.lossyScale.x);
+      float drawingRatio =
+        Mathf.Clamp(currentDrawingTime, 0.0f, maxDrawingTime) / maxDrawingTime;
+      arrowCarrier.repelIntensive = drawingRatio * maxRepelForce;
       StartCoroutine(arrowCarrier.fire(
         new Vector2(transform.lossyScale.x > 0.0f ? arrowSpeed : -arrowSpeed, 0.0f),
-        arrowLifetime,
+        maxArrowLifetime * drawingRatio,
         gameObject.tag));
       isShooting = true;
       yield return new WaitForSeconds(shootingCd);

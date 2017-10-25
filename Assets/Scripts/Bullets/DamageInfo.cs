@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 namespace Catsland.Scripts.Bullets {
-  public class DamageInfo :MonoBehaviour {
+  public class DamageInfo {
 
     public readonly int damage;
     public readonly float repelIntense;

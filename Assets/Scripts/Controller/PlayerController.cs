@@ -148,6 +148,14 @@ namespace Catsland.Scripts.Controller {
       }
     }
 
+    public float getDrawIntensity() {
+      return currentDrawingTime / maxDrawingTime;
+    }
+
+    public float getOrientation() {
+      return transform.lossyScale.x > 0.0f ? 1.0f : -1.0f;
+    }
+
     private IEnumerator shoot() {
       Debug.Assert(arrowPrefab != null, "Arrow prefab is not set");
       Debug.Assert(shootPoint != null, "Shoot point is not set");

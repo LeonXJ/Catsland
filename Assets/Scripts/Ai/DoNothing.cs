@@ -48,7 +48,6 @@ namespace Catsland.Scripts.Ai {
 
     [Task]
     public void isPlayerInRange() {
-      Debug.Log("DEBUG>> check");
       if(playerGo == null) {
         Task.current.Fail();
         return;
@@ -74,7 +73,6 @@ namespace Catsland.Scripts.Ai {
         return;
       }
 
-      Debug.Log("DEBUG>> In range");
       Task.current.Succeed();
     }
 
@@ -97,25 +95,47 @@ namespace Catsland.Scripts.Ai {
     }
 
     [Task]
-    public void doPetrol() {
-      resetControllStatus();
+    public void isMovingToPetrolPoint() {
 
-      if(petrolPoints == null || petrolPoints.Length == 0) {
+      if(petrolPoints == null || petrolPoints.Length == 0 || currentTargetPetrolPoint < 0) {
         Task.current.Fail();
         return;
       }
 
-      // initialize current target point
+      float delta = petrolPoints[currentTargetPetrolPoint].position.x - transform.position.x;
+
+      if(Mathf.Abs(delta) < pointReachRange) {
+        Task.current.Fail();
+      } else {
+        Task.current.Succeed();
+      }
+
+    }
+
+    [Task]
+    public void setPetrolPoint() {
+      if(petrolPoints == null || petrolPoints.Length == 0) {
+        Task.current.Fail();
+        return;
+      }
       if(currentTargetPetrolPoint < 0) {
         currentTargetPetrolPoint = 0;
+      } else {
+        currentTargetPetrolPoint = (currentTargetPetrolPoint + 1) % petrolPoints.Length;
+      }
+      Task.current.Succeed();
+    }
+
+    [Task]
+    public void moveToPetrolPoint() {
+      resetControllStatus();
+
+      if(petrolPoints == null || petrolPoints.Length == 0 || currentTargetPetrolPoint < 0) {
+        Task.current.Fail();
+        return;
       }
 
       float delta = petrolPoints[currentTargetPetrolPoint].position.x - transform.position.x;
-
-      // reach target point?
-      if(Mathf.Abs(delta) < pointReachRange) {
-        currentTargetPetrolPoint = (currentTargetPetrolPoint + 1) % petrolPoints.Length;
-      }
 
       // move to target point
       delta = petrolPoints[currentTargetPetrolPoint].position.x - transform.position.x;
@@ -124,6 +144,12 @@ namespace Catsland.Scripts.Ai {
       } else {
         wantHorizontal = -1.0f;
       }
+      Task.current.Succeed();
+    }
+
+    [Task]
+    public void stop() {
+      resetControllStatus();
       Task.current.Succeed();
     }
 

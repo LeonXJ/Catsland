@@ -2,7 +2,19 @@ tree("Root")
   fallback
     while isPlayerInRange()
       sequence
+        stop()
         Wait(0.5)
         doDrawing(0.8)
         doShoot()
-    doPetrol()
+    fallback
+      sequence
+        isMovingToPetrolPoint()
+        moveToPetrolPoint()
+      sequence
+        stop()
+        repeat 5
+          while
+            sequence
+              not isPlayerInRange()
+            Wait(0.2)
+        setPetrolPoint()

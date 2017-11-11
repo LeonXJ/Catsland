@@ -17,7 +17,8 @@ namespace Catsland.Scripts.Controller {
     public float jumpForce = 5.0f;
 
     // Attack
-    public float arrowSpeed = 5.0f;
+    public float maxArrowSpeed = 15.0f;
+    public float minArrowSpeed = 5.0f;
     public float maxArrowLifetime = 3.0f;
     public float maxRepelForce = 50f;
     public float maxDrawingTime = 1.0f;
@@ -165,9 +166,10 @@ namespace Catsland.Scripts.Controller {
       float drawingRatio =
         Mathf.Clamp(currentDrawingTime, 0.0f, maxDrawingTime) / maxDrawingTime;
       arrowCarrier.repelIntensive = drawingRatio * maxRepelForce;
+      float absoluteArrowSpeed = Mathf.Lerp(minArrowSpeed, maxArrowSpeed, drawingRatio);
       StartCoroutine(arrowCarrier.fire(
-        new Vector2(transform.lossyScale.x > 0.0f ? arrowSpeed : -arrowSpeed, 0.0f),
-        maxArrowLifetime * drawingRatio,
+        new Vector2(transform.lossyScale.x > 0.0f ? absoluteArrowSpeed: -absoluteArrowSpeed, 0.0f),
+        maxArrowLifetime,
         gameObject.tag));
       isShooting = true;
       yield return new WaitForSeconds(shootingCd);

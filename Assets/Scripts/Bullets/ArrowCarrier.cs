@@ -26,11 +26,11 @@ namespace Catsland.Scripts.Bullets {
 
     public void Update() {
       if(!isAttached) {
-        rb2d.velocity = velocity;
+        rb2d.velocity = new Vector2(velocity.x, rb2d.velocity.y);
       }
     }
 
-    public IEnumerator fire(Vector2 direction, float lifetime, string tagForOwner = "") {
+    public IEnumerator fire(Vector2 direction, float lifetime, string tagForOwner) {
       this.tagForOwner = tagForOwner;
 
       // velocity and orientation
@@ -64,7 +64,7 @@ namespace Catsland.Scripts.Bullets {
           // enable one side platform
           GetComponent<Collider2D>().usedByEffector = true;
         } else {
-          if(!collision.gameObject.CompareTag(tagForOwner)) {
+          if(tagForOwner == null || !collision.gameObject.CompareTag(tagForOwner)) {
             collision.gameObject.SendMessage(
               MessageNames.DAMAGE_FUNCTION,
               new DamageInfo(damage, rb2d.velocity, repelIntensive),

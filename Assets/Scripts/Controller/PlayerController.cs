@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Common;
+using Catsland.Scripts.Misc;
 
 namespace Catsland.Scripts.Controller {
 
@@ -37,6 +38,7 @@ namespace Catsland.Scripts.Controller {
     public GameObject groundSensorGO;
     public GameObject arrowPrefab;
     public Transform shootPoint;
+    public TrailIndicator trailIndicator;
     private ISensor groundSensor;
     private IInput input;
     private Rigidbody2D rb2d;
@@ -79,8 +81,17 @@ namespace Catsland.Scripts.Controller {
       // Set drawing time
       if(currentIsDrawing) {
         currentDrawingTime += Time.deltaTime;
+        // render indicator
+        if(trailIndicator != null) {
+          float velocity = Mathf.Lerp(minArrowSpeed, maxArrowSpeed, getDrawIntensity());
+          trailIndicator.isShow = true;
+          trailIndicator.initVelocity = velocity;
+        }
       } else {
         currentDrawingTime = 0.0f;
+        if(trailIndicator != null) {
+          trailIndicator.isShow = false;
+        }
       }
       isDrawing = currentIsDrawing;
 

@@ -2,6 +2,7 @@
 using UnityEngine;
 
 using Catsland.Scripts.Common;
+using Catsland.Scripts.Misc;
 
 namespace Catsland.Scripts.Bullets {
 
@@ -13,15 +14,19 @@ namespace Catsland.Scripts.Bullets {
     public float repelIntensive = 1.0f;
     public string tagForAttachable = "";
     public bool isAttached = false;
+
     private string tagForOwner;
     private bool isDestroyed = false;
     private Vector2 velocity;
 
     // References
+    public ParticleSystem particleSystem;
     private Rigidbody2D rb2d;
+    private Trail trail;
 
     public void Awake() {
       rb2d = GetComponent<Rigidbody2D>();
+      trail = GetComponent<Trail>();
     }
 
     public void Update() {
@@ -54,6 +59,7 @@ namespace Catsland.Scripts.Bullets {
       if(collision.gameObject.layer == gameObject.layer) {
         return;
       }
+
       if(!isAttached) {
         if(collision.gameObject.CompareTag(tagForAttachable)) {
           isAttached = true;
@@ -63,6 +69,11 @@ namespace Catsland.Scripts.Bullets {
           gameObject.transform.parent = collision.gameObject.transform;
           // enable one side platform
           GetComponent<Collider2D>().usedByEffector = true;
+          trail.isShow = false;
+          // particle
+          ParticleSystem.EmissionModule emission = particleSystem.emission;
+          emission.enabled = true;
+          particleSystem.Play();
         } else {
           if(tagForOwner == null || !collision.gameObject.CompareTag(tagForOwner)) {
             collision.gameObject.SendMessage(

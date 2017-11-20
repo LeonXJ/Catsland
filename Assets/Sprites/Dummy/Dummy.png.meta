@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 9572d42c1d2e99e42a969a405b456df1
-timeCreated: 1508089369
+timeCreated: 1511145413
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -52,6 +52,12 @@ TextureImporter:
     21300090: Dummy_draw_3
     21300092: Dummy_shoot_x_0
     21300094: Dummy_shoot_x_1
+    21300096: Dummy_jumpup_draw_0
+    21300098: Dummy_jumpup_draw_1
+    21300100: Dummy_jumpup_draw_2
+    21300102: Dummy_fall_draw_0
+    21300104: Dummy_fall_draw_1
+    21300106: Dummy_fall_draw_2
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -647,6 +653,84 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Dummy_jumpup_draw_0
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Dummy_jumpup_draw_1
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Dummy_jumpup_draw_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Dummy_fall_draw_0
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Dummy_fall_draw_1
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Dummy_fall_draw_2
+      rect:
+        serializedVersion: 2
+        x: 224
         y: 64
         width: 32
         height: 32

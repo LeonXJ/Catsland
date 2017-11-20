@@ -65,15 +65,10 @@ namespace Catsland.Scripts.Controller {
     public void Update() {
       float desiredSpeed = input.getHorizontal();
       float currentVerticleVolocity = rb2d.velocity.y;
-      bool verticleStable = Mathf.Abs(currentVerticleVolocity) < 0.1f;
+      //bool verticleStable = Mathf.Abs(currentVerticleVolocity) < 0.1f;
 
       // Draw and shoot 
-      bool currentIsDrawing =
-        groundSensor.isStay()
-        && verticleStable
-        && input.attack()
-        && !isShooting
-        && !isDizzy;
+      bool currentIsDrawing = input.attack() && !isShooting && !isDizzy;
       // Shoot if string is released
       if(isDrawing && !currentIsDrawing && !isDizzy) {
         StartCoroutine(shoot());
@@ -85,7 +80,7 @@ namespace Catsland.Scripts.Controller {
         if(trailIndicator != null) {
           float velocity = Mathf.Lerp(minArrowSpeed, maxArrowSpeed, getDrawIntensity());
           trailIndicator.isShow = true;
-          trailIndicator.initVelocity = velocity;
+          trailIndicator.initVelocity = new Vector2(velocity, 0.0f);
         }
       } else {
         currentDrawingTime = 0.0f;
@@ -96,8 +91,8 @@ namespace Catsland.Scripts.Controller {
       isDrawing = currentIsDrawing;
 
       // Movement
-      if(groundSensor.isStay() && verticleStable && !isDizzy) {
-        if(input.jump()) {
+      if(groundSensor.isStay() && !isDizzy) {
+        if(input.jump() && !isDrawing) {
           // jump down
           if(input.getVertical() < -0.1f) {
             if(groundSensor.getTriggerGO().CompareTag(Tags.ONESIDE)) {
@@ -112,7 +107,8 @@ namespace Catsland.Scripts.Controller {
       gameObject.transform.parent =
         groundSensor.isStay() ? groundSensor.getTriggerGO().transform : null;
       if(!isDizzy) {
-        if(!isDrawing && Mathf.Abs(desiredSpeed) > Mathf.Epsilon) {
+        if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon
+          && (!groundSensor.isStay() || !isDrawing)) {
           rb2d.AddForce(new Vector2(acceleration * desiredSpeed, 0.0f));
           rb2d.velocity = new Vector2(
             Mathf.Clamp(rb2d.velocity.x, -maxHorizontalSpeed, maxHorizontalSpeed),
@@ -146,6 +142,8 @@ namespace Catsland.Scripts.Controller {
       animator.SetFloat(V_SPEED, rb2d.velocity.y);
       animator.SetBool(DRAWING, isDrawing);
       animator.SetBool(DIZZY, isDizzy);
+
+
     }
 
     public void damage(DamageInfo damageInfo) {
@@ -179,7 +177,7 @@ namespace Catsland.Scripts.Controller {
       arrowCarrier.repelIntensive = drawingRatio * maxRepelForce;
       float absoluteArrowSpeed = Mathf.Lerp(minArrowSpeed, maxArrowSpeed, drawingRatio);
       StartCoroutine(arrowCarrier.fire(
-        new Vector2(transform.lossyScale.x > 0.0f ? absoluteArrowSpeed: -absoluteArrowSpeed, 0.0f),
+        new Vector2(transform.lossyScale.x > 0.0f ? absoluteArrowSpeed : -absoluteArrowSpeed, 0.0f),
         maxArrowLifetime,
         gameObject.tag));
       isShooting = true;

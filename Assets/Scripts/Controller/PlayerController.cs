@@ -40,6 +40,7 @@ namespace Catsland.Scripts.Controller {
     public Transform shootPoint;
     public TrailIndicator trailIndicator;
     private ISensor groundSensor;
+    private ISensor headSensor;
     private IInput input;
     private Rigidbody2D rb2d;
     private Animator animator;

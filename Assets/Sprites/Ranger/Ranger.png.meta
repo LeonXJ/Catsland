@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 08d7888d650360744a2d386f600c169e
-timeCreated: 1519087515
+timeCreated: 1519092284
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -62,6 +62,18 @@ TextureImporter:
     21300110: Ranger_FallDraw_1
     21300112: Ranger_FallDraw_2
     21300114: Ranger_FallDraw_3
+    21300116: Ranger_Stand_2
+    21300118: Ranger_Stand_3
+    21300120: Ranger_Stand_4
+    21300122: Ranger_Stand_5
+    21300124: Ranger_CrouchWalk_0
+    21300126: Ranger_CrouchWalk_1
+    21300128: Ranger_CrouchWalk_2
+    21300130: Ranger_CrouchWalk_3
+    21300132: Ranger_CrouchWalk_4
+    21300134: Ranger_CrouchWalk_5
+    21300136: Ranger_CrouchWalk_6
+    21300138: Ranger_CrouchWalk_7
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -132,7 +144,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 104
+        y: 232
         width: 24
         height: 24
       alignment: 7
@@ -145,7 +157,59 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 24
-        y: 104
+        y: 232
+        width: 24
+        height: 24
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Ranger_Stand_2
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 232
+        width: 24
+        height: 24
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Ranger_Stand_3
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 232
+        width: 24
+        height: 24
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Ranger_Stand_4
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 232
+        width: 24
+        height: 24
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Ranger_Stand_5
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 232
         width: 24
         height: 24
       alignment: 7
@@ -157,8 +221,8 @@ TextureImporter:
       name: Ranger_StandDraw_0
       rect:
         serializedVersion: 2
-        x: 48
-        y: 104
+        x: 144
+        y: 232
         width: 24
         height: 24
       alignment: 7
@@ -170,8 +234,8 @@ TextureImporter:
       name: Ranger_StandDraw_1
       rect:
         serializedVersion: 2
-        x: 72
-        y: 104
+        x: 168
+        y: 232
         width: 24
         height: 24
       alignment: 7
@@ -183,8 +247,8 @@ TextureImporter:
       name: Ranger_StandDraw_2
       rect:
         serializedVersion: 2
-        x: 96
-        y: 104
+        x: 192
+        y: 232
         width: 24
         height: 24
       alignment: 7
@@ -196,8 +260,8 @@ TextureImporter:
       name: Ranger_StandDraw_3
       rect:
         serializedVersion: 2
-        x: 120
-        y: 104
+        x: 216
+        y: 232
         width: 24
         height: 24
       alignment: 7
@@ -209,8 +273,8 @@ TextureImporter:
       name: Ranger_StandDraw_4
       rect:
         serializedVersion: 2
-        x: 144
-        y: 104
+        x: 0
+        y: 208
         width: 24
         height: 24
       alignment: 7
@@ -222,8 +286,8 @@ TextureImporter:
       name: Ranger_StandShoot_0
       rect:
         serializedVersion: 2
-        x: 168
-        y: 104
+        x: 24
+        y: 208
         width: 24
         height: 24
       alignment: 7
@@ -235,8 +299,8 @@ TextureImporter:
       name: Ranger_Run_0
       rect:
         serializedVersion: 2
-        x: 192
-        y: 104
+        x: 48
+        y: 208
         width: 24
         height: 24
       alignment: 7
@@ -248,8 +312,8 @@ TextureImporter:
       name: Ranger_Run_1
       rect:
         serializedVersion: 2
-        x: 216
-        y: 104
+        x: 72
+        y: 208
         width: 24
         height: 24
       alignment: 7
@@ -261,8 +325,8 @@ TextureImporter:
       name: Ranger_Run_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 80
+        x: 96
+        y: 208
         width: 24
         height: 24
       alignment: 7
@@ -274,8 +338,8 @@ TextureImporter:
       name: Ranger_Run_3
       rect:
         serializedVersion: 2
-        x: 24
-        y: 80
+        x: 120
+        y: 208
         width: 24
         height: 24
       alignment: 7
@@ -287,8 +351,8 @@ TextureImporter:
       name: Ranger_Run_4
       rect:
         serializedVersion: 2
-        x: 48
-        y: 80
+        x: 144
+        y: 208
         width: 24
         height: 24
       alignment: 7
@@ -300,8 +364,8 @@ TextureImporter:
       name: Ranger_Run_5
       rect:
         serializedVersion: 2
-        x: 72
-        y: 80
+        x: 168
+        y: 208
         width: 24
         height: 24
       alignment: 7
@@ -313,8 +377,8 @@ TextureImporter:
       name: Ranger_Run_6
       rect:
         serializedVersion: 2
-        x: 96
-        y: 80
+        x: 192
+        y: 208
         width: 24
         height: 24
       alignment: 7
@@ -326,8 +390,8 @@ TextureImporter:
       name: Ranger_Run_7
       rect:
         serializedVersion: 2
-        x: 120
-        y: 80
+        x: 216
+        y: 208
         width: 24
         height: 24
       alignment: 7
@@ -339,8 +403,8 @@ TextureImporter:
       name: Ranger_JumpUp_0
       rect:
         serializedVersion: 2
-        x: 144
-        y: 80
+        x: 0
+        y: 184
         width: 24
         height: 24
       alignment: 7
@@ -352,8 +416,8 @@ TextureImporter:
       name: Ranger_JumpUp_1
       rect:
         serializedVersion: 2
-        x: 168
-        y: 80
+        x: 24
+        y: 184
         width: 24
         height: 24
       alignment: 7
@@ -365,8 +429,8 @@ TextureImporter:
       name: Ranger_JumpUp_2
       rect:
         serializedVersion: 2
-        x: 192
-        y: 80
+        x: 48
+        y: 184
         width: 24
         height: 24
       alignment: 7
@@ -378,8 +442,8 @@ TextureImporter:
       name: Ranger_Fall_0
       rect:
         serializedVersion: 2
-        x: 216
-        y: 80
+        x: 72
+        y: 184
         width: 24
         height: 24
       alignment: 7
@@ -391,8 +455,8 @@ TextureImporter:
       name: Ranger_JumpUpDraw_0
       rect:
         serializedVersion: 2
-        x: 24
-        y: 56
+        x: 120
+        y: 184
         width: 24
         height: 24
       alignment: 7
@@ -404,8 +468,8 @@ TextureImporter:
       name: Ranger_JumpUpDraw_1
       rect:
         serializedVersion: 2
-        x: 48
-        y: 56
+        x: 144
+        y: 184
         width: 24
         height: 24
       alignment: 7
@@ -417,8 +481,8 @@ TextureImporter:
       name: Ranger_JumpUpDraw_2
       rect:
         serializedVersion: 2
-        x: 72
-        y: 56
+        x: 168
+        y: 184
         width: 24
         height: 24
       alignment: 7
@@ -430,8 +494,8 @@ TextureImporter:
       name: Ranger_JumpUpDraw_3
       rect:
         serializedVersion: 2
-        x: 96
-        y: 56
+        x: 192
+        y: 184
         width: 24
         height: 24
       alignment: 7
@@ -443,8 +507,8 @@ TextureImporter:
       name: Ranger_FallDraw_0
       rect:
         serializedVersion: 2
-        x: 144
-        y: 56
+        x: 0
+        y: 160
         width: 24
         height: 24
       alignment: 7
@@ -456,8 +520,8 @@ TextureImporter:
       name: Ranger_FallDraw_1
       rect:
         serializedVersion: 2
-        x: 168
-        y: 56
+        x: 24
+        y: 160
         width: 24
         height: 24
       alignment: 7
@@ -469,8 +533,8 @@ TextureImporter:
       name: Ranger_FallDraw_2
       rect:
         serializedVersion: 2
-        x: 192
-        y: 56
+        x: 48
+        y: 160
         width: 24
         height: 24
       alignment: 7
@@ -482,8 +546,8 @@ TextureImporter:
       name: Ranger_FallDraw_3
       rect:
         serializedVersion: 2
-        x: 216
-        y: 56
+        x: 72
+        y: 160
         width: 24
         height: 24
       alignment: 7
@@ -495,8 +559,8 @@ TextureImporter:
       name: Ranger_Crouch_0
       rect:
         serializedVersion: 2
-        x: 24
-        y: 32
+        x: 120
+        y: 160
         width: 24
         height: 24
       alignment: 7
@@ -508,8 +572,8 @@ TextureImporter:
       name: Ranger_Crouch_1
       rect:
         serializedVersion: 2
-        x: 48
-        y: 32
+        x: 144
+        y: 160
         width: 24
         height: 24
       alignment: 7
@@ -521,8 +585,8 @@ TextureImporter:
       name: Ranger_Crouch_2
       rect:
         serializedVersion: 2
-        x: 72
-        y: 32
+        x: 168
+        y: 160
         width: 24
         height: 24
       alignment: 7
@@ -534,8 +598,8 @@ TextureImporter:
       name: Ranger_Crouch_3
       rect:
         serializedVersion: 2
-        x: 96
-        y: 32
+        x: 192
+        y: 160
         width: 24
         height: 24
       alignment: 7
@@ -547,8 +611,8 @@ TextureImporter:
       name: Ranger_Crouch_4
       rect:
         serializedVersion: 2
-        x: 120
-        y: 32
+        x: 216
+        y: 160
         width: 24
         height: 24
       alignment: 7
@@ -560,8 +624,8 @@ TextureImporter:
       name: Ranger_Crouch_5
       rect:
         serializedVersion: 2
-        x: 144
-        y: 32
+        x: 0
+        y: 136
         width: 24
         height: 24
       alignment: 7
@@ -570,11 +634,89 @@ TextureImporter:
       outline: []
       tessellationDetail: -1
     - serializedVersion: 2
-      name: Ranger_Crouch_6
+      name: Ranger_CrouchWalk_0
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 136
+        width: 24
+        height: 24
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Ranger_CrouchWalk_1
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 136
+        width: 24
+        height: 24
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Ranger_CrouchWalk_2
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 136
+        width: 24
+        height: 24
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Ranger_CrouchWalk_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 136
+        width: 24
+        height: 24
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Ranger_CrouchWalk_4
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 136
+        width: 24
+        height: 24
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Ranger_CrouchWalk_5
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 136
+        width: 24
+        height: 24
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Ranger_CrouchWalk_6
       rect:
         serializedVersion: 2
         x: 168
-        y: 32
+        y: 136
         width: 24
         height: 24
       alignment: 7
@@ -583,11 +725,11 @@ TextureImporter:
       outline: []
       tessellationDetail: -1
     - serializedVersion: 2
-      name: Ranger_Crouch_7
+      name: Ranger_CrouchWalk_7
       rect:
         serializedVersion: 2
         x: 192
-        y: 32
+        y: 136
         width: 24
         height: 24
       alignment: 7
@@ -600,7 +742,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 216
-        y: 32
+        y: 136
         width: 24
         height: 24
       alignment: 7
@@ -613,7 +755,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 8
+        y: 112
         width: 24
         height: 24
       alignment: 7
@@ -626,7 +768,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 24
-        y: 8
+        y: 112
         width: 24
         height: 24
       alignment: 7
@@ -639,7 +781,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 48
-        y: 8
+        y: 112
         width: 24
         height: 24
       alignment: 7
@@ -652,7 +794,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 72
-        y: 8
+        y: 112
         width: 24
         height: 24
       alignment: 7
@@ -665,7 +807,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 96
-        y: 8
+        y: 112
         width: 24
         height: 24
       alignment: 7

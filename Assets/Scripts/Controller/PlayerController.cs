@@ -13,7 +13,8 @@ namespace Catsland.Scripts.Controller {
   public class PlayerController :MonoBehaviour {
 
     // Locomoation
-    public float maxHorizontalSpeed = 1.0f;
+    public float maxRunningSpeed = 1.0f;
+    public float maxCrouchSpeed = 0.5f;
     public float acceleration = 1.0f;
     public float jumpForce = 5.0f;
 
@@ -36,6 +37,7 @@ namespace Catsland.Scripts.Controller {
 
     // References
     public GameObject groundSensorGO;
+    public GameObject headSenserGo;
     public GameObject arrowPrefab;
     public Transform shootPoint;
     public TrailIndicator trailIndicator;
@@ -44,6 +46,7 @@ namespace Catsland.Scripts.Controller {
     private IInput input;
     private Rigidbody2D rb2d;
     private Animator animator;
+    private BoxCollider2D headCollider;
 
     // Animation
     private const string H_SPEED = "HSpeed";
@@ -51,12 +54,15 @@ namespace Catsland.Scripts.Controller {
     private const string GROUNDED = "Grounded";
     private const string DRAWING = "Drawing";
     private const string DIZZY = "Dizzy";
+    private const string CROUCH = "Crouch";
 
     public void Awake() {
       input = GetComponent<IInput>();
       rb2d = GetComponent<Rigidbody2D>();
       groundSensor = groundSensorGO.GetComponent<ISensor>();
+      headSensor = headSenserGo.GetComponent<ISensor>();
       animator = GetComponent<Animator>();
+      headCollider = GetComponent<BoxCollider2D>();
     }
 
     public void Start() {
@@ -92,25 +98,33 @@ namespace Catsland.Scripts.Controller {
       isDrawing = currentIsDrawing;
 
       // Movement
+      // vertical movement
+      bool isCrouching = false;
       if(groundSensor.isStay() && !isDizzy) {
-        if(input.jump() && !isDrawing) {
+        if(input.getVertical() < -0.1f || headSensor.isStay()) {
           // jump down
-          if(input.getVertical() < -0.1f) {
-            if(groundSensor.getTriggerGO().CompareTag(Tags.ONESIDE)) {
-              StartCoroutine(jumpDown(groundSensor.getTriggerGO()));
-            }
+          if(input.jump() && groundSensor.getTriggerGO().CompareTag(Tags.ONESIDE)) {
+            StartCoroutine(jumpDown(groundSensor.getTriggerGO()));
+          } else if(isDrawing) {
+            // crouch drawing
+
           } else {
+            isCrouching = true;
+          }
+        } else if (input.jump()){
             // jump up
             rb2d.AddForce(new Vector2(0.0f, jumpForce));
-          }
+
         }
       }
+      // horizontal movement
       gameObject.transform.parent =
         groundSensor.isStay() ? groundSensor.getTriggerGO().transform : null;
       if(!isDizzy) {
         if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon
           && (!groundSensor.isStay() || !isDrawing)) {
           rb2d.AddForce(new Vector2(acceleration * desiredSpeed, 0.0f));
+          float maxHorizontalSpeed = isCrouching ? maxCrouchSpeed : maxRunningSpeed;
           rb2d.velocity = new Vector2(
             Mathf.Clamp(rb2d.velocity.x, -maxHorizontalSpeed, maxHorizontalSpeed),
             rb2d.velocity.y);
@@ -137,14 +151,18 @@ namespace Catsland.Scripts.Controller {
         }
       }
 
+      // Update head collider
+      if(headCollider != null) {
+        headCollider.enabled = !isCrouching;
+      }
+
       // Update animation
       animator.SetBool(GROUNDED, groundSensor.isStay());
       animator.SetFloat(H_SPEED, Mathf.Abs(rb2d.velocity.x));
       animator.SetFloat(V_SPEED, rb2d.velocity.y);
       animator.SetBool(DRAWING, isDrawing);
       animator.SetBool(DIZZY, isDizzy);
-
-
+      animator.SetBool(CROUCH, isCrouching);
     }
 
     public void damage(DamageInfo damageInfo) {

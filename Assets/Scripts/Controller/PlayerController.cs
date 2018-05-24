@@ -47,6 +47,7 @@ namespace Catsland.Scripts.Controller {
     private Rigidbody2D rb2d;
     private Animator animator;
     private BoxCollider2D headCollider;
+    private SpriteRenderer spriteRenderer;
 
     // Animation
     private const string H_SPEED = "HSpeed";
@@ -63,6 +64,7 @@ namespace Catsland.Scripts.Controller {
       headSensor = headSenserGo.GetComponent<ISensor>();
       animator = GetComponent<Animator>();
       headCollider = GetComponent<BoxCollider2D>();
+      spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public void Start() {
@@ -111,9 +113,9 @@ namespace Catsland.Scripts.Controller {
           } else {
             isCrouching = true;
           }
-        } else if (input.jump()){
-            // jump up
-            rb2d.AddForce(new Vector2(0.0f, jumpForce));
+        } else if(input.jump()) {
+          // jump up
+          rb2d.AddForce(new Vector2(0.0f, jumpForce));
 
         }
       }
@@ -190,6 +192,19 @@ namespace Catsland.Scripts.Controller {
       Debug.Assert(shootPoint != null, "Shoot point is not set");
 
       GameObject arrow = Instantiate(arrowPrefab, shootPoint.position, shootPoint.rotation);
+      // Set arrow ordering layer
+      SpriteRenderer renderer = arrow.GetComponent<SpriteRenderer>();
+      if(renderer != null) {
+        renderer.sortingOrder = spriteRenderer.sortingOrder;
+      }
+      ParticleSystem particleSystem = arrow.GetComponentInChildren<ParticleSystem>();
+      if(particleSystem != null) {
+        particleSystem.gameObject.GetComponent<ParticleSystemRenderer>().sortingOrder = spriteRenderer.sortingOrder;
+      }
+      TrailRenderer trailRenderer = arrow.GetComponentInChildren<TrailRenderer>();
+      if(trailRenderer != null) {
+        trailRenderer.sortingOrder = spriteRenderer.sortingOrder;
+      }
       ArrowCarrier arrowCarrier = arrow.GetComponent<ArrowCarrier>();
       float drawingRatio =
         Mathf.Clamp(currentDrawingTime, 0.0f, maxDrawingTime) / maxDrawingTime;

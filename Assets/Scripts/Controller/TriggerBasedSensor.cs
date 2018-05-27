@@ -9,13 +9,11 @@ namespace Catsland.Scripts.Controller {
     private GameObject triggerGO;
 
     public void OnTriggerEnter2D(Collider2D collision) {
-      isTriggered = isCollisionWhitelisted(collision);
-      triggerGO = isTriggered ? collision.gameObject : null;
+      onTriggerEnterOrStay(collision);
     }
 
     public void OnTriggerStay2D(Collider2D collision) {
-      isTriggered = isCollisionWhitelisted(collision);
-      triggerGO = isTriggered ? collision.gameObject : null;
+      onTriggerEnterOrStay(collision);
     }
 
     public void OnTriggerExit2D(Collider2D collision) {
@@ -35,6 +33,13 @@ namespace Catsland.Scripts.Controller {
 
     private bool isCollisionWhitelisted(Collider2D collision) {
       return (layerMask & (1 << collision.gameObject.layer)) != 0x0;
+    }
+
+    private void onTriggerEnterOrStay(Collider2D collision) {
+      if(isCollisionWhitelisted(collision)) {
+        isTriggered = true;
+        triggerGO = collision.gameObject;
+      }
     }
   }
 }

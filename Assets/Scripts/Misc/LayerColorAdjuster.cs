@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 namespace Catsland.Scripts.Misc {
@@ -15,7 +13,7 @@ namespace Catsland.Scripts.Misc {
     public void OnTriggerStay2D(Collider2D collision) {
       if(collision.gameObject == triggerGameObject) {
         foreach(GameObject go in layerGameObjects) {
-          foreach(SpriteRenderer renderer in 
+          foreach(SpriteRenderer renderer in
               go.GetComponentsInChildren<SpriteRenderer>()) {
             if(renderer.material.name == "LightSprite (Instance)") {
               renderer.material.SetColor("_Color", Color.Lerp(renderer.material.GetColor("_Color"), targetColor, 0.1f));

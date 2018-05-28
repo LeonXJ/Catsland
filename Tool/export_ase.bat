@@ -1,1 +1,1 @@
-for /r %%i in (*.aseprite) do "d:\Steam Library\steamapps\common\Aseprite\Aseprite.exe" -b %%i --save-as %i.png
+for /r %i in (*.aseprite) do "d:\Steam Library\steamapps\common\Aseprite\Aseprite.exe" -b %i --save-as %i.png

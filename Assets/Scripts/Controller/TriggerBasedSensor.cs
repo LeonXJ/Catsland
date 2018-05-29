@@ -5,8 +5,8 @@ namespace Catsland.Scripts.Controller {
 
     public LayerMask layerMask;
 
-    private bool isTriggered = false;
-    private GameObject triggerGO;
+    public bool isTriggered = false;
+    public GameObject triggerGO;
 
     public void OnTriggerEnter2D(Collider2D collision) {
       onTriggerEnterOrStay(collision);

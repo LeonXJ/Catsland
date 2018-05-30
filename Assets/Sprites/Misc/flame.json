@@ -1,0 +1,55 @@
+{ "frames": {
+   "flame 0.aseprite": {
+    "frame": { "x": 0, "y": 0, "w": 5, "h": 8 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 5, "h": 8 },
+    "sourceSize": { "w": 5, "h": 8 },
+    "duration": 100
+   },
+   "flame 1.aseprite": {
+    "frame": { "x": 5, "y": 0, "w": 5, "h": 8 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 5, "h": 8 },
+    "sourceSize": { "w": 5, "h": 8 },
+    "duration": 100
+   },
+   "flame 2.aseprite": {
+    "frame": { "x": 10, "y": 0, "w": 5, "h": 8 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 5, "h": 8 },
+    "sourceSize": { "w": 5, "h": 8 },
+    "duration": 100
+   },
+   "flame 3.aseprite": {
+    "frame": { "x": 15, "y": 0, "w": 5, "h": 8 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 5, "h": 8 },
+    "sourceSize": { "w": 5, "h": 8 },
+    "duration": 100
+   },
+   "flame 4.aseprite": {
+    "frame": { "x": 20, "y": 0, "w": 5, "h": 8 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 5, "h": 8 },
+    "sourceSize": { "w": 5, "h": 8 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.8-x64",
+  "image": "D:\\workspace\\Catsland\\Assets\\Sprites\\Misc\\flame.png",
+  "format": "RGBA8888",
+  "size": { "w": 25, "h": 8 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "slices": [
+  ]
+ }
+}

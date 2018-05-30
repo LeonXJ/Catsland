@@ -9,7 +9,8 @@ namespace Catsland.Scripts.Controller {
     public float transistSpeed = 0.1f;
 
     public override void applyEffect() {
-      globalLightController.ambient = Color.Lerp(targetAmbientColor, globalLightController.ambient, transistSpeed);
+      globalLightController.ambient =
+        Color.Lerp(globalLightController.ambient, targetAmbientColor, transistSpeed);
     }
   }
 }

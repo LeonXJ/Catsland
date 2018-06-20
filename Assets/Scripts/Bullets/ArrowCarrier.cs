@@ -10,7 +10,7 @@ namespace Catsland.Scripts.Bullets {
   public class ArrowCarrier :MonoBehaviour {
 
 
-    public int damage = 1;
+    public int damageValue = 1;
     public float repelIntensive = 1.0f;
     public string tagForAttachable = "";
     public bool isAttached = false;
@@ -78,12 +78,16 @@ namespace Catsland.Scripts.Bullets {
           if(tagForOwner == null || !collision.gameObject.CompareTag(tagForOwner)) {
             collision.gameObject.SendMessage(
               MessageNames.DAMAGE_FUNCTION,
-              new DamageInfo(damage, rb2d.velocity, repelIntensive),
+              new DamageInfo(damageValue, rb2d.velocity, repelIntensive),
               SendMessageOptions.DontRequireReceiver);
             safeDestroy();
           }
         }
       }
+    }
+
+    public void damage(DamageInfo damageInfo) {
+      safeDestroy();
     }
 
     private void safeDestroy() {

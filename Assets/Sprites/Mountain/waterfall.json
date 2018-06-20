@@ -1,0 +1,39 @@
+{ "frames": {
+   "waterfall 0.aseprite": {
+    "frame": { "x": 0, "y": 0, "w": 1, "h": 63 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 63 },
+    "sourceSize": { "w": 1, "h": 63 },
+    "duration": 100
+   },
+   "waterfall 1.aseprite": {
+    "frame": { "x": 1, "y": 0, "w": 1, "h": 63 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 63 },
+    "sourceSize": { "w": 1, "h": 63 },
+    "duration": 100
+   },
+   "waterfall 2.aseprite": {
+    "frame": { "x": 2, "y": 0, "w": 1, "h": 63 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 63 },
+    "sourceSize": { "w": 1, "h": 63 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.8-x64",
+  "image": "D:\\workspace\\Catsland\\Assets\\Sprites\\Mountain\\waterfall.png",
+  "format": "RGBA8888",
+  "size": { "w": 3, "h": 63 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "slices": [
+  ]
+ }
+}

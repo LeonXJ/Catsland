@@ -5,7 +5,6 @@ using Panda;
 using Catsland.Scripts.Controller;
 
 namespace Catsland.Scripts.Ai {
-  [RequireComponent(typeof(CharacterController))]
   public class DoNothing :MonoBehaviour, IInput {
 
     enum CharacterAction {
@@ -56,7 +55,7 @@ namespace Catsland.Scripts.Ai {
       Vector2 delta = playerGo.transform.position - transform.position;
 
       // check vertical
-      if (Mathf.Abs(delta.y) > attackVerticalRange) {
+      if(Mathf.Abs(delta.y) > attackVerticalRange) {
         Task.current.Fail();
         return;
       }
@@ -68,7 +67,7 @@ namespace Catsland.Scripts.Ai {
       }
 
       // check orientation
-      if (delta.x * controller.getOrientation() < 0.0f) {
+      if(delta.x * controller.getOrientation() < 0.0f) {
         Task.current.Fail();
         return;
       }

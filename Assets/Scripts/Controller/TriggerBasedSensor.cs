@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Catsland.Scripts.Controller {
   public class TriggerBasedSensor :MonoBehaviour, ISensor {
 
     public LayerMask layerMask;
+    public List<GameObject> whitelistGos;
 
     public bool isTriggered = false;
     public GameObject triggerGO;
@@ -24,6 +26,9 @@ namespace Catsland.Scripts.Controller {
     }
 
     public bool isStay() {
+      if(triggerGO == null) {
+        isTriggered = false;
+      }
       return isTriggered;
     }
 
@@ -32,7 +37,14 @@ namespace Catsland.Scripts.Controller {
     }
 
     private bool isCollisionWhitelisted(Collider2D collision) {
-      return (layerMask & (1 << collision.gameObject.layer)) != 0x0;
+      bool masked = (layerMask & (1 << collision.gameObject.layer)) == 0x0;
+      if(masked) {
+        return false;
+      }
+      if(whitelistGos != null && whitelistGos.Count > 0) {
+        return whitelistGos.Contains(collision.gameObject);
+      }
+      return true;
     }
 
     private void onTriggerEnterOrStay(Collider2D collision) {

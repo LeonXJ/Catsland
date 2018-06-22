@@ -1,26 +1,34 @@
 ﻿using System.Collections;
 using UnityEngine;
 using Panda;
+using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Controller;
 
 namespace Catsland.Scripts.Ai {
   public class Bandit :MonoBehaviour, IInput {
     public GameObject arrowSensorGo;
     public GameObject chopSensorGo;
+    public GameObject viewSensorGo;
+    public Transform standPoint;
+    public float lockPlayerForSeconds = 3.0f;
+    public float reachTargetDistance = 0.1f;
 
     private BanditController controller;
     private ISensor arrowSensor;
     private ISensor chopSensor;
+    private ISensor viewSensor;
     private GameObject playerGo;
 
     private bool wantAttack = false;
     private float wantHorizontal = 0.0f;
+    private float playerImageFreshness = -10.0f;
 
     void Awake() {
       controller = GetComponent<BanditController>();
       playerGo = GameObject.FindGameObjectWithTag("Player");
       arrowSensor = arrowSensorGo.GetComponent<ISensor>();
       chopSensor = chopSensorGo.GetComponent<ISensor>();
+      viewSensor = viewSensorGo.GetComponent<ISensor>();
     }
 
     public bool attack() {
@@ -59,9 +67,13 @@ namespace Catsland.Scripts.Ai {
 
     [Task]
     public void moveTowardsPlayer() {
-      resetControlStatus();
-      Vector2 delta = playerGo.transform.position - transform.position;
-      wantHorizontal = Mathf.Sign(delta.x);
+      moveTowardsPoint(playerGo.transform.position);
+      Task.current.Succeed();
+    }
+
+    [Task]
+    public void moveTowardsStandPoint() {
+      moveTowardsPoint(standPoint.position);
       Task.current.Succeed();
     }
 
@@ -86,6 +98,35 @@ namespace Catsland.Scripts.Ai {
     public void stop() {
       resetControlStatus();
       Task.current.Succeed();
+    }
+
+    [Task]
+    public void knowPlayerPosition() {
+      if(playerImageFreshness > 0.0f) {
+        Task.current.Succeed();
+      } else {
+        Task.current.Fail();
+      }
+    }
+
+    void Update() {
+      if(viewSensor.isStay()) {
+        playerImageFreshness = lockPlayerForSeconds;
+      } else if(playerImageFreshness > 0.0f) {
+        playerImageFreshness -= Time.deltaTime;
+      }
+    }
+
+    public void damage(DamageInfo damageInfo) {
+      playerImageFreshness = lockPlayerForSeconds;
+    }
+
+    private void moveTowardsPoint(Vector3 targetPoint) {
+      resetControlStatus();
+      Vector2 delta = targetPoint - transform.position;
+      if(Mathf.Abs(delta.x) > reachTargetDistance) {
+        wantHorizontal = Mathf.Sign(delta.x);
+      }
     }
 
     private IEnumerator wait(float time) {

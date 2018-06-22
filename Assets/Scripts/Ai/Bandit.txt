@@ -4,10 +4,12 @@ tree("Root")
       chop()
     while isPlayerInChopRange()
       chop()
-    while not isPlayerInFront()
-      sequence
-        stop()
-        Wait(1.0)
+    while knowPlayerPosition()
+      fallback
+        while not isPlayerInFront()
+          sequence
+            stop()
+            Wait(1.0)
+            moveTowardsPlayer()
         moveTowardsPlayer()
-    moveTowardsPlayer()
-    stop()
+    moveTowardsStandPoint()

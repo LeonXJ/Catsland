@@ -17,6 +17,9 @@ namespace Catsland.Scripts.Controller {
     public float maxCrouchSpeed = 0.5f;
     public float acceleration = 1.0f;
     public float jumpForce = 5.0f;
+    public float cliffJumpForce = 5.0f;
+    public float maxFallingSpeed = 5.0f;
+    public float cliffSlidingSpeed = 1.0f;
 
     // Attack
     public float maxArrowSpeed = 15.0f;
@@ -28,6 +31,7 @@ namespace Catsland.Scripts.Controller {
     private float shootingCd = 0.5f;
     private bool isShooting = false;
     private float currentDrawingTime = 0.0f;
+    private bool isCliffSliding;
 
     // Health
     public int maxHealth = 3;
@@ -38,11 +42,13 @@ namespace Catsland.Scripts.Controller {
     // References
     public GameObject groundSensorGO;
     public GameObject headSenserGo;
+    public GameObject frontSensorGo;
     public GameObject arrowPrefab;
     public Transform shootPoint;
     public TrailIndicator trailIndicator;
     private ISensor groundSensor;
     private ISensor headSensor;
+    private ISensor frontSensor;
     private IInput input;
     private Rigidbody2D rb2d;
     private Animator animator;
@@ -56,12 +62,14 @@ namespace Catsland.Scripts.Controller {
     private const string DRAWING = "Drawing";
     private const string DIZZY = "Dizzy";
     private const string CROUCH = "Crouch";
+    private const string CLIFF_SLIDING = "CliffSliding";
 
     public void Awake() {
       input = GetComponent<IInput>();
       rb2d = GetComponent<Rigidbody2D>();
       groundSensor = groundSensorGO.GetComponent<ISensor>();
       headSensor = headSenserGo.GetComponent<ISensor>();
+      frontSensor = frontSensorGo.GetComponent<ISensor>();
       animator = GetComponent<Animator>();
       headCollider = GetComponent<BoxCollider2D>();
       spriteRenderer = GetComponent<SpriteRenderer>();
@@ -116,7 +124,21 @@ namespace Catsland.Scripts.Controller {
         } else if(input.jump()) {
           // jump up
           rb2d.AddForce(new Vector2(0.0f, jumpForce));
-
+        }
+      }
+      // Cliff jump
+      float topFallingSpeed = maxFallingSpeed;
+      isCliffSliding = false;
+      if(!groundSensor.isStay() && !isDizzy) {
+        bool isDesireSpeedFaceCliff = getOrientation() * desiredSpeed > 0.0f;
+        if(frontSensor.isStay() && isDesireSpeedFaceCliff) {
+          if(input.jump()) {
+            rb2d.velocity = Vector2.zero;
+            rb2d.AddForce(new Vector2(-Mathf.Sign(desiredSpeed) * cliffJumpForce, cliffJumpForce));
+          } else {
+            topFallingSpeed = cliffSlidingSpeed;
+            isCliffSliding = true;
+          }
         }
       }
       // horizontal movement
@@ -133,6 +155,7 @@ namespace Catsland.Scripts.Controller {
         } else {
           rb2d.velocity = new Vector2(0.0f, rb2d.velocity.y);
         }
+        // else, keep same speed
       } else {
         // dizzy, damp on horizontal speed
         rb2d.velocity =
@@ -153,6 +176,12 @@ namespace Catsland.Scripts.Controller {
         }
       }
 
+      // limit falling speed
+      if(rb2d.velocity.y < 0.0f) {
+        rb2d.velocity = new Vector2(rb2d.velocity.x, Mathf.Max(rb2d.velocity.y, -topFallingSpeed));
+
+      }
+
       // Update head collider
       if(headCollider != null) {
         headCollider.enabled = !isCrouching;
@@ -165,6 +194,7 @@ namespace Catsland.Scripts.Controller {
       animator.SetBool(DRAWING, isDrawing);
       animator.SetBool(DIZZY, isDizzy);
       animator.SetBool(CROUCH, isCrouching);
+      animator.SetBool(CLIFF_SLIDING, isCliffSliding);
     }
 
     public void damage(DamageInfo damageInfo) {
@@ -195,7 +225,7 @@ namespace Catsland.Scripts.Controller {
       // Set arrow ordering layer
       SpriteRenderer renderer = arrow.GetComponent<SpriteRenderer>();
       if(renderer != null) {
-        renderer.sortingOrder = spriteRenderer.sortingOrder;
+        renderer.sortingOrder = spriteRenderer.sortingOrder + 1;
       }
       ParticleSystem particleSystem = arrow.GetComponentInChildren<ParticleSystem>();
       if(particleSystem != null) {

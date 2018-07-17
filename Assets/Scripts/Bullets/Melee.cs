@@ -15,6 +15,7 @@ namespace Catsland.Scripts.Bullets {
 
     void Start() {
       collider2d = gameObject.GetComponent<Collider2D>();
+      collider2d.enabled = false;
     }
 
     public void OnTriggerStay2D(Collider2D collision) {

@@ -21,7 +21,10 @@ namespace Catsland.Scripts.Controller {
     public int maxHealth = 3;
     public int currentHealth;
     public float dizzyTime = 1.0f;
+    private bool isDead = false;
     private bool isDizzy = false;
+
+    public float dieAnimationSecond = 1.0f;
 
     // References
     public GameObject groundSensorGO;
@@ -36,6 +39,7 @@ namespace Catsland.Scripts.Controller {
     private const string H_SPEED = "HSpeed";
     private const string DIZZY = "Dizzy";
     private const string IS_CHOPPING = "IsChopping";
+    private const string IS_DEAD = "IsDead";
 
     public void Awake() {
       input = GetComponent<IInput>();
@@ -95,6 +99,7 @@ namespace Catsland.Scripts.Controller {
       animator.SetFloat(H_SPEED, Mathf.Abs(rb2d.velocity.x));
       animator.SetBool(DIZZY, isDizzy);
       animator.SetBool(IS_CHOPPING, isChopping);
+      animator.SetBool(IS_DEAD, isDead);
     }
 
     public void damage(DamageInfo damageInfo) {
@@ -102,13 +107,12 @@ namespace Catsland.Scripts.Controller {
       currentHealth -= damageInfo.damage;
       if(currentHealth <= 0) {
         // Die
-        Debug.Log("Bandit die");
+        StartCoroutine(die());
       } else {
         // Dizzy
         StartCoroutine(dizzy());
       }
     }
-
 
     public float getOrientation() {
       return transform.lossyScale.x > 0.0f ? 1.0f : -1.0f;
@@ -126,6 +130,13 @@ namespace Catsland.Scripts.Controller {
       isDizzy = true;
       yield return new WaitForSeconds(dizzyTime);
       isDizzy = false;
+    }
+
+    private IEnumerator die() {
+      isDizzy = true;
+      isDead = true;
+      yield return new WaitForSeconds(dieAnimationSecond);
+      Destroy(gameObject);
     }
   }
 }

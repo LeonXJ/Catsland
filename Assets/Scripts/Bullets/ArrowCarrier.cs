@@ -9,28 +9,45 @@ namespace Catsland.Scripts.Bullets {
   [RequireComponent(typeof(Rigidbody2D))]
   public class ArrowCarrier :MonoBehaviour {
 
+    enum ArrowStatus {
+      Flying = 0,
+      Attached = 1,
+      Broken = 2,
+      Hit = 3,
+    }
 
     public int damageValue = 1;
     public float repelIntensive = 1.0f;
     public string tagForAttachable = "";
     public bool isAttached = false;
+    public float brokenPartSpinSpeed = 4800.0f;
+    public float brokenPartBounceSpeedRatio = 0.2f;
 
+    public GameObject brokenArrowPrefab;
+
+    private ArrowStatus status = ArrowStatus.Flying;
     private string tagForOwner;
     private bool isDestroyed = false;
     private Vector2 velocity;
 
+    private static Random random = new Random();
+
     // References
     public ParticleSystem particleSystem;
+    private SpriteRenderer spriteRenderer;
+    private Collider2D collider2d;
     private Rigidbody2D rb2d;
     private Trail trail;
 
     public void Awake() {
       rb2d = GetComponent<Rigidbody2D>();
       trail = GetComponent<Trail>();
+      spriteRenderer = GetComponent<SpriteRenderer>();
+      collider2d = GetComponent<Collider2D>();
     }
 
     public void Update() {
-      if(!isAttached) {
+      if(!isAttached && status == ArrowStatus.Flying) {
         rb2d.velocity = new Vector2(velocity.x, rb2d.velocity.y);
       }
     }
@@ -54,40 +71,45 @@ namespace Catsland.Scripts.Bullets {
       }
     }
 
-    public void OnCollisionEnter2D(Collision2D collision) {
-      // bullet will not distroy bullet
-      if(collision.gameObject.layer == gameObject.layer) {
+
+    public void OnTriggerEnter2D(Collider2D collision) {
+      onArrowHit(collision);
+    }
+
+    public void OnTriggerStay2D(Collider2D collision) {
+      onArrowHit(collision);
+    }
+
+    private void onArrowHit(Collider2D collision) {
+      if(isAttached || status != ArrowStatus.Flying) {
         return;
       }
 
-      if(!isAttached) {
-        if(collision.gameObject.CompareTag(tagForAttachable)) {
-          isAttached = true;
-          rb2d.isKinematic = true;
-          rb2d.velocity = Vector2.zero;
-          // attach to the object
-          gameObject.transform.parent = collision.gameObject.transform;
-          // enable one side platform
-          GetComponent<Collider2D>().usedByEffector = true;
-          trail.isShow = false;
-          // particle
-          ParticleSystem.EmissionModule emission = particleSystem.emission;
-          emission.enabled = true;
-          particleSystem.Play();
-        } else {
-          if(tagForOwner == null || !collision.gameObject.CompareTag(tagForOwner)) {
-            collision.gameObject.SendMessage(
-              MessageNames.DAMAGE_FUNCTION,
-              new DamageInfo(damageValue, rb2d.velocity, repelIntensive),
-              SendMessageOptions.DontRequireReceiver);
-            safeDestroy();
-          }
+      // Still flying
+      // ignore other bullet
+      if(collision.gameObject.layer == Layers.LayerBullet) {
+        return;
+      }
+      if(collision.gameObject.layer == Layers.LayerGround) {
+        // TODO: support attachable
+        // arrow proof by default
+        Debug.Log("Broken by " + collision.gameObject.name);
+        StartCoroutine(breakArrow());
+        return;
+      }
+      if(collision.gameObject.layer == Layers.LayerCharacter) {
+        // not self hurt
+        if(tagForOwner != null && collision.gameObject.CompareTag(tagForOwner)) {
+          return;
         }
+        // TODO: support arrow proof
+        // by default vulnerable
+        StartCoroutine(arrowHit(collision));
       }
     }
 
     public void damage(DamageInfo damageInfo) {
-      safeDestroy();
+      StartCoroutine(breakArrow());
     }
 
     private void safeDestroy() {
@@ -95,6 +117,51 @@ namespace Catsland.Scripts.Bullets {
         isDestroyed = true;
         Destroy(gameObject);
       }
+    }
+
+    private IEnumerator arrowHit(Collider2D collision) {
+      status = ArrowStatus.Hit;
+      // emit
+      particleSystem.Emit(20);
+      particleSystem.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+
+      // set complete arrow status
+      spriteRenderer.enabled = false;
+      rb2d.velocity = Vector3.zero;
+      collider2d.enabled = false;
+      gameObject.transform.parent = collision.gameObject.transform;
+
+      // make damage
+      collision.gameObject.SendMessage(
+        MessageNames.DAMAGE_FUNCTION,
+        new DamageInfo(damageValue, rb2d.velocity, repelIntensive),
+        SendMessageOptions.DontRequireReceiver);
+
+      // delay self-destory
+      yield return new WaitForSeconds(1.0f);
+      safeDestroy();
+
+    }
+
+    private IEnumerator breakArrow() {
+      status = ArrowStatus.Broken;
+      GameObject brokenArrow = Instantiate(brokenArrowPrefab);
+      brokenArrow.transform.position = transform.position;
+      brokenArrow.transform.localScale = transform.lossyScale;
+      // assign random velocity
+      Rigidbody2D[] brokenParts = brokenArrow.GetComponentsInChildren<Rigidbody2D>();
+      foreach(Rigidbody2D part in brokenParts) {
+        part.angularVelocity = (Random.value - 0.5f) * 2.0f * brokenPartSpinSpeed;
+        part.velocity = new Vector2(-rb2d.velocity.x * brokenPartBounceSpeedRatio, 0.0f);
+      }
+      // set complete arrow status 
+      spriteRenderer.enabled = false;
+      rb2d.velocity = Vector3.zero;
+      collider2d.enabled = false;
+
+      // delay self-destory
+      yield return new WaitForSeconds(1.0f);
+      safeDestroy();
     }
   }
 }

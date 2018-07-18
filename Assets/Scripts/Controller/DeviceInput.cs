@@ -18,5 +18,9 @@ namespace Catsland.Scripts.Controller {
     public bool jump() {
       return Input.GetButtonDown("Jump");
     }
+
+    public bool dash() {
+      return Input.GetButtonDown("Dash");
+    }
   }
 }

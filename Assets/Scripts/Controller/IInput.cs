@@ -8,5 +8,7 @@
     bool jump();
 
     bool attack();
+
+    bool dash();
   }
 }

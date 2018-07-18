@@ -45,6 +45,10 @@ namespace Catsland.Scripts.Ai {
       return false;
     }
 
+    public bool dash() {
+      return false;
+    }
+
     [Task]
     public void isPlayerInRange() {
       if(playerGo == null) {

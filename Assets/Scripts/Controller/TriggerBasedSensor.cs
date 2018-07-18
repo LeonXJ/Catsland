@@ -9,6 +9,7 @@ namespace Catsland.Scripts.Controller {
 
     public bool isTriggered = false;
     public GameObject triggerGO;
+    public HashSet<GameObject> triggerGos = new HashSet<GameObject>();
 
     public void OnTriggerEnter2D(Collider2D collision) {
       onTriggerEnterOrStay(collision);
@@ -22,6 +23,7 @@ namespace Catsland.Scripts.Controller {
       if(isCollisionWhitelisted(collision)) {
         isTriggered = false;
         triggerGO = null;
+        triggerGos.Remove(collision.gameObject);
       }
     }
 
@@ -29,11 +31,12 @@ namespace Catsland.Scripts.Controller {
       if(triggerGO == null) {
         isTriggered = false;
       }
-      return isTriggered;
+      //return isTriggered;
+      return triggerGos.Count > 0;
     }
 
-    public GameObject getTriggerGO() {
-      return triggerGO;
+    public HashSet<GameObject> getTriggerGos() {
+      return triggerGos;
     }
 
     private bool isCollisionWhitelisted(Collider2D collision) {
@@ -51,6 +54,7 @@ namespace Catsland.Scripts.Controller {
       if(isCollisionWhitelisted(collision)) {
         isTriggered = true;
         triggerGO = collision.gameObject;
+        triggerGos.Add(collision.gameObject);
       }
     }
   }

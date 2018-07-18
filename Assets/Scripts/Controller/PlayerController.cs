@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -131,8 +132,8 @@ namespace Catsland.Scripts.Controller {
         remainingDash = 1;
         if(input.getVertical() < -0.1f || headSensor.isStay()) {
           // jump down
-          if(input.jump() && groundSensor.getTriggerGO().CompareTag(Tags.ONESIDE)) {
-            StartCoroutine(jumpDown(groundSensor.getTriggerGO()));
+          if(input.jump() && isAllOneSide(groundSensor.getTriggerGos())) {
+            StartCoroutine(jumpDown(groundSensor.getTriggerGos()));
           } else if(isDrawing) {
             // crouch drawing
 
@@ -184,7 +185,7 @@ namespace Catsland.Scripts.Controller {
 
       // horizontal movement
       gameObject.transform.parent =
-        groundSensor.isStay() ? groundSensor.getTriggerGO().transform : null;
+        groundSensor.isStay() ? Utils.getAnyFrom(groundSensor.getTriggerGos()).transform : null;
       if(dashRemainingTime <= 0.0f) {
         if(!isDizzy) {
           if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon
@@ -269,6 +270,15 @@ namespace Catsland.Scripts.Controller {
       return remainingDash > 0 && dashCooldownRemaining <= 0.0f;
     }
 
+    private bool isAllOneSide(HashSet<GameObject> gameObjects) {
+      foreach(GameObject gameObject in gameObjects) {
+        if(!gameObject.CompareTag(Tags.ONESIDE)) {
+          return false;
+        }
+      }
+      return true;
+    }
+
     private IEnumerator shoot() {
       Debug.Assert(arrowPrefab != null, "Arrow prefab is not set");
       Debug.Assert(shootPoint != null, "Shoot point is not set");
@@ -301,11 +311,16 @@ namespace Catsland.Scripts.Controller {
       isShooting = false;
     }
 
-    private IEnumerator jumpDown(GameObject onesideGO) {
-      Collider2D collider = onesideGO.GetComponent<Collider2D>();
-      collider.enabled = false;
+    private IEnumerator jumpDown(HashSet<GameObject> onesideGos) {
+      foreach(GameObject gameObject in onesideGos) {
+        Collider2D collider = gameObject.GetComponent<Collider2D>();
+        collider.enabled = false;
+      }
       yield return new WaitForSeconds(1.0f);
-      collider.enabled = true;
+      foreach(GameObject gameObject in onesideGos) {
+        Collider2D collider = gameObject.GetComponent<Collider2D>();
+        collider.enabled = true;
+      }
     }
 
     private IEnumerator dizzy() {

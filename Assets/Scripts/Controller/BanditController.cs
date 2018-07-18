@@ -65,7 +65,7 @@ namespace Catsland.Scripts.Controller {
       // Movement
       // horizontal movement
       gameObject.transform.parent =
-        groundSensor.isStay() ? groundSensor.getTriggerGO().transform : null;
+        groundSensor.isStay() ? Utils.getAnyFrom(groundSensor.getTriggerGos()).transform : null;
       if(!isDizzy) {
         if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon && groundSensor.isStay() && !isChopping) {
           rb2d.AddForce(new Vector2(acceleration * desiredSpeed, 0.0f));

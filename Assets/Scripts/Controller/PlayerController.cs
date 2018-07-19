@@ -24,6 +24,10 @@ namespace Catsland.Scripts.Controller {
     public float dashSpeed = 3.0f;
     public float dashTime = 0.6f;
     public float dashCooldown = 1.0f;
+    public Transform relayDeterminePoint;
+    public float relayHintDistance = 3.0f;
+    public float relayEffectDistance = 1.0f;
+    public bool supportRelay = true;
 
     private bool isCliffSliding;
     private float dashRemainingTime = 0.0f;
@@ -41,6 +45,8 @@ namespace Catsland.Scripts.Controller {
     private float shootingCd = 0.5f;
     private bool isShooting = false;
     private float currentDrawingTime = 0.0f;
+
+    private HashSet<RelayPoint> activeRelayPoints = new HashSet<RelayPoint>();
 
     // Health
     public int maxHealth = 3;
@@ -145,6 +151,13 @@ namespace Catsland.Scripts.Controller {
           rb2d.AddForce(new Vector2(0.0f, jumpForce));
         }
       }
+
+      // Relay jump
+      if(!isDizzy && !groundSensor.isStay() && activeRelayPoints.Count > 0 && input.jump()) {
+        rb2d.velocity = Vector2.zero;
+        rb2d.AddForce(new Vector2(0.0f, jumpForce));
+      }
+
       // Cliff jump
       float topFallingSpeed = maxFallingSpeed;
       isCliffSliding = false;
@@ -268,6 +281,14 @@ namespace Catsland.Scripts.Controller {
 
     public bool canDash() {
       return remainingDash > 0 && dashCooldownRemaining <= 0.0f;
+    }
+
+    public void registerRelayPoint(RelayPoint relayPoint) {
+      activeRelayPoints.Add(relayPoint);
+    }
+
+    public void unregisterRelayPoint(RelayPoint relayPoint) {
+      activeRelayPoints.Remove(relayPoint);
     }
 
     private bool isAllOneSide(HashSet<GameObject> gameObjects) {

@@ -39,6 +39,10 @@ namespace Catsland.Scripts.Controller {
       return triggerGos;
     }
 
+    void Update() {
+      triggerGos.RemoveWhere(gameObject => gameObject == null);
+    }
+
     private bool isCollisionWhitelisted(Collider2D collision) {
       bool masked = (layerMask & (1 << collision.gameObject.layer)) == 0x0;
       if(masked) {

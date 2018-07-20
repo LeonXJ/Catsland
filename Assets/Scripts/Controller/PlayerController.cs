@@ -29,11 +29,16 @@ namespace Catsland.Scripts.Controller {
     public float relayEffectDistance = 1.0f;
     public bool supportRelay = true;
 
+    public float maxSenseAdd = 0.5f;
+    public float senseIncreaseSpeed = 0.2f;
+    public float currentSense = 0.0f;
+
     private bool isCliffSliding;
     private float dashRemainingTime = 0.0f;
     private float gravityScale = 1.0f;
     private int remainingDash = 1;
     private float dashCooldownRemaining = 0.0f;
+    private bool isMeditation = false;
 
     // Attack
     public float maxArrowSpeed = 15.0f;
@@ -101,15 +106,18 @@ namespace Catsland.Scripts.Controller {
     public void Update() {
       float desiredSpeed = input.getHorizontal();
       float currentVerticleVolocity = rb2d.velocity.y;
-      //bool verticleStable = Mathf.Abs(currentVerticleVolocity) < 0.1f;
 
       // Cooldown
       if(dashCooldownRemaining > 0.0f) {
         dashCooldownRemaining -= Time.deltaTime;
       }
+      if(!input.meditation()) {
+        currentSense = Mathf.Max(currentSense - senseIncreaseSpeed * Time.deltaTime, 0.0f);
+      }
 
       // Draw and shoot 
-      bool currentIsDrawing = input.attack() && !isShooting && !isDizzy && !isDashing();
+      bool currentIsDrawing =
+        input.attack() && !isShooting && !isDizzy && !isDashing() && !input.meditation();
       // Shoot if string is released
       if(isDrawing && !currentIsDrawing && !isDizzy) {
         StartCoroutine(shoot());
@@ -134,7 +142,7 @@ namespace Catsland.Scripts.Controller {
       // Movement
       // vertical movement
       bool isCrouching = false;
-      if(groundSensor.isStay() && !isDizzy) {
+      if(groundSensor.isStay() && !isDizzy && !input.meditation()) {
         remainingDash = 1;
         if(input.getVertical() < -0.1f || headSensor.isStay()) {
           // jump down
@@ -148,12 +156,16 @@ namespace Catsland.Scripts.Controller {
           }
         } else if(input.jump()) {
           // jump up
+          rb2d.velocity = new Vector2(rb2d.velocity.x, 0.0f);
           rb2d.AddForce(new Vector2(0.0f, jumpForce));
         }
       }
 
       // Relay jump
-      if(!isDizzy && !groundSensor.isStay() && activeRelayPoints.Count > 0 && input.jump()) {
+      if(!isDizzy
+        && !groundSensor.isStay()
+        && activeRelayPoints.Count > 0
+        && input.jump()) {
         rb2d.velocity = Vector2.zero;
         rb2d.AddForce(new Vector2(0.0f, jumpForce));
       }
@@ -164,6 +176,7 @@ namespace Catsland.Scripts.Controller {
       if(!groundSensor.isStay() && !isDizzy) {
         bool desiredFacingOrientation = getOrientation() * desiredSpeed > 0.0f;
         if(frontSensor.isStay() && desiredFacingOrientation) {
+          remainingDash = 1;
           if(input.jump()) {
             rb2d.velocity = Vector2.zero;
             rb2d.AddForce(new Vector2(-Mathf.Sign(desiredSpeed) * cliffJumpForce, cliffJumpForce));
@@ -172,13 +185,14 @@ namespace Catsland.Scripts.Controller {
             isCliffSliding = true;
           }
         } else if(backSensor.isStay() && desiredFacingOrientation && input.jump()) {
+          remainingDash = 1;
           rb2d.velocity = Vector2.zero;
           rb2d.AddForce(new Vector2(Mathf.Sign(desiredSpeed) * cliffJumpForce, cliffJumpForce));
         }
       }
 
       // Dash
-      if(!isDizzy) {
+      if(!isDizzy && !input.meditation()) {
         if(isDashing()) {
           dashRemainingTime -= Time.deltaTime;
           if(dashRemainingTime < 0.0f) {
@@ -196,11 +210,18 @@ namespace Catsland.Scripts.Controller {
         }
       }
 
+      // meditation
+      isMeditation = false;
+      if(!isDizzy && groundSensor.isStay() && input.meditation()) {
+        currentSense = Mathf.Min(maxSenseAdd, currentSense + senseIncreaseSpeed * Time.deltaTime);
+        isMeditation = true;
+      }
+
       // horizontal movement
       gameObject.transform.parent =
         groundSensor.isStay() ? Utils.getAnyFrom(groundSensor.getTriggerGos()).transform : null;
       if(dashRemainingTime <= 0.0f) {
-        if(!isDizzy) {
+        if(!isDizzy && !input.meditation()) {
           if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon
             && (!groundSensor.isStay() || !isDrawing)) {
             rb2d.AddForce(new Vector2(acceleration * desiredSpeed, 0.0f));
@@ -220,7 +241,7 @@ namespace Catsland.Scripts.Controller {
       }
 
       // Update facing
-      if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon && !isDizzy) {
+      if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon && !isDizzy && !input.meditation()) {
         float parentLossyScale = gameObject.transform.parent != null
             ? gameObject.transform.parent.lossyScale.x : 1.0f;
         if(desiredSpeed * parentLossyScale > 0.0f) {
@@ -333,15 +354,16 @@ namespace Catsland.Scripts.Controller {
     }
 
     private IEnumerator jumpDown(HashSet<GameObject> onesideGos) {
-      foreach(GameObject gameObject in onesideGos) {
+      List<GameObject> disabledColliders = new List<GameObject>(onesideGos);
+      foreach(GameObject gameObject in disabledColliders) {
         Collider2D collider = gameObject.GetComponent<Collider2D>();
         collider.enabled = false;
       }
       yield return new WaitForSeconds(1.0f);
-      foreach(GameObject gameObject in onesideGos) {
+      disabledColliders.ForEach(gameObject => {
         Collider2D collider = gameObject.GetComponent<Collider2D>();
         collider.enabled = true;
-      }
+      });
     }
 
     private IEnumerator dizzy() {

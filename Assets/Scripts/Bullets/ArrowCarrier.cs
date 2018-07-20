@@ -148,6 +148,13 @@ namespace Catsland.Scripts.Bullets {
       GameObject brokenArrow = Instantiate(brokenArrowPrefab);
       brokenArrow.transform.position = transform.position;
       brokenArrow.transform.localScale = transform.lossyScale;
+
+      // adjust layer
+      SpriteRenderer[] renderers = brokenArrow.GetComponentsInChildren<SpriteRenderer>();
+      foreach(SpriteRenderer renderer in renderers) {
+        renderer.sortingOrder = spriteRenderer.sortingOrder;
+      }
+
       // assign random velocity
       Rigidbody2D[] brokenParts = brokenArrow.GetComponentsInChildren<Rigidbody2D>();
       foreach(Rigidbody2D part in brokenParts) {

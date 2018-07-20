@@ -10,5 +10,7 @@
     bool attack();
 
     bool dash();
+
+    bool meditation();
   }
 }

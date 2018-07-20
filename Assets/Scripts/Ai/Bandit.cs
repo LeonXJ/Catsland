@@ -51,6 +51,10 @@ namespace Catsland.Scripts.Ai {
       return false;
     }
 
+    public bool meditation() {
+      return false;
+    }
+
     [Task]
     public void isIncomingArrow() {
       if(arrowSensor.isStay()) {

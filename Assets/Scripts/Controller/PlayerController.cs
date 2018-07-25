@@ -11,7 +11,7 @@ namespace Catsland.Scripts.Controller {
 
   [RequireComponent(typeof(IInput))]
   [RequireComponent(typeof(Animator))]
-  public class PlayerController :MonoBehaviour {
+  public class PlayerController: MonoBehaviour {
 
     // Locomoation
     public float maxRunningSpeed = 1.0f;
@@ -57,7 +57,9 @@ namespace Catsland.Scripts.Controller {
     public int maxHealth = 3;
     public int currentHealth;
     public float dizzyTime = 1.0f;
+    public float immutableTime = 0.5f;
     private bool isDizzy = false;
+    private float lastGetDamagedTime = 0.0f;
 
     // References
     public GameObject groundSensorGO;
@@ -277,6 +279,12 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void damage(DamageInfo damageInfo) {
+      if(Time.time - lastGetDamagedTime < immutableTime) {
+        return;
+      }
+
+      lastGetDamagedTime = Time.time;
+      rb2d.velocity = Vector2.zero;
       rb2d.AddForce(damageInfo.repelDirection * damageInfo.repelIntense);
       currentHealth -= damageInfo.damage;
       if(currentHealth <= 0) {

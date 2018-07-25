@@ -1,11 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
-
 using Catsland.Scripts.Common;
 using Catsland.Scripts.Misc;
 
 namespace Catsland.Scripts.Bullets {
-
   [RequireComponent(typeof(Rigidbody2D))]
   public class ArrowCarrier :MonoBehaviour {
 

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 08d7888d650360744a2d386f600c169e
-timeCreated: 1519092284
+timeCreated: 1532498525
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -74,6 +74,8 @@ TextureImporter:
     21300134: Ranger_CrouchWalk_5
     21300136: Ranger_CrouchWalk_6
     21300138: Ranger_CrouchWalk_7
+    21300140: Ranger_Dash_0
+    21300142: Ranger_CliffSliding_0
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -807,6 +809,32 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 96
+        y: 112
+        width: 24
+        height: 24
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Ranger_Dash_0
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 112
+        width: 24
+        height: 24
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Ranger_CliffSliding_0
+      rect:
+        serializedVersion: 2
+        x: 144
         y: 112
         width: 24
         height: 24

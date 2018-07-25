@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 namespace Catsland.Scripts.Controller {
-  public class DeviceInput :MonoBehaviour, IInput {
+  public class DeviceInput: MonoBehaviour, IInput, HeadOfBanditController.HeadOfBanditInput {
 
     public bool attack() {
       return Input.GetButton("Fire1");
@@ -25,6 +25,18 @@ namespace Catsland.Scripts.Controller {
 
     public bool meditation() {
       return Input.GetButton("Meditation");
+    }
+
+    public bool charge() {
+      return Input.GetButtonDown("Charge");
+    }
+
+    public bool jumpSmash() {
+      return Input.GetButtonDown("Jump");
+    }
+
+    public bool spell() {
+      return Input.GetButtonDown("Dash");
     }
   }
 }

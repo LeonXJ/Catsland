@@ -69,6 +69,9 @@ namespace Catsland.Scripts.Controller {
     public GameObject arrowPrefab;
     public Transform shootPoint;
     public TrailIndicator trailIndicator;
+    public GameObject cliffJumpEffectPrefab;
+    public Transform forwardCliffJumpEffectPoint;
+    public Transform backwardCliffJumpEffectPoint;
     private ISensor groundSensor;
     private ISensor headSensor;
     private ISensor backSensor;
@@ -181,7 +184,11 @@ namespace Catsland.Scripts.Controller {
           remainingDash = 1;
           if(input.jump()) {
             rb2d.velocity = Vector2.zero;
-            rb2d.AddForce(new Vector2(-Mathf.Sign(desiredSpeed) * cliffJumpForce, cliffJumpForce));
+            rb2d.AddForce(new Vector2(-Mathf.Sign(desiredSpeed) * cliffJumpForce, cliffJumpForce * 0.8f));
+            // cliff jump effect
+            GameObject cliffJumpEffect = GameObject.Instantiate(cliffJumpEffectPrefab);
+            cliffJumpEffect.transform.position = backwardCliffJumpEffectPoint.position;
+            cliffJumpEffect.transform.localScale = new Vector2(-getOrientation(), 1.0f);
           } else {
             topFallingSpeed = cliffSlidingSpeed;
             isCliffSliding = true;
@@ -190,6 +197,10 @@ namespace Catsland.Scripts.Controller {
           remainingDash = 1;
           rb2d.velocity = Vector2.zero;
           rb2d.AddForce(new Vector2(Mathf.Sign(desiredSpeed) * cliffJumpForce, cliffJumpForce));
+          // cliff jump effect
+          GameObject cliffJumpEffect = GameObject.Instantiate(cliffJumpEffectPrefab);
+          cliffJumpEffect.transform.position = forwardCliffJumpEffectPoint.position;
+          cliffJumpEffect.transform.localScale = new Vector2(getOrientation(), 1.0f);
         }
       }
 

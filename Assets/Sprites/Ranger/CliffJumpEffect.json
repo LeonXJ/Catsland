@@ -1,0 +1,47 @@
+{ "frames": {
+   "CliffJumpEffect 0.aseprite": {
+    "frame": { "x": 0, "y": 0, "w": 19, "h": 27 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 19, "h": 27 },
+    "sourceSize": { "w": 19, "h": 27 },
+    "duration": 100
+   },
+   "CliffJumpEffect 1.aseprite": {
+    "frame": { "x": 19, "y": 0, "w": 19, "h": 27 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 19, "h": 27 },
+    "sourceSize": { "w": 19, "h": 27 },
+    "duration": 100
+   },
+   "CliffJumpEffect 2.aseprite": {
+    "frame": { "x": 38, "y": 0, "w": 19, "h": 27 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 19, "h": 27 },
+    "sourceSize": { "w": 19, "h": 27 },
+    "duration": 100
+   },
+   "CliffJumpEffect 3.aseprite": {
+    "frame": { "x": 57, "y": 0, "w": 19, "h": 27 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 19, "h": 27 },
+    "sourceSize": { "w": 19, "h": 27 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.9-x64",
+  "image": "D:\\workspace\\Catsland\\Assets\\Sprites\\Ranger\\CliffJumpEffect.png",
+  "format": "RGBA8888",
+  "size": { "w": 76, "h": 27 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "slices": [
+  ]
+ }
+}

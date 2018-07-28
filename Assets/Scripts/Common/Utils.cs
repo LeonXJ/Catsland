@@ -8,4 +8,9 @@ public class Utils {
     }
     return null;
   }
+
+  public static void setRelativeRenderLayer(
+    SpriteRenderer mainRenderer, SpriteRenderer subRenderer, int offset) {
+    subRenderer.sortingOrder = mainRenderer.sortingOrder + offset;
+  }
 }

@@ -40,6 +40,9 @@ namespace Catsland.Scripts.Controller {
     private float dashCooldownRemaining = 0.0f;
     private bool isMeditation = false;
 
+    public float smashMinSpeed = 1.0f;
+    private bool isLastUpdateOnGround = false;
+
     // Attack
     public float maxArrowSpeed = 15.0f;
     public float minArrowSpeed = 5.0f;
@@ -70,8 +73,12 @@ namespace Catsland.Scripts.Controller {
     public Transform shootPoint;
     public TrailIndicator trailIndicator;
     public GameObject cliffJumpEffectPrefab;
+    public Transform smashEffectPoint;
+    public GameObject smashEffectPrefab;
     public Transform forwardCliffJumpEffectPoint;
     public Transform backwardCliffJumpEffectPoint;
+    public GameObject doubleJumpEffectPrefab;
+    public Transform doubleJumpEffectPoint;
     private ISensor groundSensor;
     private ISensor headSensor;
     private ISensor backSensor;
@@ -173,6 +180,10 @@ namespace Catsland.Scripts.Controller {
         && input.jump()) {
         rb2d.velocity = Vector2.zero;
         rb2d.AddForce(new Vector2(0.0f, jumpForce));
+        // effect
+        GameObject doubleJumpEffect = Instantiate(doubleJumpEffectPrefab);
+        doubleJumpEffect.transform.position = doubleJumpEffectPoint.position;
+        Utils.setRelativeRenderLayer(spriteRenderer, doubleJumpEffect.GetComponent<SpriteRenderer>(), 1);
       }
 
       // Cliff jump
@@ -230,9 +241,20 @@ namespace Catsland.Scripts.Controller {
         isMeditation = true;
       }
 
+      // smash
+      if(!isDizzy &&
+        !isLastUpdateOnGround &&
+        groundSensor.isStay() &&
+        rb2d.velocity.y < -smashMinSpeed) {
+        GameObject smashEffect = Instantiate(smashEffectPrefab);
+        smashEffect.transform.position = smashEffectPoint.position;
+        Utils.setRelativeRenderLayer(spriteRenderer, smashEffect.GetComponentInChildren<SpriteRenderer>(), 1);
+      }
+
+
       // horizontal movement
       gameObject.transform.parent =
-        groundSensor.isStay() ? Utils.getAnyFrom(groundSensor.getTriggerGos()).transform : null;
+          groundSensor.isStay() ? Utils.getAnyFrom(groundSensor.getTriggerGos()).transform : null;
       if(dashRemainingTime <= 0.0f) {
         if(!isDizzy && !input.meditation()) {
           if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon

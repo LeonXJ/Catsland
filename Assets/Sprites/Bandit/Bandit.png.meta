@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e1fc45e68ddcaa242981cb5387856c76
-timeCreated: 1529820916
+timeCreated: 1532837059
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -29,6 +29,20 @@ TextureImporter:
     21300044: Bandit_Escape_4
     21300046: Bandit_Escape_5
     21300048: Bandit_Escape_6
+    21300050: Bandit_ChargePrepare_0
+    21300052: Bandit_ChargePrepare_1
+    21300054: Bandit_ChargePrepare_2
+    21300056: Bandit_Charge_0
+    21300058: Bandit_SpellPrepare_0
+    21300060: Bandit_SpellPrepare_1
+    21300062: Bandit_SpellPrepare_2
+    21300064: Bandit_Spell_0
+    21300066: Bandit_JumpSmashPrepare_0
+    21300068: Bandit_JumpSmashPrepare_1
+    21300070: Bandit_JumpSmashPrepare_2
+    21300072: Bandit_JumpSmashUp_0
+    21300074: Bandit_JumpSmashDown_0
+    21300076: Bandit_JumpSmashDown_1
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -76,7 +90,7 @@ TextureImporter:
   textureFormatSet: 0
   platformSettings:
   - buildTarget: DefaultTexturePlatform
-    maxTextureSize: 256
+    maxTextureSize: 512
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
@@ -99,9 +113,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 99
-        width: 24
-        height: 29
+        y: 226
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -111,10 +125,10 @@ TextureImporter:
       name: Bandit_Stand_1
       rect:
         serializedVersion: 2
-        x: 24
-        y: 99
-        width: 24
-        height: 29
+        x: 60
+        y: 226
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,10 +138,10 @@ TextureImporter:
       name: Bandit_Stand_2
       rect:
         serializedVersion: 2
-        x: 48
-        y: 99
-        width: 24
-        height: 29
+        x: 120
+        y: 226
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -137,10 +151,10 @@ TextureImporter:
       name: Bandit_Stand_3
       rect:
         serializedVersion: 2
-        x: 72
-        y: 99
-        width: 24
-        height: 29
+        x: 180
+        y: 226
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -150,10 +164,10 @@ TextureImporter:
       name: Bandit_Stand_4
       rect:
         serializedVersion: 2
-        x: 96
-        y: 99
-        width: 24
-        height: 29
+        x: 240
+        y: 226
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -163,10 +177,192 @@ TextureImporter:
       name: Bandit_Stand_5
       rect:
         serializedVersion: 2
+        x: 300
+        y: 226
+        width: 60
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Bandit_ChargePrepare_0
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 226
+        width: 60
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Bandit_ChargePrepare_1
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 226
+        width: 60
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Bandit_ChargePrepare_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 196
+        width: 60
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Bandit_Charge_0
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 196
+        width: 60
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Bandit_SpellPrepare_0
+      rect:
+        serializedVersion: 2
         x: 120
-        y: 99
-        width: 24
-        height: 29
+        y: 196
+        width: 60
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Bandit_SpellPrepare_1
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 196
+        width: 60
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Bandit_SpellPrepare_2
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 196
+        width: 60
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Bandit_Spell_0
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 196
+        width: 60
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Bandit_JumpSmashPrepare_0
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 196
+        width: 60
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Bandit_JumpSmashPrepare_1
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 196
+        width: 60
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Bandit_JumpSmashPrepare_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 166
+        width: 60
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Bandit_JumpSmashUp_0
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 166
+        width: 60
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Bandit_JumpSmashDown_0
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 166
+        width: 60
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Bandit_JumpSmashDown_1
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 166
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -176,10 +372,10 @@ TextureImporter:
       name: Bandit_Escape_0
       rect:
         serializedVersion: 2
-        x: 144
-        y: 99
-        width: 24
-        height: 29
+        x: 240
+        y: 166
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -189,10 +385,10 @@ TextureImporter:
       name: Bandit_Escape_1
       rect:
         serializedVersion: 2
-        x: 168
-        y: 99
-        width: 24
-        height: 29
+        x: 300
+        y: 166
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -202,10 +398,10 @@ TextureImporter:
       name: Bandit_Escape_2
       rect:
         serializedVersion: 2
-        x: 192
-        y: 99
-        width: 24
-        height: 29
+        x: 360
+        y: 166
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -215,10 +411,10 @@ TextureImporter:
       name: Bandit_Escape_3
       rect:
         serializedVersion: 2
-        x: 216
-        y: 99
-        width: 24
-        height: 29
+        x: 420
+        y: 166
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -229,9 +425,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 70
-        width: 24
-        height: 29
+        y: 136
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -241,10 +437,10 @@ TextureImporter:
       name: Bandit_Escape_5
       rect:
         serializedVersion: 2
-        x: 24
-        y: 70
-        width: 24
-        height: 29
+        x: 60
+        y: 136
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -254,10 +450,10 @@ TextureImporter:
       name: Bandit_Escape_6
       rect:
         serializedVersion: 2
-        x: 48
-        y: 70
-        width: 24
-        height: 29
+        x: 120
+        y: 136
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -267,10 +463,10 @@ TextureImporter:
       name: Bandit_Walk_0
       rect:
         serializedVersion: 2
-        x: 72
-        y: 70
-        width: 24
-        height: 29
+        x: 180
+        y: 136
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -280,10 +476,10 @@ TextureImporter:
       name: Bandit_Walk_1
       rect:
         serializedVersion: 2
-        x: 96
-        y: 70
-        width: 24
-        height: 29
+        x: 240
+        y: 136
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -293,10 +489,10 @@ TextureImporter:
       name: Bandit_Walk_2
       rect:
         serializedVersion: 2
-        x: 120
-        y: 70
-        width: 24
-        height: 29
+        x: 300
+        y: 136
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -306,10 +502,10 @@ TextureImporter:
       name: Bandit_Walk_3
       rect:
         serializedVersion: 2
-        x: 144
-        y: 70
-        width: 24
-        height: 29
+        x: 360
+        y: 136
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -319,10 +515,10 @@ TextureImporter:
       name: Bandit_Walk_4
       rect:
         serializedVersion: 2
-        x: 168
-        y: 70
-        width: 24
-        height: 29
+        x: 420
+        y: 136
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -332,10 +528,10 @@ TextureImporter:
       name: Bandit_Walk_5
       rect:
         serializedVersion: 2
-        x: 192
-        y: 70
-        width: 24
-        height: 29
+        x: 0
+        y: 106
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -345,10 +541,10 @@ TextureImporter:
       name: Bandit_Walk_6
       rect:
         serializedVersion: 2
-        x: 216
-        y: 70
-        width: 24
-        height: 29
+        x: 60
+        y: 106
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -358,10 +554,10 @@ TextureImporter:
       name: Bandit_Walk_7
       rect:
         serializedVersion: 2
-        x: 0
-        y: 41
-        width: 24
-        height: 29
+        x: 120
+        y: 106
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -371,10 +567,10 @@ TextureImporter:
       name: Bandit_Chop_0
       rect:
         serializedVersion: 2
-        x: 24
-        y: 41
-        width: 24
-        height: 29
+        x: 180
+        y: 106
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -384,10 +580,10 @@ TextureImporter:
       name: Bandit_Chop_1
       rect:
         serializedVersion: 2
-        x: 48
-        y: 41
-        width: 24
-        height: 29
+        x: 240
+        y: 106
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -397,10 +593,10 @@ TextureImporter:
       name: Bandit_Chop_2
       rect:
         serializedVersion: 2
-        x: 72
-        y: 41
-        width: 24
-        height: 29
+        x: 300
+        y: 106
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -410,10 +606,10 @@ TextureImporter:
       name: Bandit_Chop_3
       rect:
         serializedVersion: 2
-        x: 96
-        y: 41
-        width: 24
-        height: 29
+        x: 360
+        y: 106
+        width: 60
+        height: 30
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

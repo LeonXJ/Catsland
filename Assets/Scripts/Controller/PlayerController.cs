@@ -183,7 +183,8 @@ namespace Catsland.Scripts.Controller {
         // effect
         GameObject doubleJumpEffect = Instantiate(doubleJumpEffectPrefab);
         doubleJumpEffect.transform.position = doubleJumpEffectPoint.position;
-        Utils.setRelativeRenderLayer(spriteRenderer, doubleJumpEffect.GetComponent<SpriteRenderer>(), 1);
+        Utils.setRelativeRenderLayer(
+          spriteRenderer, doubleJumpEffect.GetComponentInChildren<SpriteRenderer>(), 1);
       }
 
       // Cliff jump
@@ -250,7 +251,7 @@ namespace Catsland.Scripts.Controller {
         smashEffect.transform.position = smashEffectPoint.position;
         Utils.setRelativeRenderLayer(spriteRenderer, smashEffect.GetComponentInChildren<SpriteRenderer>(), 1);
       }
-
+      isLastUpdateOnGround = groundSensor.isStay();
 
       // horizontal movement
       gameObject.transform.parent =

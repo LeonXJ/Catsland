@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System;
+using UnityEngine;
 using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Controller {
@@ -23,7 +25,7 @@ namespace Catsland.Scripts.Controller {
       JUMP_SMASH_PREPARE,
       JUMP_SMASH_JUMPING,
       JUMP_SMASH_SMASHING,
-      JUMP_SAMSH_REST,
+      JUMP_SMASH_REST,
 
       // Spell
       SPELL_PREAPRE,
@@ -47,6 +49,9 @@ namespace Catsland.Scripts.Controller {
     public float jumpSmashPrepareTime = 0.3f;
     public float jumpSmashSmashTime = 0.3f;
     public float jumpSmashRestTime = 0.5f;
+    public GameObject jumpSmashEffectPrefab;
+    public Transform jumpSmashEffectTransform;
+    private bool isLastOnGround = false;
 
     // Spell
     public GameObject throwingKnifePrefab;
@@ -67,11 +72,22 @@ namespace Catsland.Scripts.Controller {
     private ISensor groundSensor;
     private Rigidbody2D rb2d;
     private HeadOfBanditInput input;
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
+
+    // Animation
+    private static readonly string H_SPEED = "HSpeed";
+    private static readonly string V_SPEED = "VSpeed";
+    private static readonly string JUMP_SMASH_PHASE = "JumpSmashPhase";
+    private static readonly Dictionary<Status, int> JUMP_SMASH_STATUS_TO_PHASE =
+      new Dictionary<Status, int>();
 
     void Awake() {
       rb2d = GetComponent<Rigidbody2D>();
       input = GetComponent<HeadOfBanditInput>();
       groundSensor = groundSensorGo.GetComponent<ISensor>();
+      animator = GetComponent<Animator>();
+      spriteRenderer = GetComponent<SpriteRenderer>();
 
       chargeSequence = LinearSequence.newBuilder()
         .append(Status.CHARGE_PREPARE, chargePrepareTime)
@@ -84,7 +100,7 @@ namespace Catsland.Scripts.Controller {
         .append(Status.JUMP_SMASH_PREPARE, jumpSmashPrepareTime)
         .append(Status.JUMP_SMASH_JUMPING, jumpSmashReadyToSmash)
         .append(Status.JUMP_SMASH_SMASHING, jumpSmashSmashTime)
-        .append(Status.JUMP_SAMSH_REST, jumpSmashRestTime)
+        .append(Status.JUMP_SMASH_REST, jumpSmashRestTime)
         .withEndingStatus(Status.IDEAL)
         .build();
 
@@ -94,6 +110,11 @@ namespace Catsland.Scripts.Controller {
         .append(Status.SPELL_REST, spellRestTime)
         .withEndingStatus(Status.IDEAL)
         .build();
+
+      JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_PREPARE, 1);
+      JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_JUMPING, 2);
+      JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_SMASHING, 3);
+      JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_REST, 4);
     }
 
     void Update() {
@@ -142,7 +163,20 @@ namespace Catsland.Scripts.Controller {
       } else if(groundSensor.isStay()) {
         rb2d.velocity = new Vector2(0.0f, rb2d.velocity.y);
       }
+
+      // effect
+      if(!isLastOnGround && groundSensor.isStay()
+        && (status == Status.JUMP_SMASH_JUMPING || status == Status.JUMP_SMASH_SMASHING)) {
+        GameObject jumpSmashEffect = Instantiate(jumpSmashEffectPrefab);
+        jumpSmashEffect.transform.position = jumpSmashEffectTransform.position;
+        Utils.setRelativeRenderLayer(spriteRenderer, jumpSmashEffect.GetComponent<SpriteRenderer>(), 1);
+      }
+      isLastOnGround = groundSensor.isStay();
+
       // animation
+      animator.SetFloat(H_SPEED, rb2d.velocity.x);
+      animator.SetFloat(V_SPEED, rb2d.velocity.y);
+      setAnimiatorPhaseValue(JUMP_SMASH_PHASE, JUMP_SMASH_STATUS_TO_PHASE);
     }
 
     public float getOrientation() {
@@ -183,6 +217,12 @@ namespace Catsland.Scripts.Controller {
       Rigidbody2D knifeRb2d = knife.GetComponent<Rigidbody2D>();
       knifeRb2d.velocity = new Vector2(getOrientation() * knifeSpeed, 0.0f);
       knifeRb2d.angularVelocity = getOrientation() * knifeAngularSpeed;
+    }
+
+    private void setAnimiatorPhaseValue(String variableName, Dictionary<Status, int> statusToPhase) {
+      int phase = 0;
+      statusToPhase.TryGetValue(status, out phase);
+      animator.SetInteger(variableName, phase);
     }
   }
 }

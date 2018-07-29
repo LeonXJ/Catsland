@@ -2,13 +2,11 @@
 using UnityEngine;
 
 namespace Catsland.Scripts.Controller {
-  public class TriggerBasedSensor :MonoBehaviour, ISensor {
+  public class TriggerBasedSensor: MonoBehaviour, ISensor {
 
     public LayerMask layerMask;
     public List<GameObject> whitelistGos;
 
-    public bool isTriggered = false;
-    public GameObject triggerGO;
     public HashSet<GameObject> triggerGos = new HashSet<GameObject>();
 
     public void OnTriggerEnter2D(Collider2D collision) {
@@ -21,25 +19,21 @@ namespace Catsland.Scripts.Controller {
 
     public void OnTriggerExit2D(Collider2D collision) {
       if(isCollisionWhitelisted(collision)) {
-        isTriggered = false;
-        triggerGO = null;
         triggerGos.Remove(collision.gameObject);
       }
     }
 
     public bool isStay() {
-      if(triggerGO == null) {
-        isTriggered = false;
-      }
-      //return isTriggered;
+      cleanUpDeleteGos();
       return triggerGos.Count > 0;
     }
 
     public HashSet<GameObject> getTriggerGos() {
+      cleanUpDeleteGos();
       return triggerGos;
     }
 
-    void Update() {
+    void cleanUpDeleteGos() {
       triggerGos.RemoveWhere(gameObject => gameObject == null);
     }
 
@@ -56,8 +50,6 @@ namespace Catsland.Scripts.Controller {
 
     private void onTriggerEnterOrStay(Collider2D collision) {
       if(isCollisionWhitelisted(collision)) {
-        isTriggered = true;
-        triggerGO = collision.gameObject;
         triggerGos.Add(collision.gameObject);
       }
     }

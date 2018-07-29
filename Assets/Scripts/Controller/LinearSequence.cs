@@ -57,6 +57,9 @@ public class LinearSequence {
           || !actions[statusOrder].isActionDoneFunction())
         && currentStatusRemainingTime > timeToProcess) {
         currentStatusRemainingTime -= timeToProcess;
+        if(currentStatus != actionStatus) {
+          Debug.Log("LinearSequence jump to status from A: " + currentStatus);
+        }
         return currentStatus;
       }
       // otherwise, jump to next status
@@ -64,12 +67,14 @@ public class LinearSequence {
         timeToProcess -= currentStatusRemainingTime;
       }
       if(statusOrder == actions.Count - 1) {
+        Debug.Log("LinearSequence jump to status from B: " + jumpToStatusWhenFinish);
         return jumpToStatusWhenFinish;
       }
       statusOrder += 1;
       currentStatus = actions[statusOrder].actionStatus;
       currentStatusRemainingTime = actions[statusOrder].performingTime;
     }
+    Debug.Log("LinearSequence jump to status from C: " + currentStatus);
     return currentStatus;
   }
 

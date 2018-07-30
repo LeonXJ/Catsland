@@ -202,7 +202,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     bool jumpSmashReadyToSmash() {
-      return status == Status.JUMP_SMASH_JUMPING && groundSensor.isStay();
+      return status == Status.JUMP_SMASH_JUMPING && groundSensor.isStay() && !isLastOnGround;
     }
 
     private bool canAdjustOrientation() {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using UnityEngine;
-using Catsland.Scripts.Common;
+using Catsland.Scripts.Bullets;
 
 namespace Catsland.Scripts.Controller {
   public class HeadOfBanditController: MonoBehaviour {
@@ -61,6 +61,7 @@ namespace Catsland.Scripts.Controller {
     public float spellPrepareTime = 0.3f;
     public float spellSpellTime = 0.3f;
     public float spellRestTime = 0.2f;
+    public Transform spellTransform;
 
     private float currentChargeStatusRemainingTime;
     private LinearSequence chargeSequence;
@@ -80,9 +81,13 @@ namespace Catsland.Scripts.Controller {
     private static readonly string V_SPEED = "VSpeed";
     private static readonly string JUMP_SMASH_PHASE = "JumpSmashPhase";
     private static readonly string CHARGE_PHASE = "ChargePhase";
+    private static readonly string SPELL_PHASE = "SpellPhase";
+
     private static readonly Dictionary<Status, int> JUMP_SMASH_STATUS_TO_PHASE =
       new Dictionary<Status, int>();
     private static readonly Dictionary<Status, int> CHARGE_STATUS_TO_PHASE =
+      new Dictionary<Status, int>();
+    private static readonly Dictionary<Status, int> SPELL_STATUS_TO_PHASE =
       new Dictionary<Status, int>();
 
     void Awake() {
@@ -123,6 +128,9 @@ namespace Catsland.Scripts.Controller {
       CHARGE_STATUS_TO_PHASE.Add(Status.CHARGE_CHARGING, 2);
       CHARGE_STATUS_TO_PHASE.Add(Status.CHARGE_REST, 3);
 
+      SPELL_STATUS_TO_PHASE.Add(Status.SPELL_PREAPRE, 1);
+      SPELL_STATUS_TO_PHASE.Add(Status.SPELL_SPELLING, 2);
+      SPELL_STATUS_TO_PHASE.Add(Status.SPELL_REST, 3);
     }
 
     void Update() {
@@ -186,6 +194,7 @@ namespace Catsland.Scripts.Controller {
       animator.SetFloat(V_SPEED, rb2d.velocity.y);
       setAnimiatorPhaseValue(JUMP_SMASH_PHASE, JUMP_SMASH_STATUS_TO_PHASE);
       setAnimiatorPhaseValue(CHARGE_PHASE, CHARGE_STATUS_TO_PHASE);
+      setAnimiatorPhaseValue(SPELL_PHASE, SPELL_STATUS_TO_PHASE);
     }
 
     public float getOrientation() {
@@ -218,14 +227,17 @@ namespace Catsland.Scripts.Controller {
 
     private void spell() {
       GameObject knife = Instantiate(throwingKnifePrefab);
-      knife.transform.position = knifeGenerationPoint.position;
+      knife.transform.position = spellTransform.position;
+      knife.transform.localScale = new Vector2(getOrientation(), 1.0f);
       // renderer
-      SpriteRenderer renderer = knife.GetComponent<SpriteRenderer>();
-      renderer.sortingOrder = GetComponent<SpriteRenderer>().sortingOrder;
+      SpriteRenderer knifeRenderer = knife.GetComponent<SpriteRenderer>();
+      Utils.setRelativeRenderLayer(spriteRenderer, knifeRenderer, 1);
+
       // velocity
       Rigidbody2D knifeRb2d = knife.GetComponent<Rigidbody2D>();
       knifeRb2d.velocity = new Vector2(getOrientation() * knifeSpeed, 0.0f);
-      knifeRb2d.angularVelocity = getOrientation() * knifeAngularSpeed;
+
+      knife.GetComponent<Spell>().fire();
     }
 
     private void setAnimiatorPhaseValue(String variableName, Dictionary<Status, int> statusToPhase) {

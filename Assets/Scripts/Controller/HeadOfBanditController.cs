@@ -79,7 +79,10 @@ namespace Catsland.Scripts.Controller {
     private static readonly string H_SPEED = "HSpeed";
     private static readonly string V_SPEED = "VSpeed";
     private static readonly string JUMP_SMASH_PHASE = "JumpSmashPhase";
+    private static readonly string CHARGE_PHASE = "ChargePhase";
     private static readonly Dictionary<Status, int> JUMP_SMASH_STATUS_TO_PHASE =
+      new Dictionary<Status, int>();
+    private static readonly Dictionary<Status, int> CHARGE_STATUS_TO_PHASE =
       new Dictionary<Status, int>();
 
     void Awake() {
@@ -115,6 +118,11 @@ namespace Catsland.Scripts.Controller {
       JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_JUMPING, 2);
       JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_SMASHING, 3);
       JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_REST, 4);
+
+      CHARGE_STATUS_TO_PHASE.Add(Status.CHARGE_PREPARE, 1);
+      CHARGE_STATUS_TO_PHASE.Add(Status.CHARGE_CHARGING, 2);
+      CHARGE_STATUS_TO_PHASE.Add(Status.CHARGE_REST, 3);
+
     }
 
     void Update() {
@@ -174,9 +182,10 @@ namespace Catsland.Scripts.Controller {
       isLastOnGround = groundSensor.isStay();
 
       // animation
-      animator.SetFloat(H_SPEED, rb2d.velocity.x);
+      animator.SetFloat(H_SPEED, Mathf.Abs(rb2d.velocity.x));
       animator.SetFloat(V_SPEED, rb2d.velocity.y);
       setAnimiatorPhaseValue(JUMP_SMASH_PHASE, JUMP_SMASH_STATUS_TO_PHASE);
+      setAnimiatorPhaseValue(CHARGE_PHASE, CHARGE_STATUS_TO_PHASE);
     }
 
     public float getOrientation() {

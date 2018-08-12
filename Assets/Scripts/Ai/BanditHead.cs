@@ -12,6 +12,7 @@ namespace Catsland.Scripts.Ai {
     public float knifeReachDistance = 10.0f;
     public float chargeReachDistance = 6.0f;
     public float jumpSmashReachDistance = 3.0f;
+    public float verticalReachDistance = 5.0f;
 
     private float horizontal;
     private bool wantJumpSmash;
@@ -108,7 +109,7 @@ namespace Catsland.Scripts.Ai {
     [Task]
     public void faceToPlayer() {
       resetStatus();
-      float horizontalDelta = getHorizontalDistanceToPlayer();
+      float horizontalDelta = getDistanceToPlayer().x;
       // Keep checking the orientation until successfully set orientation.
       if(controller.getOrientation() * horizontalDelta > 0.0f) {
         Task.current.Succeed();
@@ -120,15 +121,16 @@ namespace Catsland.Scripts.Ai {
     }
 
     private void setTaskSucceedElseFailIfInDistance(float distance) {
-      if(Mathf.Abs(getHorizontalDistanceToPlayer()) < distance) {
+      Vector2 delta = getDistanceToPlayer();
+      if(Mathf.Abs(delta.x) < distance && Mathf.Abs(delta.y) < verticalReachDistance) {
         Task.current.Succeed();
       } else {
         Task.current.Fail();
       }
     }
 
-    private float getHorizontalDistanceToPlayer() {
-      return playerGo.transform.position.x - gameObject.transform.position.x;
+    private Vector2 getDistanceToPlayer() {
+      return playerGo.transform.position - gameObject.transform.position;
     }
 
     private void performAndWaitDoneAction(

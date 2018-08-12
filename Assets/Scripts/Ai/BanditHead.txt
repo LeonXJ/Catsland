@@ -1,0 +1,17 @@
+tree("Root")
+  sequence 
+    mute
+      sequence
+        isPlayerInKnifeReachDistance()
+        faceToPlayer()
+        throwKnife()
+    mute
+      sequence
+        isPlayerInChargeReachDistance()
+        faceToPlayer()
+        performCharge()
+    mute
+      sequence
+        isPlayerInJumpSmashReachDistance()
+        faceToPlayer()
+        performJumpSmash()

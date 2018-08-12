@@ -90,13 +90,31 @@ namespace Catsland.Scripts.Controller {
     private static readonly Dictionary<Status, int> SPELL_STATUS_TO_PHASE =
       new Dictionary<Status, int>();
 
+    static HeadOfBanditController() {
+      JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_PREPARE, 1);
+      JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_JUMPING, 2);
+      JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_SMASHING, 3);
+      JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_REST, 4);
+
+      CHARGE_STATUS_TO_PHASE.Add(Status.CHARGE_PREPARE, 1);
+      CHARGE_STATUS_TO_PHASE.Add(Status.CHARGE_CHARGING, 2);
+      CHARGE_STATUS_TO_PHASE.Add(Status.CHARGE_REST, 3);
+
+      SPELL_STATUS_TO_PHASE.Add(Status.SPELL_PREAPRE, 1);
+      SPELL_STATUS_TO_PHASE.Add(Status.SPELL_SPELLING, 2);
+      SPELL_STATUS_TO_PHASE.Add(Status.SPELL_REST, 3);
+    }
+
+
     void Awake() {
       rb2d = GetComponent<Rigidbody2D>();
       input = GetComponent<HeadOfBanditInput>();
       groundSensor = groundSensorGo.GetComponent<ISensor>();
       animator = GetComponent<Animator>();
       spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
+    private void Start() {
       chargeSequence = LinearSequence.newBuilder()
         .append(Status.CHARGE_PREPARE, chargePrepareTime)
         .append(Status.CHARGE_CHARGING, chargeChargingTime)
@@ -118,19 +136,6 @@ namespace Catsland.Scripts.Controller {
         .append(Status.SPELL_REST, spellRestTime)
         .withEndingStatus(Status.IDEAL)
         .build();
-
-      JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_PREPARE, 1);
-      JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_JUMPING, 2);
-      JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_SMASHING, 3);
-      JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_REST, 4);
-
-      CHARGE_STATUS_TO_PHASE.Add(Status.CHARGE_PREPARE, 1);
-      CHARGE_STATUS_TO_PHASE.Add(Status.CHARGE_CHARGING, 2);
-      CHARGE_STATUS_TO_PHASE.Add(Status.CHARGE_REST, 3);
-
-      SPELL_STATUS_TO_PHASE.Add(Status.SPELL_PREAPRE, 1);
-      SPELL_STATUS_TO_PHASE.Add(Status.SPELL_SPELLING, 2);
-      SPELL_STATUS_TO_PHASE.Add(Status.SPELL_REST, 3);
     }
 
     void Update() {
@@ -205,19 +210,19 @@ namespace Catsland.Scripts.Controller {
       return status == Status.JUMP_SMASH_JUMPING && groundSensor.isStay() && !isLastOnGround;
     }
 
-    private bool canAdjustOrientation() {
+    public bool canAdjustOrientation() {
       return status == Status.IDEAL;
     }
 
-    private bool canCharge() {
+    public bool canCharge() {
       return status == Status.IDEAL;
     }
 
-    private bool canJumpSmash() {
+    public bool canJumpSmash() {
       return status == Status.IDEAL;
     }
 
-    private bool canSpell() {
+    public bool canSpell() {
       return status == Status.IDEAL;
     }
 
@@ -237,7 +242,7 @@ namespace Catsland.Scripts.Controller {
       Rigidbody2D knifeRb2d = knife.GetComponent<Rigidbody2D>();
       knifeRb2d.velocity = new Vector2(getOrientation() * knifeSpeed, 0.0f);
 
-      knife.GetComponent<Spell>().fire();
+      knife.GetComponent<Spell>().fire(gameObject);
     }
 
     private void setAnimiatorPhaseValue(String variableName, Dictionary<Status, int> statusToPhase) {

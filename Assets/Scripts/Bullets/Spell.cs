@@ -10,13 +10,17 @@ namespace Catsland.Scripts.Bullets {
     public bool onlyHitPlayer = true;
     public float lifetimeInSecond = 5.0f;
 
+    // Bullet won't collide with the owner. At bullet initial phase, bullet collider might collide
+    // with owner's. This bit is useful to avoid bullet hit the owner.
+    private GameObject owner;
     private Rigidbody2D rb2d;
 
     void Awake() {
       rb2d = GetComponent<Rigidbody2D>();
     }
 
-    public void fire() {
+    public void fire(GameObject owner) {
+      this.owner = owner;
       StartCoroutine(delayDestroy());
     }
 
@@ -29,12 +33,16 @@ namespace Catsland.Scripts.Bullets {
     }
 
     private void onHit(Collider2D collision) {
+      // Bullets won't collide.
       if(collision.gameObject.layer == Layers.LayerBullet) {
         return;
       }
-      if(onlyHitPlayer && collision.gameObject.layer == Layers.LayerCharacter) {
+      // Bullets won't collide with owner. This is useful esp. at beginning phase when the bullet
+      // collider might collide with owner's.
+      if(collision.gameObject == owner) {
         return;
       }
+
       if((onlyHitPlayer && collision.gameObject.CompareTag(Tags.PLAYER))
         || (!onlyHitPlayer && collision.gameObject.layer == Layers.LayerCharacter)) {
         collision.gameObject.SendMessage(

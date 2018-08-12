@@ -99,7 +99,7 @@ namespace Catsland.Scripts.Controller {
     private const string CLIFF_SLIDING = "CliffSliding";
     private const string DASHING = "Dashing";
 
-    public void Awake() {
+    public void Start() {
       input = GetComponent<IInput>();
       rb2d = GetComponent<Rigidbody2D>();
       groundSensor = groundSensorGO.GetComponent<ISensor>();
@@ -111,7 +111,7 @@ namespace Catsland.Scripts.Controller {
       spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void Start() {
+    public void Awake() {
       currentHealth = maxHealth;
     }
 

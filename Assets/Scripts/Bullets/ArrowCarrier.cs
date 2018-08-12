@@ -5,7 +5,7 @@ using Catsland.Scripts.Misc;
 
 namespace Catsland.Scripts.Bullets {
   [RequireComponent(typeof(Rigidbody2D))]
-  public class ArrowCarrier :MonoBehaviour {
+  public class ArrowCarrier: MonoBehaviour {
 
     enum ArrowStatus {
       Flying = 0,
@@ -91,7 +91,6 @@ namespace Catsland.Scripts.Bullets {
       if(collision.gameObject.layer == Layers.LayerGround) {
         // TODO: support attachable
         // arrow proof by default
-        Debug.Log("Broken by " + collision.gameObject.name);
         StartCoroutine(breakArrow());
         return;
       }

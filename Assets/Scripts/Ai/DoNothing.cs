@@ -5,7 +5,7 @@ using Panda;
 using Catsland.Scripts.Controller;
 
 namespace Catsland.Scripts.Ai {
-  public class DoNothing :MonoBehaviour, IInput {
+  public class DoNothing: MonoBehaviour, IInput {
 
     enum CharacterAction {
       Attack,
@@ -50,6 +50,10 @@ namespace Catsland.Scripts.Ai {
     }
 
     public bool meditation() {
+      return false;
+    }
+
+    public bool interact() {
       return false;
     }
 

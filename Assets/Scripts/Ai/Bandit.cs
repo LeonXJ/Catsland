@@ -5,7 +5,7 @@ using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Controller;
 
 namespace Catsland.Scripts.Ai {
-  public class Bandit :MonoBehaviour, IInput {
+  public class Bandit: MonoBehaviour, IInput {
     public GameObject arrowSensorGo;
     public GameObject chopSensorGo;
     public GameObject viewSensorGo;
@@ -52,6 +52,10 @@ namespace Catsland.Scripts.Ai {
     }
 
     public bool meditation() {
+      return false;
+    }
+
+    public bool interact() {
       return false;
     }
 

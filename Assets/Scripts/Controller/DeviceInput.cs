@@ -38,5 +38,9 @@ namespace Catsland.Scripts.Controller {
     public bool spell() {
       return Input.GetButtonDown("Dash");
     }
+
+    public bool interact() {
+      return Input.GetButtonDown("Interact");
+    }
   }
 }

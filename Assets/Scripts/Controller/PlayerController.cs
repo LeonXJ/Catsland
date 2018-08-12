@@ -201,6 +201,8 @@ namespace Catsland.Scripts.Controller {
             GameObject cliffJumpEffect = GameObject.Instantiate(cliffJumpEffectPrefab);
             cliffJumpEffect.transform.position = backwardCliffJumpEffectPoint.position;
             cliffJumpEffect.transform.localScale = new Vector2(-getOrientation(), 1.0f);
+            Utils.setRelativeRenderLayer(
+              spriteRenderer, cliffJumpEffect.GetComponentInChildren<SpriteRenderer>(), 1);
           } else {
             topFallingSpeed = cliffSlidingSpeed;
             isCliffSliding = true;
@@ -213,6 +215,8 @@ namespace Catsland.Scripts.Controller {
           GameObject cliffJumpEffect = GameObject.Instantiate(cliffJumpEffectPrefab);
           cliffJumpEffect.transform.position = forwardCliffJumpEffectPoint.position;
           cliffJumpEffect.transform.localScale = new Vector2(getOrientation(), 1.0f);
+          Utils.setRelativeRenderLayer(
+            spriteRenderer, cliffJumpEffect.GetComponentInChildren<SpriteRenderer>(), 1);
         }
       }
 

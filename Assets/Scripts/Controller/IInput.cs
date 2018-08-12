@@ -12,5 +12,7 @@
     bool dash();
 
     bool meditation();
+
+    bool interact();
   }
 }

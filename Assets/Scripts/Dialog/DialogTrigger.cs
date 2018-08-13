@@ -9,6 +9,8 @@ namespace Catsland.Scripts.Dialog {
 
     public GameObject dialogSensorGo;
     public GameObject canTalkSignGo;
+    public GameObject dialogPanel;
+    public GameObject continueSignGo;
     public bool canTalk = false;
     public Text textArea;
     public float typeIntervalSecond = 0.02f;
@@ -59,7 +61,9 @@ namespace Catsland.Scripts.Dialog {
         if(currentDialogIndex < 0) {
           currentDialogIndex = 0;
           hasCurrentDialogIndexShown = false;
+          continueSignGo.SetActive(false);
           inTalkMode = true;
+          dialogPanel.SetActive(true);
           // set text
           StartCoroutine(type(dialogs[currentDialogIndex]));
           return;
@@ -73,6 +77,7 @@ namespace Catsland.Scripts.Dialog {
           } else {
             // set text
             hasCurrentDialogIndexShown = false;
+            continueSignGo.SetActive(false);
             StartCoroutine(type(dialogs[currentDialogIndex]));
           }
         }
@@ -83,7 +88,9 @@ namespace Catsland.Scripts.Dialog {
       inTalkMode = false;
       currentDialogIndex = -1;
       hasCurrentDialogIndexShown = false;
+      continueSignGo.SetActive(false);
       textArea.text = "";
+      dialogPanel.SetActive(false);
     }
 
     IEnumerator type(string text) {
@@ -102,6 +109,7 @@ namespace Catsland.Scripts.Dialog {
       }
       if(inTalkMode) {
         hasCurrentDialogIndexShown = true;
+        continueSignGo.SetActive(true);
       }
     }
   }

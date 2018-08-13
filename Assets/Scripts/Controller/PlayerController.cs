@@ -284,7 +284,7 @@ namespace Catsland.Scripts.Controller {
       if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon
         && !isDizzy
         && !input.meditation()
-        && dashRemainingTime < 0.0f) {
+        && dashRemainingTime < Mathf.Epsilon) {
         float parentLossyScale = gameObject.transform.parent != null
             ? gameObject.transform.parent.lossyScale.x : 1.0f;
         if(desiredSpeed * parentLossyScale > 0.0f) {

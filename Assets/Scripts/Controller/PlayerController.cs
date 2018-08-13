@@ -281,7 +281,10 @@ namespace Catsland.Scripts.Controller {
       }
 
       // Update facing
-      if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon && !isDizzy && !input.meditation()) {
+      if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon
+        && !isDizzy
+        && !input.meditation()
+        && dashRemainingTime < 0.0f) {
         float parentLossyScale = gameObject.transform.parent != null
             ? gameObject.transform.parent.lossyScale.x : 1.0f;
         if(desiredSpeed * parentLossyScale > 0.0f) {
@@ -297,7 +300,6 @@ namespace Catsland.Scripts.Controller {
       // limit falling speed
       if(rb2d.velocity.y < 0.0f) {
         rb2d.velocity = new Vector2(rb2d.velocity.x, Mathf.Max(rb2d.velocity.y, -topFallingSpeed));
-
       }
 
       // Update head collider

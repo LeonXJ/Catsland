@@ -53,7 +53,7 @@ namespace Catsland.Scripts.Dialog {
       }
 
       // on player talk
-      if(playerGo.GetComponent<IInput>().interact()) {
+      if(canTalk && playerGo.GetComponent<IInput>().interact()) {
         // enter player talk mode
         // start dialog
         if(currentDialogIndex < 0) {

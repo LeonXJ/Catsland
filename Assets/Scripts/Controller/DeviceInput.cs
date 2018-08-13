@@ -3,8 +3,27 @@
 namespace Catsland.Scripts.Controller {
   public class DeviceInput: MonoBehaviour, IInput, HeadOfBanditController.HeadOfBanditInput {
 
+    public float dashAxisDeadzone = 0.2f;
+
+    private bool lastWantDash = false;
+    private bool curWantDash = false;
+
+    void Update() {
+      // Because controller trigger is axis, we simulate snap button here.
+      curWantDash = false;
+      if(Input.GetAxis("Dash") > dashAxisDeadzone) {
+        if(!lastWantDash) {
+          curWantDash = true;
+        }
+        lastWantDash = true;
+      } else {
+        lastWantDash = false;
+      }
+
+    }
+
     public bool attack() {
-      return Input.GetButton("Fire1");
+      return Input.GetButton("Attack");
     }
 
     public float getHorizontal() {
@@ -20,11 +39,11 @@ namespace Catsland.Scripts.Controller {
     }
 
     public bool dash() {
-      return Input.GetButtonDown("Dash");
+      return Input.GetButtonDown("Dash") || curWantDash;
     }
 
     public bool meditation() {
-      return Input.GetButton("Meditation");
+      return Input.GetButton("Interact");
     }
 
     public bool charge() {

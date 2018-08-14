@@ -164,7 +164,8 @@ namespace Catsland.Scripts.Controller {
             // crouch drawing
 
           } else {
-            isCrouching = true;
+            // disable crouch
+            // isCrouching = true;
           }
         } else if(input.jump()) {
           // jump up
@@ -228,7 +229,7 @@ namespace Catsland.Scripts.Controller {
             // exit dash
             rb2d.gravityScale = gravityScale;
           }
-        } else if(input.dash() && canDash()) {
+        } else if(input.dash() && canDash(isCliffSliding)) {
           // enter dash
           rb2d.velocity = new Vector2(Mathf.Sign(getOrientation()) * dashSpeed, 0.0f);
           gravityScale = rb2d.gravityScale;
@@ -348,8 +349,8 @@ namespace Catsland.Scripts.Controller {
       return dashRemainingTime > 0.0f;
     }
 
-    public bool canDash() {
-      return remainingDash > 0 && dashCooldownRemaining <= 0.0f;
+    public bool canDash(bool isCliffSliding) {
+      return remainingDash > 0 && dashCooldownRemaining <= 0.0f && !isCliffSliding;
     }
 
     public void registerRelayPoint(RelayPoint relayPoint) {

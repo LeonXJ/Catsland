@@ -6,9 +6,14 @@ namespace Catsland.Scripts.Bullets {
 
     public int damage;
     public float repelIntensity;
+    public GameObject owner;
 
     void OnCollisionEnter2D(Collision2D collision) {
       onHit(collision);
+    }
+
+    void OnTriggerEnter2D(Collider2D collider) {
+      onHit(collider);
     }
 
     void OnCollisionStay2D(Collision2D collision) {
@@ -16,9 +21,17 @@ namespace Catsland.Scripts.Bullets {
     }
 
     void onHit(Collision2D collision) {
-      if(collision.gameObject.layer == Layers.LayerCharacter) {
-        Vector2 delta = collision.gameObject.transform.position - transform.position;
-        collision.gameObject.SendMessage(
+      onHitGameObject(collision.gameObject);
+    }
+
+    void onHit(Collider2D collider) {
+      onHitGameObject(collider.gameObject);
+    }
+
+    private void onHitGameObject(GameObject gameObject) {
+      if(gameObject.layer == Layers.LayerCharacter && gameObject != owner) {
+        Vector2 delta = gameObject.transform.position - transform.position;
+        gameObject.SendMessage(
           MessageNames.DAMAGE_FUNCTION,
           new DamageInfo(damage, new Vector2(Mathf.Sign(delta.x), 0.0f), repelIntensity),
           SendMessageOptions.DontRequireReceiver);

@@ -222,12 +222,15 @@ namespace Catsland.Scripts.Controller {
       }
 
       // Dash
+      if(isDizzy && isDashing()) {
+        exitDash();
+      }
       if(!isDizzy && !input.meditation()) {
         if(isDashing()) {
           dashRemainingTime -= Time.deltaTime;
           if(dashRemainingTime < 0.0f) {
             // exit dash
-            rb2d.gravityScale = gravityScale;
+            exitDash();
           }
         } else if(input.dash() && canDash(isCliffSliding)) {
           // enter dash
@@ -368,6 +371,11 @@ namespace Catsland.Scripts.Controller {
         }
       }
       return true;
+    }
+
+    private void exitDash() {
+      dashRemainingTime = 0.0f;
+      rb2d.gravityScale = gravityScale;
     }
 
     private IEnumerator shoot() {

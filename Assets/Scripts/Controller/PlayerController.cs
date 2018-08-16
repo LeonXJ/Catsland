@@ -401,10 +401,10 @@ namespace Catsland.Scripts.Controller {
         Mathf.Clamp(currentDrawingTime, 0.0f, maxDrawingTime) / maxDrawingTime;
       arrowCarrier.repelIntensive = drawingRatio * maxRepelForce;
       float absoluteArrowSpeed = Mathf.Lerp(minArrowSpeed, maxArrowSpeed, drawingRatio);
-      StartCoroutine(arrowCarrier.fire(
+      arrowCarrier.fire(
         new Vector2(transform.lossyScale.x > 0.0f ? absoluteArrowSpeed : -absoluteArrowSpeed, 0.0f),
         maxArrowLifetime,
-        gameObject.tag));
+        gameObject.tag);
       isShooting = true;
       yield return new WaitForSeconds(shootingCd);
       isShooting = false;

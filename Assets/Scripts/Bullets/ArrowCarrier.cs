@@ -25,7 +25,6 @@ namespace Catsland.Scripts.Bullets {
 
     private ArrowStatus status = ArrowStatus.Flying;
     private string tagForOwner;
-    private bool isDestroyed = false;
     private Vector2 velocity;
 
     private static Random random = new Random();
@@ -50,7 +49,7 @@ namespace Catsland.Scripts.Bullets {
       }
     }
 
-    public IEnumerator fire(Vector2 direction, float lifetime, string tagForOwner) {
+    public void fire(Vector2 direction, float lifetime, string tagForOwner) {
       this.tagForOwner = tagForOwner;
 
       // velocity and orientation
@@ -62,11 +61,12 @@ namespace Catsland.Scripts.Bullets {
             : -Mathf.Abs(transform.localScale.x),
         1.0f);
 
-      // self destory
+      StartCoroutine(expireAndDestroy(lifetime));
+    }
+
+    private IEnumerator expireAndDestroy(float lifetime) {
       yield return new WaitForSeconds(lifetime);
-      if(!isAttached) {
-        safeDestroy();
-      }
+      safeDestroy();
     }
 
 
@@ -91,7 +91,7 @@ namespace Catsland.Scripts.Bullets {
       if(collision.gameObject.layer == Layers.LayerGround) {
         // TODO: support attachable
         // arrow proof by default
-        StartCoroutine(breakArrow());
+        breakArrow();
         return;
       }
       if(collision.gameObject.layer == Layers.LayerCharacter) {
@@ -101,22 +101,22 @@ namespace Catsland.Scripts.Bullets {
         }
         // TODO: support arrow proof
         // by default vulnerable
-        StartCoroutine(arrowHit(collision));
+        arrowHit(collision);
       }
     }
 
     public void damage(DamageInfo damageInfo) {
-      StartCoroutine(breakArrow());
+      breakArrow();
+      //StartCoroutine(breakArrow());
     }
 
     private void safeDestroy() {
-      if(!isDestroyed) {
-        isDestroyed = true;
+      if(gameObject != null) {
         Destroy(gameObject);
       }
     }
 
-    private IEnumerator arrowHit(Collider2D collision) {
+    private void arrowHit(Collider2D collision) {
       status = ArrowStatus.Hit;
       // emit
       particleSystem.Emit(20);
@@ -135,12 +135,11 @@ namespace Catsland.Scripts.Bullets {
         SendMessageOptions.DontRequireReceiver);
 
       // delay self-destory
-      yield return new WaitForSeconds(1.0f);
       safeDestroy();
 
     }
 
-    private IEnumerator breakArrow() {
+    private void breakArrow() {
       status = ArrowStatus.Broken;
       GameObject brokenArrow = Instantiate(brokenArrowPrefab);
       brokenArrow.transform.position = transform.position;
@@ -164,7 +163,6 @@ namespace Catsland.Scripts.Bullets {
       collider2d.enabled = false;
 
       // delay self-destory
-      yield return new WaitForSeconds(1.0f);
       safeDestroy();
     }
   }

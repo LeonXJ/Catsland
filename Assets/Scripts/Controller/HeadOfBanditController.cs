@@ -68,6 +68,10 @@ namespace Catsland.Scripts.Controller {
     private LinearSequence jumpSmashSequence;
     private LinearSequence spellSequence;
 
+    // Health
+    public int maxHealth = 5;
+    private int curHealth = 5;
+
     // References
     public GameObject groundSensorGo;
     private ISensor groundSensor;
@@ -136,6 +140,8 @@ namespace Catsland.Scripts.Controller {
         .append(Status.SPELL_REST, spellRestTime)
         .withEndingStatus(Status.IDEAL)
         .build();
+
+      curHealth = maxHealth;
     }
 
     void Update() {
@@ -224,6 +230,14 @@ namespace Catsland.Scripts.Controller {
 
     public bool canSpell() {
       return status == Status.IDEAL;
+    }
+
+    public void damage(DamageInfo damageInfo) {
+      curHealth -= damageInfo.damage;
+      if(curHealth <= 0) {
+        // Die
+        Destroy(gameObject);
+      }
     }
 
     private bool canWalk() {

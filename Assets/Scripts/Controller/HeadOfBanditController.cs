@@ -31,6 +31,9 @@ namespace Catsland.Scripts.Controller {
       SPELL_PREAPRE,
       SPELL_SPELLING,
       SPELL_REST,
+
+      DIE_THROW,
+      DIE_STAY,
     }
 
     public Status status = Status.IDEAL;
@@ -67,6 +70,12 @@ namespace Catsland.Scripts.Controller {
     private LinearSequence chargeSequence;
     private LinearSequence jumpSmashSequence;
     private LinearSequence spellSequence;
+    private LinearSequence dieSequence;
+
+    // Die
+    public float throwForceOnDie = 10.0f;
+    public GameObject dieEffectGoPrefab;
+    public Transform hurtEffectPoint;
 
     // Health
     public int maxHealth = 5;
@@ -86,6 +95,7 @@ namespace Catsland.Scripts.Controller {
     private static readonly string JUMP_SMASH_PHASE = "JumpSmashPhase";
     private static readonly string CHARGE_PHASE = "ChargePhase";
     private static readonly string SPELL_PHASE = "SpellPhase";
+    private static readonly string DIE = "Die";
 
     private static readonly Dictionary<Status, int> JUMP_SMASH_STATUS_TO_PHASE =
       new Dictionary<Status, int>();
@@ -141,6 +151,12 @@ namespace Catsland.Scripts.Controller {
         .withEndingStatus(Status.IDEAL)
         .build();
 
+      dieSequence = LinearSequence.newBuilder()
+        .append(Status.DIE_THROW, dieThrownOnGround)
+        .append(Status.DIE_STAY, 0.1f)
+        .withEndingStatus(Status.DIE_STAY)
+        .build();
+
       curHealth = maxHealth;
     }
 
@@ -150,6 +166,7 @@ namespace Catsland.Scripts.Controller {
       status = (Status)chargeSequence.processIfInInterestedStatus(status);
       status = (Status)jumpSmashSequence.processIfInInterestedStatus(status);
       status = (Status)spellSequence.processIfInInterestedStatus(status);
+      status = (Status)dieSequence.processIfInInterestedStatus(status);
 
       // transition logic
       float desiredSpeed = input.getHorizontal();
@@ -187,6 +204,9 @@ namespace Catsland.Scripts.Controller {
         spell();
       } else if(canWalk()) {
         rb2d.velocity = new Vector2(desiredSpeed * walkingSpeed, rb2d.velocity.y);
+      } else if(status == Status.DIE_THROW) {
+        // do nothing on die throwing
+        // fix on ground on die stay
       } else if(groundSensor.isStay()) {
         rb2d.velocity = new Vector2(0.0f, rb2d.velocity.y);
       }
@@ -200,12 +220,21 @@ namespace Catsland.Scripts.Controller {
       }
       isLastOnGround = groundSensor.isStay();
 
+      if(oldStatus == Status.DIE_THROW && status == Status.DIE_STAY) {
+        if(dieEffectGoPrefab != null) {
+          GameObject dieEffectGo = Instantiate(dieEffectGoPrefab);
+          dieEffectGo.transform.position = hurtEffectPoint.position;
+        }
+      }
+
       // animation
       animator.SetFloat(H_SPEED, Mathf.Abs(rb2d.velocity.x));
       animator.SetFloat(V_SPEED, rb2d.velocity.y);
       setAnimiatorPhaseValue(JUMP_SMASH_PHASE, JUMP_SMASH_STATUS_TO_PHASE);
       setAnimiatorPhaseValue(CHARGE_PHASE, CHARGE_STATUS_TO_PHASE);
       setAnimiatorPhaseValue(SPELL_PHASE, SPELL_STATUS_TO_PHASE);
+      animator.SetBool(DIE, isDead());
+
     }
 
     public float getOrientation() {
@@ -214,6 +243,10 @@ namespace Catsland.Scripts.Controller {
 
     bool jumpSmashReadyToSmash() {
       return status == Status.JUMP_SMASH_JUMPING && groundSensor.isStay() && !isLastOnGround;
+    }
+
+    bool dieThrownOnGround() {
+      return status == Status.DIE_THROW && groundSensor.isStay() && !isLastOnGround;
     }
 
     public bool canAdjustOrientation() {
@@ -233,11 +266,30 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void damage(DamageInfo damageInfo) {
+      if(isDead()) {
+        return;
+      }
       curHealth -= damageInfo.damage;
       if(curHealth <= 0) {
-        // Die
-        Destroy(gameObject);
+        enterDie();
       }
+    }
+
+    public bool isDead() {
+      return curHealth <= 0;
+    }
+
+    private void enterDie() {
+      ContactDamage[] contactDamages = GetComponentsInChildren<ContactDamage>();
+      foreach(ContactDamage contactDamage in contactDamages) {
+        contactDamage.enabled = false;
+      }
+
+      rb2d.velocity = Vector2.zero;
+      rb2d.AddForce(new Vector2(-getOrientation() * throwForceOnDie, throwForceOnDie));
+
+      status = (Status)dieSequence.start();
+
     }
 
     private bool canWalk() {

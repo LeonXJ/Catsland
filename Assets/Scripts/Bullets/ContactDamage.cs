@@ -3,7 +3,6 @@ using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Bullets {
   public class ContactDamage: MonoBehaviour {
-
     public int damage;
     public float repelIntensity;
     public GameObject owner;
@@ -29,6 +28,9 @@ namespace Catsland.Scripts.Bullets {
     }
 
     private void onHitGameObject(GameObject gameObject) {
+      if(!enabled) {
+        return;
+      }
       if(gameObject.layer == Layers.LayerCharacter && gameObject != owner) {
         Vector2 delta = gameObject.transform.position - transform.position;
         gameObject.SendMessage(

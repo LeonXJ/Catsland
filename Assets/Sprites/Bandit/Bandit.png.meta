@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e1fc45e68ddcaa242981cb5387856c76
-timeCreated: 1534481765
+timeCreated: 1535086399
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -47,6 +47,49 @@ TextureImporter:
     21300080: Bandit_Die_1
     21300082: Bandit_Die_2
     21300084: Bandit_Die_3
+    21300086: Bandit 0
+    21300088: Bandit 1
+    21300090: Bandit 2
+    21300092: Bandit 3
+    21300094: Bandit 4
+    21300096: Bandit 5
+    21300098: Bandit 6
+    21300100: Bandit 7
+    21300102: Bandit 8
+    21300104: Bandit 9
+    21300106: Bandit 10
+    21300108: Bandit 11
+    21300110: Bandit 12
+    21300112: Bandit 13
+    21300114: Bandit 14
+    21300116: Bandit 15
+    21300118: Bandit 16
+    21300120: Bandit 17
+    21300122: Bandit 18
+    21300124: Bandit 19
+    21300126: Bandit 20
+    21300128: Bandit 21
+    21300130: Bandit 22
+    21300132: Bandit 23
+    21300134: Bandit 24
+    21300136: Bandit 25
+    21300138: Bandit 26
+    21300140: Bandit 27
+    21300142: Bandit 28
+    21300144: Bandit 29
+    21300146: Bandit 30
+    21300148: Bandit 31
+    21300150: Bandit 32
+    21300152: Bandit 33
+    21300154: Bandit 34
+    21300156: Bandit 35
+    21300158: Bandit 36
+    21300160: Bandit 37
+    21300162: Bandit 38
+    21300164: Bandit 39
+    21300166: Bandit 40
+    21300168: Bandit 41
+    21300170: Bandit 42
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0

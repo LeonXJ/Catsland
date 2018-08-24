@@ -47,7 +47,7 @@ namespace Catsland.Scripts.Bullets {
         || (!onlyHitPlayer && collision.gameObject.layer == Layers.LayerCharacter)) {
         collision.gameObject.SendMessage(
           MessageNames.DAMAGE_FUNCTION,
-          new DamageInfo(damage, new Vector2(Mathf.Sign(rb2d.velocity.x), 0.0f), repelInsentive),
+          new DamageInfo(damage, collision.bounds.center, new Vector2(Mathf.Sign(rb2d.velocity.x), 0.0f), repelInsentive),
           SendMessageOptions.DontRequireReceiver);
       }
       Destroy(gameObject);

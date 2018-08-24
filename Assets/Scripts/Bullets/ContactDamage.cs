@@ -20,22 +20,24 @@ namespace Catsland.Scripts.Bullets {
     }
 
     void onHit(Collision2D collision) {
-      onHitGameObject(collision.gameObject);
+      onHitGameObject(collision.collider);
     }
 
     void onHit(Collider2D collider) {
-      onHitGameObject(collider.gameObject);
+      onHitGameObject(collider);
     }
 
-    private void onHitGameObject(GameObject gameObject) {
+    private void onHitGameObject(Collider2D collider) {
       if(!enabled) {
         return;
       }
-      if(gameObject.layer == Layers.LayerCharacter && gameObject != owner) {
-        Vector2 delta = gameObject.transform.position - transform.position;
-        gameObject.SendMessage(
+      GameObject collidingGameObject = collider.gameObject;
+      if(collidingGameObject.layer == Layers.LayerCharacter && collidingGameObject != owner) {
+        Vector2 delta = collidingGameObject.transform.position - transform.position;
+        collidingGameObject.SendMessage(
           MessageNames.DAMAGE_FUNCTION,
-          new DamageInfo(damage, new Vector2(Mathf.Sign(delta.x), 0.0f), repelIntensity),
+          new DamageInfo(
+            damage, collider.bounds.center, new Vector2(Mathf.Sign(delta.x), 0.0f), repelIntensity),
           SendMessageOptions.DontRequireReceiver);
       }
     }

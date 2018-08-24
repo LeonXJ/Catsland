@@ -3,12 +3,12 @@ using UnityEngine;
 using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Bullets {
-  public class Melee :MonoBehaviour {
+  public class Melee: MonoBehaviour {
 
     public LayerMask layerMask;
     public List<GameObject> muteGameObjects;
 
-    private DamageInfo damageInfo = new DamageInfo(1, Vector2.right, 1.0f);
+    private DamageInfo damageInfo = new DamageInfo(1, Vector2.zero, Vector2.right, 1.0f);
     private HashSet<GameObject> processedGameObjects = new HashSet<GameObject>();
 
     private Collider2D collider2d;

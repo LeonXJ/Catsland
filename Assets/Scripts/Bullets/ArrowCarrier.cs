@@ -122,17 +122,18 @@ namespace Catsland.Scripts.Bullets {
       particleSystem.Emit(20);
       particleSystem.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
 
+      // make damage
+      collision.gameObject.SendMessage(
+        MessageNames.DAMAGE_FUNCTION,
+        new DamageInfo(damageValue, collision.bounds.center, rb2d.velocity, repelIntensive),
+        SendMessageOptions.DontRequireReceiver);
+
       // set complete arrow status
       spriteRenderer.enabled = false;
       rb2d.velocity = Vector3.zero;
       collider2d.enabled = false;
       gameObject.transform.parent = collision.gameObject.transform;
 
-      // make damage
-      collision.gameObject.SendMessage(
-        MessageNames.DAMAGE_FUNCTION,
-        new DamageInfo(damageValue, rb2d.velocity, repelIntensive),
-        SendMessageOptions.DontRequireReceiver);
 
       // delay self-destory
       safeDestroy();

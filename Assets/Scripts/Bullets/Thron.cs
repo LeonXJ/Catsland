@@ -3,7 +3,7 @@
 using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Bullets {
-  public class Thron :MonoBehaviour {
+  public class Thron: MonoBehaviour {
 
     public int damage = 1;
     public float repelIntense = 1.0f;
@@ -17,7 +17,7 @@ namespace Catsland.Scripts.Bullets {
           collision.gameObject.transform.position - transform.position;
         collision.gameObject.SendMessage(
           MessageNames.DAMAGE_FUNCTION,
-          new DamageInfo(damage, repelDirection, repelIntense),
+          new DamageInfo(damage, collision.bounds.center, repelDirection, repelIntense),
           SendMessageOptions.DontRequireReceiver);
       }
 

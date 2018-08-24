@@ -6,7 +6,7 @@ using Catsland.Scripts.Bullets;
 namespace Catsland.Scripts.Controller {
   [RequireComponent(typeof(IInput))]
   [RequireComponent(typeof(Animator))]
-  public class BanditController :MonoBehaviour {
+  public class BanditController: MonoBehaviour {
 
     // Locomoation
     public float maxRunningSpeed = 1.0f;
@@ -120,7 +120,7 @@ namespace Catsland.Scripts.Controller {
 
     private IEnumerator chop() {
       isChopping = true;
-      melee.turnOn(new DamageInfo(damageValue, new Vector2(getOrientation(), 0.0f), 1.0f));
+      melee.turnOn(new DamageInfo(damageValue, Vector2.zero, new Vector2(getOrientation(), 0.0f), 1.0f));
       yield return new WaitForSeconds(chopingCd);
       melee.turnOff();
       isChopping = false;

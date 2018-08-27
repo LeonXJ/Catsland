@@ -79,6 +79,8 @@ namespace Catsland.Scripts.Controller {
     public Transform backwardCliffJumpEffectPoint;
     public GameObject doubleJumpEffectPrefab;
     public Transform doubleJumpEffectPoint;
+    public Animator damageEffectAnimator;
+    public ParticleSystem damageEffectParticleSystem;
     private ISensor groundSensor;
     private ISensor headSensor;
     private ISensor backSensor;
@@ -337,6 +339,9 @@ namespace Catsland.Scripts.Controller {
       } else {
         // Dizzy
         StartCoroutine(dizzy());
+        // Effect
+        damageEffectAnimator.SetTrigger("onDamage");
+        damageEffectParticleSystem.Emit(30);
       }
     }
 
@@ -427,6 +432,7 @@ namespace Catsland.Scripts.Controller {
       isDizzy = true;
       yield return new WaitForSeconds(dizzyTime);
       isDizzy = false;
+      damageEffectAnimator.ResetTrigger("onDamage");
     }
   }
 }

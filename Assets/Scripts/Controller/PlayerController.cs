@@ -158,7 +158,7 @@ namespace Catsland.Scripts.Controller {
       bool isCrouching = false;
       if(groundSensor.isStay() && !isDizzy && !input.meditation()) {
         remainingDash = 1;
-        if(input.getVertical() < -0.1f || headSensor.isStay()) {
+        if(input.getVertical() < -0.1f) {
           // jump down
           if(input.jump() && isAllOneSide(groundSensor.getTriggerGos())) {
             StartCoroutine(jumpDown(groundSensor.getTriggerGos()));

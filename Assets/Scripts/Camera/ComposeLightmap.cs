@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-public class ComposeLightmap :MonoBehaviour {
+[ExecuteInEditMode]
+public class ComposeLightmap: MonoBehaviour {
 
   public Camera lightmapCamera;
   public Material lightmapMaterial;

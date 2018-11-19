@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 namespace Catsland.Scripts.Camera {
-  public class CameraController :MonoBehaviour {
+  public class CameraController: MonoBehaviour {
 
     public float horizontalSmooth;
     public float verticalSmooth;
@@ -20,7 +20,11 @@ namespace Catsland.Scripts.Camera {
         transform.position = new Vector3(newX, newY, transform.position.z);
 
       }
+    }
 
+    public void setToTargetPosition() {
+      transform.position = new Vector3(
+        target.transform.position.x, target.transform.position.y, transform.position.z);
     }
   }
 

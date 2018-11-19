@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Catsland.Scripts.Misc;
 
 namespace Catsland.Scripts.Controller {
   [RequireComponent(typeof(MeshRenderer))]
@@ -13,6 +14,9 @@ namespace Catsland.Scripts.Controller {
 
     // TODO: use global setting.
     public int pixelPerUnit = 25;
+
+    // Stop updating grass swinging if the camera is further than this distance.
+    public float stopUpdateDistance = 10.0f;
 
     // Whether and how the grass is pressed.
     public enum PressStatus {
@@ -43,7 +47,7 @@ namespace Catsland.Scripts.Controller {
       if(!hasInitialized) {
         initializeMesh();
       }
-      if(Application.isPlaying) {
+      if(Application.isPlaying && isInMainCamera()) {
         updateDegree();
         updateVertices();
         updateTexture();
@@ -161,6 +165,11 @@ namespace Catsland.Scripts.Controller {
     public void OnAttributeUpdate() {
       updateVertices();
       updateTexture();
+    }
+
+    private bool isInMainCamera() {
+      Vector3 cameraPosition = SceneConfig.getSceneConfig().MainCamera.transform.position;
+      return Vector2.SqrMagnitude(cameraPosition - transform.position) < stopUpdateDistance * stopUpdateDistance;
     }
   }
 }

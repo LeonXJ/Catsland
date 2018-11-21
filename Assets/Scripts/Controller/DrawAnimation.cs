@@ -5,7 +5,7 @@ namespace Catsland.Scripts.Controller {
   [RequireComponent(typeof(SpriteRenderer))]
   [RequireComponent(typeof(Animator))]
   [RequireComponent(typeof(PlayerController))]
-  public class DrawAnimation :MonoBehaviour {
+  public class DrawAnimation: MonoBehaviour {
 
     public string standDrawStateName = "draw";
     public Sprite[] standDrawSprites;
@@ -35,9 +35,12 @@ namespace Catsland.Scripts.Controller {
 
     bool ifStateThenUpdate(string stateName, Sprite[] sprites) {
       AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-      if (stateInfo.IsName(stateName)) {
+      if(stateInfo.IsName(stateName)) {
         float intensity = playerController.getDrawIntensity();
         int index = (int)Mathf.Ceil(Mathf.Clamp(intensity, 0.0f, 1.0f) * (sprites.Length - 1));
+        if(index == 0) {
+          return false;
+        }
         spriteRenderer.sprite = sprites[index];
         return true;
       }

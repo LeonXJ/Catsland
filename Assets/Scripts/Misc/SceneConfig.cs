@@ -6,6 +6,7 @@ namespace Catsland.Scripts.Misc {
     private static SceneConfig sceneConfig;
 
     public UnityEngine.Camera MainCamera;
+    public GameObject player;
 
     public static SceneConfig getSceneConfig() {
       return sceneConfig;

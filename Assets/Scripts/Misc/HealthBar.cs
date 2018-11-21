@@ -3,11 +3,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Catsland.Scripts.Controller;
+using Catsland.Scripts.Misc;
 
 namespace Catsland.Scripts.Misc {
-  public class HealthBar :MonoBehaviour {
+  public class HealthBar: MonoBehaviour {
 
-    public PlayerController playerController;
     public GameObject heartGO;
     public Vector2 heartInterval = new Vector2(16, 16);
     public int maxHeartsInRow = 10;
@@ -24,6 +24,7 @@ namespace Catsland.Scripts.Misc {
       foreach(Transform child in transform) {
         Destroy(child.gameObject);
       }
+      PlayerController playerController = getPlayerController();
       if(playerController == null || heartGO == null) {
         return;
       }
@@ -33,12 +34,13 @@ namespace Catsland.Scripts.Misc {
         float currentY = -(i / maxHeartsInRow) * heartInterval.y;
         float currentX = (i % maxHeartsInRow) * heartInterval.x;
         GameObject heart = GameObject.Instantiate(heartGO, transform);
-        heart.transform.localPosition =new Vector3(currentX, currentY, 0.0f);
+        heart.transform.localPosition = new Vector3(currentX, currentY, 0.0f);
         hearts.Add(heart.GetComponent<Image>());
       }
     }
 
     void Update() {
+      PlayerController playerController = getPlayerController();
       if(playerController.maxHealth != hearts.Count) {
         initializeHearts();
       }
@@ -55,6 +57,10 @@ namespace Catsland.Scripts.Misc {
         }
         index++;
       }
+    }
+
+    private PlayerController getPlayerController() {
+      return SceneConfig.getSceneConfig().player.GetComponent<PlayerController>();
     }
   }
 

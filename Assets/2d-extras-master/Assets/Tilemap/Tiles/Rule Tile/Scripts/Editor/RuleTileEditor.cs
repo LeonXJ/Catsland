@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Linq;
 using UnityEditor.Sprites;
 using UnityEditorInternal;
 using UnityEngine;
@@ -11,13 +10,91 @@ using Object = UnityEngine.Object;
 
 namespace UnityEditor
 {
-	[CustomEditor(typeof(RuleTile), true)]
+    [CustomEditor(typeof(RuleTile))]
 	[CanEditMultipleObjects]
 	internal class RuleTileEditor : Editor
 	{
+        static GUIStyle grey = new GUIStyle();
+        private const string s_XIconString = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAABoSURBVDhPnY3BDcAgDAOZhS14dP1O0x2C/LBEgiNSHvfwyZabmV0jZRUpq2zi6f0DJwdcQOEdwwDLypF0zHLMa9+NQRxkQ+ACOT2STVw/q8eY1346ZlE54sYAhVhSDrjwFymrSFnD2gTZpls2OvFUHAAAAABJRU5ErkJggg==";
+		private const string s_Arrow0 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAACYSURBVDhPzZExDoQwDATzE4oU4QXXcgUFj+YxtETwgpMwXuFcwMFSRMVKKwzZcWzhiMg91jtg34XIntkre5EaT7yjjhI9pOD5Mw5k2X/DdUwFr3cQ7Pu23E/BiwXyWSOxrNqx+ewnsayam5OLBtbOGPUM/r93YZL4/dhpR/amwByGFBz170gNChA6w5bQQMqramBTgJ+Z3A58WuWejPCaHQAAAABJRU5ErkJggg==";
+		private const string s_Arrow1 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAABqSURBVDhPxYzBDYAgEATpxYcd+PVr0fZ2siZrjmMhFz6STIiDs8XMlpEyi5RkO/d66TcgJUB43JfNBqRkSEYDnYjhbKD5GIUkDqRDwoH3+NgTAw+bL/aoOP4DOgH+iwECEt+IlFmkzGHlAYKAWF9R8zUnAAAAAElFTkSuQmCC";
+		private const string s_Arrow2 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAAC0SURBVDhPjVE5EsIwDMxPKFKYF9CagoJH8xhaMskLmEGsjOSRkBzYmU2s9a58TUQUmCH1BWEHweuKP+D8tphrWcAHuIGrjPnPNY8X2+DzEWE+FzrdrkNyg2YGNNfRGlyOaZDJOxBrDhgOowaYW8UW0Vau5ZkFmXbbDr+CzOHKmLinAXMEePyZ9dZkZR+s5QX2O8DY3zZ/sgYcdDqeEVp8516o0QQV1qeMwg6C91toYoLoo+kNt/tpKQEVvFQAAAAASUVORK5CYII=";
+		private const string s_Arrow3 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAAB2SURBVDhPzY1LCoAwEEPnLi48gW5d6p31bH5SMhp0Cq0g+CCLxrzRPqMZ2pRqKG4IqzJc7JepTlbRZXYpWTg4RZE1XAso8VHFKNhQuTjKtZvHUNCEMogO4K3BhvMn9wP4EzoPZ3n0AGTW5fiBVzLAAYTP32C2Ay3agtu9V/9PAAAAAElFTkSuQmCC";
+		private const string s_Arrow5 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAABqSURBVDhPnY3BCYBADASvFx924NevRdvbyoLBmNuDJQMDGjNxAFhK1DyUQ9fvobCdO+j7+sOKj/uSB+xYHZAxl7IR1wNTXJeVcaAVU+614uWfCT9mVUhknMlxDokd15BYsQrJFHeUQ0+MB5ErsPi/6hO1AAAAAElFTkSuQmCC";
+		private const string s_Arrow6 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAACaSURBVDhPxZExEkAwEEVzE4UiTqClUDi0w2hlOIEZsV82xCZmQuPPfFn8t1mirLWf7S5flQOXjd64vCuEKWTKVt+6AayH3tIa7yLg6Qh2FcKFB72jBgJeziA1CMHzeaNHjkfwnAK86f3KUafU2ClHIJSzs/8HHLv09M3SaMCxS7ljw/IYJWzQABOQZ66x4h614ahTCL/WT7BSO51b5Z5hSx88AAAAAElFTkSuQmCC";
+		private const string s_Arrow7 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAABQSURBVDhPYxh8QNle/T8U/4MKEQdAmsz2eICx6W530gygr2aQBmSMphkZYxqErAEXxusKfAYQ7XyyNMIAsgEkaYQBkAFkaYQBsjXSGDAwAAD193z4luKPrAAAAABJRU5ErkJggg==";
+		private const string s_Arrow8 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAACYSURBVDhPxZE9DoAwCIW9iUOHegJXHRw8tIdx1egJTMSHAeMPaHSR5KVQ+KCkCRF91mdz4VDEWVzXTBgg5U1N5wahjHzXS3iFFVRxAygNVaZxJ6VHGIl2D6oUXP0ijlJuTp724FnID1Lq7uw2QM5+thoKth0N+GGyA7IA3+yM77Ag1e2zkey5gCdAg/h8csy+/89v7E+YkgUntOWeVt2SfAAAAABJRU5ErkJggg==";
 		private const string s_MirrorX = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwQAADsEBuJFr7QAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC41ZYUyZQAAAG1JREFUOE+lj9ENwCAIRB2IFdyRfRiuDSaXAF4MrR9P5eRhHGb2Gxp2oaEjIovTXSrAnPNx6hlgyCZ7o6omOdYOldGIZhAziEmOTSfigLV0RYAB9y9f/7kO8L3WUaQyhCgz0dmCL9CwCw172HgBeyG6oloC8fAAAAAASUVORK5CYII=";
 		private const string s_MirrorY = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC41ZYUyZQAAAG9JREFUOE+djckNACEMAykoLdAjHbPyw1IOJ0L7mAejjFlm9hspyd77Kk+kBAjPOXcakJIh6QaKyOE0EB5dSPJAiUmOiL8PMVGxugsP/0OOib8vsY8yYwy6gRyC8CB5QIWgCMKBLgRSkikEUr5h6wOPWfMoCYILdgAAAABJRU5ErkJggg==";
 		private const string s_Rotated = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwQAADsEBuJFr7QAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC41ZYUyZQAAAHdJREFUOE+djssNwCAMQxmIFdgx+2S4Vj4YxWlQgcOT8nuG5u5C732Sd3lfLlmPMR4QhXgrTQaimUlA3EtD+CJlBuQ7aUAUMjEAv9gWCQNEPhHJUkYfZ1kEpcxDzioRzGIlr0Qwi0r+Q5rTgM+AAVcygHgt7+HtBZs/2QVWP8ahAAAAAElFTkSuQmCC";
+        #region Advanced
+        private const string circle1 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAMklEQVR42mNgGFSAj+Hmf3RMtkaiDMCnEa8B+BQRNICQ6UNAM8l+pii0KY5nilMY3QAAX8aQSTpzLc0AAAAASUVORK5CYII=";
+        private const string circle2 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAMklEQVR42mNgGFTg9g3V/+iYbI1EGYBPI14D8CkiaAAh04eAZpL9TFFoUxzPFKcwugEA2grX1TiIQSkAAAAASUVORK5CYII=";
+        private const string circle3 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAMklEQVR42mNgGFSgUXbzf3RMtkaiDMCnEa8B+BQRNICQ6UNAM8l+pii0KY5nilMY3QAA3Sqvwf/BxaMAAAAASUVORK5CYII=";
+        private const string circle4 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAMklEQVR42mNgGFTgXlDHf3RMtkaiDMCnEa8B+BQRNICQ6UNAM8l+pii0KY5nilMY3QAAvYvOVenLju0AAAAASUVORK5CYII=";
+        
+
+        private const string circle5 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAMklEQVR42mNgGFTgQanAf3RMtkaiDMCnEa8B+BQRNICQ6UNAM8l+pii0KY5nilMY3QAAyce1sVPCVtQAAAAASUVORK5CYII=";
+        private const string circle6 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAMklEQVR42mNgGFTA8ojdf3RMtkaiDMCnEa8B+BQRNICQ6UNAM8l+pii0KY5nilMY3QAAOpGpOV3hibcAAAAASUVORK5CYII=";
+        private const string circle7 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAMklEQVR42mNgGFTgiKXlf3RMtkaiDMCnEa8B+BQRNICQ6UNAM8l+pii0KY5nilMY3QAAvUynvQdvQVEAAAAASUVORK5CYII=";
+        //     ----------------------------------------------------------------------
+        private const string x1 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAPElEQVR42mNgGB6AmSHtPwgTEsOqkY/hJhjDFGMTI6gZphidT7TtJGnE5wKyNJLtZJJcQFFoUxTPQwcAAPZlZgeDaYACAAAAAElFTkSuQmCC";
+        private const string x2 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAPElEQVR42mNgGB5gzkyp/yBMSAyrxts3VMEYphibGEHNMMXofKJtJ0kjPheQpZFsJ5PkAopCm6J4HjoAANz3nkCCfAG6AAAAAElFTkSuQmCC";
+        private const string x3 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAUUlEQVR42mNgGB5AW8boDQgTEsOqcYLZ3v8grC1j/AYiZowkhscAZM0wA1D5BG1H1YDuEiL8TaKNhG0m0cmYYYA3wIwJhLYxYdvRFWETG8IAAJaaed90uTinAAAAAElFTkSuQmCC";
+        private const string x4 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAPElEQVR42mNgGB5gpmXcfxAmJIZV472gDjCGKcYmRlAzTDE6n2jbSdKIzwVkaSTbySS5gKLQpiiehw4AAFXolryf9K/0AAAAAElFTkSuQmCC";
+        private const string x5 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAPElEQVR42mNgGB5gWSj/fxAmJIZV44NSATCGKcYmRlAzTDE6n2jbSdKIzwVkaSTbySS5gKLQpiiehw4AANpPh+HPPMQxAAAAAElFTkSuQmCC";
+        private const string x6 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAATklEQVR42mNgGB5A0VrxDQgTEsOq0eKo3X8QhinGJkZQM0wxCt+KBNvRDSLa31TRSLSTFfD5+ZDtf0VLIgMMI7QJaYbZjjWerYj09+AHAJzfcOZDjC/eAAAAAElFTkSuQmCC";
+        #endregion
+        private static Texture2D[] s_Arrows;
+		public static Texture2D[] arrows
+		{
+			get
+			{
+				if (s_Arrows == null)
+				{
+					s_Arrows = new Texture2D[10];
+					s_Arrows[0] = Base64ToTexture(s_Arrow0);
+					s_Arrows[1] = Base64ToTexture(s_Arrow1);
+					s_Arrows[2] = Base64ToTexture(s_Arrow2);
+					s_Arrows[3] = Base64ToTexture(s_Arrow3);
+					s_Arrows[5] = Base64ToTexture(s_Arrow5);
+					s_Arrows[6] = Base64ToTexture(s_Arrow6);
+					s_Arrows[7] = Base64ToTexture(s_Arrow7);
+					s_Arrows[8] = Base64ToTexture(s_Arrow8);
+					s_Arrows[9] = Base64ToTexture(s_XIconString);
+				}
+				return s_Arrows;
+			}
+		}
+        private static Texture2D[] t_icons;
+        public static Texture2D[] icons
+        {
+            get
+            {
+                if (t_icons == null)
+                {
+                    t_icons = new Texture2D[13];
+                    /*t_icons[0] = Base64ToTexture("");
+                    t_icons[1] = Base64ToTexture("");
+                    t_icons[2] = Base64ToTexture("");*/
+                    t_icons[0] = Base64ToTexture(circle1);
+                    t_icons[1] = Base64ToTexture(circle2);
+                    t_icons[2] = Base64ToTexture(circle3);
+                    t_icons[3] = Base64ToTexture(circle4);
+                    t_icons[4] = Base64ToTexture(circle5);
+                    t_icons[5] = Base64ToTexture(circle6);
+                    t_icons[6] = Base64ToTexture(circle7);
+                    t_icons[7] = Base64ToTexture(x1);
+                    t_icons[8] = Base64ToTexture(x2);
+                    t_icons[9] = Base64ToTexture(x3);
+                    t_icons[10] = Base64ToTexture(x4);
+                    t_icons[11] = Base64ToTexture(x5);
+                    t_icons[12] = Base64ToTexture(x6);
+                }
+                return t_icons;
+            }
+        }
+
 
 		private static Texture2D[] s_AutoTransforms;
 		public static Texture2D[] autoTransforms
@@ -27,9 +104,9 @@ namespace UnityEditor
 				if (s_AutoTransforms == null)
 				{
 					s_AutoTransforms = new Texture2D[3];
-					s_AutoTransforms[0] = RuleTile.Base64ToTexture(s_Rotated);
-					s_AutoTransforms[1] = RuleTile.Base64ToTexture(s_MirrorX);
-					s_AutoTransforms[2] = RuleTile.Base64ToTexture(s_MirrorY);
+					s_AutoTransforms[0] = Base64ToTexture(s_Rotated);
+					s_AutoTransforms[1] = Base64ToTexture(s_MirrorX);
+					s_AutoTransforms[2] = Base64ToTexture(s_MirrorY);
 				}
 				return s_AutoTransforms;
 			}
@@ -39,15 +116,20 @@ namespace UnityEditor
 		public RuleTile tile { get { return (target as RuleTile); } }
 		private Rect m_ListRect;
 
-		internal const float k_DefaultElementHeight = 48f;
-		internal const float k_PaddingBetweenRules = 26f;
-		internal const float k_SingleLineHeight = 16f;
-		internal const float k_ObjectFieldLineHeight = 20f;
-        internal const float k_LabelWidth = 80f;
-			
-		public void OnEnable()
+		public const float k_DefaultElementHeight = 48f;
+		public const float k_PaddingBetweenRules = 30f; // was 13
+		public const float k_SingleLineHeight = 16f;
+		public const float k_LabelWidth = 53f;
+        
+
+        public void OnEnable()
 		{
-			if (tile.m_TilingRules == null)
+            grey.normal.textColor = Color.grey;
+            if (tile.NotZero == 8) {
+                NewRuleTile();
+            }
+            
+            if (tile.m_TilingRules == null)
 				tile.m_TilingRules = new List<RuleTile.TilingRule>();
 
 			m_ReorderableList = new ReorderableList(tile.m_TilingRules, typeof(RuleTile.TilingRule), true, true, true, true);
@@ -55,10 +137,19 @@ namespace UnityEditor
 			m_ReorderableList.drawElementCallback = OnDrawElement;
 			m_ReorderableList.elementHeightCallback = GetElementHeight;
 			m_ReorderableList.onReorderCallback = ListUpdated;
-			m_ReorderableList.onAddCallback = OnAddElement;
 		}
 
-		private void ListUpdated(ReorderableList list)
+        private void NewRuleTile() {
+            tile.NotZero = 5;
+            tile.DefaultNumOfThese = 0;
+            tile.TheseNumberOfTiles = new byte[7];
+            //tile.TheseSprites = new TileBase[7][];
+            tile.DefaultNumOfNotThese = 0;
+            tile.NotTheseNumberOfTiles = new byte[6];
+            //tile.NotTheseSprites = new TileBase[6][];
+        }
+
+        private void ListUpdated(ReorderableList list)
 		{
 			SaveTile();
 		}
@@ -92,27 +183,18 @@ namespace UnityEditor
 
 			EditorGUI.BeginChangeCheck();
 			RuleInspectorOnGUI(inspectorRect, rule);
-			RuleMatrixOnGUI(tile, matrixRect, rule);
+            RuleMatrixOnGUI(matrixRect, rule, tile);
 			SpriteOnGUI(spriteRect, rule);
 			if (EditorGUI.EndChangeCheck())
 				SaveTile();
-		}
-		
-		private void OnAddElement(ReorderableList list)
-		{
-			RuleTile.TilingRule rule = new RuleTile.TilingRule();
-			rule.m_Output = RuleTile.TilingRule.OutputSprite.Single;
-			rule.m_Sprites[0] = tile.m_DefaultSprite;
-			rule.m_GameObject = tile.m_DefaultGameObject;
-            rule.m_ColliderType = tile.m_DefaultColliderType;
-			tile.m_TilingRules.Add(rule);
 		}
 
 		private void SaveTile()
 		{
 			EditorUtility.SetDirty(target);
+            EditorUtility.SetDirty(tile);
 			SceneView.RepaintAll();
-		}
+        }
 
 		private void OnDrawHeader(Rect rect)
 		{
@@ -121,22 +203,171 @@ namespace UnityEditor
 
 		public override void OnInspectorGUI()
 		{
-			tile.m_DefaultSprite = EditorGUILayout.ObjectField("Default Sprite", tile.m_DefaultSprite, typeof(Sprite), false) as Sprite;
-			tile.m_DefaultGameObject = EditorGUILayout.ObjectField("Default Game Object", tile.m_DefaultGameObject, typeof(GameObject), false) as GameObject;
+            tile.m_DefaultSprite = EditorGUILayout.ObjectField("Default Sprite", tile.m_DefaultSprite, typeof(Sprite), false) as Sprite;
             tile.m_DefaultColliderType = (Tile.ColliderType)EditorGUILayout.EnumPopup("Default Collider", tile.m_DefaultColliderType);
 
-			var baseFields = typeof(RuleTile).GetFields().Select(field => field.Name);
-			var fields = target.GetType().GetFields().Select(field => field.Name).Where(field => !baseFields.Contains(field));
-			foreach (var field in fields)
-				EditorGUILayout.PropertyField(serializedObject.FindProperty(field), true);
-			
-			EditorGUILayout.Space();
+            EditorGUILayout.Space();EditorGUILayout.Space();EditorGUILayout.Space();
+            DoAdvanceRuleLayout();
+            EditorGUILayout.Space();EditorGUILayout.Space();EditorGUILayout.Space();
 
-			if (m_ReorderableList != null && tile.m_TilingRules != null)
+            if (m_ReorderableList != null && tile.m_TilingRules != null)
 				m_ReorderableList.DoLayoutList();
 		}
 
-		internal static void RuleMatrixOnGUI(RuleTile tile, Rect rect, RuleTile.TilingRule tilingRule)
+
+
+        private void DoAdvanceRuleLayout() {
+
+            tile.These = EditorGUILayout.Toggle("Show Inclusive", tile.These);
+            if (tile.These) {
+                EditorGUILayout.LabelField("# of inclusive rules");
+                tile.DefaultNumOfThese = (byte)EditorGUILayout.IntSlider(tile.DefaultNumOfThese, 0, 7);
+                for (byte i = 0; i < tile.DefaultNumOfThese; i++) {
+                    Rect guiPOS = EditorGUILayout.BeginHorizontal();
+                    GUI.DrawTexture(new Rect(0, guiPOS.y, 15, guiPOS.height), icons[i]);
+                    EditorGUILayout.LabelField("Tiles");
+                    EditorGUI.BeginChangeCheck();
+                    tile.TheseNumberOfTiles[i] = (byte)EditorGUI.DelayedIntField(new Rect(60, guiPOS.y, 30, guiPOS.height), tile.TheseNumberOfTiles[i]);
+                    if (EditorGUI.EndChangeCheck() || tile.firstExists) {
+                        ResizeArr(i, 0);
+                        tile.firstExists = false;
+                    }
+                    tile.RuleNames[i] = (tile.RuleNames[i] == "" || tile.RuleNames[i] == "Click to set rule name" || tile.RuleNames[i] == null) ? EditorGUILayout.TextField("Click to set rule name", grey) : EditorGUILayout.TextField(tile.RuleNames[i], GUILayout.MaxWidth(Math.Max(100, GUI.skin.textField.CalcSize(new GUIContent (tile.RuleNames[i])).x)));
+                    EditorGUILayout.Space();
+                    EditorGUILayout.EndHorizontal();
+                    for (byte q = 0; q < tile.TheseNumberOfTiles[i]; q++) {
+                        #region This is bad
+                        switch (i) {
+                            case 0:
+                                tile.t1[q] = EditorGUILayout.ObjectField(tile.t1[q], typeof(TileBase), false) as TileBase;
+                                break;
+                            case 1:
+                                tile.t2[q] = EditorGUILayout.ObjectField(tile.t2[q], typeof(TileBase), false) as TileBase;
+                                break;
+                            case 2:
+                                tile.t3[q] = EditorGUILayout.ObjectField(tile.t3[q], typeof(TileBase), false) as TileBase;
+                                break;
+                            case 3:
+                                tile.t4[q] = EditorGUILayout.ObjectField(tile.t4[q], typeof(TileBase), false) as TileBase;
+                                break;
+                            case 4:
+                                tile.t5[q] = EditorGUILayout.ObjectField(tile.t5[q], typeof(TileBase), false) as TileBase;
+                                break;
+                            case 5:
+                                tile.t6[q] = EditorGUILayout.ObjectField(tile.t6[q], typeof(TileBase), false) as TileBase;
+                                break;
+                            case 6:
+                                tile.t7[q] = EditorGUILayout.ObjectField(tile.t7[q], typeof(TileBase), false) as TileBase;
+                                break;
+                        }
+                        #endregion
+                    }
+                }
+            }
+            EditorGUILayout.Space(); EditorGUILayout.Space();
+            tile.NotThese = EditorGUILayout.Toggle("Show Exclusive", tile.NotThese);
+            if (tile.NotThese) {
+                EditorGUILayout.LabelField("# of exclusive rules");
+                tile.DefaultNumOfNotThese = (byte)EditorGUILayout.IntSlider(tile.DefaultNumOfNotThese, 0, 6);
+                for (byte i = 0; i < tile.DefaultNumOfNotThese; i++) {
+                    Rect guiPOS = EditorGUILayout.BeginHorizontal();
+                    GUI.DrawTexture(new Rect(0, guiPOS.y, 15, guiPOS.height), icons[i + 7]);
+                    EditorGUILayout.LabelField("Tiles");
+                    EditorGUI.BeginChangeCheck();
+                    tile.NotTheseNumberOfTiles[i] = (byte)EditorGUI.DelayedIntField(new Rect(60, guiPOS.y, 30, guiPOS.height), tile.NotTheseNumberOfTiles[i]);
+                    if (EditorGUI.EndChangeCheck() || tile.firstExists2) {
+                        ResizeArr(i, 1);
+                        tile.firstExists2 = false;
+                    }
+                    tile.RuleNames[i+7] = (tile.RuleNames[i+7] == "" || tile.RuleNames[i+7] == "Click to set rule name" || tile.RuleNames[i] == null) ? EditorGUILayout.TextField("Click to set rule name", grey) : EditorGUILayout.TextField(tile.RuleNames[i+7], GUILayout.MaxWidth(Math.Max(100, GUI.skin.textField.CalcSize(new GUIContent(tile.RuleNames[i+7])).x)));
+                    EditorGUILayout.EndHorizontal();
+                    for (byte q = 0; q < tile.NotTheseNumberOfTiles[i]; q++) {
+                        #region This is bad
+                        switch (i) {
+                            case 0:
+                                tile.n1[q] = EditorGUILayout.ObjectField(tile.n1[q], typeof(TileBase), false) as TileBase;
+                                break;
+                            case 1:
+                                tile.n2[q] = EditorGUILayout.ObjectField(tile.n2[q], typeof(TileBase), false) as TileBase;
+                                break;
+                            case 2:
+                                tile.n3[q] = EditorGUILayout.ObjectField(tile.n3[q], typeof(TileBase), false) as TileBase;
+                                break;
+                            case 3:
+                                tile.n4[q] = EditorGUILayout.ObjectField(tile.n4[q], typeof(TileBase), false) as TileBase;
+                                break;
+                            case 4:
+                                tile.n5[q] = EditorGUILayout.ObjectField(tile.n5[q], typeof(TileBase), false) as TileBase;
+                                break;
+                            case 5:
+                                tile.n6[q] = EditorGUILayout.ObjectField(tile.n6[q], typeof(TileBase), false) as TileBase;
+                                break;
+                        }
+                        #endregion
+                    }
+                }
+            }
+        }
+
+        public enum Num {t1, t2, t3, t4, t5, t6, t7}
+        public enum Nom {n1, n2, n3, n4, n5, n6}
+
+        private void ResizeArr(byte i, byte v) {
+            #region This is bad
+            switch (v) {
+                case 0:
+                    switch (i) {
+                        case 0:
+                            Array.Resize(ref tile.t1, tile.TheseNumberOfTiles[i]);
+                            break;
+                        case 1:
+                            Array.Resize(ref tile.t2, tile.TheseNumberOfTiles[i]);
+                            break;
+                        case 2:
+                            Array.Resize(ref tile.t3, tile.TheseNumberOfTiles[i]);
+                            break;
+                        case 3:
+                            Array.Resize(ref tile.t4, tile.TheseNumberOfTiles[i]);
+                            break;
+                        case 4:
+                            Array.Resize(ref tile.t5, tile.TheseNumberOfTiles[i]);
+                            break;
+                        case 5:
+                            Array.Resize(ref tile.t6, tile.TheseNumberOfTiles[i]);
+                            break;
+                        case 6:
+                            Array.Resize(ref tile.t7, tile.TheseNumberOfTiles[i]);
+                            break;
+                    }
+                    break;
+                case 1:
+                    switch (i) {
+                        case 0:
+                            Array.Resize(ref tile.n1, tile.NotTheseNumberOfTiles[i]);
+                            break;
+                        case 1:
+                            Array.Resize(ref tile.n2, tile.NotTheseNumberOfTiles[i]);
+                            break;
+                        case 2:
+                            Array.Resize(ref tile.n3, tile.NotTheseNumberOfTiles[i]);
+                            break;
+                        case 3:
+                            Array.Resize(ref tile.n4, tile.NotTheseNumberOfTiles[i]);
+                            break;
+                        case 4:
+                            Array.Resize(ref tile.n5, tile.NotTheseNumberOfTiles[i]);
+                            break;
+                        case 5:
+                            Array.Resize(ref tile.n6, tile.NotTheseNumberOfTiles[i]);
+                            break;
+                    }
+                    break;
+            }
+            #endregion
+        }
+
+
+        internal static void RuleMatrixOnGUI(Rect rect, RuleTile.TilingRule tilingRule, RuleTile tile)
 		{
 			Handles.color = EditorGUIUtility.isProSkin ? new Color(1f, 1f, 1f, 0.2f) : new Color(0f, 0f, 0f, 0.2f);
 			int index = 0;
@@ -162,22 +393,38 @@ namespace UnityEditor
 					Rect r = new Rect(rect.xMin + x * w, rect.yMin + y * h, w - 1, h - 1);
 					if (x != 1 || y != 1)
 					{
-						tile.RuleOnGUI(r, new Vector2Int(x, y), tilingRule.m_Neighbors[index]);
+                        try
+                        {
+                            switch (tilingRule.m_Neighbors[index])
+						    {
+							    case RuleTile.TilingRule.Neighbor.This:
+								    GUI.DrawTexture(r, arrows[y*3 + x]);
+								    break;
+							    case RuleTile.TilingRule.Neighbor.NotThis:
+								    GUI.DrawTexture(r, arrows[9]);
+								    break;
+                                case RuleTile.TilingRule.Neighbor.DontCare:
+                                    break;
+                                default:
+                                        GUI.DrawTexture(r, icons[(int)tilingRule.m_Neighbors[index] - 3]);
+                                    //Debug.Log("index: " + index);
+                                    //Debug.Log((int)tilingRule.m_Neighbors[index] - 3);
+                                    //GUI.DrawTexture(r, icons[(int)tilingRule.m_Neighbors[index] - 3]);//- 3]);
+                                    break;
+                                    index++;
+                            }
+                        } catch (System.IndexOutOfRangeException e)
+                        { }
 						if (Event.current.type == EventType.MouseDown && r.Contains(Event.current.mousePosition))
 						{
                             int change = 1;
-						    if (Event.current.button == 1)
-								change = -1;
-
-							var allConsts = tile.m_NeighborType.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
-							var neighbors = allConsts.Select(c => (int)c.GetValue(null)).ToList();
-							neighbors.Sort();
-
-							int oldIndex = neighbors.IndexOf(tilingRule.m_Neighbors[index]);
-							int newIndex = (int)Mathf.Repeat(oldIndex + change, neighbors.Count);
-							tilingRule.m_Neighbors[index] = neighbors[newIndex];
-							GUI.changed = true;
-							Event.current.Use();
+                            if (Event.current.button == 0)
+                            {
+                                change = -1;
+                                tilingRule.m_Neighbors[index] = (RuleTile.TilingRule.Neighbor)/*(((int)tilingRule.m_Neighbors[index] + change) % 3); //*/ FindNextIcon((int)tilingRule.m_Neighbors[index], tile.DefaultNumOfThese, tile.DefaultNumOfNotThese);
+                                GUI.changed = true;
+                                Event.current.Use();
+                            }
 						}
 
 						index++;
@@ -208,7 +455,7 @@ namespace UnityEditor
 			}
 		}
 
-		private static void OnSelect(object userdata)
+        private static void OnSelect(object userdata)
 		{
 			MenuItemData data = (MenuItemData) userdata;
 			data.m_Rule.m_RuleTransform = data.m_NewValue;
@@ -226,19 +473,17 @@ namespace UnityEditor
 			}
 		}
 
-		internal static void SpriteOnGUI(Rect rect, RuleTile.TilingRule tilingRule)
+		///*
+        internal static void SpriteOnGUI(Rect rect, RuleTile.TilingRule tilingRule)
 		{
 			tilingRule.m_Sprites[0] = EditorGUI.ObjectField(new Rect(rect.xMax - rect.height, rect.yMin, rect.height, rect.height), tilingRule.m_Sprites[0], typeof (Sprite), false) as Sprite;
 		}
 
-		internal static void RuleInspectorOnGUI(Rect rect, RuleTile.TilingRule tilingRule)
+        internal static void RuleInspectorOnGUI(Rect rect, RuleTile.TilingRule tilingRule)
 		{
 			float y = rect.yMin;
 			EditorGUI.BeginChangeCheck();
-            GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Game Object");
-            tilingRule.m_GameObject = (GameObject)EditorGUI.ObjectField(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), "", tilingRule.m_GameObject, typeof(GameObject), true);
-            y += k_ObjectFieldLineHeight;
-            GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Rule");
+			GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Rule");
 			tilingRule.m_RuleTransform = (RuleTile.TilingRule.Transform)EditorGUI.EnumPopup(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_RuleTransform);
 			y += k_SingleLineHeight;
 			GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Collider");
@@ -247,10 +492,8 @@ namespace UnityEditor
 			GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Output");
 			tilingRule.m_Output = (RuleTile.TilingRule.OutputSprite)EditorGUI.EnumPopup(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_Output);
 			y += k_SingleLineHeight;
-            
 
-
-            if (tilingRule.m_Output == RuleTile.TilingRule.OutputSprite.Animation)
+			if (tilingRule.m_Output == RuleTile.TilingRule.OutputSprite.Animation)
 			{
 				GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Speed");
 				tilingRule.m_AnimationSpeed = EditorGUI.FloatField(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_AnimationSpeed);
@@ -283,7 +526,7 @@ namespace UnityEditor
 				}
 			}
 		}
-
+        //*/
 		public override Texture2D RenderStaticPreview(string assetPath, Object[] subAssets, int width, int height)
 		{
 			if (tile.m_DefaultSprite != null)
@@ -334,44 +577,25 @@ namespace UnityEditor
 			}
 			return null;
 		}
-		
-		[Serializable]
-		class RuleTileRuleWrapper
-		{
-			[SerializeField]
-			public List<RuleTile.TilingRule> rules = new List<RuleTile.TilingRule>();
-		}
-		
-		[MenuItem("CONTEXT/RuleTile/Copy All Rules")]
-		private static void CopyAllRules(MenuCommand item)
-		{
-			RuleTile tile = item.context as RuleTile;
-			if (tile == null)
-				return;
-			
-			RuleTileRuleWrapper rulesWrapper = new RuleTileRuleWrapper();
-			rulesWrapper.rules = tile.m_TilingRules;
-			var rulesJson = EditorJsonUtility.ToJson(rulesWrapper);
-			EditorGUIUtility.systemCopyBuffer = rulesJson;
-		}
-		
-		[MenuItem("CONTEXT/RuleTile/Paste Rules")]
-		private static void PasteRules(MenuCommand item)
-		{
-			RuleTile tile = item.context as RuleTile;
-			if (tile == null)
-				return;
 
-			try
-			{
-				RuleTileRuleWrapper rulesWrapper = new RuleTileRuleWrapper();
-				EditorJsonUtility.FromJsonOverwrite(EditorGUIUtility.systemCopyBuffer, rulesWrapper);
-				tile.m_TilingRules.AddRange(rulesWrapper.rules);
-			}
-			catch (Exception)
-			{
-				Debug.LogError("Unable to paste rules from system copy buffer");
-			}
+		private static Texture2D Base64ToTexture(string base64)
+		{
+			Texture2D t = new Texture2D(1, 1);
+			t.hideFlags = HideFlags.HideAndDontSave;
+			t.LoadImage(System.Convert.FromBase64String(base64));
+			return t;
 		}
-	}
+        
+        private static int FindNextIcon(int current, byte NumThese, byte NumNotThese) { //0-15  say there's 5 & 4   it's i13    14 < 14
+            current++;
+            if (current > 15)
+                current = 0;
+            if (current < 3 + NumThese)
+                return current;
+            if (current > 9 && current < 10 + NumNotThese)
+                return current;
+            return FindNextIcon(current, NumThese, NumNotThese);
+        }
+
+    }
 }

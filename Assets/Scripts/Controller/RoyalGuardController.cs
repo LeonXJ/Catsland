@@ -310,6 +310,7 @@ namespace Catsland.Scripts.Controller {
         chop.transform.lossyScale.z);
 
       chop.GetComponent<Rigidbody2D>().velocity = new Vector2(chopEffectSpeed * getOrientation(), 0.0f);
+      chop.GetComponentInChildren<Spell>().fireWithSpecificRepel(gameObject, getOrientation());
     }
 
     public void endChop() {

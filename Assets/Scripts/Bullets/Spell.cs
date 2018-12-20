@@ -9,6 +9,11 @@ namespace Catsland.Scripts.Bullets {
     public float repelInsentive;
     public bool onlyHitPlayer = true;
     public float lifetimeInSecond = 5.0f;
+    public bool isEnable = true;
+    public bool destroyWhenHitAny = true;
+    private float repelDirectionX;
+    private bool useRigidbodyRepelDirection = true;
+
 
     // Bullet won't collide with the owner. At bullet initial phase, bullet collider might collide
     // with owner's. This bit is useful to avoid bullet hit the owner.
@@ -24,6 +29,16 @@ namespace Catsland.Scripts.Bullets {
       StartCoroutine(delayDestroy());
     }
 
+    public void fireWithSpecificRepel(GameObject owner, float repelDirectionX) {
+      fire(owner);
+      this.repelDirectionX = repelDirectionX;
+      this.useRigidbodyRepelDirection = false;
+    }
+
+    public void disableCollide() {
+      isEnable = false;
+    }
+
     public void OnTriggerEnter2D(Collider2D collision) {
       onHit(collision);
     }
@@ -33,6 +48,9 @@ namespace Catsland.Scripts.Bullets {
     }
 
     private void onHit(Collider2D collision) {
+      if(!isEnable) {
+        return;
+      }
       // Bullets won't collide.
       if(collision.gameObject.layer == Layers.LayerBullet) {
         return;
@@ -45,12 +63,16 @@ namespace Catsland.Scripts.Bullets {
 
       if((onlyHitPlayer && collision.gameObject.CompareTag(Tags.PLAYER))
         || (!onlyHitPlayer && collision.gameObject.layer == Layers.LayerCharacter)) {
+        float repelX = useRigidbodyRepelDirection ? rb2d.velocity.x : repelDirectionX;
         collision.gameObject.SendMessage(
           MessageNames.DAMAGE_FUNCTION,
-          new DamageInfo(damage, collision.bounds.center, new Vector2(Mathf.Sign(rb2d.velocity.x), 0.0f), repelInsentive),
+          new DamageInfo(damage, collision.bounds.center, new Vector2(Mathf.Sign(repelX), 0.0f), repelInsentive),
           SendMessageOptions.DontRequireReceiver);
+        Destroy(gameObject);
       }
-      Destroy(gameObject);
+      if(destroyWhenHitAny) {
+        Destroy(gameObject);
+      }
     }
 
     private IEnumerator delayDestroy() {

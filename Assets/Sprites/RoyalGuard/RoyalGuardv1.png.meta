@@ -1,0 +1,823 @@
+fileFormatVersion: 2
+guid: 912fd38212e5d5442a35e0ccfa9e2a25
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: RoyalGuardv1_Stand_0
+    21300002: RoyalGuardv1_Summon_0
+    21300004: RoyalGuardv1_Summon_1
+    21300006: RoyalGuardv1_Summon_2
+    21300008: RoyalGuardv1_Summon_3
+    21300010: RoyalGuardv1_Summon_4
+    21300012: RoyalGuardv1_Summon_5
+    21300014: RoyalGuardv1_Summon_6
+    21300016: RoyalGuardv1_Summon_7
+    21300018: RoyalGuardv1_Summon_8
+    21300020: RoyalGuardv1_Summon_9
+    21300022: RoyalGuardv1_Summon_10
+    21300024: RoyalGuardv1_Chop1_0
+    21300026: RoyalGuardv1_Chop1_1
+    21300028: RoyalGuardv1_Chop1_2
+    21300030: RoyalGuardv1_Chop1_3
+    21300032: RoyalGuardv1_Chop1_4
+    21300034: RoyalGuardv1_Chop1_5
+    21300036: RoyalGuardv1_Chop1_6
+    21300038: RoyalGuardv1_Chop1_7
+    21300040: RoyalGuardv1_Chop1_8
+    21300042: RoyalGuardv1_Jump_0
+    21300044: RoyalGuardv1_Jump_1
+    21300046: RoyalGuardv1_Jump_2
+    21300048: RoyalGuardv1_Jump_3
+    21300050: RoyalGuardv1_Jump_4
+    21300052: RoyalGuardv1_Jump_5
+    21300054: RoyalGuardv1_Jump_6
+    21300056: RoyalGuardv1_Jump_7
+    21300058: RoyalGuardv1_Jump_8
+    21300060: RoyalGuardv1_Jump_9
+    21300062: RoyalGuardv1_Jump_10
+    21300064: RoyalGuardv1_Jump_11
+    21300066: RoyalGuardv1_StandBy_0
+    21300068: RoyalGuardv1_SmashAfterSummon_0
+    21300070: RoyalGuardv1_SmashAfterSummon_1
+    21300072: RoyalGuardv1_SmashAfterSummon_2
+    21300074: RoyalGuardv1_SmashAfterSummon_3
+    21300076: RoyalGuardv1_Chop2_0
+    21300078: RoyalGuardv1_Chop2_1
+    21300080: RoyalGuardv1_Chop2_2
+    21300082: RoyalGuardv1_Chop2_3
+    21300084: RoyalGuardv1_Chop2_4
+    21300086: RoyalGuardv1_JumpPrepare_0
+    21300088: RoyalGuardv1_JumpPrepare_1
+    21300090: RoyalGuardv1_JumpPrepare_2
+    21300092: RoyalGuardv1_JumpPrepare_3
+    21300094: RoyalGuardv1_Jumpup_0
+    21300096: RoyalGuardv1_Jumpup_1
+    21300098: RoyalGuardv1_JumpDown_0
+    21300100: RoyalGuardv1_JumpDown_1
+    21300102: RoyalGuardv1_JumpSmash_0
+    21300104: RoyalGuardv1_JumpSmash_1
+    21300106: RoyalGuardv1_JumpSmash_2
+    21300108: RoyalGuardv1_JumpSmash_3
+  externalObjects: {}
+  serializedVersion: 7
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 25
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 512
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: RoyalGuardv1_Stand_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 444
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b84006ea685f42a4a8dbb10085ca882a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_StandBy_0
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 444
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c72594c40eccd5740a1837efe0c7dc5e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Summon_0
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 444
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3ffc4df995fbb6499cbac30794000e6
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Summon_1
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 444
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22cd65d8b2f023c44885fab92cbf5ac4
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Summon_2
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 444
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8a48c262e352fe438340a6a2c792f16
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Summon_3
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 444
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fd4323972911c74f98423ebbe8a35cb
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Summon_4
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 444
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f79fa5e83ae35e54a819b1dc1030e36f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Summon_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 376
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a07da4e686f0ab4b92c7da2456f0671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Summon_6
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 376
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b6e582416d7c4c44ad5aa8e21d3aceb
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_SmashAfterSummon_0
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 376
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1dbfcb0f5fea7eb4798e3e3f5d388089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_SmashAfterSummon_1
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 376
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12166306fd170ca4595715c9dd532b7d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_SmashAfterSummon_2
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 376
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21a8b12c701ef7941aa897dfaa19505d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_SmashAfterSummon_3
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 376
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e9f9b2b323cf5a4f9d1aa92d1e2485e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Chop1_0
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 376
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2acf031138a03648bb3a3e520f01378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Chop1_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 308
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 037acab6cd4d8f7428f7e0558c454864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Chop1_2
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 308
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7fcfae8bc0603544b94242e1f1278a34
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Chop1_3
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 308
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b43c8f3110dfa124895222daa6ed3d9e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Chop2_0
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 308
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 371fab2bb86b8f54d90676dcdbd38067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Chop2_1
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 308
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f1598cae958975418c276c3526c6af7
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Chop2_2
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 308
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02282bde25f09f545b9f84c862fd28ba
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Chop2_3
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 308
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e490d4fdaf13cb242b06536feb1ecfc4
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Chop2_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 240
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9fb0eda83d96bce4fbac12bc2da46e5c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_JumpPrepare_0
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 240
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8afd222a3532aa049ac2d2a9cae00047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_JumpPrepare_1
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 240
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b0cdae31e94aa44a8a99f32f52f8bd9
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_JumpPrepare_2
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 240
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 540036e8a462e1646b51433f0f04a23b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_JumpPrepare_3
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 240
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10101632b65a88d4ea18b4691b788df1
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Jumpup_0
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 240
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ced81dec34a15146affa95523294223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_Jumpup_1
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 240
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d95309a5734372f42873e21e0ad8cc6b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_JumpDown_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 172
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff5e6f3a388b5684eb135dce04dd359f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_JumpDown_1
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 172
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b862aee9d34863f47b2b40b7c8efd17a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_JumpSmash_0
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 172
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 112fc4a9c4127bc4da477395d8599914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_JumpSmash_1
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 172
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85d29464de6e34f489d9fd407a1fdf07
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_JumpSmash_2
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 172
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76d389877525d3f49a49500935a65442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RoyalGuardv1_JumpSmash_3
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 172
+        width: 72
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cdb1dcbd35692f4aaea34f4ac4de038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5206e469f84fda54aa63b65796fbe9cb
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -2,7 +2,7 @@
 using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Controller {
-  public class RelayPoint :MonoBehaviour {
+  public class RelayPoint: MonoBehaviour {
 
     public GameObject currentHintGo;
     public GameObject targetHintGo;
@@ -18,7 +18,7 @@ namespace Catsland.Scripts.Controller {
       Debug.AssertFormat(playerGo != null, "Cannot get Player gameObject via tag: %s", Tags.PLAYER);
 
       playerController = playerGo.GetComponent<PlayerController>();
-      Debug.AssertFormat(playerController != null, "Cannot get PlayerController within Player GameObject");
+      Debug.AssertFormat(playerController != null, "Cannot get PlayerController within Player GameObject: " + playerGo.name);
 
       currentHintRenderer = currentHintGo.GetComponent<SpriteRenderer>();
       targetHintRenderer = targetHintGo.GetComponent<SpriteRenderer>();

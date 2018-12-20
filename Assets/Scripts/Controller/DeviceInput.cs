@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 namespace Catsland.Scripts.Controller {
-  public class DeviceInput: MonoBehaviour, IInput, HeadOfBanditController.HeadOfBanditInput {
+  public class DeviceInput: MonoBehaviour, IInput, HeadOfBanditController.HeadOfBanditInput, RoyalGuardController.RoyalGuardInput {
 
     public float dashAxisDeadzone = 0.2f;
 
@@ -60,6 +60,10 @@ namespace Catsland.Scripts.Controller {
 
     public bool interact() {
       return Input.GetButtonDown("Interact");
+    }
+
+    public bool chop() {
+      return Input.GetButtonDown("Attack");
     }
   }
 }

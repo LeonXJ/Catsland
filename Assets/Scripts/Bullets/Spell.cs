@@ -11,6 +11,7 @@ namespace Catsland.Scripts.Bullets {
     public float lifetimeInSecond = 5.0f;
     public bool isEnable = true;
     public bool destroyWhenHitAny = true;
+    public GameObject alsoDestroyGo;
     private float repelDirectionX;
     private bool useRigidbodyRepelDirection = true;
 
@@ -77,7 +78,9 @@ namespace Catsland.Scripts.Bullets {
 
     private IEnumerator delayDestroy() {
       yield return new WaitForSeconds(lifetimeInSecond);
-      if(gameObject != null) {
+      if(alsoDestroyGo != null) {
+        Destroy(alsoDestroyGo);
+      } else if(gameObject != null) {
         Destroy(gameObject);
       }
     }

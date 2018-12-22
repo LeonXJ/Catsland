@@ -54,6 +54,7 @@ namespace Catsland.Scripts.Controller {
     public GameObject smashEffectGo;
     public Transform smashEffectoGeneratePosition;
     public Transform smashEffectHorizon;
+    public GameObject smashSplashGo;
 
     public Vector2 jumpSmashJumpForce = new Vector2(50.0f, 200.0f);
     public float jumpSmashPrepareTime = 0.3f;
@@ -82,6 +83,10 @@ namespace Catsland.Scripts.Controller {
     public float minWidth = 0.5f;
     private GameObject lineParent;
     public GameObject warningLineGo;
+    public GameObject aoeSpellGo;
+    public float aoeSpellSpeed;
+    public float aoeSpellHeightRange = 0.5f;
+    public float noHaveLineWithinRange = 0.5f;
 
     private float currentChargeStatusRemainingTime;
     private LinearSequence chargeSequence;
@@ -361,6 +366,9 @@ namespace Catsland.Scripts.Controller {
 
     public void startIdeal() {
       status = Status.IDEAL;
+      if(lineParent != null) {
+        cancelWarningLine();
+      }
     }
 
     public void startJump() {
@@ -374,6 +382,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void generateSmashEffect(Vector3 position, bool forward) {
+      // smash attack
       GameObject smash = Instantiate(smashEffectGo);
       smash.transform.position = new Vector3(
         position.x,
@@ -395,7 +404,14 @@ namespace Catsland.Scripts.Controller {
     public void generateDoubleSmashEffect() {
       generateSmashEffect(transform.position, true);
       generateSmashEffect(transform.position, false);
+    }
 
+    public void generateSmashSpash() {
+      GameObject splash = Instantiate(smashSplashGo);
+      splash.transform.position = new Vector3(
+        transform.position.x,
+        smashEffectHorizon.position.y,
+        transform.position.z);
     }
 
     public void prepareAoe() {
@@ -403,16 +419,44 @@ namespace Catsland.Scripts.Controller {
         lineParent = new GameObject("WarningLine");
       }
 
-      float left = 0.0f;
+      float aoeRangeLeft = transform.position.x - rangeWidth * 0.5f;
+      float aoeRangeRight = transform.position.x + rangeWidth * 0.5f;
+      float avgRange = rangeWidth / lineNumber;
+
+      float x = aoeRangeLeft;
       for(int i = 0; i < lineNumber; i++) {
-        float maxRight = rangeWidth - (lineNumber - i - 1) * minWidth;
-        float x = UnityEngine.Random.Range(left, maxRight);
+        float spellRangeRight = aoeRangeLeft + (i + 1) * avgRange;
+        x = UnityEngine.Random.Range(x + minWidth, spellRangeRight);
+        if(Mathf.Abs(x - transform.position.x) < noHaveLineWithinRange) {
+          continue;
+        }
         GameObject warningLine = Instantiate(warningLineGo);
+        warningLine.transform.parent = lineParent.transform;
         warningLine.GetComponent<LineRenderer>().SetPositions(new[]{
-          new Vector3(transform.position.x - rangeWidth * 0.5f + x, lineTopPosition.position.y),
-          new Vector3(transform.position.x - rangeWidth * 0.5f + x, lineBottomPosition.position.y)});
-        left = x + minWidth;
+          new Vector3(x, lineTopPosition.position.y),
+          new Vector3(x, lineBottomPosition.position.y)});
       }
+    }
+
+    public void performAoe() {
+      Debug.Log("Perform Aoe.");
+      if(lineParent == null) {
+        return;
+      }
+      foreach(LineRenderer lineRenderer in lineParent.transform.GetComponentsInChildren<LineRenderer>()) {
+        Debug.Log("Create spell");
+        Vector3 startPoint = lineRenderer.GetPosition(0);
+        GameObject spell = Instantiate(aoeSpellGo);
+        spell.transform.position =
+          startPoint + new Vector3(0.0f, UnityEngine.Random.Range(0.0f, aoeSpellHeightRange), 0.0f);
+        spell.GetComponent<Rigidbody2D>().velocity = new Vector2(0.0f, -aoeSpellSpeed);
+        spell.GetComponentInChildren<Spell>().fire(gameObject);
+      }
+      cancelWarningLine();
+    }
+
+    private void cancelWarningLine() {
+      Destroy(lineParent);
     }
   }
 }

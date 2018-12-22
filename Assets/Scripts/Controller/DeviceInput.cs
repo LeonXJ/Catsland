@@ -65,5 +65,9 @@ namespace Catsland.Scripts.Controller {
     public bool chop() {
       return Input.GetButtonDown("Attack");
     }
+
+    public bool summon() {
+      return Input.GetButton("Interact");
+    }
   }
 }

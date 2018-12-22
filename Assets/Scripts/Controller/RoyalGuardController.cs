@@ -14,6 +14,8 @@ namespace Catsland.Scripts.Controller {
       bool spell();
       */
       bool chop();
+      bool jumpSmash();
+      bool summon();
     }
 
     public enum Status {
@@ -21,6 +23,10 @@ namespace Catsland.Scripts.Controller {
 
       // Chop
       CHOPPING = 2,
+
+      JUMPING = 3,
+
+      SUMMONING = 4,
     }
 
     public Status status = Status.IDEAL;
@@ -42,6 +48,13 @@ namespace Catsland.Scripts.Controller {
     public float chargeRestTime = 1.0f;
 
     // Jump Smash
+    public float jumpDirectionDegree = 60.0f;
+    public float jumpForce = 200.0f;
+    public float smashEffectSpeed = 12.0f;
+    public GameObject smashEffectGo;
+    public Transform smashEffectoGeneratePosition;
+    public Transform smashEffectHorizon;
+
     public Vector2 jumpSmashJumpForce = new Vector2(50.0f, 200.0f);
     public float jumpSmashPrepareTime = 0.3f;
     public float jumpSmashSmashTime = 0.3f;
@@ -59,6 +72,16 @@ namespace Catsland.Scripts.Controller {
     public float spellSpellTime = 0.3f;
     public float spellRestTime = 0.2f;
     public Transform spellTransform;
+
+
+    // Aoe
+    public int lineNumber = 5;
+    public Transform lineTopPosition;
+    public Transform lineBottomPosition;
+    public float rangeWidth = 8.0f;
+    public float minWidth = 0.5f;
+    private GameObject lineParent;
+    public GameObject warningLineGo;
 
     private float currentChargeStatusRemainingTime;
     private LinearSequence chargeSequence;
@@ -93,6 +116,10 @@ namespace Catsland.Scripts.Controller {
     private static readonly string DIE = "Die";
     */
     private static readonly string WANT_CHOP = "WantChop";
+    private static readonly string WANT_JUMP = "WantJump";
+    private static readonly string IS_GROUNDED = "IsGrounded";
+    private static readonly string V_SPEED = "VSpeed";
+    private static readonly string WANT_SUMMON = "WantSummon";
 
     private static readonly Dictionary<Status, int> JUMP_SMASH_STATUS_TO_PHASE =
       new Dictionary<Status, int>();
@@ -101,7 +128,13 @@ namespace Catsland.Scripts.Controller {
     private static readonly Dictionary<Status, int> SPELL_STATUS_TO_PHASE =
       new Dictionary<Status, int>();
 
+    private static HashSet<Status> lockVelocityStatus = new HashSet<Status>();
+
+    private static System.Random random = new System.Random();
+
     static RoyalGuardController() {
+      lockVelocityStatus.Add(Status.IDEAL);
+      lockVelocityStatus.Add(Status.CHOPPING);
       /*
       JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_PREPARE, 1);
       JUMP_SMASH_STATUS_TO_PHASE.Add(Status.JUMP_SMASH_JUMPING, 2);
@@ -122,7 +155,7 @@ namespace Catsland.Scripts.Controller {
     void Awake() {
       rb2d = GetComponent<Rigidbody2D>();
       input = GetComponent<RoyalGuardInput>();
-      //groundSensor = groundSensorGo.GetComponent<ISensor>();
+      groundSensor = groundSensorGo.GetComponent<ISensor>();
       animator = GetComponent<Animator>();
       spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -169,6 +202,11 @@ namespace Catsland.Scripts.Controller {
       // Chop
       if(status == Status.CHOPPING && input.chop()) {
         wantNextChop = true;
+      }
+      // Jump
+      if(status == Status.IDEAL) {
+        animator.SetBool(WANT_JUMP, input.jumpSmash());
+        animator.SetBool(WANT_SUMMON, input.summon());
       }
       /*
       // apply velocity
@@ -217,9 +255,13 @@ namespace Catsland.Scripts.Controller {
       animator.SetBool(DIE, isDead());
       */
 
-      rb2d.velocity = Vector2.zero;
+      if(lockVelocityStatus.Contains(status)) {
+        rb2d.velocity = Vector2.zero;
+      }
 
       animator.SetBool(WANT_CHOP, input.chop() || wantNextChop);
+      animator.SetBool(IS_GROUNDED, groundSensor.isStay());
+      animator.SetFloat(V_SPEED, rb2d.velocity.y);
 
     }
 
@@ -313,12 +355,64 @@ namespace Catsland.Scripts.Controller {
       chop.GetComponentInChildren<Spell>().fireWithSpecificRepel(gameObject, getOrientation());
     }
 
-    public void endChop() {
+    public void makeOffset() {
+      transform.position += new Vector3(chopMoveForwardDistance * getOrientation(), 0.0f);
+    }
+
+    public void startIdeal() {
       status = Status.IDEAL;
     }
 
-    public void makeOffset() {
-      transform.position += new Vector3(chopMoveForwardDistance * getOrientation(), 0.0f);
+    public void startJump() {
+      Vector2 jumpVector =
+        new Vector2(
+        getOrientation() * Mathf.Cos(jumpDirectionDegree * Mathf.Deg2Rad),
+        Mathf.Sin(jumpDirectionDegree * Mathf.Deg2Rad))
+        * jumpForce;
+      rb2d.AddForce(jumpVector);
+      status = Status.JUMPING;
+    }
+
+    public void generateSmashEffect(Vector3 position, bool forward) {
+      GameObject smash = Instantiate(smashEffectGo);
+      smash.transform.position = new Vector3(
+        position.x,
+        smashEffectHorizon.position.y,
+        position.z);
+      smash.transform.localScale = new Vector3(
+        (forward ? 1 : -1) * getOrientation() * smash.transform.lossyScale.x,
+        smash.transform.lossyScale.y,
+        smash.transform.lossyScale.z);
+      smash.GetComponent<Rigidbody2D>().velocity =
+        new Vector2(smashEffectSpeed * getOrientation() * (forward ? 1 : -1), 0.0f);
+      smash.GetComponentInChildren<Spell>().fireWithSpecificRepel(gameObject, getOrientation());
+    }
+
+    public void generateSingleSmashEfect() {
+      generateSmashEffect(smashEffectoGeneratePosition.position, true);
+    }
+
+    public void generateDoubleSmashEffect() {
+      generateSmashEffect(transform.position, true);
+      generateSmashEffect(transform.position, false);
+
+    }
+
+    public void prepareAoe() {
+      if(lineParent == null) {
+        lineParent = new GameObject("WarningLine");
+      }
+
+      float left = 0.0f;
+      for(int i = 0; i < lineNumber; i++) {
+        float maxRight = rangeWidth - (lineNumber - i - 1) * minWidth;
+        float x = UnityEngine.Random.Range(left, maxRight);
+        GameObject warningLine = Instantiate(warningLineGo);
+        warningLine.GetComponent<LineRenderer>().SetPositions(new[]{
+          new Vector3(transform.position.x - rangeWidth * 0.5f + x, lineTopPosition.position.y),
+          new Vector3(transform.position.x - rangeWidth * 0.5f + x, lineBottomPosition.position.y)});
+        left = x + minWidth;
+      }
     }
   }
 }

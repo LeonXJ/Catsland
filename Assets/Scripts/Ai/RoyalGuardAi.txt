@@ -1,0 +1,18 @@
+tree("Root")
+  sequence 
+    mute
+      sequence
+        isPlayerInReactDistance()
+        faceToPlayer()
+        comboChop()
+    mute
+      sequence
+        isPlayerInReactDistance()
+        faceToPlayer()
+        doSummon()
+    repeat 3
+      mute
+        sequence
+          isPlayerInReactDistance()
+          faceToPlayer()
+          doJumpSmash()

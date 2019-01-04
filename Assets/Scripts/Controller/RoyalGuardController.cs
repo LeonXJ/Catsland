@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 using Catsland.Scripts.Bullets;
+using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Controller {
   public class RoyalGuardController: MonoBehaviour {
@@ -40,6 +41,7 @@ namespace Catsland.Scripts.Controller {
     public Transform chopEffectGeneratePosition;
     public float chopEffectSpeed = 8.0f;
     private bool wantNextChop = false;
+    private int chopCombo = 0;
 
     // Charge
     public float chargeSpeed = 5.0f;
@@ -55,6 +57,7 @@ namespace Catsland.Scripts.Controller {
     public Transform smashEffectoGeneratePosition;
     public Transform smashEffectHorizon;
     public GameObject smashSplashGo;
+    private ConsumableBool hasJumpSmashUnleashed = new ConsumableBool();
 
     public Vector2 jumpSmashJumpForce = new Vector2(50.0f, 200.0f);
     public float jumpSmashPrepareTime = 0.3f;
@@ -87,6 +90,7 @@ namespace Catsland.Scripts.Controller {
     public float aoeSpellSpeed;
     public float aoeSpellHeightRange = 0.5f;
     public float noHaveLineWithinRange = 0.5f;
+    private ConsumableBool hasAoeUnleashed = new ConsumableBool();
 
     private float currentChargeStatusRemainingTime;
     private LinearSequence chargeSequence;
@@ -290,6 +294,14 @@ namespace Catsland.Scripts.Controller {
       return status == Status.IDEAL;
     }
 
+    public bool consumeHasAoeUnleashed() {
+      return hasAoeUnleashed.getAndReset();
+    }
+
+    public bool consumeHasJumpSmashUnleashed() {
+      return hasJumpSmashUnleashed.getAndReset();
+    }
+
     public void damage(DamageInfo damageInfo) {
       if(isDead()) {
         return;
@@ -345,7 +357,12 @@ namespace Catsland.Scripts.Controller {
     public void startChop() {
       status = Status.CHOPPING;
       wantNextChop = false;
+      chopCombo += 1;
       generateChopEffect();
+    }
+
+    public int getChopCombo() {
+      return chopCombo;
     }
 
     private void generateChopEffect() {
@@ -366,6 +383,7 @@ namespace Catsland.Scripts.Controller {
 
     public void startIdeal() {
       status = Status.IDEAL;
+      chopCombo = 0;
       if(lineParent != null) {
         cancelWarningLine();
       }
@@ -398,6 +416,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void generateSingleSmashEfect() {
+      hasJumpSmashUnleashed.setTrue();
       generateSmashEffect(smashEffectoGeneratePosition.position, true);
     }
 
@@ -439,12 +458,11 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void performAoe() {
-      Debug.Log("Perform Aoe.");
       if(lineParent == null) {
         return;
       }
+      hasAoeUnleashed.setTrue();
       foreach(LineRenderer lineRenderer in lineParent.transform.GetComponentsInChildren<LineRenderer>()) {
-        Debug.Log("Create spell");
         Vector3 startPoint = lineRenderer.GetPosition(0);
         GameObject spell = Instantiate(aoeSpellGo);
         spell.transform.position =

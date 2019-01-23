@@ -7,7 +7,7 @@ namespace Catsland.Scripts.Controller {
   [ExecuteInEditMode]
   public class GrassModel: MonoBehaviour {
 
-    public Texture texture;
+    public Sprite sprite;
     public float width = 1.0f;
     public float height = 0.3f;
     public float degree = 0.0f;
@@ -67,7 +67,7 @@ namespace Catsland.Scripts.Controller {
 
     private void updateTexture() {
       MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-      meshRenderer.sharedMaterial.mainTexture = texture;
+      meshRenderer.sharedMaterial.mainTexture = sprite.texture;
     }
 
     private void initializeMesh() {
@@ -77,10 +77,10 @@ namespace Catsland.Scripts.Controller {
 
       vertices = new Vector3[4];
 
-      vertices[0] = new Vector3(-width / 2.0f, 0.0f, 0.0f);
-      vertices[1] = new Vector3(width / 2.0f, 0.0f, 0.0f);
-      vertices[2] = new Vector3(-width / 2.0f, height, 0.0f);
-      vertices[3] = new Vector3(width / 2.0f, height, 0.0f);
+      vertices[0] = new Vector3(-width / 2.0f, height, 0.0f);
+      vertices[1] = new Vector3(width / 2.0f, height, 0.0f);
+      vertices[2] = new Vector3(-width / 2.0f, 0.0f, 0.0f);
+      vertices[3] = new Vector3(width / 2.0f, 0.0f, 0.0f);
 
       mesh.vertices = vertices;
 
@@ -104,15 +104,7 @@ namespace Catsland.Scripts.Controller {
       normals[3] = -Vector3.forward;
 
       mesh.normals = normals;
-
-      Vector2[] uv = new Vector2[4];
-
-      uv[0] = new Vector2(0.0f, 0.0f);
-      uv[1] = new Vector2(1.0f, 0.0f);
-      uv[2] = new Vector2(0.0f, 1.0f);
-      uv[3] = new Vector2(1.0f, 1.0f);
-
-      mesh.uv = uv;
+      mesh.uv = sprite.uv;
 
       hasInitialized = true;
     }
@@ -121,23 +113,24 @@ namespace Catsland.Scripts.Controller {
 
       Mesh mesh = GetComponent<MeshFilter>().sharedMesh;
 
-      vertices[0] = new Vector3(-width * 0.5f, 0.0f, 0.0f);
-      vertices[1] = new Vector3(width * 0.5f, 0.0f, 0.0f);
       Vector3 farendBias = new Vector3(
         height * Mathf.Sin(Mathf.Deg2Rad * degree),
         height * Mathf.Cos(Mathf.Deg2Rad * degree),
         0.0f);
-      vertices[2] = vertices[0] + farendBias;
-      vertices[3] = vertices[1] + farendBias;
+      // Top-left -> Top-right -> Bottom-left -> Bottom-right
+      vertices[2] = new Vector3(-width * 0.5f, 0.0f, 0.0f);
+      vertices[3] = new Vector3(width * 0.5f, 0.0f, 0.0f);
+      vertices[0] = vertices[2] + farendBias;
+      vertices[1] = vertices[3] + farendBias;
 
       mesh.vertices = vertices;
       mesh.RecalculateBounds();
     }
 
     public void UpdateSize() {
-      if(texture != null) {
-        width = (float)texture.width / pixelPerUnit;
-        height = (float)texture.height / pixelPerUnit;
+      if(sprite != null) {
+        width = sprite.rect.width / sprite.pixelsPerUnit;
+        height = sprite.rect.height / sprite.pixelsPerUnit;
       }
     }
 

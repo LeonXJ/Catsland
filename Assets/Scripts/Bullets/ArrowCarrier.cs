@@ -21,7 +21,11 @@ namespace Catsland.Scripts.Bullets {
     public float brokenPartSpinSpeed = 4800.0f;
     public float brokenPartBounceSpeedRatio = 0.2f;
 
+
+
     public GameObject brokenArrowPrefab;
+    public GameObject attachedArrowPrefab;
+    public float attachedPositionOffset = 0.2f;
 
     private ArrowStatus status = ArrowStatus.Flying;
     private string tagForOwner;
@@ -89,20 +93,22 @@ namespace Catsland.Scripts.Bullets {
         return;
       }
       if(collision.gameObject.layer == Layers.LayerGround) {
-        // TODO: support attachable
-        // arrow proof by default
+        if(collision.gameObject.CompareTag(Tags.ATTACHABLE)) {
+          enterAttach(collision);
+          return;
+        }
         breakArrow();
         return;
       }
-      if(collision.gameObject.layer == Layers.LayerCharacter) {
-        // not self hurt
-        if(tagForOwner != null && collision.gameObject.CompareTag(tagForOwner)) {
-          return;
-        }
-        // TODO: support arrow proof
-        // by default vulnerable
-        arrowHit(collision);
+      //if(collision.gameObject.layer == Layers.LayerCharacter) {
+      // not self hurt
+      if(tagForOwner != null && collision.gameObject.CompareTag(tagForOwner)) {
+        return;
       }
+      // TODO: support arrow proof
+      // by default vulnerable
+      arrowHit(collision);
+      //}
     }
 
     public void damage(DamageInfo damageInfo) {
@@ -140,24 +146,25 @@ namespace Catsland.Scripts.Bullets {
 
     }
 
+    private void enterAttach(Collider2D collision) {
+      GameObject gameObject = Instantiate(attachedArrowPrefab);
+      gameObject.transform.position = transform.position
+        + new Vector3(attachedPositionOffset * transform.lossyScale.x, 0.0f);
+      gameObject.transform.localScale = transform.lossyScale;
+      gameObject.transform.parent = collision.gameObject.transform;
+
+      safeDestroy();
+    }
+
     private void breakArrow() {
       status = ArrowStatus.Broken;
-      GameObject brokenArrow = Instantiate(brokenArrowPrefab);
-      brokenArrow.transform.position = transform.position;
-      brokenArrow.transform.localScale = transform.lossyScale;
 
-      // adjust layer
-      SpriteRenderer[] renderers = brokenArrow.GetComponentsInChildren<SpriteRenderer>();
-      foreach(SpriteRenderer renderer in renderers) {
-        renderer.sortingOrder = spriteRenderer.sortingOrder;
-      }
+      BulletUtils.generateDebrid(
+        brokenArrowPrefab,
+        transform,
+        -rb2d.velocity.x * brokenPartBounceSpeedRatio,
+        (Random.value - 0.5f) * 2.0f * brokenPartSpinSpeed);
 
-      // assign random velocity
-      Rigidbody2D[] brokenParts = brokenArrow.GetComponentsInChildren<Rigidbody2D>();
-      foreach(Rigidbody2D part in brokenParts) {
-        part.angularVelocity = (Random.value - 0.5f) * 2.0f * brokenPartSpinSpeed;
-        part.velocity = new Vector2(-rb2d.velocity.x * brokenPartBounceSpeedRatio, 0.0f);
-      }
       // set complete arrow status 
       spriteRenderer.enabled = false;
       rb2d.velocity = Vector3.zero;

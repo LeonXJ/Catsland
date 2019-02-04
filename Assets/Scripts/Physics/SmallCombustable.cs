@@ -2,7 +2,7 @@
 
 namespace Catsland.Scripts.Physics {
   [RequireComponent(typeof(Collider2D))]
-  public class SmallCombustable :MonoBehaviour, IIgnitable {
+  public class SmallCombustable: MonoBehaviour, IIgnitable {
 
     public GameObject flamePrefab;
     public Transform flamePoint;

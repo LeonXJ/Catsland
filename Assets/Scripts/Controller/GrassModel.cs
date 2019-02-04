@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Catsland.Scripts.Misc;
+using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Controller {
   [RequireComponent(typeof(MeshRenderer))]

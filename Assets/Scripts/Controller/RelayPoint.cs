@@ -40,14 +40,15 @@ namespace Catsland.Scripts.Controller {
 
       // update UI
       if(distance < playerController.relayHintDistance) {
-        Debug.Log("Draw hint circle");
+        /*
+        // For debug only
         drawCircle(transform.position, distance, hintCircleSegment, Color.white);
         drawCircle(
           transform.position,
           playerController.relayEffectDistance,
           hintCircleSegment,
           Color.green);
-
+          */
         currentHintRenderer.enabled = true;
         targetHintRenderer.enabled = true;
         // size

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Catsland.Scripts.Controller;
-using Catsland.Scripts.Misc;
+using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Misc {
   public class HealthBar: MonoBehaviour {

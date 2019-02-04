@@ -2,6 +2,7 @@
 using UnityEngine;
 using Catsland.Scripts.Common;
 using Catsland.Scripts.Misc;
+using Catsland.Scripts.Physics;
 
 namespace Catsland.Scripts.Bullets {
   [RequireComponent(typeof(Rigidbody2D))]
@@ -87,11 +88,7 @@ namespace Catsland.Scripts.Bullets {
         return;
       }
 
-      // Still flying
-      // ignore other bullet
-      if(collision.gameObject.layer == Layers.LayerBullet) {
-        return;
-      }
+      // Ground: attach / break
       if(collision.gameObject.layer == Layers.LayerGround) {
         if(collision.gameObject.CompareTag(Tags.ATTACHABLE)) {
           enterAttach(collision);
@@ -100,15 +97,21 @@ namespace Catsland.Scripts.Bullets {
         breakArrow();
         return;
       }
-      //if(collision.gameObject.layer == Layers.LayerCharacter) {
-      // not self hurt
-      if(tagForOwner != null && collision.gameObject.CompareTag(tagForOwner)) {
+
+      // Bullet: ignore
+      if(collision.gameObject.layer == Layers.LayerBullet) {
         return;
       }
-      // TODO: support arrow proof
-      // by default vulnerable
-      arrowHit(collision);
-      //}
+
+      // Character: ignore / damge
+      if(collision.gameObject.layer == Layers.LayerCharacter
+        || collision.gameObject.layer == Layers.LayerVulnerableObject) {
+        if(tagForOwner != null && collision.gameObject.CompareTag(tagForOwner)) {
+          // ignore owner
+          return;
+        }
+        arrowHit(collision);
+      }
     }
 
     public void damage(DamageInfo damageInfo) {
@@ -147,11 +150,14 @@ namespace Catsland.Scripts.Bullets {
     }
 
     private void enterAttach(Collider2D collision) {
-      GameObject gameObject = Instantiate(attachedArrowPrefab);
-      gameObject.transform.position = transform.position
+      // This is necessray because another update cycle can happen before self-destroy.
+      status = ArrowStatus.Attached;
+      GameObject attached = Instantiate(attachedArrowPrefab);
+      attached.transform.position = transform.position
         + new Vector3(attachedPositionOffset * transform.lossyScale.x, 0.0f);
-      gameObject.transform.localScale = transform.lossyScale;
-      gameObject.transform.parent = collision.gameObject.transform;
+      attached.transform.localScale = transform.lossyScale;
+      attached.transform.parent = collision.gameObject.transform;
+      transferFlame(attached);
 
       safeDestroy();
     }
@@ -159,11 +165,13 @@ namespace Catsland.Scripts.Bullets {
     private void breakArrow() {
       status = ArrowStatus.Broken;
 
-      BulletUtils.generateDebrid(
+      GameObject debrid = BulletUtils.generateDebrid(
         brokenArrowPrefab,
         transform,
         -rb2d.velocity.x * brokenPartBounceSpeedRatio,
         (Random.value - 0.5f) * 2.0f * brokenPartSpinSpeed);
+
+      transferFlame(debrid);
 
       // set complete arrow status 
       spriteRenderer.enabled = false;
@@ -172,6 +180,13 @@ namespace Catsland.Scripts.Bullets {
 
       // delay self-destory
       safeDestroy();
+    }
+
+    private void transferFlame(GameObject newGO) {
+      Flame flame = GetComponentInChildren<Flame>();
+      if(flame != null) {
+        flame.transform.parent = newGO.transform;
+      }
     }
   }
 }

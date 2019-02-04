@@ -2,15 +2,16 @@
 using UnityEngine;
 
 namespace Catsland.Scripts.Controller {
-  public class ChangeGlobalLightEffector :Effector {
+  public class ChangeGlobalLightEffector: Effector {
 
     public Color targetAmbientColor;
     public GlobalLightController globalLightController;
     public float transistSpeed = 0.1f;
 
     public override void applyEffect() {
-      globalLightController.ambient =
-        Color.Lerp(globalLightController.ambient, targetAmbientColor, transistSpeed);
+      // Deprecated
+      globalLightController.backupAmbientColor =
+        Color.Lerp(globalLightController.backupAmbientColor, targetAmbientColor, transistSpeed);
     }
   }
 }

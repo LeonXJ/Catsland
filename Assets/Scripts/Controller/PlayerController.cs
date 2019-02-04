@@ -29,6 +29,7 @@ namespace Catsland.Scripts.Controller {
     public float relayEffectDistance = 1.0f;
     public bool supportRelay = true;
     public bool canCliffJump = true;
+    public bool canDetectCliff = true;
 
     public float maxSenseAdd = 0.5f;
     public float senseIncreaseSpeed = 0.2f;
@@ -189,6 +190,14 @@ namespace Catsland.Scripts.Controller {
         doubleJumpEffect.transform.position = doubleJumpEffectPoint.position;
         Utils.setRelativeRenderLayer(
           spriteRenderer, doubleJumpEffect.GetComponentInChildren<SpriteRenderer>(), 1);
+        // Reset dash
+        remainingDash = 1;
+      }
+
+      if(activeRelayPoints.Count > 0) {
+        Time.timeScale = 0.6f;
+      } else {
+        Time.timeScale = 1.0f;
       }
 
       // Cliff jump
@@ -196,7 +205,7 @@ namespace Catsland.Scripts.Controller {
       isCliffSliding = false;
       if(!groundSensor.isStay() && !isDizzy) {
         bool desiredFacingOrientation = getOrientation() * desiredSpeed > 0.0f;
-        if(frontSensor.isStay() && desiredFacingOrientation) {
+        if(canDetectCliff && frontSensor.isStay() && desiredFacingOrientation) {
           remainingDash = 1;
           if(input.jump() && canCliffJump) {
             rb2d.velocity = Vector2.zero;
@@ -211,7 +220,7 @@ namespace Catsland.Scripts.Controller {
             topFallingSpeed = cliffSlidingSpeed;
             isCliffSliding = true;
           }
-        } else if(backSensor.isStay() && desiredFacingOrientation && input.jump() && canCliffJump) {
+        } else if(canDetectCliff && backSensor.isStay() && desiredFacingOrientation && input.jump() && canCliffJump) {
           remainingDash = 1;
           rb2d.velocity = Vector2.zero;
           rb2d.AddForce(new Vector2(Mathf.Sign(desiredSpeed) * cliffJumpForce, cliffJumpForce));

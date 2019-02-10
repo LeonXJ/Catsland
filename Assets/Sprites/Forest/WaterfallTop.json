@@ -1,0 +1,47 @@
+{ "frames": {
+   "WaterfallTop 0.aseprite": {
+    "frame": { "x": 0, "y": 0, "w": 32, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
+    "sourceSize": { "w": 32, "h": 48 },
+    "duration": 100
+   },
+   "WaterfallTop 1.aseprite": {
+    "frame": { "x": 32, "y": 0, "w": 32, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
+    "sourceSize": { "w": 32, "h": 48 },
+    "duration": 100
+   },
+   "WaterfallTop 2.aseprite": {
+    "frame": { "x": 64, "y": 0, "w": 32, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
+    "sourceSize": { "w": 32, "h": 48 },
+    "duration": 100
+   },
+   "WaterfallTop 3.aseprite": {
+    "frame": { "x": 96, "y": 0, "w": 32, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 48 },
+    "sourceSize": { "w": 32, "h": 48 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.9-x64",
+  "image": "D:\\workspace\\Catsland\\Assets\\Sprites\\Forest\\WaterfallTop.png",
+  "format": "RGBA8888",
+  "size": { "w": 128, "h": 48 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "slices": [
+  ]
+ }
+}

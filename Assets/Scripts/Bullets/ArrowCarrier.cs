@@ -22,6 +22,7 @@ namespace Catsland.Scripts.Bullets {
     public float brokenPartSpinSpeed = 4800.0f;
     public float brokenPartBounceSpeedRatio = 0.2f;
 
+    public bool isShellBreaking = false;
 
 
     public GameObject brokenArrowPrefab;
@@ -88,6 +89,34 @@ namespace Catsland.Scripts.Bullets {
         return;
       }
 
+      // ArrowResult interceptor
+      IArrowDamageInterceptor interceptor = collision.gameObject.GetComponent<IArrowDamageInterceptor>();
+      if(interceptor != null) {
+        ArrowResult result = interceptor.getArrowResult(this);
+        switch(result) {
+          case ArrowResult.ATTACHED:
+            enterAttach(collision);
+            return;
+          case ArrowResult.BROKEN:
+            breakArrow();
+            return;
+          case ArrowResult.DISAPPEAR:
+            safeDestroy();
+            return;
+          case ArrowResult.HIT:
+            arrowHit(collision);
+            return;
+          case ArrowResult.HIT_AND_BROKEN:
+            breakArrow();
+            arrowHit(collision);
+            return;
+          case ArrowResult.SKIP:
+            return;
+          case ArrowResult.IGNORE:
+            break;
+        }
+      }
+
       // Ground: attach / break
       if(collision.gameObject.layer == Layers.LayerGround) {
         if(collision.gameObject.CompareTag(Tags.ATTACHABLE)) {
@@ -103,7 +132,7 @@ namespace Catsland.Scripts.Bullets {
         return;
       }
 
-      // Character: ignore / damge
+      // Character: ignore / damage
       if(collision.gameObject.layer == Layers.LayerCharacter
         || collision.gameObject.layer == Layers.LayerVulnerableObject) {
         if(tagForOwner != null && collision.gameObject.CompareTag(tagForOwner)) {

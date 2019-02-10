@@ -180,16 +180,7 @@ namespace Catsland.Scripts.Controller {
         status = (Status)spellSequence.start();
       }
       if(canAdjustOrientation()) {
-        float parentLossyScale = gameObject.transform.parent != null
-            ? gameObject.transform.parent.lossyScale.x : 1.0f;
-        if(desiredSpeed * parentLossyScale > 0.0f) {
-          transform.localScale = new Vector3(
-            Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-        }
-        if(desiredSpeed * parentLossyScale < 0.0f) {
-          transform.localScale = new Vector3(
-            -Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-        }
+        ControllerUtils.AdjustOrientation(desiredSpeed, gameObject);
       }
 
       // apply velocity

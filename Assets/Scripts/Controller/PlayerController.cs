@@ -51,6 +51,7 @@ namespace Catsland.Scripts.Controller {
     public float maxArrowLifetime = 3.0f;
     public float maxRepelForce = 50f;
     public float maxDrawingTime = 1.0f;
+    public float strongArrowDrawingRatio = 0.9f;
     private bool isDrawing = false;
     private float shootingCd = 0.5f;
     private bool isShooting = false;
@@ -335,6 +336,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void damage(DamageInfo damageInfo) {
+      Debug.Log("Damage");
       if(Time.time - lastGetDamagedTime < immutableTime) {
         return;
       }
@@ -416,6 +418,7 @@ namespace Catsland.Scripts.Controller {
         Mathf.Clamp(currentDrawingTime, 0.0f, maxDrawingTime) / maxDrawingTime;
       arrowCarrier.repelIntensive = drawingRatio * maxRepelForce;
       float absoluteArrowSpeed = Mathf.Lerp(minArrowSpeed, maxArrowSpeed, drawingRatio);
+      arrowCarrier.isShellBreaking = drawingRatio > strongArrowDrawingRatio;
       arrowCarrier.fire(
         new Vector2(transform.lossyScale.x > 0.0f ? absoluteArrowSpeed : -absoluteArrowSpeed, 0.0f),
         maxArrowLifetime,

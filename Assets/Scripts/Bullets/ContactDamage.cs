@@ -32,7 +32,9 @@ namespace Catsland.Scripts.Bullets {
         return;
       }
       GameObject collidingGameObject = collider.gameObject;
+      Debug.Log("Hit " + collidingGameObject.name);
       if(collidingGameObject.layer == Layers.LayerCharacter && collidingGameObject != owner) {
+        Debug.Log("Real Hit " + collidingGameObject.name);
         Vector2 delta = collidingGameObject.transform.position - transform.position;
         collidingGameObject.SendMessage(
           MessageNames.DAMAGE_FUNCTION,

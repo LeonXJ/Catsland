@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 namespace Catsland.Scripts.Controller {
-  public class DeviceInput: MonoBehaviour, IInput, HeadOfBanditController.HeadOfBanditInput, RoyalGuardController.RoyalGuardInput {
+  public class DeviceInput: MonoBehaviour, IInput, HeadOfBanditController.HeadOfBanditInput, RoyalGuardController.RoyalGuardInput, EvilFlowerController.EvilFlowerInput {
 
     public float dashAxisDeadzone = 0.2f;
 

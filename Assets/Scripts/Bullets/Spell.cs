@@ -52,6 +52,11 @@ namespace Catsland.Scripts.Bullets {
       if(!isEnable) {
         return;
       }
+      // Ignore other trigger.
+      if(collision.isTrigger) {
+        return;
+      }
+
       // Bullets won't collide.
       if(collision.gameObject.layer == Layers.LayerBullet) {
         return;
@@ -72,6 +77,7 @@ namespace Catsland.Scripts.Bullets {
         Destroy(gameObject);
       }
       if(destroyWhenHitAny) {
+        Debug.Log("Spell hits: " + collision.gameObject.name);
         Destroy(gameObject);
       }
     }

@@ -15,10 +15,8 @@ namespace Catsland.Scripts.Controller {
 
     void Awake() {
       playerGo = GameObject.FindGameObjectWithTag(Tags.PLAYER);
-      Debug.AssertFormat(playerGo != null, "Cannot get Player gameObject via tag: %s", Tags.PLAYER);
 
       playerController = playerGo.GetComponent<PlayerController>();
-      Debug.AssertFormat(playerController != null, "Cannot get PlayerController within Player GameObject: " + playerGo.name);
 
       currentHintRenderer = currentHintGo.GetComponent<SpriteRenderer>();
       targetHintRenderer = targetHintGo.GetComponent<SpriteRenderer>();
@@ -77,6 +75,10 @@ namespace Catsland.Scripts.Controller {
           center + new Vector3(Mathf.Sin(endArc), Mathf.Cos(endArc), 0.0f) * radius,
           color);
       }
+    }
+
+    private void OnDestroy() {
+      playerController.unregisterRelayPoint(this);
     }
   }
 }

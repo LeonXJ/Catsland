@@ -94,6 +94,9 @@ namespace Catsland.Scripts.Controller {
     private BoxCollider2D headCollider;
     private SpriteRenderer spriteRenderer;
 
+    private GameObject previousParentGameObject;
+    private Vector3 previousParentPosition;
+
     // Animation
     private const string H_SPEED = "HSpeed";
     private const string V_SPEED = "VSpeed";
@@ -277,6 +280,14 @@ namespace Catsland.Scripts.Controller {
       // horizontal movement
       gameObject.transform.parent =
           groundSensor.isStay() ? Utils.getAnyFrom(groundSensor.getTriggerGos()).transform : null;
+
+      // Move with the platform.
+      if(gameObject.transform.parent != null && gameObject.transform.parent.gameObject == previousParentGameObject) {
+        gameObject.transform.position += gameObject.transform.parent.position - previousParentPosition;
+      }
+      previousParentGameObject = gameObject.transform.parent == null ? null : gameObject.transform.parent.gameObject;
+      previousParentPosition = gameObject.transform.parent == null ? Vector3.zero : gameObject.transform.parent.position;
+
       if(dashRemainingTime <= 0.0f) {
         if(!isDizzy && !input.meditation()) {
           if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon
@@ -336,7 +347,6 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void damage(DamageInfo damageInfo) {
-      Debug.Log("Damage");
       if(Time.time - lastGetDamagedTime < immutableTime) {
         return;
       }

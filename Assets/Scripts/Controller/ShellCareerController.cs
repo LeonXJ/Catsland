@@ -16,6 +16,14 @@ namespace Catsland.Scripts.Controller {
     public int maxShellHealth = 2;
     public SpriteRenderer shellBrokenEffectRenderer;
     public float shellReceoverPerS = 1.0f;
+    public bool disableContactDamageInDormant = true;
+
+    public GameObject stingGenerations;
+    public GameObject stingPrefab;
+    public float stingSpeed = 3.0f;
+    public float stingGenerationInterval = 1.0f;
+    private float stingGenerationTimer = 0.0f;
+
 
     private IInput input;
     private Rigidbody2D rb2d;
@@ -81,6 +89,16 @@ namespace Catsland.Scripts.Controller {
           "_Color", new Color(1.0f, 1.0f, 1.0f, Mathf.Lerp(currentAlpha, targetAlpha, BROKEN_SHELL_EFFECT_CONVERT_SPEED)));
       }
 
+      if(canGenerateSting()) {
+        if(stingGenerationTimer > stingGenerationInterval) {
+          generateStings();
+        } else {
+          stingGenerationTimer += Time.deltaTime;
+        }
+      } else {
+        stingGenerationTimer = 0.0f;
+      }
+
       // Animation
       animator.SetBool(IS_DORMANT, status == Status.DORMANT);
     }
@@ -93,17 +111,46 @@ namespace Catsland.Scripts.Controller {
       return status == Status.IDEAL;
     }
 
+    public bool canGenerateSting() {
+      return stingGenerations != null && status != Status.DORMANT;
+    }
+
+    private void generateStings() {
+      for(int i = 0; i < stingGenerations.transform.childCount; i++) {
+        Transform t = stingGenerations.transform.GetChild(i);
+        GameObject stingGo = Instantiate(stingPrefab);
+        stingGo.transform.position = t.position;
+        stingGo.transform.rotation = t.rotation;
+
+        stingGo.GetComponent<Spell>().fire(gameObject);
+
+        Vector2 v = t.rotation * Vector2.up * stingSpeed;
+        stingGo.GetComponent<Rigidbody2D>().velocity = v;
+      }
+      stingGenerationTimer = 0.0f;
+    }
+
     private void enterDormant() {
       currentDormantTime = 0.0f;
       status = Status.DORMANT;
       // Apply a repel force
       rb2d.AddForce(lastDamageRepelDirection * enterDormantRepelForce);
+      // Disable contact damage
+      if(disableContactDamageInDormant) {
+        foreach(ContactDamage cd in GetComponentsInChildren<ContactDamage>()) {
+          cd.enabled = false;
+        }
+      }
     }
 
     private void enterIdeal() {
       curHealth = maxHealth;
       status = Status.IDEAL;
       curShellHeath = maxShellHealth;
+      // Enable contact damage
+      foreach(ContactDamage cd in GetComponentsInChildren<ContactDamage>()) {
+        cd.enabled = true;
+      }
     }
 
     public void damage(DamageInfo damageInfo) {

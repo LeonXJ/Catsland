@@ -7,8 +7,9 @@ namespace Catsland.Scripts.Common {
     private static SceneConfig sceneConfig;
 
     public UnityEngine.Camera MainCamera;
-    public GameObject player;
     public GlobalLightController globalLightController;
+
+    public GameObject player;
 
     public static SceneConfig getSceneConfig() {
       return sceneConfig;
@@ -16,6 +17,13 @@ namespace Catsland.Scripts.Common {
 
     SceneConfig() {
       sceneConfig = this;
+    }
+
+    public GameObject GetPlayer() {
+      if(player == null) {
+        player = GameObject.FindGameObjectWithTag(Tags.PLAYER);
+      }
+      return player;
     }
   }
 }

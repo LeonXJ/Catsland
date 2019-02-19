@@ -1,10 +1,15 @@
 fileFormatVersion: 2
-guid: 4490c904198a7de48b65ea986bbb1d18
+guid: b433405a17dbb0d43b43b1d196c415d6
 TextureImporter:
   fileIDToRecycleName:
-    21300000: ShellCarrierSting_Walk_0
-    21300002: ShellCarrierSting_Walk_1
-    21300004: ShellCarrierSting_Dormant_0
+    21300000: Bee_Flying_0
+    21300002: Bee_Flying_1
+    21300004: Bee_Prepare_0
+    21300006: Bee_Prepare_1
+    21300008: Bee_Prepare_2
+    21300010: Bee_Prepare_3
+    21300012: Bee_Prepare_4
+    21300014: Bee_Charge_0
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -76,12 +81,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ShellCarrierSting_Walk_0
+      name: Bee_Flying_0
       rect:
         serializedVersion: 2
         x: 0
         y: 32
-        width: 48
+        width: 32
         height: 32
       alignment: 9
       pivot: {x: 0.5, y: 0}
@@ -90,18 +95,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 31881a69c3d895a44a52bd8ea86c959b
+      spriteID: ea84de1f9331b5f41bbe8581c2767809
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ShellCarrierSting_Walk_1
+      name: Bee_Flying_1
       rect:
         serializedVersion: 2
-        x: 48
+        x: 32
         y: 32
-        width: 48
+        width: 32
         height: 32
       alignment: 9
       pivot: {x: 0.5, y: 0}
@@ -110,27 +115,127 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 796673c24306ca748abcaba6575634e6
+      spriteID: 854c6bb418c76ca4db59b0ae11555789
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ShellCarrierSting_Dormant_0
+      name: Bee_Prepare_0
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 32
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34a186ef148131247a8a141b37a79582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bee_Prepare_1
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 32
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcd8269ec1f2b3a41a9c983b43a0b9fc
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bee_Prepare_2
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 48
+        width: 32
         height: 32
       alignment: 9
-      pivot: {x: 0.5, y: 0.05}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d2edc1256a5f8ae47b3cdee14307e7c8
+      spriteID: 6f9f825619436ec4f97115f7544bb576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bee_Prepare_3
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 304314c475802644a99366a8e1224000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bee_Prepare_4
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1b68321f9dba384487f05c45c4a591d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bee_Charge_0
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7da17aba5c8cb8244beea2840179b170
       vertices: []
       indices: 
       edges: []
@@ -138,7 +243,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: d586f9a67bc8c8946a037133d5a834f6
+    spriteID: 635ce4d85ce886d41b3d04de415894e5
     vertices: []
     indices: 
     edges: []

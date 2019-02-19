@@ -1,0 +1,6 @@
+tree("Root")
+  fallback
+    sequence
+      isPlayerInReactDistance()
+      doCharge()
+    patrol()

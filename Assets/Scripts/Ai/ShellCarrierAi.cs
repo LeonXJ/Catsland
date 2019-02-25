@@ -4,10 +4,9 @@ using Catsland.Scripts.Controller;
 namespace Catsland.Scripts.Ai {
   public class ShellCarrierAi: MonoBehaviour, IInput {
 
-    public Transform leftBound;
-    public Transform rightBound;
-
-    public float distanceThreshold = 0.2f;
+    public LayerMask groundLayerMask;
+    public Rect frontSpaceDetector;
+    public Rect frontGroundDetector;
 
     private float horizontal;
 
@@ -45,26 +44,23 @@ namespace Catsland.Scripts.Ai {
       return false;
     }
 
-    // Start is called before the first frame update
-    void Start() {
-
-    }
-
     // Update is called once per frame
     void Update() {
-      if(movingDirection == MovingDirection.LEFT
-        && Mathf.Abs(leftBound.position.x - transform.position.x) < distanceThreshold) {
-        movingDirection = MovingDirection.RIGHT;
-      }
-      if(movingDirection == MovingDirection.RIGHT
-        && Mathf.Abs(rightBound.position.x - transform.position.x) < distanceThreshold) {
-        movingDirection = MovingDirection.LEFT;
-      }
-      if(movingDirection == MovingDirection.LEFT) {
-        horizontal = -1.0f;
-      } else {
-        horizontal = 1.0f;
-      }
+      horizontal = (canMoveForward() ? 1.0f : -1.0f) *
+         Mathf.Sign(Common.Utils.getOrientation(gameObject));
+    }
+
+    private bool canMoveForward() {
+      return !isGroundDetected(frontSpaceDetector) && isGroundDetected(frontGroundDetector);
+    }
+
+    private bool isGroundDetected(Rect rect) {
+      return Common.Utils.isRectOverlap(rect, transform, groundLayerMask);
+    }
+
+    void OnDrawGizmosSelected() {
+      Common.Utils.drawRectAsGizmos(frontSpaceDetector, isGroundDetected(frontSpaceDetector) ? Color.white : Color.blue, transform);
+      Common.Utils.drawRectAsGizmos(frontGroundDetector, isGroundDetected(frontGroundDetector) ? Color.white : Color.red, transform);
     }
 
     public void resetStatus() {

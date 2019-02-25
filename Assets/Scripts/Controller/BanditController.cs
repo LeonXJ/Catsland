@@ -2,6 +2,7 @@
 using UnityEngine;
 
 using Catsland.Scripts.Bullets;
+using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Controller {
   [RequireComponent(typeof(IInput))]

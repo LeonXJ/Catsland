@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 using Catsland.Scripts.Bullets;
+using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Controller {
   public class HeadOfBanditController: MonoBehaviour {

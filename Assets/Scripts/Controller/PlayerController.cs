@@ -126,6 +126,7 @@ namespace Catsland.Scripts.Controller {
     public void Update() {
       float desiredSpeed = input.getHorizontal();
       float currentVerticleVolocity = rb2d.velocity.y;
+      Vector2 appliedForce = Vector2.zero;
 
       // Cooldown
       if(dashCooldownRemaining > 0.0f) {
@@ -178,7 +179,7 @@ namespace Catsland.Scripts.Controller {
         } else if(input.jump()) {
           // jump up
           rb2d.velocity = new Vector2(rb2d.velocity.x, 0.0f);
-          rb2d.AddForce(new Vector2(0.0f, jumpForce));
+          appliedForce = new Vector2(0.0f, jumpForce);
         }
       }
 
@@ -188,7 +189,8 @@ namespace Catsland.Scripts.Controller {
         && activeRelayPoints.Count > 0
         && input.jump()) {
         rb2d.velocity = Vector2.zero;
-        rb2d.AddForce(new Vector2(0.0f, jumpForce));
+        //rb2d.AddForce(new Vector2(0.0f, jumpForce));
+        appliedForce = new Vector2(0.0f, jumpForce);
         // effect
         GameObject doubleJumpEffect = Instantiate(doubleJumpEffectPrefab);
         doubleJumpEffect.transform.position = doubleJumpEffectPoint.position;
@@ -213,7 +215,7 @@ namespace Catsland.Scripts.Controller {
           remainingDash = 1;
           if(input.jump() && canCliffJump) {
             rb2d.velocity = Vector2.zero;
-            rb2d.AddForce(new Vector2(-Mathf.Sign(desiredSpeed) * cliffJumpForce, cliffJumpForce * 0.8f));
+            appliedForce = new Vector2(-Mathf.Sign(desiredSpeed) * cliffJumpForce, cliffJumpForce * 0.8f);
             // cliff jump effect
             GameObject cliffJumpEffect = GameObject.Instantiate(cliffJumpEffectPrefab);
             cliffJumpEffect.transform.position = backwardCliffJumpEffectPoint.position;
@@ -227,7 +229,7 @@ namespace Catsland.Scripts.Controller {
         } else if(canDetectCliff && backSensor.isStay() && desiredFacingOrientation && input.jump() && canCliffJump) {
           remainingDash = 1;
           rb2d.velocity = Vector2.zero;
-          rb2d.AddForce(new Vector2(Mathf.Sign(desiredSpeed) * cliffJumpForce, cliffJumpForce));
+          appliedForce = new Vector2(Mathf.Sign(desiredSpeed) * cliffJumpForce, cliffJumpForce);
           // cliff jump effect
           GameObject cliffJumpEffect = GameObject.Instantiate(cliffJumpEffectPrefab);
           cliffJumpEffect.transform.position = forwardCliffJumpEffectPoint.position;
@@ -307,6 +309,9 @@ namespace Catsland.Scripts.Controller {
             new Vector2(rb2d.velocity.x * 0.8f, rb2d.velocity.y);
         }
       }
+
+      // Apply force
+      rb2d.AddForce(appliedForce);
 
       // Update facing
       if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon

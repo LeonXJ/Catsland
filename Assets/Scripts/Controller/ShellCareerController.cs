@@ -172,7 +172,6 @@ namespace Catsland.Scripts.Controller {
     }
 
     bool IDamageInterceptor.shouldSplashOnDamage(DamageInfo damageInfo) {
-      Debug.Log("Damage Interceptor, should splash? " + (curShellHeath <= 0));
       return curShellHeath <= 0;
     }
 

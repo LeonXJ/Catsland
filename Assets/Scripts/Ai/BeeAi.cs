@@ -39,7 +39,6 @@ namespace Catsland.Scripts.Ai {
     [Task]
     public void isPlayerInReactDistance() {
       if(playerSensor.isStay()) {
-        Debug.Log("Collide!!!");
         Task.current.Succeed();
       } else {
         Task.current.Fail();

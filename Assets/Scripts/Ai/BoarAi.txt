@@ -1,0 +1,7 @@
+tree("Root")
+  sequence
+    facePlayer()
+    doThrowStone()
+    Wait(0.5)
+    doCharge()
+    Wait(0.5)

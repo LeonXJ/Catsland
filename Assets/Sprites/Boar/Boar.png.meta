@@ -26,6 +26,7 @@ TextureImporter:
     21300042: Boar 10
     21300044: Boar 11
     21300046: Boar_Stand_0
+    21300048: Boar_Die_0
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -111,7 +112,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4a343ad2dcbaee54da2b18a09f4ba055
+      spriteID: 7677535089306d84abd4bf3423a67495
       vertices: []
       indices: 
       edges: []
@@ -131,7 +132,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4a69b82576a7a3e4db7ec9a69badb5d3
+      spriteID: 02542935fb062bd47b3163e995b59f97
       vertices: []
       indices: 
       edges: []
@@ -151,7 +152,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2781ba19946cf56449029c549b688dd3
+      spriteID: e176f550733127b49911e95326e08955
       vertices: []
       indices: 
       edges: []
@@ -171,7 +172,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 390a6c10eac8fb840889633e92dc84c4
+      spriteID: 9e42ba0f824682c479a50227f6687d36
       vertices: []
       indices: 
       edges: []
@@ -191,7 +192,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 07b208146e2a6ab458780d7595ee6f33
+      spriteID: c15a6a4c4e4c8f248a2e247a5cb03a46
       vertices: []
       indices: 
       edges: []
@@ -211,7 +212,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ee0a91f52cb3e2e4d9381b9c91a5a4f7
+      spriteID: 67aee0b24b471054eb9b92b5af89aa94
       vertices: []
       indices: 
       edges: []
@@ -231,7 +232,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1111419e28debb443a374034d02d55c5
+      spriteID: 8591f6f157902194781520aae2c296ee
       vertices: []
       indices: 
       edges: []
@@ -251,7 +252,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f960ae25f602ccf47baa1e90f118e0e1
+      spriteID: ec6471bc1f41be844a4f449c23654129
       vertices: []
       indices: 
       edges: []
@@ -271,7 +272,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f33bdb9408abc5d40b86c5d0c579aa81
+      spriteID: 240945e9261eba3479ef92da487a7150
       vertices: []
       indices: 
       edges: []
@@ -291,7 +292,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e3e528893ad2a764894e16393f37a6a7
+      spriteID: 0b6e1171a82e38b4bb90c468bc957a30
       vertices: []
       indices: 
       edges: []
@@ -311,7 +312,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9f19e11da4169b6479516ecdc5f40fd6
+      spriteID: 899f7e01335d0d64b93fb78e6c97be68
       vertices: []
       indices: 
       edges: []
@@ -331,7 +332,27 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b75d7b1c5faec7b42bb7dec8c4e86a5a
+      spriteID: 2699a8d50c52a2f40a6199b0b6f42d61
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boar_Die_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20cb45edb9923a34a98daeba4119bec2
       vertices: []
       indices: 
       edges: []

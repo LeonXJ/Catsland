@@ -21,6 +21,7 @@ namespace Catsland.Scripts.Controller {
       CHARGE = 2,
       THROW = 3,
       CLASH = 4,
+      DIE = 5,
     }
 
     private static readonly Dictionary<Status, string> STATUS_MAP;
@@ -34,6 +35,8 @@ namespace Catsland.Scripts.Controller {
     public int stoneNumber = 5;
     public float stoneSpeed = 8.0f;
     public int maxHealth = 3;
+    public GameObject dieEffectGoPrefab;
+    public Transform dieEffectPosition;
 
     public Status status = Status.IDEAL;
     public Status wantStatus = Status.IDEAL;
@@ -41,6 +44,8 @@ namespace Catsland.Scripts.Controller {
     private BoarInput input;
     private Animator animator;
     private int currentHealth = 3;
+    private bool isShaking = false;
+    public float shakingOffset = 0.1f;
 
     private ConsumableBool hasCharged = new ConsumableBool();
     private ConsumableBool hasThrowStone = new ConsumableBool();
@@ -48,6 +53,7 @@ namespace Catsland.Scripts.Controller {
     private static readonly string IS_PREPARING = "IsPreparing";
     private static readonly string IS_CHARGING = "IsCharging";
     private static readonly string THROW = "Throw";
+    private static readonly string IS_DEAD = "IsDead";
 
     static BoarController() {
       STATUS_MAP = new Dictionary<Status, string>();
@@ -56,6 +62,7 @@ namespace Catsland.Scripts.Controller {
       STATUS_MAP.Add(Status.CHARGE, "Charge");
       STATUS_MAP.Add(Status.CLASH, "Clash");
       STATUS_MAP.Add(Status.THROW, "Throw");
+      STATUS_MAP.Add(Status.DIE, "Die");
 
     }
 
@@ -68,7 +75,7 @@ namespace Catsland.Scripts.Controller {
 
     // Start is called before the first frame update
     void Start() {
-
+      currentHealth = maxHealth;
     }
 
     // Update is called once per frame
@@ -106,6 +113,11 @@ namespace Catsland.Scripts.Controller {
       } else {
         animator.ResetTrigger(THROW);
       }
+      if(isShaking) {
+        transform.position += new Vector3(
+          Random.Range(-shakingOffset, shakingOffset),
+          Random.Range(-shakingOffset, shakingOffset));
+      }
 
       // Set animator
       animator.SetBool(
@@ -114,6 +126,7 @@ namespace Catsland.Scripts.Controller {
         || wantStatus == Status.CHARGE
         || wantStatus == Status.THROW);
       animator.SetBool(IS_CHARGING, wantStatus == Status.CHARGE);
+      animator.SetBool(IS_DEAD, currentHealth <= 0);
     }
 
     public bool CanAdjustOrientation() {
@@ -145,6 +158,9 @@ namespace Catsland.Scripts.Controller {
         stoneRb2d.velocity = new Vector2(
           stoneSpeed * Mathf.Cos(curAngle * Mathf.Deg2Rad) * Utils.getOrientation(gameObject),
           stoneSpeed * Mathf.Sin(curAngle * Mathf.Deg2Rad));
+        stoneRb2d.angularVelocity = Random.Range(90.0f, 180.0f);
+        float scale = Random.Range(0.5f, 1.0f);
+        stone.transform.localScale = new Vector3(scale, scale, 1.0f);
 
         curAngle += stepAngle;
       }
@@ -159,6 +175,9 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void damage(DamageInfo damageInfo) {
+      if(currentHealth <= 0) {
+        return;
+      }
       currentHealth -= damageInfo.damage;
       if(currentHealth <= 0) {
         enterDie();
@@ -169,8 +188,25 @@ namespace Catsland.Scripts.Controller {
       rb2d.velocity = Vector2.zero;
     }
 
+    public void UnleashDieEffect() {
+      if(dieEffectGoPrefab != null) {
+        GameObject dieEffectGo = Instantiate(dieEffectGoPrefab);
+        dieEffectGo.transform.position = dieEffectPosition.position;
+      }
+      isShaking = false;
+    }
+
+    public void StopMovingAndStartShaking() {
+      rb2d.velocity = Vector2.zero;
+      isShaking = true;
+    }
+
     private void enterDie() {
-      Destroy(gameObject);
+      ContactDamage[] contactDamages = GetComponentsInChildren<ContactDamage>();
+      foreach(ContactDamage contactDamage in contactDamages) {
+        contactDamage.enabled = false;
+      }
+      rb2d.drag = 2f;
     }
 
     private void enterPrepare() {

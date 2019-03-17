@@ -19,6 +19,10 @@ namespace Catsland.Scripts.Bullets {
       onHit(collision);
     }
 
+    private void OnTriggerStay2D(Collider2D collision) {
+      onHit(collision);
+    }
+
     void onHit(Collision2D collision) {
       onHitGameObject(collision.collider);
     }

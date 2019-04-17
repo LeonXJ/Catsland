@@ -11,6 +11,7 @@ namespace Catsland.Scripts.Ai {
     public float distanceThreshold = 0.2f;
 
     public GameObject playerSensorGo;
+    public bool lockOn = false;
 
     private bool wantAttack;
     private Vector2 v;
@@ -24,6 +25,11 @@ namespace Catsland.Scripts.Ai {
       controller = GetComponent<BeeController>();
     }
 
+    void Start() {
+      TriggerBasedSensor sensor = playerSensor as TriggerBasedSensor;
+      sensor.whitelistGos.Add(Common.SceneConfig.getSceneConfig().GetPlayer());
+    }
+
     public bool attack() {
       return wantAttack;
     }
@@ -34,6 +40,15 @@ namespace Catsland.Scripts.Ai {
 
     public float getVertical() {
       return v.y;
+    }
+
+    [Task]
+    public void isLockOn() {
+      if(lockOn) {
+        Task.current.Succeed();
+      } else {
+        Task.current.Fail();
+      }
     }
 
     [Task]
@@ -70,16 +85,6 @@ namespace Catsland.Scripts.Ai {
         () => {
           wantAttack = true;
         });
-    }
-
-    // Start is called before the first frame update
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
     }
 
     public void resetStatus() {

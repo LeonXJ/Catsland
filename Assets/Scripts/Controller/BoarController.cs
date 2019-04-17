@@ -103,7 +103,7 @@ namespace Catsland.Scripts.Controller {
         if(isGroundDetected(frontSpaceDetector)) {
           exitCharge();
         } else {
-          rb2d.velocity = new Vector2(Utils.getOrientation(gameObject) * chargeSpeed, 0.0f);
+          rb2d.velocity = new Vector2(Utils.getOrientation(gameObject) * chargeSpeed, rb2d.velocity.y);
           wantStatus = Status.CHARGE;
         }
       }
@@ -238,12 +238,15 @@ namespace Catsland.Scripts.Controller {
     }
 
     private void updateStatusFromAnimator() {
+      status = ControllerUtils.GetStatusFromAnimator(animator, STATUS_MAP, Status.IDEAL);
+      // TODO: remove the following code after verify
+      /*
       foreach(KeyValuePair<Status, string> entry in STATUS_MAP) {
         if(animator.GetCurrentAnimatorStateInfo(0).IsName(entry.Value)) {
           status = entry.Key;
           return;
         }
-      }
+      }*/
     }
 
     public ArrowResult getArrowResult(ArrowCarrier arrowCarrier) {

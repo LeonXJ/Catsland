@@ -10,12 +10,6 @@ namespace Catsland.Scripts.Ai {
 
     private float horizontal;
 
-    enum MovingDirection {
-      LEFT = 0,
-      RIGHT,
-    }
-    private MovingDirection movingDirection = MovingDirection.LEFT;
-
     bool IInput.attack() {
       return false;
     }

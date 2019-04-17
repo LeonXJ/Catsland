@@ -7,10 +7,17 @@ namespace Catsland.Scripts.Controller {
   [ExecuteInEditMode]
   public class GrassModel: MonoBehaviour {
 
+    public enum SwingCenter {
+      BOTTOM,
+      TOP,
+    }
+
     public Sprite sprite;
     public float width = 1.0f;
     public float height = 0.3f;
     public float degree = 0.0f;
+    public bool randomInitPhase = true;
+    public SwingCenter swingCenter = SwingCenter.BOTTOM;
 
     // TODO: use global setting.
     public int pixelPerUnit = 25;
@@ -43,6 +50,12 @@ namespace Catsland.Scripts.Controller {
     private bool hasInitialized = false;
     private Vector3[] vertices;
 
+    private void Start() {
+      if(randomInitPhase) {
+        phase = Random.Range(0.0f, 360.0f);
+      }
+    }
+
     void Update() {
       if(!hasInitialized) {
         initializeMesh();
@@ -67,7 +80,7 @@ namespace Catsland.Scripts.Controller {
 
     private void updateTexture() {
       MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-      meshRenderer.sharedMaterial.mainTexture = sprite.texture;
+      meshRenderer.material.mainTexture = sprite.texture;
     }
 
     private void initializeMesh() {
@@ -77,10 +90,17 @@ namespace Catsland.Scripts.Controller {
 
       vertices = new Vector3[4];
 
-      vertices[0] = new Vector3(-width / 2.0f, height, 0.0f);
-      vertices[1] = new Vector3(width / 2.0f, height, 0.0f);
-      vertices[2] = new Vector3(-width / 2.0f, 0.0f, 0.0f);
-      vertices[3] = new Vector3(width / 2.0f, 0.0f, 0.0f);
+      if(swingCenter == SwingCenter.BOTTOM) {
+        vertices[0] = new Vector3(-width / 2.0f, height, 0.0f);
+        vertices[1] = new Vector3(width / 2.0f, height, 0.0f);
+        vertices[2] = new Vector3(-width / 2.0f, 0.0f, 0.0f);
+        vertices[3] = new Vector3(width / 2.0f, 0.0f, 0.0f);
+      } else if(swingCenter == SwingCenter.TOP) {
+        vertices[0] = new Vector3(-width / 2.0f, 0.0f, 0.0f);
+        vertices[1] = new Vector3(width / 2.0f, 0.0f, 0.0f);
+        vertices[2] = new Vector3(-width / 2.0f, -height, 0.0f);
+        vertices[3] = new Vector3(width / 2.0f, -height, 0.0f);
+      }
 
       mesh.vertices = vertices;
 
@@ -113,15 +133,26 @@ namespace Catsland.Scripts.Controller {
 
       Mesh mesh = GetComponent<MeshFilter>().sharedMesh;
 
-      Vector3 farendBias = new Vector3(
-        height * Mathf.Sin(Mathf.Deg2Rad * degree),
-        height * Mathf.Cos(Mathf.Deg2Rad * degree),
-        0.0f);
-      // Top-left -> Top-right -> Bottom-left -> Bottom-right
-      vertices[2] = new Vector3(-width * 0.5f, 0.0f, 0.0f);
-      vertices[3] = new Vector3(width * 0.5f, 0.0f, 0.0f);
-      vertices[0] = vertices[2] + farendBias;
-      vertices[1] = vertices[3] + farendBias;
+      if(swingCenter == SwingCenter.BOTTOM) {
+        Vector3 farendBias = new Vector3(
+          height * Mathf.Sin(Mathf.Deg2Rad * degree),
+          height * Mathf.Cos(Mathf.Deg2Rad * degree),
+          0.0f);
+        // Bottom-left -> Bottom-right -> Top-left -> Top-right
+        vertices[2] = new Vector3(-width * 0.5f, 0.0f, 0.0f);
+        vertices[3] = new Vector3(width * 0.5f, 0.0f, 0.0f);
+        vertices[0] = vertices[2] + farendBias;
+        vertices[1] = vertices[3] + farendBias;
+      } else if(swingCenter == SwingCenter.TOP) {
+        Vector3 farendBias = new Vector3(
+          height * Mathf.Sin(Mathf.Deg2Rad * degree),
+          -height * Mathf.Cos(Mathf.Deg2Rad * degree),
+          0.0f);
+        vertices[0] = new Vector3(-width * 0.5f, 0.0f, 0.0f);
+        vertices[1] = new Vector3(width * 0.5f, 0.0f, 0.0f);
+        vertices[2] = vertices[0] + farendBias;
+        vertices[3] = vertices[1] + farendBias;
+      }
 
       mesh.vertices = vertices;
       mesh.RecalculateBounds();

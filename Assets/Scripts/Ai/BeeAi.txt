@@ -1,6 +1,9 @@
 tree("Root")
   fallback
     sequence
+      isLockOn()
+      doCharge()
+    sequence
       isPlayerInReactDistance()
       doCharge()
     patrol()

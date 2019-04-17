@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Catsland.Scripts.Controller {
   public static class ControllerUtils {
@@ -21,5 +23,13 @@ namespace Catsland.Scripts.Controller {
       }
     }
 
+    public static T GetStatusFromAnimator<T>(Animator animator, Dictionary<T, string> statusMap, T defaultStatus) {
+      foreach(KeyValuePair<T, string> entry in statusMap) {
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName(entry.Value)) {
+          return entry.Key;
+        }
+      }
+      return defaultStatus;
+    }
   }
 }

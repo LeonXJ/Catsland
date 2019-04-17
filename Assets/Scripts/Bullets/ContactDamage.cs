@@ -6,42 +6,58 @@ namespace Catsland.Scripts.Bullets {
     public int damage;
     public float repelIntensity;
     public GameObject owner;
+    public bool isSmashAttack = false;
+    public bool canSmashAttakInStay = false;
+    public bool tryGetPartyTagFromParent = true;
+
+    public LayerMask includeLayer;
+
+    private PartyTag partyTag;
+
+    private void Start() {
+      partyTag = transform.parent.GetComponent<PartyTag>();
+    }
+
 
     void OnCollisionEnter2D(Collision2D collision) {
-      onHit(collision);
+      onHit(collision, false);
     }
 
     void OnTriggerEnter2D(Collider2D collider) {
-      onHit(collider);
+      onHit(collider, false);
     }
 
     void OnCollisionStay2D(Collision2D collision) {
-      onHit(collision);
+      onHit(collision, true);
     }
 
     private void OnTriggerStay2D(Collider2D collision) {
-      onHit(collision);
+      onHit(collision, true);
     }
 
-    void onHit(Collision2D collision) {
-      onHitGameObject(collision.collider);
+    void onHit(Collision2D collision, bool isStay) {
+      onHitGameObject(collision.collider, isStay);
     }
 
-    void onHit(Collider2D collider) {
-      onHitGameObject(collider);
+    void onHit(Collider2D collider, bool isStay) {
+      onHitGameObject(collider, isStay);
     }
 
-    private void onHitGameObject(Collider2D collider) {
+    private void onHitGameObject(Collider2D collider, bool isStay) {
       if(!enabled) {
         return;
       }
       GameObject collidingGameObject = collider.gameObject;
-      if(collidingGameObject.layer == Layers.LayerCharacter && collidingGameObject != owner) {
+
+      bool masked = (includeLayer & (1 << collider.gameObject.layer)) == 0x0;
+      PartyTag otherPartyTag = collidingGameObject.GetComponent<PartyTag>();
+      if(!masked && collidingGameObject != owner && PartyTag.ShouldTakeDamage(partyTag, otherPartyTag)) {
         Vector2 delta = collidingGameObject.transform.position - transform.position;
         collidingGameObject.SendMessage(
           MessageNames.DAMAGE_FUNCTION,
           new DamageInfo(
-            damage, collider.bounds.center, new Vector2(Mathf.Sign(delta.x), 0.0f), repelIntensity),
+            damage, collider.bounds.center, new Vector2(Mathf.Sign(delta.x), 0.0f), repelIntensity,
+            isSmashAttack && (canSmashAttakInStay || !isStay)),
           SendMessageOptions.DontRequireReceiver);
       }
     }

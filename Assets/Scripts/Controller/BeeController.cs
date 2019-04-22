@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Catsland.Scripts.Common;
 using Catsland.Scripts.Bullets;
+using Catsland.Scripts.Misc;
 
 namespace Catsland.Scripts.Controller {
   [RequireComponent(typeof(Rigidbody2D)), RequireComponent(typeof(BeeInput)), RequireComponent(typeof(Animator))]
@@ -30,6 +31,7 @@ namespace Catsland.Scripts.Controller {
     private Rigidbody2D rb2d;
     private BeeInput input;
     private Animator animator;
+    private DiamondGenerator diamondGenerator;
 
     private float currentPrepareTimeInSecond = 0.0f;
     private ConsumableBool hasCharged = new ConsumableBool();
@@ -41,6 +43,7 @@ namespace Catsland.Scripts.Controller {
       rb2d = GetComponent<Rigidbody2D>();
       input = GetComponent<BeeInput>();
       animator = GetComponent<Animator>();
+      diamondGenerator = GetComponent<DiamondGenerator>();
     }
 
     // Start is called before the first frame update
@@ -130,6 +133,9 @@ namespace Catsland.Scripts.Controller {
     }
 
     private void enterDie() {
+      if (diamondGenerator != null) {
+        diamondGenerator.Generate(5, 1);
+      }
       Destroy(gameObject);
     }
   }

@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: 66fb3660d6c36694897be20dd48ff896
+guid: 72d2e0813a3264d419ab41bb4a07665a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2957377806533565299
-    second: CliffTree_Trunk
+      213: -4592294069249941190
+    second: WarningStatusBig_untriggered
   - first:
-      213: 6340468578171225630
-    second: CliffTree_Leave
+      213: -4093858190779947721
+    second: WarningStatusBig_triggered
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -69,7 +69,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 3
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -80,7 +80,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 3
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -90,43 +90,43 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CliffTree_Trunk
+      name: WarningStatusBig_untriggered
       rect:
         serializedVersion: 2
-        x: 0
-        y: 22
-        width: 73
-        height: 22
+        x: 6
+        y: 0
+        width: 86
+        height: 126
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 981c1cebe86ef7b449ec20b18d8618f8
-      internalID: 2957377806533565299
+      spriteID: 9e1aabd7aab7e554abae03f7c396e292
+      internalID: -4592294069249941190
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CliffTree_Leave
+      name: WarningStatusBig_triggered
       rect:
         serializedVersion: 2
-        x: 0
+        x: 102
         y: 0
-        width: 73
-        height: 22
+        width: 86
+        height: 126
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 26cfbc0448a78074f953b2af3d1816cb
-      internalID: 6340468578171225630
+      spriteID: db695a140efdc784990c8838df83eaf1
+      internalID: -4093858190779947721
       vertices: []
       indices: 
       edges: []
@@ -134,7 +134,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 113266fb5e5b4c74fbdb89223b37ec9c
+    spriteID: a970525128f4159419e34d3d09050aae
     internalID: 0
     vertices: []
     indices: 

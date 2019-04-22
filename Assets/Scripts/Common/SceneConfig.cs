@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Catsland.Scripts.Camera;
+using Catsland.Scripts.Misc;
 
 namespace Catsland.Scripts.Common {
   public class SceneConfig: MonoBehaviour {
@@ -8,6 +9,7 @@ namespace Catsland.Scripts.Common {
 
     public UnityEngine.Camera MainCamera;
     public GlobalLightController globalLightController;
+    public ProgressManager progressManager;
 
     public GameObject player;
 
@@ -17,6 +19,7 @@ namespace Catsland.Scripts.Common {
 
     SceneConfig() {
       sceneConfig = this;
+      progressManager = new ProgressManager();
     }
 
     public GameObject GetPlayer() {
@@ -24,6 +27,10 @@ namespace Catsland.Scripts.Common {
         player = GameObject.FindGameObjectWithTag(Tags.PLAYER);
       }
       return player;
+    }
+
+    public ProgressManager getProgressManager() {
+      return progressManager;
     }
   }
 }

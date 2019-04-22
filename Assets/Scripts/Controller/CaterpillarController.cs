@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Catsland.Scripts.Bullets;
+using Catsland.Scripts.Misc;
 
 namespace Catsland.Scripts.Controller {
   [RequireComponent(typeof(Rigidbody2D)), RequireComponent(typeof(Animator)), RequireComponent(typeof(CaterpillarController))]
@@ -25,7 +26,8 @@ namespace Catsland.Scripts.Controller {
     private Status status;
     private int currentHp;
     private static readonly Dictionary<Status, string> STATUS_MAP;
-
+    private DiamondGenerator diamondGenerator;
+    
     private static readonly string H_ABS_SPEED = "HAbsSpeed";
 
     static CaterpillarController() {
@@ -39,6 +41,7 @@ namespace Catsland.Scripts.Controller {
       rb2d = GetComponent<Rigidbody2D>();
       animator = GetComponent<Animator>();
       input = GetComponent<CaterpillarInput>();
+      diamondGenerator = GetComponent<DiamondGenerator>();
     }
 
 
@@ -85,6 +88,9 @@ namespace Catsland.Scripts.Controller {
     }
 
     private void enterDie() {
+      if (diamondGenerator != null) {
+        diamondGenerator.Generate(3, 1);
+      }
       Destroy(gameObject);
     }
   }

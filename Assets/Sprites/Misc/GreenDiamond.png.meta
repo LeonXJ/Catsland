@@ -1,13 +1,22 @@
 fileFormatVersion: 2
-guid: 66fb3660d6c36694897be20dd48ff896
+guid: 58826ad3a06660e448963a45250788ae
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2957377806533565299
-    second: CliffTree_Trunk
+      213: 2866716853901922351
+    second: GreenDiamond_0
   - first:
-      213: 6340468578171225630
-    second: CliffTree_Leave
+      213: -1470938856185901122
+    second: GreenDiamond_1
+  - first:
+      213: 4306120298893915810
+    second: GreenDiamond_2
+  - first:
+      213: -7632079442852336453
+    second: GreenDiamond_3
+  - first:
+      213: -8637148901966603155
+    second: GreenDiamond_4
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -69,7 +78,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 3
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -80,7 +89,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 3
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -90,13 +99,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CliffTree_Trunk
+      name: GreenDiamond_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 22
-        width: 73
-        height: 22
+        y: 0
+        width: 8
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -104,20 +113,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 981c1cebe86ef7b449ec20b18d8618f8
-      internalID: 2957377806533565299
+      spriteID: 547eb99d2369e144796d2f97fa03a6b5
+      internalID: 2866716853901922351
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CliffTree_Leave
+      name: GreenDiamond_1
       rect:
         serializedVersion: 2
-        x: 0
+        x: 8
         y: 0
-        width: 73
-        height: 22
+        width: 8
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -125,8 +134,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 26cfbc0448a78074f953b2af3d1816cb
-      internalID: 6340468578171225630
+      spriteID: 309c853338c3c4e42960574312528b03
+      internalID: -1470938856185901122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenDiamond_2
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 0
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0c0c2dc953f11646af71a354944a076
+      internalID: 4306120298893915810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenDiamond_3
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 0
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e18472a7662a4248946e82fc6f7d096
+      internalID: -7632079442852336453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenDiamond_4
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e2c1f9b0f2e7a84a8f01240bfda4b37
+      internalID: -8637148901966603155
       vertices: []
       indices: 
       edges: []
@@ -134,7 +206,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 113266fb5e5b4c74fbdb89223b37ec9c
+    spriteID: 02b15dea66b7ec048bd845ef62f5c752
     internalID: 0
     vertices: []
     indices: 

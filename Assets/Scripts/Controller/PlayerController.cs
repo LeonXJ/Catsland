@@ -66,6 +66,7 @@ namespace Catsland.Scripts.Controller {
     public float immutableTime = 0.5f;
     private bool isDizzy = false;
     private float lastGetDamagedTime = 0.0f;
+    public int score = 0;
 
     // References
     public GameObject groundSensorGO;
@@ -85,7 +86,6 @@ namespace Catsland.Scripts.Controller {
     public Animator damageEffectAnimator;
     public ParticleSystem damageEffectParticleSystem;
     private ISensor groundSensor;
-    private ISensor headSensor;
     private ISensor backSensor;
     private ISensor frontSensor;
     private IInput input;
@@ -111,7 +111,6 @@ namespace Catsland.Scripts.Controller {
       input = GetComponent<IInput>();
       rb2d = GetComponent<Rigidbody2D>();
       groundSensor = groundSensorGO.GetComponent<ISensor>();
-      headSensor = headSenserGo.GetComponent<ISensor>();
       frontSensor = frontSensorGo.GetComponent<ISensor>();
       backSensor = backSensorGo.GetComponent<ISensor>();
       animator = GetComponent<Animator>();
@@ -362,7 +361,7 @@ namespace Catsland.Scripts.Controller {
       currentHealth -= damageInfo.damage;
       if(currentHealth <= 0) {
         // Die
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneConfig.getSceneConfig().getProgressManager().Load();
       } else {
         // Dizzy
         StartCoroutine(dizzy());

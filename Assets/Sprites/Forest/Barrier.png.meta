@@ -1,13 +1,7 @@
 fileFormatVersion: 2
-guid: 66fb3660d6c36694897be20dd48ff896
+guid: c64023f7445aa684095f10933de08db0
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 2957377806533565299
-    second: CliffTree_Trunk
-  - first:
-      213: 6340468578171225630
-    second: CliffTree_Leave
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -46,7 +40,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -69,7 +63,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 3
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -80,7 +74,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 3
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -88,53 +82,11 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: CliffTree_Trunk
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 22
-        width: 73
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 981c1cebe86ef7b449ec20b18d8618f8
-      internalID: 2957377806533565299
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: CliffTree_Leave
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 73
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 26cfbc0448a78074f953b2af3d1816cb
-      internalID: 6340468578171225630
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 113266fb5e5b4c74fbdb89223b37ec9c
+    spriteID: d17df01845dac76409026e929b0d7f30
     internalID: 0
     vertices: []
     indices: 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Controller {
@@ -7,23 +8,11 @@ namespace Catsland.Scripts.Controller {
   [ExecuteInEditMode]
   public class GrassModel: MonoBehaviour {
 
+    // The center of swing.
     public enum SwingCenter {
       BOTTOM,
       TOP,
     }
-
-    public Sprite sprite;
-    public float width = 1.0f;
-    public float height = 0.3f;
-    public float degree = 0.0f;
-    public bool randomInitPhase = true;
-    public SwingCenter swingCenter = SwingCenter.BOTTOM;
-
-    // TODO: use global setting.
-    public int pixelPerUnit = 25;
-
-    // Stop updating grass swinging if the camera is further than this distance.
-    public float stopUpdateDistance = 10.0f;
 
     // Whether and how the grass is pressed.
     public enum PressStatus {
@@ -31,24 +20,69 @@ namespace Catsland.Scripts.Controller {
       LEFT = 1,
       RIGHT = 2,
     }
-    public PressStatus pressStatus = PressStatus.NONE;
-    public float maxSwingSpeed = 45.0f;
+
+    // Mesh and sprite attributes.
+    public Sprite sprite;
+    public float width = 1.0f;
+    public float height = 0.3f;
+
+    private Vector3[] vertices;
+
+    // Movement attributes.
+    public SwingCenter swingCenter = SwingCenter.BOTTOM;
+
+    // Value range of centerDegree.
+    public float maxCenterDegree = 80.0f;
+
+    // Center restoring speed degree per second.
+    public float centerRestoringDegreeSpeed = 45.0f;
+
+    // Range of frequency, ~swingCenter.
+    public Vector2 frequencyRange = new Vector2(100.0f, 1000.0f);
+
+    // Range of swing amp in degree, ~1/swingCenter.
+    public Vector2 ampRangeDegree = new Vector2(5.0f, 20.0f);
+
+    // Grass swings around center. 0.0 means middle. Value is within CenterRange.
+    // for debugging
+    public float centerDegree = 0.0f;
+
+    // frequency = [minFrequency, maxFrequency] ~ centerDegree
+    private float frequency = 10.0f;
 
     // Following attributes are used when pressStatus is NONE.
-    // Phase of the swing cycle.
-    // Swing as: 
-    //   degree = center + Sin(phase) * amp
-    //   amp = maxDegree - | center |
-    public float phase = 0.0f;
-    public float maxDegree = 45.0f;
-    public float center = 0.0f;
-    public float frequency = 10.0f;
+    // Degree of swing is calculate as:
+    // 1. phase = frequency * t
+    // 2. target_degree = centerDegree + Sin(phase) * amp
+    // 3. degree = lerp(target_degree, degree)
+
+    // phase is in range of [.0f, 360.0f]
+    private float phase = 0.0f;
+    private float degree = 0.0f;
+
+    // The winds which affect this grass.
+    // for debugging
+    public HashSet<IWind> winds = new HashSet<IWind>();
+
+    private PressStatus pressStatus = PressStatus.NONE;
+
+
+    // Movement updating attributes.
+
+    // Whether to assign a random init phase.
+    public bool randomInitPhase = true;
+
+    // Stop updating grass swinging if the camera is further than this distance.
+    public float stopUpdateDistance = 10.0f;
+
+    // Whether the mesh has been created.
+    private bool hasInitialized = false;
+
+    // How fast is the degree changes towards target degree.
+    public float maxSwingSpeed = 45.0f;
 
     // Max degree when pressStatus is LEFT/RIGHT.
     public float maxPressDegree = 80.0f;
-
-    private bool hasInitialized = false;
-    private Vector3[] vertices;
 
     private void Start() {
       if(randomInitPhase) {
@@ -61,6 +95,7 @@ namespace Catsland.Scripts.Controller {
         initializeMesh();
       }
       if(Application.isPlaying && isInMainCamera()) {
+        updateWinds();
         updateDegree();
         updateVertices();
         updateTexture();
@@ -68,6 +103,11 @@ namespace Catsland.Scripts.Controller {
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
+      IWind wind = collision.gameObject.GetComponent<IWind>();
+      if (wind != null && !winds.Contains(wind)) {
+        winds.Add(wind);
+        return;
+      }
       Rigidbody2D rigidbody = collision.GetComponent<Rigidbody2D>();
       if(rigidbody != null) {
         pressStatus = rigidbody.velocity.x > 0.0f ? PressStatus.RIGHT : PressStatus.LEFT;
@@ -75,6 +115,11 @@ namespace Catsland.Scripts.Controller {
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
+      IWind wind = collision.gameObject.GetComponent<IWind>();
+      if (wind != null && winds.Contains(wind)) {
+        winds.Remove(wind);
+        return;
+      }
       pressStatus = PressStatus.NONE;
     }
 
@@ -103,7 +148,6 @@ namespace Catsland.Scripts.Controller {
       }
 
       mesh.vertices = vertices;
-
       int[] triangles = new int[6];
 
       triangles[0] = 0;
@@ -158,6 +202,26 @@ namespace Catsland.Scripts.Controller {
       mesh.RecalculateBounds();
     }
 
+    private void updateWinds() {
+      // Calcuate total wind force.
+      float power = 0.0f;
+      winds.RemoveWhere(wind => wind == null);
+      foreach (IWind wind in winds) {
+        power += wind.GetWindPower();
+      }
+
+      if (power * power > 0.01f) {
+        float absPower = Mathf.Abs(power);
+        float absCenter = Mathf.Min(absPower, maxCenterDegree);
+        centerDegree = Mathf.Sign(power) * absCenter;
+        frequency = Mathf.Lerp(frequencyRange.x, frequencyRange.y, absCenter / maxCenterDegree);
+      } else {
+        // No wind, restoring centerDegree.
+        centerDegree = Mathf.Lerp(centerDegree, 0.0f, centerRestoringDegreeSpeed * Time.deltaTime);
+        frequency = Mathf.Lerp(frequencyRange.x, frequencyRange.y, Mathf.Abs(centerDegree) / maxCenterDegree);
+      }
+    }
+
     public void UpdateSize() {
       if(sprite != null) {
         width = sprite.rect.width / sprite.pixelsPerUnit;
@@ -171,9 +235,8 @@ namespace Catsland.Scripts.Controller {
         phase += Time.deltaTime * frequency;
         phase -= 360.0f * Mathf.Floor(phase / 360.0f);
 
-        float realAmp = maxDegree - Mathf.Min(Mathf.Abs(center), maxDegree);
-        //degree = Mathf.Lerp(degree, center + Mathf.Sin(Mathf.Deg2Rad * phase) * realAmp, Time.deltaTime * frequency);
-        targetDegree = center + Mathf.Sin(Mathf.Deg2Rad * phase) * realAmp;
+        float realAmp = Mathf.Lerp(ampRangeDegree.x, ampRangeDegree.y, 1.0f - Mathf.Abs(centerDegree) / maxCenterDegree);
+        targetDegree = centerDegree + Mathf.Sin(Mathf.Deg2Rad * phase) * realAmp;
       } else {
         targetDegree = pressStatus == PressStatus.LEFT ? -maxPressDegree : maxPressDegree;
       }

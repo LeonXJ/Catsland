@@ -25,6 +25,8 @@ namespace Catsland.Scripts.Controller {
     public Sprite sprite;
     public float width = 1.0f;
     public float height = 0.3f;
+    public int heightSegment = 2;
+
 
     private Vector3[] vertices;
 
@@ -133,23 +135,68 @@ namespace Catsland.Scripts.Controller {
       Mesh mesh = new Mesh();
       meshFilter.sharedMesh = mesh;
 
-      vertices = new Vector3[4];
+      int vertexCount = (heightSegment + 1) * 2;
+      //vertices = new Vector3[4];
+      //Vector3[] normals = new Vector3[4];
+      vertices = new Vector3[vertexCount];
+      Vector3[] normals = new Vector3[vertexCount];
+      Vector2[] uvs = new Vector2[vertexCount];
+
+      float halfWidth = width * 0.5f;
+      float segmentHeight = height / heightSegment;
+
+      Vector2 leftBottomUv = sprite.uv[2];
+      Vector2 rightBottomUv = sprite.uv[3];
+      Vector2 leftTopUv = sprite.uv[0];
 
       if(swingCenter == SwingCenter.BOTTOM) {
+        /*
         vertices[0] = new Vector3(-width / 2.0f, height, 0.0f);
         vertices[1] = new Vector3(width / 2.0f, height, 0.0f);
         vertices[2] = new Vector3(-width / 2.0f, 0.0f, 0.0f);
         vertices[3] = new Vector3(width / 2.0f, 0.0f, 0.0f);
+        */
+
+        for (int i = 0; i < (heightSegment + 1); i++) {
+          float y = segmentHeight * i;
+          vertices[i * 2] = new Vector3(-halfWidth, y, 0.0f);
+          vertices[i * 2 + 1] = new Vector3(halfWidth, y, 0.0f);
+
+          normals[i * 2] = -Vector3.forward;
+          normals[i * 2 + 1] = -Vector3.forward;
+
+          float ratio = (float)i / heightSegment;
+          float uvY = Mathf.Lerp(leftBottomUv.y, leftTopUv.y, ratio);
+          uvs[i * 2] = new Vector2(leftBottomUv.x, uvY);
+          uvs[i * 2 + 1] = new Vector2(rightBottomUv.x, uvY);
+        }
+
       } else if(swingCenter == SwingCenter.TOP) {
-        vertices[0] = new Vector3(-width / 2.0f, 0.0f, 0.0f);
-        vertices[1] = new Vector3(width / 2.0f, 0.0f, 0.0f);
-        vertices[2] = new Vector3(-width / 2.0f, -height, 0.0f);
-        vertices[3] = new Vector3(width / 2.0f, -height, 0.0f);
+        for (int i = 0; i < (heightSegment + 1); i++) {
+          float y = -segmentHeight * i;
+          vertices[i * 2] = new Vector3(-halfWidth, y, 0.0f);
+          vertices[i * 2 + 1] = new Vector3(halfWidth, y, 0.0f);
+
+          normals[i * 2] = -Vector3.forward;
+          normals[i * 2 + 1] = -Vector3.forward;
+
+          float ratio = (float)i / heightSegment;
+          float uvY = Mathf.Lerp(leftTopUv.y, leftBottomUv.y, ratio);
+          uvs[i * 2] = new Vector2(leftBottomUv.x, uvY);
+          uvs[i * 2 + 1] = new Vector2(rightBottomUv.x, uvY);
+        }
       }
 
       mesh.vertices = vertices;
-      int[] triangles = new int[6];
+      mesh.normals = normals;
+      mesh.uv = uvs;
 
+      int triangleCount = heightSegment * 2;
+
+      int[] triangles = new int[triangleCount * 3];
+      // int[] triangles = new int[6];
+
+      /*
       triangles[0] = 0;
       triangles[1] = 2;
       triangles[2] = 1;
@@ -157,18 +204,35 @@ namespace Catsland.Scripts.Controller {
       triangles[3] = 2;
       triangles[4] = 3;
       triangles[5] = 1;
+      */
+
+      for (int i = 0; i < heightSegment; i++) {
+        int baseVertexIndex = i * 2;
+        int baseTriangleIndex = i * 2 * 3;
+
+        // left top triangle
+        triangles[baseTriangleIndex] = baseVertexIndex + 2;
+        triangles[baseTriangleIndex + 1] = baseVertexIndex;
+        triangles[baseTriangleIndex + 2] = baseVertexIndex + 3;
+
+        // Right bottom triangle
+        triangles[baseTriangleIndex + 3] = baseVertexIndex;
+        triangles[baseTriangleIndex + 4] = baseVertexIndex + 1;
+        triangles[baseTriangleIndex + 5] = baseVertexIndex + 3;
+      }
 
       mesh.triangles = triangles;
 
+      /*
       Vector3[] normals = new Vector3[4];
 
       normals[0] = -Vector3.forward;
       normals[1] = -Vector3.forward;
       normals[2] = -Vector3.forward;
       normals[3] = -Vector3.forward;
+      */
 
-      mesh.normals = normals;
-      mesh.uv = sprite.uv;
+
 
       hasInitialized = true;
     }
@@ -178,24 +242,36 @@ namespace Catsland.Scripts.Controller {
       Mesh mesh = GetComponent<MeshFilter>().sharedMesh;
 
       if(swingCenter == SwingCenter.BOTTOM) {
-        Vector3 farendBias = new Vector3(
-          height * Mathf.Sin(Mathf.Deg2Rad * degree),
-          height * Mathf.Cos(Mathf.Deg2Rad * degree),
-          0.0f);
-        // Bottom-left -> Bottom-right -> Top-left -> Top-right
-        vertices[2] = new Vector3(-width * 0.5f, 0.0f, 0.0f);
-        vertices[3] = new Vector3(width * 0.5f, 0.0f, 0.0f);
-        vertices[0] = vertices[2] + farendBias;
-        vertices[1] = vertices[3] + farendBias;
+        float segmentLength = height / heightSegment;
+        float halfWidth = width * 0.5f;
+        for (int i = 0; i < heightSegment + 1; i++) {
+          float length = segmentLength * i;
+          float ratio = (float) i / heightSegment;
+          float segDegree = Mathf.Lerp(centerDegree, degree, ratio);
+
+          Vector3 offset = new Vector3(
+            length * Mathf.Sin(Mathf.Deg2Rad * segDegree),
+            length * Mathf.Cos(Mathf.Deg2Rad * segDegree),
+            0.0f);
+          vertices[i * 2] = new Vector3(-halfWidth, 0.0f, 0.0f) + offset;
+          vertices[i * 2 + 1] = new Vector3(halfWidth, 0.0f, 0.0f) + offset;
+        }
+
       } else if(swingCenter == SwingCenter.TOP) {
-        Vector3 farendBias = new Vector3(
-          height * Mathf.Sin(Mathf.Deg2Rad * degree),
-          -height * Mathf.Cos(Mathf.Deg2Rad * degree),
-          0.0f);
-        vertices[0] = new Vector3(-width * 0.5f, 0.0f, 0.0f);
-        vertices[1] = new Vector3(width * 0.5f, 0.0f, 0.0f);
-        vertices[2] = vertices[0] + farendBias;
-        vertices[3] = vertices[1] + farendBias;
+        float segmentLength = height / heightSegment;
+        float halfWidth = width * 0.5f;
+        for (int i = 0; i < heightSegment + 1; i++) {
+          float length = segmentLength * i;
+          float ratio = (float) i / heightSegment;
+          float segDegree = Mathf.Lerp(centerDegree, degree, ratio);
+
+          Vector3 offset = new Vector3(
+            length * Mathf.Sin(Mathf.Deg2Rad * segDegree),
+            -length * Mathf.Cos(Mathf.Deg2Rad * segDegree),
+            0.0f);
+          vertices[i * 2] = new Vector3(-halfWidth, 0.0f, 0.0f) + offset;
+          vertices[i * 2 + 1] = new Vector3(halfWidth, 0.0f, 0.0f) + offset;
+        }
       }
 
       mesh.vertices = vertices;

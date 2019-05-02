@@ -4,8 +4,8 @@ using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Misc;
 
 namespace Catsland.Scripts.Controller {
-  [RequireComponent(typeof(Rigidbody2D)), RequireComponent(typeof(Animator)), RequireComponent(typeof(CaterpillarController))]
-  public class CaterpillarController: MonoBehaviour {
+  [RequireComponent(typeof(SpriteRenderer)), RequireComponent(typeof(Rigidbody2D)), RequireComponent(typeof(Animator)), RequireComponent(typeof(CaterpillarController))]
+  public class CaterpillarController : MonoBehaviour {
 
     public enum Status {
       IDEAL = 0,
@@ -19,6 +19,8 @@ namespace Catsland.Scripts.Controller {
 
     public float runningSpeed = 0.5f;
     public int maxHp = 3;
+    public Color camelflagColor;
+    public float colorChangeSpeed = 0.1f;
 
     private Rigidbody2D rb2d;
     private Animator animator;
@@ -27,7 +29,8 @@ namespace Catsland.Scripts.Controller {
     private int currentHp;
     private static readonly Dictionary<Status, string> STATUS_MAP;
     private DiamondGenerator diamondGenerator;
-    
+    private SpriteRenderer renderer;
+
     private static readonly string H_ABS_SPEED = "HAbsSpeed";
 
     static CaterpillarController() {
@@ -42,6 +45,7 @@ namespace Catsland.Scripts.Controller {
       animator = GetComponent<Animator>();
       input = GetComponent<CaterpillarInput>();
       diamondGenerator = GetComponent<DiamondGenerator>();
+      renderer = GetComponent<SpriteRenderer>();
     }
 
 
@@ -56,11 +60,22 @@ namespace Catsland.Scripts.Controller {
       Vector2 wantDirection = new Vector2(input.getHorizontal(), 0.0f).normalized;
       status = ControllerUtils.GetStatusFromAnimator(animator, STATUS_MAP, Status.IDEAL);
 
-      if(CanChangeOrientation()) {
+      if (status == Status.IDEAL) {
+        renderer.material.SetColor("_Color", Color.Lerp(renderer.material.GetColor("_Color"), Color.black, colorChangeSpeed * Time.deltaTime));
+        renderer.material.SetColor("_AmbientLight", Color.Lerp(renderer.material.GetColor("_AmbientLight"), camelflagColor, colorChangeSpeed * Time.deltaTime));
+        rb2d.gravityScale = 0.0f;
+        rb2d.velocity = Vector2.zero;
+      } else {
+        renderer.material.SetColor("_Color", Color.Lerp(renderer.material.GetColor("_Color"), Color.white, colorChangeSpeed * Time.deltaTime));
+        renderer.material.SetColor("_AmbientLight", Color.Lerp(renderer.material.GetColor("_AmbientLight"), Color.black, colorChangeSpeed * Time.deltaTime));
+        rb2d.gravityScale = 1.0f;
+      }
+
+      if (CanChangeOrientation()) {
         ControllerUtils.AdjustOrientation(wantDirection.x, gameObject);
       }
 
-      if(CanMove()) {
+      if (CanMove()) {
         rb2d.velocity = new Vector2(wantDirection.x * runningSpeed, rb2d.velocity.y);
       }
 
@@ -78,11 +93,11 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void damage(DamageInfo damageInfo) {
-      if(currentHp <= 0) {
+      if (currentHp <= 0) {
         return;
       }
       currentHp -= damageInfo.damage;
-      if(currentHp <= 0) {
+      if (currentHp <= 0) {
         enterDie();
       }
     }

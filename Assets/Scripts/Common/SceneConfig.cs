@@ -13,8 +13,14 @@ namespace Catsland.Scripts.Common {
 
     public GameObject player;
 
+    private CameraController cameraController;
+
     public static SceneConfig getSceneConfig() {
       return sceneConfig;
+    }
+
+    private void Awake() {
+      cameraController = MainCamera.GetComponent<CameraController>();
     }
 
     SceneConfig() {
@@ -31,6 +37,10 @@ namespace Catsland.Scripts.Common {
 
     public ProgressManager getProgressManager() {
       return progressManager;
+    }
+
+    public CameraController GetCameraController() {
+      return cameraController;
     }
   }
 }

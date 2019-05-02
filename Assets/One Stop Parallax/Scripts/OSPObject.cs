@@ -22,7 +22,7 @@ namespace OSP
         /// Gets the sprite bounds. Used for calculations needing the size of the sprite.
         /// </summary>
         /// <value>The sprite bounds.</value>
-        public Bounds SpriteBounds { get { return sRenderer.bounds; } }
+        public Bounds SpriteBounds { get { return (sRenderer == null) ? new Bounds() : sRenderer.bounds; } }
 
         /// <summary>
         /// Determines whether the layer should use parallax on the X axis.

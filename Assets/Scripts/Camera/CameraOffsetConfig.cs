@@ -2,7 +2,7 @@
 using Catsland.Scripts.Controller;
 
 namespace Catsland.Scripts.Camera {
-  public class GlobalLightConfig: StackEffectConfig {
-    public Color color;
+  public class CameraOffsetConfig : StackEffectConfig {
+    public Vector2 offset;
   }
 }

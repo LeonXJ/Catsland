@@ -6,7 +6,7 @@ namespace Catsland.Scripts.Controller {
   [RequireComponent(typeof(MeshRenderer))]
   [RequireComponent(typeof(MeshFilter))]
   [ExecuteInEditMode]
-  public class GrassModel: MonoBehaviour {
+  public class GrassModel : MonoBehaviour {
 
     // The center of swing.
     public enum SwingCenter {
@@ -87,16 +87,16 @@ namespace Catsland.Scripts.Controller {
     public float maxPressDegree = 80.0f;
 
     private void Start() {
-      if(randomInitPhase) {
+      if (randomInitPhase) {
         phase = Random.Range(0.0f, 360.0f);
       }
     }
 
     void Update() {
-      if(!hasInitialized) {
+      if (!hasInitialized) {
         initializeMesh();
       }
-      if(Application.isPlaying && isInMainCamera()) {
+      if (Application.isPlaying && isInMainCamera()) {
         updateWinds();
         updateDegree();
         updateVertices();
@@ -111,7 +111,7 @@ namespace Catsland.Scripts.Controller {
         return;
       }
       Rigidbody2D rigidbody = collision.GetComponent<Rigidbody2D>();
-      if(rigidbody != null) {
+      if (rigidbody != null) {
         pressStatus = rigidbody.velocity.x > 0.0f ? PressStatus.RIGHT : PressStatus.LEFT;
       }
     }
@@ -149,42 +149,35 @@ namespace Catsland.Scripts.Controller {
       Vector2 rightBottomUv = sprite.uv[3];
       Vector2 leftTopUv = sprite.uv[0];
 
-      if(swingCenter == SwingCenter.BOTTOM) {
-        /*
-        vertices[0] = new Vector3(-width / 2.0f, height, 0.0f);
-        vertices[1] = new Vector3(width / 2.0f, height, 0.0f);
-        vertices[2] = new Vector3(-width / 2.0f, 0.0f, 0.0f);
-        vertices[3] = new Vector3(width / 2.0f, 0.0f, 0.0f);
-        */
+      float ky = 1.0f;
+      float uvYStart = leftBottomUv.y;
+      float uvYEnd = leftTopUv.y;
 
-        for (int i = 0; i < (heightSegment + 1); i++) {
-          float y = segmentHeight * i;
-          vertices[i * 2] = new Vector3(-halfWidth, y, 0.0f);
-          vertices[i * 2 + 1] = new Vector3(halfWidth, y, 0.0f);
+      switch (swingCenter) {
+        case SwingCenter.BOTTOM:
+        ky = 1.0f;
+        uvYStart = leftBottomUv.y;
+        uvYEnd = leftTopUv.y;
+        break;
+        case SwingCenter.TOP:
+        ky = -1.0f;
+        uvYStart = leftTopUv.y;
+        uvYEnd = leftBottomUv.y;
+        break;
+      }
 
-          normals[i * 2] = -Vector3.forward;
-          normals[i * 2 + 1] = -Vector3.forward;
+      for (int i = 0; i < (heightSegment + 1); i++) {
+        float y = ky * segmentHeight * i;
+        vertices[i * 2] = new Vector3(-halfWidth, y, 0.0f);
+        vertices[i * 2 + 1] = new Vector3(halfWidth, y, 0.0f);
 
-          float ratio = (float)i / heightSegment;
-          float uvY = Mathf.Lerp(leftBottomUv.y, leftTopUv.y, ratio);
-          uvs[i * 2] = new Vector2(leftBottomUv.x, uvY);
-          uvs[i * 2 + 1] = new Vector2(rightBottomUv.x, uvY);
-        }
+        normals[i * 2] = -Vector3.forward;
+        normals[i * 2 + 1] = -Vector3.forward;
 
-      } else if(swingCenter == SwingCenter.TOP) {
-        for (int i = 0; i < (heightSegment + 1); i++) {
-          float y = -segmentHeight * i;
-          vertices[i * 2] = new Vector3(-halfWidth, y, 0.0f);
-          vertices[i * 2 + 1] = new Vector3(halfWidth, y, 0.0f);
-
-          normals[i * 2] = -Vector3.forward;
-          normals[i * 2 + 1] = -Vector3.forward;
-
-          float ratio = (float)i / heightSegment;
-          float uvY = Mathf.Lerp(leftTopUv.y, leftBottomUv.y, ratio);
-          uvs[i * 2] = new Vector2(leftBottomUv.x, uvY);
-          uvs[i * 2 + 1] = new Vector2(rightBottomUv.x, uvY);
-        }
+        float ratio = (float)i / heightSegment;
+        float uvY = Mathf.Lerp(uvYStart, uvYEnd, ratio);
+        uvs[i * 2] = new Vector2(leftBottomUv.x, uvY);
+        uvs[i * 2 + 1] = new Vector2(rightBottomUv.x, uvY);
       }
 
       mesh.vertices = vertices;
@@ -192,19 +185,7 @@ namespace Catsland.Scripts.Controller {
       mesh.uv = uvs;
 
       int triangleCount = heightSegment * 2;
-
       int[] triangles = new int[triangleCount * 3];
-      // int[] triangles = new int[6];
-
-      /*
-      triangles[0] = 0;
-      triangles[1] = 2;
-      triangles[2] = 1;
-
-      triangles[3] = 2;
-      triangles[4] = 3;
-      triangles[5] = 1;
-      */
 
       for (int i = 0; i < heightSegment; i++) {
         int baseVertexIndex = i * 2;
@@ -222,18 +203,6 @@ namespace Catsland.Scripts.Controller {
       }
 
       mesh.triangles = triangles;
-
-      /*
-      Vector3[] normals = new Vector3[4];
-
-      normals[0] = -Vector3.forward;
-      normals[1] = -Vector3.forward;
-      normals[2] = -Vector3.forward;
-      normals[3] = -Vector3.forward;
-      */
-
-
-
       hasInitialized = true;
     }
 
@@ -241,41 +210,24 @@ namespace Catsland.Scripts.Controller {
 
       Mesh mesh = GetComponent<MeshFilter>().sharedMesh;
 
-      if(swingCenter == SwingCenter.BOTTOM) {
-        float segmentLength = height / heightSegment;
-        float halfWidth = width * 0.5f;
-        for (int i = 0; i < heightSegment + 1; i++) {
-          float length = segmentLength * i;
-          float ratio = (float) i / heightSegment;
-          float segDegree = Mathf.Lerp(centerDegree, degree, ratio);
+      float ky = swingCenter == SwingCenter.BOTTOM ? 1.0f : -1.0f;
+      float segmentLength = height / heightSegment;
+      float halfWidth = width * 0.5f;
+      for (int i = 0; i < heightSegment + 1; i++) {
+        float length = segmentLength * i;
+        float ratio = (float)i / heightSegment;
+        float segDegree = Mathf.Lerp(centerDegree, degree, ratio);
 
-          Vector3 offset = new Vector3(
-            length * Mathf.Sin(Mathf.Deg2Rad * segDegree),
-            length * Mathf.Cos(Mathf.Deg2Rad * segDegree),
-            0.0f);
-          vertices[i * 2] = new Vector3(-halfWidth, 0.0f, 0.0f) + offset;
-          vertices[i * 2 + 1] = new Vector3(halfWidth, 0.0f, 0.0f) + offset;
-        }
+        Vector3 offset = new Vector3(
+          length * Mathf.Sin(Mathf.Deg2Rad * segDegree),
+          ky * length * Mathf.Cos(Mathf.Deg2Rad * segDegree),
+          0.0f);
+        vertices[i * 2] = new Vector3(-halfWidth, 0.0f, 0.0f) + offset;
+        vertices[i * 2 + 1] = new Vector3(halfWidth, 0.0f, 0.0f) + offset;
 
-      } else if(swingCenter == SwingCenter.TOP) {
-        float segmentLength = height / heightSegment;
-        float halfWidth = width * 0.5f;
-        for (int i = 0; i < heightSegment + 1; i++) {
-          float length = segmentLength * i;
-          float ratio = (float) i / heightSegment;
-          float segDegree = Mathf.Lerp(centerDegree, degree, ratio);
-
-          Vector3 offset = new Vector3(
-            length * Mathf.Sin(Mathf.Deg2Rad * segDegree),
-            -length * Mathf.Cos(Mathf.Deg2Rad * segDegree),
-            0.0f);
-          vertices[i * 2] = new Vector3(-halfWidth, 0.0f, 0.0f) + offset;
-          vertices[i * 2 + 1] = new Vector3(halfWidth, 0.0f, 0.0f) + offset;
-        }
+        mesh.vertices = vertices;
+        mesh.RecalculateBounds();
       }
-
-      mesh.vertices = vertices;
-      mesh.RecalculateBounds();
     }
 
     private void updateWinds() {
@@ -299,7 +251,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void UpdateSize() {
-      if(sprite != null) {
+      if (sprite != null) {
         width = sprite.rect.width / sprite.pixelsPerUnit;
         height = sprite.rect.height / sprite.pixelsPerUnit;
       }
@@ -307,7 +259,7 @@ namespace Catsland.Scripts.Controller {
 
     private void updateDegree() {
       float targetDegree = degree;
-      if(pressStatus == PressStatus.NONE) {
+      if (pressStatus == PressStatus.NONE) {
         phase += Time.deltaTime * frequency;
         phase -= 360.0f * Mathf.Floor(phase / 360.0f);
 

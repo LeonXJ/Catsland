@@ -2,19 +2,18 @@
 using UnityEngine;
 
 namespace Catsland.Scripts.Controller {
-  public abstract class StackEffectController: MonoBehaviour {
+  public abstract class StackEffectController<T>: MonoBehaviour where T : StackEffectConfig {
 
-    public Color backupAmbientColor = Color.white;
     public float backupColorChangeSpeed = 0.1f;
-    public Dictionary<string, StackEffectConfig> stackEffectConfigs;
+    public Dictionary<string, T> stackEffectConfigs;
 
-    protected StackEffectConfig topPrioritizedColor;
+    protected T topPrioritizedColor;
 
     protected virtual void Awake() {
-      stackEffectConfigs = new Dictionary<string, StackEffectConfig>();
+      stackEffectConfigs = new Dictionary<string, T>();
     }
 
-    public bool RegisterColor(StackEffectConfig color) {
+    public bool RegisterColor(T color) {
       if(!stackEffectConfigs.ContainsKey(color.name)) {
         stackEffectConfigs.Add(color.name, color);
         updateTopPriority();
@@ -23,7 +22,7 @@ namespace Catsland.Scripts.Controller {
       return false;
     }
 
-    public bool UnregisterColor(StackEffectConfig color) {
+    public bool UnregisterColor(T color) {
       if(stackEffectConfigs.ContainsKey(color.name)) {
         stackEffectConfigs.Remove(color.name);
         updateTopPriority();
@@ -35,7 +34,7 @@ namespace Catsland.Scripts.Controller {
     private void updateTopPriority() {
       int topPriority = int.MinValue;
       topPrioritizedColor = null;
-      foreach(StackEffectConfig color in stackEffectConfigs.Values) {
+      foreach(T color in stackEffectConfigs.Values) {
         if(color.priority > topPriority) {
           topPriority = color.priority;
           topPrioritizedColor = color;

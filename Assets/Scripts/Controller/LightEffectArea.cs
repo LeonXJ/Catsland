@@ -8,8 +8,8 @@ namespace Catsland.Scripts.Controller {
     public GlobalLightConfig globalColorConfig;
 
     // To be refactor to multiple controller and config pairs
-    public StackEffectController stackEffectController;
-    public StackEffectConfig stackEffectConfig;
+    public SpriteColorStackEffectController spriteColorStackEffectController;
+    public SpriteColorConfig spriteColorConfig ;
 
     private GlobalLightController globalLightController;
 
@@ -22,8 +22,8 @@ namespace Catsland.Scripts.Controller {
     public void OnTriggerEnter2D(Collider2D collision) {
       if(collision.CompareTag(Tags.PLAYER)) {
         globalLightController.RegisterColor(globalColorConfig);
-        if(stackEffectController != null & stackEffectConfig != null) {
-          stackEffectController.RegisterColor(stackEffectConfig);
+        if(spriteColorStackEffectController != null & spriteColorConfig!= null) {
+          spriteColorStackEffectController.RegisterColor(spriteColorConfig);
         }
       }
     }
@@ -31,8 +31,8 @@ namespace Catsland.Scripts.Controller {
     public void OnTriggerExit2D(Collider2D collision) {
       if(collision.CompareTag(Tags.PLAYER)) {
         globalLightController.UnregisterColor(globalColorConfig);
-        if(stackEffectController != null && stackEffectConfig != null) {
-          stackEffectController.UnregisterColor(stackEffectConfig);
+        if(spriteColorStackEffectController != null && spriteColorConfig!= null) {
+          spriteColorStackEffectController.UnregisterColor(spriteColorConfig);
         }
       }
     }

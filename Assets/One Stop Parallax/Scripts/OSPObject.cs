@@ -19,10 +19,25 @@ namespace OSP
         public SpriteRenderer sRenderer;
 
         /// <summary>
+        /// The SpriteRenderGroup for this layer. If set, sRenderer will not be used.
+        /// </summary>
+        public SpriteRenderGrounp sRenderGroup;
+
+        /// <summary>
         /// Gets the sprite bounds. Used for calculations needing the size of the sprite.
         /// </summary>
         /// <value>The sprite bounds.</value>
-        public Bounds SpriteBounds { get { return (sRenderer == null) ? new Bounds() : sRenderer.bounds; } }
+        public Bounds SpriteBounds {
+          get {
+            if (sRenderGroup != null) {
+              return sRenderGroup.GetBounds();
+            }
+            if (sRenderer != null) {
+              return sRenderer.bounds;
+            }
+            return new Bounds();
+          }
+        }
 
         /// <summary>
         /// Determines whether the layer should use parallax on the X axis.
@@ -192,12 +207,12 @@ namespace OSP
         /// Gets the width of the sprite.
         /// </summary>
         /// <value>The width of the sprite.</value>
-        public float SpriteWidth { get { return sRenderer.sprite.bounds.size.x; } }
+        public float SpriteWidth { get { return sRenderGroup == null ? sRenderer.sprite.bounds.size.x : sRenderGroup.GetBounds().size.x; } }
         /// <summary>
         /// Gets the height of the sprite.
         /// </summary>
         /// <value>The height of the sprite.</value>
-        public float SpriteHeight { get { return sRenderer.sprite.bounds.size.y; } }
+        public float SpriteHeight { get { return sRenderGroup == null ? sRenderer.sprite.bounds.size.y : sRenderGroup.GetBounds().size.y; } }
 
         /// <summary>
         /// This object's row value
@@ -219,6 +234,7 @@ namespace OSP
         void Awake()
         {
             sRenderer = GetComponent<SpriteRenderer>();
+            sRenderGroup = GetComponent<SpriteRenderGrounp>();
         }
 
         /// <summary>

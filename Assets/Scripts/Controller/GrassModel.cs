@@ -49,6 +49,8 @@ namespace Catsland.Scripts.Controller {
     // for debugging
     public float centerDegree = 0.0f;
 
+    public Material material;
+
     // frequency = [minFrequency, maxFrequency] ~ centerDegree
     private float frequency = 10.0f;
 
@@ -127,7 +129,12 @@ namespace Catsland.Scripts.Controller {
 
     private void updateTexture() {
       MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-      meshRenderer.material.mainTexture = sprite.texture;
+      if (material != null) {
+        meshRenderer.sharedMaterial = material;
+        material.mainTexture = sprite.texture;
+      } else {
+        meshRenderer.material.mainTexture = sprite.texture;
+      }
     }
 
     private void initializeMesh() {

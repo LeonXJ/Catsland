@@ -192,6 +192,7 @@ namespace OSP {
           #region AutoTileX
           if (obj.AutoTileX) {
             var sb = obj.SpriteBounds;
+            Debug.Log("Bound of " + obj.name + " :" + sb.ToString());
 
             // Don't do anything if we already have a left or right tile set
             if (!obj.hasLeftTile || !obj.hasRightTile) {
@@ -424,6 +425,7 @@ namespace OSP {
         pool.SetSiblings(newTile);
 
         // Now that we're in position, set this tile active
+        Debug.Log("Create new at: " + newTile.transform.position);
         newTile.gameObject.SetActive(true);
 
         #endregion

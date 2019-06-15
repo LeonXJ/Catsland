@@ -4,7 +4,7 @@ using Catsland.Scripts.Misc;
 
 namespace Catsland.Scripts.Controller {
   [RequireComponent(typeof(IInput)), RequireComponent(typeof(Rigidbody2D))]
-  public class ShellCareerController: MonoBehaviour, IDamageInterceptor, IArrowDamageInterceptor {
+  public class ShellCareerController: MonoBehaviour, Misc.IDamageInterceptor, Bullets.IDamageInterceptor {
 
     private static readonly float BROKEN_SHELL_EFFECT_CONVERT_SPEED = 0.1f;
 
@@ -167,15 +167,15 @@ namespace Catsland.Scripts.Controller {
       }
     }
 
-    bool IDamageInterceptor.shouldFlashOnDamage(DamageInfo damageInfo) {
+    bool Misc.IDamageInterceptor.shouldFlashOnDamage(DamageInfo damageInfo) {
       return curShellHeath <= 0;
     }
 
-    bool IDamageInterceptor.shouldSplashOnDamage(DamageInfo damageInfo) {
+    bool Misc.IDamageInterceptor.shouldSplashOnDamage(DamageInfo damageInfo) {
       return curShellHeath <= 0;
     }
 
-    ArrowResult IArrowDamageInterceptor.getArrowResult(ArrowCarrier arrowCarrier) {
+    ArrowResult Bullets.IDamageInterceptor.getArrowResult(ArrowCarrier arrowCarrier) {
       return arrowCarrier.isShellBreaking
         ? (curShellHeath > 0 ? ArrowResult.HIT_AND_BROKEN : ArrowResult.HIT)
         : (curShellHeath > 0 ? ArrowResult.BROKEN : ArrowResult.HIT);

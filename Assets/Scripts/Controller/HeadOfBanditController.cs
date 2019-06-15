@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 using Catsland.Scripts.Bullets;
-using Catsland.Scripts.Common;
+using Cinemachine;
 
 namespace Catsland.Scripts.Controller {
   public class HeadOfBanditController: MonoBehaviour {
@@ -43,18 +43,22 @@ namespace Catsland.Scripts.Controller {
     public float walkingSpeed = 2.0f;
 
     // Charge
+    [Header("Charge")]
     public float chargeSpeed = 5.0f;
     public float chargePrepareTime = 0.5f;
     public float chargeChargingTime = 2.0f;
     public float chargeRestTime = 1.0f;
+    public float chargingShakeAmp = 0.1f;
 
     // Jump Smash
+    [Header("Jump Smash")]
     public Vector2 jumpSmashJumpForce = new Vector2(50.0f, 200.0f);
     public float jumpSmashPrepareTime = 0.3f;
     public float jumpSmashSmashTime = 0.3f;
     public float jumpSmashRestTime = 0.5f;
     public GameObject jumpSmashEffectPrefab;
     public Transform jumpSmashEffectTransform;
+    public float jumpSmashShakeAmp = 1.5f;
     private bool isLastOnGround = false;
 
     // Spell
@@ -77,6 +81,7 @@ namespace Catsland.Scripts.Controller {
     public float throwForceOnDie = 10.0f;
     public GameObject dieEffectGoPrefab;
     public Transform hurtEffectPoint;
+    public BattleTrap battleTrap;
 
     // Health
     public int maxHealth = 5;
@@ -89,6 +94,7 @@ namespace Catsland.Scripts.Controller {
     private HeadOfBanditInput input;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+    private CinemachineImpulseSource cinemachineImpulseSource;
 
     // Animation
     private static readonly string H_SPEED = "HSpeed";
@@ -127,6 +133,7 @@ namespace Catsland.Scripts.Controller {
       groundSensor = groundSensorGo.GetComponent<ISensor>();
       animator = GetComponent<Animator>();
       spriteRenderer = GetComponent<SpriteRenderer>();
+      cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
     }
 
     private void Start() {
@@ -186,6 +193,8 @@ namespace Catsland.Scripts.Controller {
 
       // apply velocity
       if(status == Status.CHARGE_CHARGING) {
+        cinemachineImpulseSource.m_ImpulseDefinition.m_AmplitudeGain = chargingShakeAmp;
+        cinemachineImpulseSource.GenerateImpulse();
         rb2d.velocity = new Vector2(getOrientation() * chargeSpeed, rb2d.velocity.y);
       } else if(status == Status.JUMP_SMASH_JUMPING) {
         if(oldStatus != status) {
@@ -208,9 +217,14 @@ namespace Catsland.Scripts.Controller {
         && (status == Status.JUMP_SMASH_JUMPING || status == Status.JUMP_SMASH_SMASHING)) {
         GameObject jumpSmashEffect = Instantiate(jumpSmashEffectPrefab);
         jumpSmashEffect.transform.position = jumpSmashEffectTransform.position;
-        Utils.setRelativeRenderLayer(spriteRenderer, jumpSmashEffect.GetComponent<SpriteRenderer>(), 1);
+        Common.Utils.setRelativeRenderLayer(spriteRenderer, jumpSmashEffect.GetComponent<SpriteRenderer>(), 1);
       }
       isLastOnGround = groundSensor.isStay();
+
+      if (oldStatus != Status.JUMP_SMASH_SMASHING && status == Status.JUMP_SMASH_SMASHING) {
+        cinemachineImpulseSource.m_ImpulseDefinition.m_AmplitudeGain = jumpSmashShakeAmp;
+        cinemachineImpulseSource.GenerateImpulse();
+      }
 
       if(oldStatus == Status.DIE_THROW && status == Status.DIE_STAY) {
         if(dieEffectGoPrefab != null) {
@@ -261,6 +275,8 @@ namespace Catsland.Scripts.Controller {
       if(isDead()) {
         return;
       }
+
+      Bullets.Utils.ApplyRepel(damageInfo, rb2d);
       curHealth -= damageInfo.damage;
       if(curHealth <= 0) {
         enterDie();
@@ -282,6 +298,11 @@ namespace Catsland.Scripts.Controller {
 
       status = (Status)dieSequence.start();
 
+      if (battleTrap != null) {
+        battleTrap.SetRise(false);
+        battleTrap.SetEnable(false);
+      }
+
     }
 
     private bool canWalk() {
@@ -294,7 +315,7 @@ namespace Catsland.Scripts.Controller {
       knife.transform.localScale = new Vector2(getOrientation(), 1.0f);
       // renderer
       SpriteRenderer knifeRenderer = knife.GetComponent<SpriteRenderer>();
-      Utils.setRelativeRenderLayer(spriteRenderer, knifeRenderer, 1);
+      Common.Utils.setRelativeRenderLayer(spriteRenderer, knifeRenderer, 1);
 
       // velocity
       Rigidbody2D knifeRb2d = knife.GetComponent<Rigidbody2D>();

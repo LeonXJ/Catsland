@@ -6,7 +6,7 @@ using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Controller {
   [RequireComponent(typeof(Rigidbody2D)), RequireComponent(typeof(Animator)), RequireComponent(typeof(BoarInput))]
-  public class BoarController: MonoBehaviour, IArrowDamageInterceptor {
+  public class BoarController: MonoBehaviour, IDamageInterceptor {
 
     public interface BoarInput {
       float getHorizontal();
@@ -103,7 +103,7 @@ namespace Catsland.Scripts.Controller {
         if(isGroundDetected(frontSpaceDetector)) {
           exitCharge();
         } else {
-          rb2d.velocity = new Vector2(Utils.getOrientation(gameObject) * chargeSpeed, rb2d.velocity.y);
+          rb2d.velocity = new Vector2(Common.Utils.getOrientation(gameObject) * chargeSpeed, rb2d.velocity.y);
           wantStatus = Status.CHARGE;
         }
       }
@@ -156,7 +156,7 @@ namespace Catsland.Scripts.Controller {
 
         Rigidbody2D stoneRb2d = stone.GetComponent<Rigidbody2D>();
         stoneRb2d.velocity = new Vector2(
-          stoneSpeed * Mathf.Cos(curAngle * Mathf.Deg2Rad) * Utils.getOrientation(gameObject),
+          stoneSpeed * Mathf.Cos(curAngle * Mathf.Deg2Rad) * Common.Utils.getOrientation(gameObject),
           stoneSpeed * Mathf.Sin(curAngle * Mathf.Deg2Rad));
         stoneRb2d.angularVelocity = Random.Range(90.0f, 180.0f);
         float scale = Random.Range(0.5f, 1.0f);
@@ -227,11 +227,11 @@ namespace Catsland.Scripts.Controller {
     }
 
     private bool isGroundDetected(Rect rect) {
-      return Utils.isRectOverlap(rect, transform, groundLayerMask);
+      return Common.Utils.isRectOverlap(rect, transform, groundLayerMask);
     }
 
     private void OnDrawGizmosSelected() {
-      Utils.drawRectAsGizmos(
+      Common.Utils.drawRectAsGizmos(
         frontSpaceDetector,
         isGroundDetected(frontSpaceDetector) ? Color.white : Color.blue,
         transform);

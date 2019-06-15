@@ -24,7 +24,7 @@ namespace Catsland.Scripts.Controller {
 
     private Animator animator;
     private EvilFlowerInput input;
-    private float lastShootTime;
+    private float lastShootTime = 0f;
 
 
     private void Awake() {

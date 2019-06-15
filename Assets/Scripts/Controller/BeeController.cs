@@ -4,6 +4,7 @@ using UnityEngine;
 using Catsland.Scripts.Common;
 using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Misc;
+using static Catsland.Scripts.Bullets.Utils;
 
 namespace Catsland.Scripts.Controller {
   [RequireComponent(typeof(Rigidbody2D)), RequireComponent(typeof(BeeInput)), RequireComponent(typeof(Animator))]
@@ -19,12 +20,14 @@ namespace Catsland.Scripts.Controller {
       FLYING = 0,
       PREPARING = 1,
       CHARING = 2,
+      DIZZY = 3,
     }
 
     public float flyingSpeed = 1.0f;
     public float prepareTimeInSecond = 1.0f;
     public float chargeSpeed = 5.0f;
     public float chargeTimeInSecond = 0.5f;
+    public float dizzyTimeInSecond = 0.5f;
     public int health = 3;
 
     private Status status = Status.FLYING;
@@ -38,18 +41,13 @@ namespace Catsland.Scripts.Controller {
 
     private static readonly string IS_PREPARING = "IsPreparing";
     private static readonly string IS_CHARGING = "IsCharging";
+    private static readonly string IS_DIZZY = "IsDizzy";
 
     private void Awake() {
       rb2d = GetComponent<Rigidbody2D>();
       input = GetComponent<BeeInput>();
       animator = GetComponent<Animator>();
       diamondGenerator = GetComponent<DiamondGenerator>();
-    }
-
-    // Start is called before the first frame update
-    void Start() {
-
-
     }
 
     // Update is called once per frame
@@ -84,6 +82,7 @@ namespace Catsland.Scripts.Controller {
       // Set animation
       animator.SetBool(IS_PREPARING, status == Status.PREPARING);
       animator.SetBool(IS_CHARGING, status == Status.CHARING);
+      animator.SetBool(IS_DIZZY, status == Status.DIZZY);
     }
 
     public bool CanMoveAround() {
@@ -127,9 +126,17 @@ namespace Catsland.Scripts.Controller {
 
     public void damage(DamageInfo damageInfo) {
       health -= damageInfo.damage;
+      StartCoroutine(dizzy());
+      ApplyRepel(damageInfo, rb2d);
       if(health <= 0) {
         enterDie();
+        return;
       }
+    }
+    private IEnumerator dizzy() {
+      status = Status.DIZZY;
+      yield return new WaitForSeconds(dizzyTimeInSecond);
+      status = Status.FLYING;
     }
 
     private void enterDie() {

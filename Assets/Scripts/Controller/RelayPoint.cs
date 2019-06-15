@@ -38,6 +38,7 @@ namespace Catsland.Scripts.Controller {
 
       // update UI
       if(distance < playerController.relayHintDistance) {
+        Debug.Log("Show relay");
         /*
         // For debug only
         drawCircle(transform.position, distance, hintCircleSegment, Color.white);
@@ -60,9 +61,13 @@ namespace Catsland.Scripts.Controller {
         currentHintRenderer.material.SetColor("_Color", new Color(1.0f, 1.0f, 1.0f, alpha));
         targetHintRenderer.material.SetColor("_Color", new Color(1.0f, 1.0f, 1.0f, alpha));
       } else {
-        currentHintRenderer.enabled = false;
-        targetHintRenderer.enabled = false;
+        HideCircle();
       }
+    }
+
+    public void HideCircle() {
+      currentHintRenderer.enabled = false;
+      targetHintRenderer.enabled = false;
     }
 
     private static void drawCircle(Vector3 center, float radius, int segments, Color color) {

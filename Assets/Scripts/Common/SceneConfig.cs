@@ -10,6 +10,7 @@ namespace Catsland.Scripts.Common {
     public UnityEngine.Camera MainCamera;
     public GlobalLightController globalLightController;
     public ProgressManager progressManager;
+    public Shader defaultDiffuseShader;
 
     public GameObject player;
 
@@ -41,6 +42,10 @@ namespace Catsland.Scripts.Common {
 
     public CameraController GetCameraController() {
       return cameraController;
+    }
+
+    public Shader GetDefaultDiffuseShader() {
+      return defaultDiffuseShader;
     }
   }
 }

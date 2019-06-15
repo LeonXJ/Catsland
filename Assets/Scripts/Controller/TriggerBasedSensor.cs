@@ -44,9 +44,6 @@ namespace Catsland.Scripts.Controller {
         return false;
       }
       if(whitelistGos != null && whitelistGos.Count > 0) {
-        if(!whitelistGos.Contains(collision.gameObject)) {
-          Debug.Log("Whitelist filter: " + collision.name);
-        }
         return whitelistGos.Contains(collision.gameObject);
       }
       return true;
@@ -54,9 +51,6 @@ namespace Catsland.Scripts.Controller {
 
     private void onTriggerEnterOrStay(Collider2D collision) {
       if(isCollisionWhitelisted(collision)) {
-        if(debug) {
-          Debug.Log("Collide: " + collision.name);
-        }
         triggerGos.Add(collision.gameObject);
       }
     }

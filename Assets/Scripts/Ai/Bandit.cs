@@ -47,6 +47,10 @@ namespace Catsland.Scripts.Ai {
       return false;
     }
 
+    public bool jumpHigher() {
+      return false;
+    }
+
     public bool dash() {
       return false;
     }

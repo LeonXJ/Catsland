@@ -25,7 +25,7 @@ namespace Catsland.Scripts.Bullets {
     HIT_AND_BROKEN = 6,
   }
 
-  public interface IArrowDamageInterceptor {
+  public interface IDamageInterceptor {
 
     ArrowResult getArrowResult(ArrowCarrier arrowCarrier);
 

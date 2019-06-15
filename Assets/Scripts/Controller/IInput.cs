@@ -7,6 +7,8 @@
 
     bool jump();
 
+    bool jumpHigher();
+
     bool attack();
 
     bool dash();

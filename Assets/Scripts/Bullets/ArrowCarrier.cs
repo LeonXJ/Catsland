@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using UnityEngine;
 using Catsland.Scripts.Common;
+using Catsland.Scripts.Controller;
 using Catsland.Scripts.Misc;
 using Catsland.Scripts.Physics;
 
 namespace Catsland.Scripts.Bullets {
   [RequireComponent(typeof(Rigidbody2D))]
-  public class ArrowCarrier: MonoBehaviour {
+  public class ArrowCarrier : MonoBehaviour {
 
     enum ArrowStatus {
       Flying = 0,
@@ -24,6 +25,8 @@ namespace Catsland.Scripts.Bullets {
 
     public bool isShellBreaking = false;
 
+    public Transform tailPosition;
+    public Transform headPosition;
 
     public GameObject brokenArrowPrefab;
     public GameObject attachedArrowPrefab;
@@ -42,6 +45,8 @@ namespace Catsland.Scripts.Bullets {
     private Rigidbody2D rb2d;
     private Trail trail;
 
+    private Vector3 lastTailPosition;
+
     public void Awake() {
       rb2d = GetComponent<Rigidbody2D>();
       trail = GetComponent<Trail>();
@@ -49,9 +54,23 @@ namespace Catsland.Scripts.Bullets {
       collider2d = GetComponent<Collider2D>();
     }
 
+    public void Start() {
+      lastTailPosition = tailPosition.position;
+    }
+
     public void Update() {
-      if(!isAttached && status == ArrowStatus.Flying) {
+      if (!isAttached && status == ArrowStatus.Flying) {
         rb2d.velocity = new Vector2(velocity.x, rb2d.velocity.y);
+      }
+      if (status == ArrowStatus.Flying) {
+        RaycastHit2D[] hits = Physics2D.LinecastAll(lastTailPosition, headPosition.position);
+        foreach (RaycastHit2D hit in hits) {
+          bool processed = onArrowHitNew(hit);
+          if (processed) {
+            break;
+          }
+        }
+        lastTailPosition = tailPosition.position;
       }
     }
 
@@ -75,72 +94,71 @@ namespace Catsland.Scripts.Bullets {
       safeDestroy();
     }
 
-
-    public void OnTriggerEnter2D(Collider2D collision) {
-      onArrowHit(collision);
-    }
-
-    public void OnTriggerStay2D(Collider2D collision) {
-      onArrowHit(collision);
-    }
-
-    private void onArrowHit(Collider2D collision) {
-      if(isAttached || status != ArrowStatus.Flying) {
-        return;
-      }
+    private bool onArrowHitNew(RaycastHit2D hit) {
 
       // ArrowResult interceptor
-      IArrowDamageInterceptor interceptor = collision.gameObject.GetComponent<IArrowDamageInterceptor>();
-      if(interceptor != null) {
+      Collider2D collider = hit.collider;
+      IDamageInterceptor interceptor = hit.collider.gameObject.GetComponent<IDamageInterceptor>();
+      if (interceptor != null) {
         ArrowResult result = interceptor.getArrowResult(this);
-        switch(result) {
+        switch (result) {
           case ArrowResult.ATTACHED:
-            enterAttach(collision);
-            return;
+          enterAttach(hit);
+          return true;
           case ArrowResult.BROKEN:
-            breakArrow();
-            return;
+          breakArrow();
+          return true;
           case ArrowResult.DISAPPEAR:
-            safeDestroy();
-            return;
+          safeDestroy();
+          return true;
           case ArrowResult.HIT:
-            arrowHit(collision);
-            return;
+          arrowHit(collider);
+          return true;
           case ArrowResult.HIT_AND_BROKEN:
-            breakArrow();
-            arrowHit(collision);
-            return;
+          breakArrow();
+          arrowHit(collider);
+          return true;
           case ArrowResult.SKIP:
-            return;
+          return false;
           case ArrowResult.IGNORE:
-            break;
+          return false;
         }
       }
+
+      return defaultHitBehavior(hit);
+    }
+
+    private bool defaultHitBehavior(RaycastHit2D hit) {
 
       // Ground: attach / break
-      if(collision.gameObject.layer == Layers.LayerGround) {
-        if(collision.gameObject.CompareTag(Tags.ATTACHABLE)) {
-          enterAttach(collision);
-          return;
+      Collider2D collider = hit.collider;
+      if (collider.gameObject.layer == Layers.LayerGround) {
+        if (collider.gameObject.CompareTag(Tags.ATTACHABLE)) {
+          enterAttach(hit);
+          return true;
         }
         breakArrow();
-        return;
+        return true;
       }
 
+      /*
       // Bullet: ignore
-      if(collision.gameObject.layer == Layers.LayerBullet) {
-        return;
+      if(collider.gameObject.layer == Layers.LayerBullet) {
+        return false;
       }
 
       // Character: ignore / damage
-      if(collision.gameObject.layer == Layers.LayerCharacter
-        || collision.gameObject.layer == Layers.LayerVulnerableObject) {
-        if(tagForOwner != null && collision.gameObject.CompareTag(tagForOwner)) {
+      if(collider.gameObject.layer == Layers.LayerCharacter
+        || collider.gameObject.layer == Layers.LayerVulnerableObject) {
+        if(tagForOwner != null && collider.gameObject.CompareTag(tagForOwner)) {
           // ignore owner
-          return;
+          return false;
         }
-        arrowHit(collision);
+        arrowHit(collider);
+        return true;
       }
+      */
+      return false;
     }
 
     public void damage(DamageInfo damageInfo) {
@@ -149,7 +167,7 @@ namespace Catsland.Scripts.Bullets {
     }
 
     private void safeDestroy() {
-      if(gameObject != null) {
+      if (gameObject != null) {
         Destroy(gameObject);
       }
     }
@@ -178,14 +196,19 @@ namespace Catsland.Scripts.Bullets {
 
     }
 
-    private void enterAttach(Collider2D collision) {
+    private void enterAttach(RaycastHit2D hit) {
       // This is necessray because another update cycle can happen before self-destroy.
       status = ArrowStatus.Attached;
+
+      // find the exact hit point
       GameObject attached = Instantiate(attachedArrowPrefab);
-      attached.transform.position = transform.position
-        + new Vector3(attachedPositionOffset * transform.lossyScale.x, 0.0f);
+      attached.transform.position = hit.point - new Vector2(attachedPositionOffset * transform.lossyScale.x, 0.0f);
       attached.transform.localScale = transform.lossyScale;
-      attached.transform.parent = collision.gameObject.transform;
+      attached.transform.parent = hit.collider.gameObject.transform;
+
+      RelayPoint relay = attached.GetComponent<RelayPoint>();
+      relay.HideCircle();
+
       transferFlame(attached);
 
       safeDestroy();
@@ -213,7 +236,7 @@ namespace Catsland.Scripts.Bullets {
 
     private void transferFlame(GameObject newGO) {
       Flame flame = GetComponentInChildren<Flame>();
-      if(flame != null) {
+      if (flame != null) {
         flame.transform.parent = newGO.transform;
       }
     }

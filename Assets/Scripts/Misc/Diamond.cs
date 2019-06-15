@@ -11,14 +11,20 @@ namespace Catsland.Scripts.Misc {
     private bool collected = false;
 
 
+    private void OnTriggerEnter2D(Collider2D collision) {
+      onHit(collision.gameObject);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision) {
+      onHit(collision.gameObject);
+    }
+
+    private void onHit(GameObject other) {
       if (collected) {
         return;
       }
-      if (collision.gameObject.CompareTag(Tags.PLAYER)) {
-        PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
-        Debug.Assert(playerController != null, "Player GameObject must have PlayerController component.");
-
+      if (other.CompareTag(Tags.PLAYER)) {
+        PlayerController playerController = other.GetComponent<PlayerController>();
         playerController.score += value;
         collected = true;
 

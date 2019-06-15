@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Catsland.Scripts.Common;
 using Catsland.Scripts.Controller;
+using Cinemachine;
+using DG.Tweening;
 
 namespace Catsland.Scripts.Bullets {
   [RequireComponent(typeof(ParticleSystem))]
@@ -15,9 +17,11 @@ namespace Catsland.Scripts.Bullets {
     public float repel = 100.0f;
 
     private ParticleSystem particle;
+    private CinemachineImpulseSource cinemachineImpulseSource;
 
     void Awake() {
       particle = GetComponent<ParticleSystem>();
+      cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
     }
 
     public void StartTimer() {
@@ -37,6 +41,8 @@ namespace Catsland.Scripts.Bullets {
           new DamageInfo(damage, collider.bounds.center, collider.transform.position - transform.position, repel),
           SendMessageOptions.DontRequireReceiver);
       }
+
+      cinemachineImpulseSource.GenerateImpulse();
 
       // Remove relay
       RelayPoint relay = GetComponentInChildren<RelayPoint>();

@@ -34,6 +34,10 @@ namespace Catsland.Scripts.Ai {
       return false;
     }
 
+    bool IInput.jumpHigher() {
+      return false;
+    }
+
     bool IInput.meditation() {
       return false;
     }

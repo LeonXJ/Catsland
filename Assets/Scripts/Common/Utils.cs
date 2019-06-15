@@ -42,6 +42,18 @@ namespace Catsland.Scripts.Common {
       }
     }
 
+    public static void DrawCircleAsGizmos(float radius, Color color, Vector3 center, int segments = 16) {
+      float deltaArc = 2 * Mathf.PI / segments;
+      Gizmos.color = color;
+      for(int i = 0; i < segments; ++i) {
+        float startArc = i * deltaArc;
+        float endArc = startArc + deltaArc;
+        Gizmos.DrawLine(
+          center + new Vector3(Mathf.Sin(startArc), Mathf.Cos(startArc), 0.0f) * radius,
+          center + new Vector3(Mathf.Sin(endArc), Mathf.Cos(endArc), 0.0f) * radius);
+      }
+    }
+
     public static bool isRectOverlap(Rect rect, Transform transform, LayerMask layerMask) {
       return Physics2D.OverlapBox(
         transform.TransformPoint(rect.position),

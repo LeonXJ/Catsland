@@ -12,7 +12,14 @@ namespace Catsland.Scripts.Controller {
 
     public bool inverseTransformDirection = false;
 
+    public bool IsAlive() {
+      return this != null && gameObject != null;
+    }
+
     public float GetWindPower() {
+      if (gameObject == null) {
+        return 0.0f;
+      }
       return enable
         ? (useTransformDirection ? (inverseTransformDirection ? -1.0f : 1.0f) * Mathf.Sign(transform.lossyScale.x) * windPower : windPower)
         : 0.0f;

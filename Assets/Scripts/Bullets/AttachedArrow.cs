@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 namespace Catsland.Scripts.Bullets {
-  public class AttachedArrow: MonoBehaviour {
+  public class AttachedArrow: MonoBehaviour, IDamageInterceptor {
 
     public GameObject brokenArrowPrefab;
     public float brokenPartBounceSpeedRatio = 0.8f;
@@ -12,6 +12,10 @@ namespace Catsland.Scripts.Bullets {
         damageInfo.repelDirection.x * brokenPartBounceSpeedRatio,
         (Random.value - 0.5f) * 2.0f * brokenPartSpinSpeed);
       Destroy(gameObject);
+    }
+
+    ArrowResult IDamageInterceptor.getArrowResult(ArrowCarrier arrowCarrier) {
+      return ArrowResult.HIT_AND_BROKEN;
     }
   }
 }

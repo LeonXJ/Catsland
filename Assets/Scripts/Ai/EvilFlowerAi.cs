@@ -59,5 +59,9 @@ namespace Catsland.Scripts.Ai {
     public void resetStatus() {
       wantAttack = false;
     }
+
+    void OnDrawGizmos() {
+      Common.Utils.DrawCircleAsGizmos(detectRange, Color.red, transform.position, 32);
+    }
   }
 }

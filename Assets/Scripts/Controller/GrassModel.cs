@@ -8,6 +8,8 @@ namespace Catsland.Scripts.Controller {
   [ExecuteInEditMode]
   public class GrassModel : MonoBehaviour {
 
+    private static Dictionary<string, Material> materials = new Dictionary<string, Material>();
+
     // The center of swing.
     public enum SwingCenter {
       BOTTOM,
@@ -49,7 +51,12 @@ namespace Catsland.Scripts.Controller {
     // for debugging
     public float centerDegree = 0.0f;
 
-    public Material material;
+    // If set, particle will be shot on trigger.
+    public ParticleSystem particleSystem;
+
+    // The min internal between two particle shoot.
+    public float particleEmitMinInternalSecond = 1f;
+
 
     // frequency = [minFrequency, maxFrequency] ~ centerDegree
     private float frequency = 10.0f;
@@ -69,6 +76,8 @@ namespace Catsland.Scripts.Controller {
     public HashSet<IWind> winds = new HashSet<IWind>();
 
     private PressStatus pressStatus = PressStatus.NONE;
+
+    private float particleCd = .0f;
 
 
     // Movement updating attributes.
@@ -94,6 +103,17 @@ namespace Catsland.Scripts.Controller {
       }
     }
 
+    private Material GetMaterial() {
+      string materialName = sprite.name;
+      if (!materials.ContainsKey(materialName)) {
+        Material m = new Material(SceneConfig.getSceneConfig().GetDefaultDiffuseShader()) {
+          name = materialName
+        };
+        materials.Add(materialName, m);
+      }
+      return materials[materialName];
+    }
+
     void Update() {
       if (!hasInitialized) {
         initializeMesh();
@@ -103,6 +123,11 @@ namespace Catsland.Scripts.Controller {
         updateDegree();
         updateVertices();
         updateTexture();
+      }
+      if (particleSystem != null) {
+        if (particleCd > .0f) {
+          particleCd -= Time.deltaTime;
+        }
       }
     }
 
@@ -115,6 +140,11 @@ namespace Catsland.Scripts.Controller {
       Rigidbody2D rigidbody = collision.GetComponent<Rigidbody2D>();
       if (rigidbody != null) {
         pressStatus = rigidbody.velocity.x > 0.0f ? PressStatus.RIGHT : PressStatus.LEFT;
+      }
+      // particle effect
+      if (particleSystem != null && particleCd <= .0f) {
+        particleSystem.Play();
+        particleCd = particleEmitMinInternalSecond;
       }
     }
 
@@ -129,12 +159,11 @@ namespace Catsland.Scripts.Controller {
 
     private void updateTexture() {
       MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-      if (material != null) {
-        meshRenderer.sharedMaterial = material;
-        material.mainTexture = sprite.texture;
-      } else {
-        meshRenderer.material.mainTexture = sprite.texture;
+      if (meshRenderer.sharedMaterial == null || meshRenderer.sharedMaterial.name != sprite.name) {
+        meshRenderer.sharedMaterial = GetMaterial();
       }
+      Debug.Assert(meshRenderer.sharedMaterial != null);
+      meshRenderer.sharedMaterial.mainTexture = sprite.texture;
     }
 
     private void initializeMesh() {
@@ -240,7 +269,7 @@ namespace Catsland.Scripts.Controller {
     private void updateWinds() {
       // Calcuate total wind force.
       float power = 0.0f;
-      winds.RemoveWhere(wind => wind == null);
+      winds.RemoveWhere(wind => wind == null || !wind.IsAlive());
       foreach (IWind wind in winds) {
         power += wind.GetWindPower();
       }

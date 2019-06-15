@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Catsland.Scripts.Controller;
 
-
 namespace Catsland.Scripts.Bullets {
   [RequireComponent(typeof(Rigidbody2D))]
   public class Missile: MonoBehaviour {
@@ -62,7 +61,6 @@ namespace Catsland.Scripts.Bullets {
       explosionGo.transform.position = new Vector3(transform.position.x, transform.position.y, explosionGo.transform.position.z);
       Explosion explosion = explosionGo.GetComponent<Explosion>();
       explosion.StartTimer();
-
       // Pass on the relay point
       RelayPoint relay = GetComponentInChildren<RelayPoint>();
       if(relay != null) {

@@ -21,7 +21,9 @@ namespace Catsland.Scripts.Controller {
 
     public void OnTriggerEnter2D(Collider2D collision) {
       if(collision.CompareTag(Tags.PLAYER)) {
-        globalLightController.RegisterColor(globalColorConfig);
+        if (globalColorConfig != null) {
+          globalLightController.RegisterColor(globalColorConfig);
+        }
         if(spriteColorStackEffectController != null & spriteColorConfig!= null) {
           spriteColorStackEffectController.RegisterColor(spriteColorConfig);
         }
@@ -30,7 +32,9 @@ namespace Catsland.Scripts.Controller {
 
     public void OnTriggerExit2D(Collider2D collision) {
       if(collision.CompareTag(Tags.PLAYER)) {
-        globalLightController.UnregisterColor(globalColorConfig);
+        if (globalColorConfig != null) {
+          globalLightController.UnregisterColor(globalColorConfig);
+        }
         if(spriteColorStackEffectController != null && spriteColorConfig!= null) {
           spriteColorStackEffectController.UnregisterColor(spriteColorConfig);
         }

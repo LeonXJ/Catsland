@@ -339,7 +339,7 @@ namespace Catsland.Scripts.Controller {
       knife.transform.localScale = new Vector2(getOrientation(), 1.0f);
       // renderer
       SpriteRenderer knifeRenderer = knife.GetComponent<SpriteRenderer>();
-      Utils.setRelativeRenderLayer(spriteRenderer, knifeRenderer, 1);
+      Common.Utils.setRelativeRenderLayer(spriteRenderer, knifeRenderer, 1);
 
       // velocity
       Rigidbody2D knifeRb2d = knife.GetComponent<Rigidbody2D>();

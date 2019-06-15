@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 using Catsland.Scripts.Bullets;
-using Catsland.Scripts.Common;
 using Catsland.Scripts.Misc;
+using Cinemachine;
 
 namespace Catsland.Scripts.Controller {
 
@@ -14,22 +13,37 @@ namespace Catsland.Scripts.Controller {
   public class PlayerController: MonoBehaviour {
 
     // Locomoation
+    [Header("Run")]
     public float maxRunningSpeed = 1.0f;
     public float maxCrouchSpeed = 0.5f;
     public float acceleration = 1.0f;
+
+    [Header("Jump")]
     public float jumpForce = 5.0f;
+    public float doubleJumpForce = 10.0f;
     public float cliffJumpForce = 5.0f;
     public float maxFallingSpeed = 5.0f;
     public float cliffSlidingSpeed = 1.0f;
+    public float fallMultiplier = 2.5f;
+    public float lowJumMultiplier = 2f;
+
+    [Header("Dash")]
     public float dashSpeed = 3.0f;
     public float dashTime = 0.6f;
     public float dashCooldown = 1.0f;
+    public Vector2 dashCameraShakeScale = new Vector2(0.5f, 0.0f);
+    // If true, player orientation will affect the sign of x of dashCameraShakeScale.
+    public bool dashCameraShakeApplyOrientationImpact = true;
+
+    [Header("Relay")]
     public Transform relayDeterminePoint;
     public float relayHintDistance = 3.0f;
     public float relayEffectDistance = 1.0f;
     public bool supportRelay = true;
     public bool canCliffJump = true;
     public bool canDetectCliff = true;
+    public float timeScaleInRelay = 0.6f;
+
 
     public float maxSenseAdd = 0.5f;
     public float senseIncreaseSpeed = 0.2f;
@@ -46,27 +60,33 @@ namespace Catsland.Scripts.Controller {
     private bool isLastUpdateOnGround = false;
 
     // Attack
+    [Header("Arrow")]
     public float maxArrowSpeed = 15.0f;
     public float minArrowSpeed = 5.0f;
     public float maxArrowLifetime = 3.0f;
-    public float maxRepelForce = 50f;
+    public float maxRepelForce = 800f;
     public float maxDrawingTime = 1.0f;
     public float strongArrowDrawingRatio = 0.9f;
+    public float minTrailTime = 1f;
+    public float maxTrailTime = 3f;
+    
     private bool isDrawing = false;
     private float shootingCd = 0.5f;
     private bool isShooting = false;
     private float currentDrawingTime = 0.0f;
-
     private HashSet<RelayPoint> activeRelayPoints = new HashSet<RelayPoint>();
 
     // Health
+    [Header("Health")]
     public int maxHealth = 3;
     public int currentHealth;
     public float dizzyTime = 1.0f;
+    public float timeScaleInDizzy = 0.4f;
     public float immutableTime = 0.5f;
+    public int score = 0;
+
     private bool isDizzy = false;
     private float lastGetDamagedTime = 0.0f;
-    public int score = 0;
 
     // References
     public GameObject groundSensorGO;
@@ -93,6 +113,7 @@ namespace Catsland.Scripts.Controller {
     private Animator animator;
     private BoxCollider2D headCollider;
     private SpriteRenderer spriteRenderer;
+    private CinemachineImpulseSource cinemachineImpulseSource;
 
     private GameObject previousParentGameObject;
     private Vector3 previousParentPosition;
@@ -116,6 +137,7 @@ namespace Catsland.Scripts.Controller {
       animator = GetComponent<Animator>();
       headCollider = GetComponent<BoxCollider2D>();
       spriteRenderer = GetComponent<SpriteRenderer>();
+      cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
     }
 
     public void Awake() {
@@ -189,18 +211,20 @@ namespace Catsland.Scripts.Controller {
         && input.jump()) {
         rb2d.velocity = Vector2.zero;
         //rb2d.AddForce(new Vector2(0.0f, jumpForce));
-        appliedForce = new Vector2(0.0f, jumpForce);
+        appliedForce = new Vector2(0.0f, doubleJumpForce);
         // effect
         GameObject doubleJumpEffect = Instantiate(doubleJumpEffectPrefab);
         doubleJumpEffect.transform.position = doubleJumpEffectPoint.position;
-        Utils.setRelativeRenderLayer(
+        Common.Utils.setRelativeRenderLayer(
           spriteRenderer, doubleJumpEffect.GetComponentInChildren<SpriteRenderer>(), 1);
         // Reset dash
         remainingDash = 1;
       }
 
-      if(activeRelayPoints.Count > 0) {
-        Time.timeScale = 0.6f;
+      if (activeRelayPoints.Count > 0) {
+        Time.timeScale = timeScaleInRelay;
+      } else if (isDizzy) {
+        Time.timeScale = timeScaleInDizzy;
       } else {
         Time.timeScale = 1.0f;
       }
@@ -219,7 +243,7 @@ namespace Catsland.Scripts.Controller {
             GameObject cliffJumpEffect = GameObject.Instantiate(cliffJumpEffectPrefab);
             cliffJumpEffect.transform.position = backwardCliffJumpEffectPoint.position;
             cliffJumpEffect.transform.localScale = new Vector2(-getOrientation(), 1.0f);
-            Utils.setRelativeRenderLayer(
+            Common.Utils.setRelativeRenderLayer(
               spriteRenderer, cliffJumpEffect.GetComponentInChildren<SpriteRenderer>(), 1);
           } else {
             topFallingSpeed = cliffSlidingSpeed;
@@ -233,7 +257,7 @@ namespace Catsland.Scripts.Controller {
           GameObject cliffJumpEffect = GameObject.Instantiate(cliffJumpEffectPrefab);
           cliffJumpEffect.transform.position = forwardCliffJumpEffectPoint.position;
           cliffJumpEffect.transform.localScale = new Vector2(getOrientation(), 1.0f);
-          Utils.setRelativeRenderLayer(
+          Common.Utils.setRelativeRenderLayer(
             spriteRenderer, cliffJumpEffect.GetComponentInChildren<SpriteRenderer>(), 1);
         }
       }
@@ -274,13 +298,15 @@ namespace Catsland.Scripts.Controller {
         rb2d.velocity.y < -smashMinSpeed) {
         GameObject smashEffect = Instantiate(smashEffectPrefab);
         smashEffect.transform.position = smashEffectPoint.position;
-        Utils.setRelativeRenderLayer(spriteRenderer, smashEffect.GetComponentInChildren<SpriteRenderer>(), 1);
+        Common.Utils.setRelativeRenderLayer(spriteRenderer, smashEffect.GetComponentInChildren<SpriteRenderer>(), 1);
       }
       isLastUpdateOnGround = groundSensor.isStay();
 
       // horizontal movement
+      /*
       gameObject.transform.parent =
           groundSensor.isStay() ? Utils.getAnyFrom(groundSensor.getTriggerGos()).transform : null;
+      */
 
       // Move with the platform.
       if(gameObject.transform.parent != null && gameObject.transform.parent.gameObject == previousParentGameObject) {
@@ -334,10 +360,19 @@ namespace Catsland.Scripts.Controller {
         rb2d.velocity = new Vector2(rb2d.velocity.x, Mathf.Max(rb2d.velocity.y, -topFallingSpeed));
       }
 
+      // better jump
+      if (rb2d.velocity.y < 0) {
+        rb2d.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1.0f) * Time.deltaTime;
+      } else if (rb2d.velocity.y > .0f && !input.jumpHigher()) {
+        rb2d.velocity += Vector2.up * Physics2D.gravity.y * (lowJumMultiplier - 1.0f) * Time.deltaTime;
+      }
+
       // Update head collider
+      /*
       if(headCollider != null) {
         headCollider.enabled = !isCrouching;
       }
+      */
 
       // Update animation
       animator.SetBool(GROUNDED, groundSensor.isStay());
@@ -356,14 +391,14 @@ namespace Catsland.Scripts.Controller {
       }
 
       lastGetDamagedTime = Time.time;
-      rb2d.velocity = Vector2.zero;
-      rb2d.AddForce(damageInfo.repelDirection * damageInfo.repelIntense);
+      Bullets.Utils.ApplyRepel(damageInfo, rb2d);
       currentHealth -= damageInfo.damage;
       if(currentHealth <= 0) {
         // Die
-        SceneConfig.getSceneConfig().getProgressManager().Load();
+        Common.SceneConfig.getSceneConfig().getProgressManager().Load();
       } else {
         // Dizzy
+        cinemachineImpulseSource.GenerateImpulse();
         StartCoroutine(dizzy());
         // Effect
         damageEffectAnimator.SetTrigger("onDamage");
@@ -397,7 +432,7 @@ namespace Catsland.Scripts.Controller {
 
     private bool isAllOneSide(HashSet<GameObject> gameObjects) {
       foreach(GameObject gameObject in gameObjects) {
-        if(!gameObject.CompareTag(Tags.ONESIDE)) {
+        if(!gameObject.CompareTag(Common.Tags.ONESIDE)) {
           return false;
         }
       }
@@ -424,6 +459,7 @@ namespace Catsland.Scripts.Controller {
         particleSystem.gameObject.GetComponent<ParticleSystemRenderer>().sortingOrder = spriteRenderer.sortingOrder;
       }
       TrailRenderer trailRenderer = arrow.GetComponentInChildren<TrailRenderer>();
+      trailRenderer.time = Mathf.Lerp(minTrailTime, maxTrailTime, getDrawIntensity());
       if(trailRenderer != null) {
         trailRenderer.sortingOrder = spriteRenderer.sortingOrder;
       }

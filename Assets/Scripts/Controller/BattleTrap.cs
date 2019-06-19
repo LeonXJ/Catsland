@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Catsland.Scripts.Common;
+using Cinemachine;
 
 namespace Catsland.Scripts.Controller {
   public class BattleTrap : MonoBehaviour

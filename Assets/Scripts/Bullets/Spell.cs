@@ -77,7 +77,6 @@ namespace Catsland.Scripts.Bullets {
         Destroy(gameObject);
       }
       if(destroyWhenHitAny) {
-        Debug.Log("Spell hits: " + collision.gameObject.name);
         Destroy(gameObject);
       }
     }

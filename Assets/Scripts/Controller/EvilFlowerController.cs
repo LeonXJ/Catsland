@@ -14,6 +14,7 @@ namespace Catsland.Scripts.Controller {
 
     private static readonly string STATE_NAME_IDEAL = "Ideal";
     private static readonly string TRIGGER_SHOOT = "Shoot";
+    private static readonly string IS_DIE = "IsDie";
 
     public GameObject missilePrefab;
     public Transform missileGeneration;
@@ -21,6 +22,7 @@ namespace Catsland.Scripts.Controller {
     public float missileLifetime = 3.0f;
     public float shootIntervalInSecond = 5.0f;
     public int health = 2;
+    public float respawnTimeInS = 3.0f;
 
     private Animator animator;
     private EvilFlowerInput input;
@@ -30,12 +32,6 @@ namespace Catsland.Scripts.Controller {
     private void Awake() {
       animator = GetComponent<Animator>();
       input = GetComponent<EvilFlowerInput>();
-    }
-
-
-    // Start is called before the first frame update
-    void Start() {
-
     }
 
     // Update is called once per frame
@@ -52,7 +48,6 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void Shoot() {
-
       GameObject player = GameObject.FindGameObjectWithTag(Tags.PLAYER);
 
       GameObject missileGo = Instantiate(missilePrefab);
@@ -72,7 +67,13 @@ namespace Catsland.Scripts.Controller {
     }
 
     private void enterDie() {
-      Destroy(gameObject);
+      animator.SetBool(IS_DIE, true);
+      StartCoroutine(delayRespawn());
+    }
+
+    IEnumerator delayRespawn() {
+      yield return new WaitForSeconds(respawnTimeInS);
+      animator.SetBool(IS_DIE, false);
     }
   }
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Cinemachine;
 using Catsland.Scripts.Camera;
 using Catsland.Scripts.Misc;
 
@@ -11,17 +12,14 @@ namespace Catsland.Scripts.Common {
     public GlobalLightController globalLightController;
     public ProgressManager progressManager;
     public Shader defaultDiffuseShader;
+    public FocusPointController cameraController;
+    public CinemachineImpulseSource stonePillarShakeAgent;
 
     public GameObject player;
 
-    private CameraController cameraController;
 
     public static SceneConfig getSceneConfig() {
       return sceneConfig;
-    }
-
-    private void Awake() {
-      cameraController = MainCamera.GetComponent<CameraController>();
     }
 
     SceneConfig() {
@@ -40,12 +38,17 @@ namespace Catsland.Scripts.Common {
       return progressManager;
     }
 
-    public CameraController GetCameraController() {
+    public FocusPointController GetCameraController() {
       return cameraController;
     }
 
     public Shader GetDefaultDiffuseShader() {
       return defaultDiffuseShader;
+    }
+
+    public void stonePillarShake(Vector3 position, Vector3 velocity) {
+      Debug.Log("Shake");
+      stonePillarShakeAgent.GenerateImpulseAt(position, velocity);
     }
   }
 }

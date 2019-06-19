@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Catsland.Scripts.Bullets;
+using Cinemachine;
 using DG.Tweening;
+using Catsland.Scripts.Bullets;
+using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Controller {
   public class BreakableWall : MonoBehaviour, IDamageInterceptor {
@@ -12,6 +14,7 @@ namespace Catsland.Scripts.Controller {
     public float shakeA = 0.1f;
     public int genFragmentNumber = 5;
     public Vector2 fragmentInitVelocityXRange = new Vector2(-1.0f, 1.0f);
+    public Vector3 shakeVelocity = Vector3.up;
 
     public GameObject[] fragmentGos;
 
@@ -45,6 +48,7 @@ namespace Catsland.Scripts.Controller {
       UnityEngine.Camera.main.DOShakePosition(0.4f, new Vector2(0.1f, 0.0f), 10, 90, true);
       if (currentHp <= 0) {
         // destory
+        SceneConfig.getSceneConfig().stonePillarShake(transform.position, shakeVelocity);
         Destroy(gameObject);
         return;
       }

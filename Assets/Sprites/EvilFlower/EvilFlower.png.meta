@@ -1,18 +1,90 @@
 fileFormatVersion: 2
 guid: 28ec97cd38fa42846b1090ebb6a10f37
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: EvilFlower_Ideal_0
-    21300002: EvilFlower_Loop_0
-    21300004: EvilFlower_Loop_1
-    21300006: EvilFlower_Loop_2
-    21300008: EvilFlower_Loop_3
-    21300010: EvilFlower_Shoot_0
-    21300012: EvilFlower_Shoot_1
-    21300014: EvilFlower_Shoot_2
-    21300016: EvilFlower_Shoot_3
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: EvilFlower_Ideal_0
+  - first:
+      213: 21300002
+    second: EvilFlower_Loop_0
+  - first:
+      213: 21300004
+    second: EvilFlower_Loop_1
+  - first:
+      213: 21300006
+    second: EvilFlower_Loop_2
+  - first:
+      213: 21300008
+    second: EvilFlower_Loop_3
+  - first:
+      213: 21300010
+    second: EvilFlower_Shoot_0
+  - first:
+      213: 21300012
+    second: EvilFlower_Shoot_1
+  - first:
+      213: 21300014
+    second: EvilFlower_Shoot_2
+  - first:
+      213: 21300016
+    second: EvilFlower_Shoot_3
+  - first:
+      213: 7968284768301727522
+    second: EvilFlower_Die_0
+  - first:
+      213: -3856766270117848054
+    second: EvilFlower_Respawn_0
+  - first:
+      213: -1932086183266618665
+    second: EvilFlower_Respawn_1
+  - first:
+      213: -3096497752542013638
+    second: EvilFlower_Respawn_2
+  - first:
+      213: -3345486234053939647
+    second: EvilFlower_Respawn_3
+  - first:
+      213: 6527122192528406847
+    second: EvilFlower_Respawn_4
+  - first:
+      213: 9176923017710113930
+    second: EvilFlower_Respawn_5
+  - first:
+      213: 8995546219401909734
+    second: EvilFlower_Respawn_6
+  - first:
+      213: -129117155117342918
+    second: EvilFlower_Respawn_7
+  - first:
+      213: 6796292999481980457
+    second: EvilFlower_Respawn_8
+  - first:
+      213: 7181323252146155961
+    second: EvilFlower_Respawn_9
+  - first:
+      213: 7834434720554168084
+    second: EvilFlower_Respawn_10
+  - first:
+      213: 1105279610055549486
+    second: EvilFlower_Respawn_11
+  - first:
+      213: 658677661509554115
+    second: EvilFlower_Respawn_12
+  - first:
+      213: -1185563240216337468
+    second: EvilFlower_Respawn_13
+  - first:
+      213: -2864326562460237401
+    second: EvilFlower_Respawn_14
+  - first:
+      213: -2449004395570279349
+    second: EvilFlower_Respawn_15
+  - first:
+      213: 146485566129876886
+    second: EvilFlower_Respawn_16
   externalObjects: {}
-  serializedVersion: 9
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -67,9 +139,9 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - serializedVersion: 2
+  - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 64
+    maxTextureSize: 128
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -78,6 +150,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -86,7 +159,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 48
+        y: 112
         width: 32
         height: 16
       alignment: 9
@@ -96,7 +169,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 98452eeae9e3ac449809dec8f669123e
+      spriteID: 
+      internalID: 21300000
       vertices: []
       indices: 
       edges: []
@@ -106,6 +180,321 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
+        y: 112
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: 21300010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Shoot_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 112
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: 21300012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Shoot_2
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 112
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: 21300014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Shoot_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: 21300016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Die_0
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 96
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: 7968284768301727522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Respawn_0
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 96
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: -3856766270117848054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Respawn_1
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 96
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: -1932086183266618665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Respawn_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 80
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: -3096497752542013638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Respawn_3
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 80
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: -3345486234053939647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Respawn_4
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 80
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: 6527122192528406847
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Respawn_5
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 80
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: 9176923017710113930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Respawn_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: 8995546219401909734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Respawn_7
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 64
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: -129117155117342918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Respawn_8
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 64
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: 6796292999481980457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Respawn_9
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 64
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: 7181323252146155961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Respawn_10
+      rect:
+        serializedVersion: 2
+        x: 0
         y: 48
         width: 32
         height: 16
@@ -116,13 +505,77 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8586c27cfa6b5c64c8c47b509818b15c
+      spriteID: 
+      internalID: 7834434720554168084
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: EvilFlower_Shoot_1
+      name: EvilFlower_Respawn_11
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 48
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: 1105279610055549486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Respawn_12
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 48
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: 658677661509554115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Respawn_13
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 48
+        width: 32
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 
+      internalID: -1185563240216337468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilFlower_Respawn_14
       rect:
         serializedVersion: 2
         x: 0
@@ -136,13 +589,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 32e1417e61bf9be49a53e8f96ce0d700
+      spriteID: 
+      internalID: -2864326562460237401
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: EvilFlower_Shoot_2
+      name: EvilFlower_Respawn_15
       rect:
         serializedVersion: 2
         x: 32
@@ -156,17 +610,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 601937b3c45594147bf5bde3a5b443b1
+      spriteID: 
+      internalID: -2449004395570279349
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: EvilFlower_Shoot_3
+      name: EvilFlower_Respawn_16
       rect:
         serializedVersion: 2
-        x: 0
-        y: 16
+        x: 64
+        y: 32
         width: 32
         height: 16
       alignment: 9
@@ -176,7 +631,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2036e31a7ed087044825487eef35e667
+      spriteID: 
+      internalID: 146485566129876886
       vertices: []
       indices: 
       edges: []
@@ -185,10 +641,12 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5fc00db1034f39e43aeb292d6deeff7b
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
+    secondaryTextures: []
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

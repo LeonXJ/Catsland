@@ -192,7 +192,6 @@ namespace OSP {
           #region AutoTileX
           if (obj.AutoTileX) {
             var sb = obj.SpriteBounds;
-            Debug.Log("Bound of " + obj.name + " :" + sb.ToString());
 
             // Don't do anything if we already have a left or right tile set
             if (!obj.hasLeftTile || !obj.hasRightTile) {

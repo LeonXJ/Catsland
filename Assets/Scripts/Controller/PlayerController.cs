@@ -117,6 +117,7 @@ namespace Catsland.Scripts.Controller {
 
     private GameObject previousParentGameObject;
     private Vector3 previousParentPosition;
+    private ParticleSystem dustParticleSystem;
 
     // Animation
     private const string H_SPEED = "HSpeed";
@@ -128,6 +129,7 @@ namespace Catsland.Scripts.Controller {
     private const string CLIFF_SLIDING = "CliffSliding";
     private const string DASHING = "Dashing";
 
+
     public void Start() {
       input = GetComponent<IInput>();
       rb2d = GetComponent<Rigidbody2D>();
@@ -138,6 +140,7 @@ namespace Catsland.Scripts.Controller {
       headCollider = GetComponent<BoxCollider2D>();
       spriteRenderer = GetComponent<SpriteRenderer>();
       cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
+      dustParticleSystem = GetComponent<ParticleSystem>();
     }
 
     public void Awake() {
@@ -430,6 +433,10 @@ namespace Catsland.Scripts.Controller {
       activeRelayPoints.Remove(relayPoint);
     }
 
+    public void generateDust() {
+      dustParticleSystem.Play();
+    }
+
     private bool isAllOneSide(HashSet<GameObject> gameObjects) {
       foreach(GameObject gameObject in gameObjects) {
         if(!gameObject.CompareTag(Common.Tags.ONESIDE)) {
@@ -448,21 +455,10 @@ namespace Catsland.Scripts.Controller {
       Debug.Assert(arrowPrefab != null, "Arrow prefab is not set");
       Debug.Assert(shootPoint != null, "Shoot point is not set");
 
-      GameObject arrow = Instantiate(arrowPrefab, shootPoint.position, shootPoint.rotation);
-      // Set arrow ordering layer
-      SpriteRenderer renderer = arrow.GetComponent<SpriteRenderer>();
-      if(renderer != null) {
-        renderer.sortingOrder = spriteRenderer.sortingOrder + 1;
-      }
-      ParticleSystem particleSystem = arrow.GetComponentInChildren<ParticleSystem>();
-      if(particleSystem != null) {
-        particleSystem.gameObject.GetComponent<ParticleSystemRenderer>().sortingOrder = spriteRenderer.sortingOrder;
-      }
+      GameObject arrow = Instantiate(arrowPrefab, shootPoint.position + Vector3.forward * 0.1f, shootPoint.rotation);
+      // Set arrow 
       TrailRenderer trailRenderer = arrow.GetComponentInChildren<TrailRenderer>();
       trailRenderer.time = Mathf.Lerp(minTrailTime, maxTrailTime, getDrawIntensity());
-      if(trailRenderer != null) {
-        trailRenderer.sortingOrder = spriteRenderer.sortingOrder;
-      }
       ArrowCarrier arrowCarrier = arrow.GetComponent<ArrowCarrier>();
       float drawingRatio =
         Mathf.Clamp(currentDrawingTime, 0.0f, maxDrawingTime) / maxDrawingTime;

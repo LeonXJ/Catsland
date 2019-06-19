@@ -4,14 +4,14 @@ using UnityEngine;
 using UnityEditor;
 
 namespace Catsland.Scripts.Camera.Editor {
-  [CustomEditor(typeof(CameraController))]
+  [CustomEditor(typeof(FocusPointController))]
   public class CameraControllerEditor: UnityEditor.Editor {
     public override void OnInspectorGUI() {
       base.OnInspectorGUI();
 
-      CameraController cameraController = target as CameraController;
+      FocusPointController cameraController = target as FocusPointController;
       if(GUILayout.Button("Set to Position")) {
-        cameraController.setToTargetPosition();
+        //cameraController.setToTargetPosition();
       }
     }
 

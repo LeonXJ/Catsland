@@ -16,6 +16,8 @@ namespace Catsland.Scripts.Bullets {
       Hit = 3,
     }
 
+    private static readonly string IS_FULL_CHARGED_PARAMETER = "IsFullCharged";
+
     public int damageValue = 1;
     public float repelIntensive = 1.0f;
     public string tagForAttachable = "";
@@ -23,7 +25,7 @@ namespace Catsland.Scripts.Bullets {
     public float brokenPartSpinSpeed = 4800.0f;
     public float brokenPartBounceSpeedRatio = 0.2f;
 
-    public bool isShellBreaking = false;
+    public bool isShellBreaking { get; private set; } = false;
 
     public Transform tailPosition;
     public Transform headPosition;
@@ -32,6 +34,11 @@ namespace Catsland.Scripts.Bullets {
     public GameObject attachedArrowPrefab;
     public float attachedPositionOffset = 0.2f;
 
+    public GameObject hitEffectPrefab;
+
+    [Header("Effect")]
+    public GameObject lightLayer;
+
     private ArrowStatus status = ArrowStatus.Flying;
     private string tagForOwner;
     private Vector2 velocity;
@@ -39,7 +46,7 @@ namespace Catsland.Scripts.Bullets {
     private static Random random = new Random();
 
     // References
-    public ParticleSystem particleSystem;
+    public ParticleSystem hitEffectparticleSystem;
     private SpriteRenderer spriteRenderer;
     private Collider2D collider2d;
     private Rigidbody2D rb2d;
@@ -128,6 +135,16 @@ namespace Catsland.Scripts.Bullets {
       return defaultHitBehavior(hit);
     }
 
+    public void SetIsShellBreaking(bool isShellBreaking) {
+      this.isShellBreaking = isShellBreaking;
+      if (lightLayer != null) {
+        lightLayer.SetActive(isShellBreaking);
+      }
+      if (isShellBreaking) {
+        gameObject.layer = Common.Layers.LayerSelfIlluminate;
+      }
+    }
+
     private bool defaultHitBehavior(RaycastHit2D hit) {
 
       // Ground: attach / break
@@ -175,8 +192,8 @@ namespace Catsland.Scripts.Bullets {
     private void arrowHit(Collider2D collision) {
       status = ArrowStatus.Hit;
       // emit
-      particleSystem.Emit(20);
-      particleSystem.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+      hitEffectparticleSystem.Emit(20);
+      hitEffectparticleSystem.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
 
       // make damage
       collision.gameObject.SendMessage(
@@ -223,12 +240,20 @@ namespace Catsland.Scripts.Bullets {
         -rb2d.velocity.x * brokenPartBounceSpeedRatio,
         (Random.value - 0.5f) * 2.0f * brokenPartSpinSpeed);
 
+      // set layer
+      debrid.layer = gameObject.layer;
+      foreach (Transform t in debrid.transform) {
+        t.gameObject.layer = gameObject.layer;
+      }
       transferFlame(debrid);
 
       // set complete arrow status 
       spriteRenderer.enabled = false;
       rb2d.velocity = Vector3.zero;
       collider2d.enabled = false;
+
+      // spark effect
+      ReleaseHitEffectParticle();
 
       // delay self-destory
       safeDestroy();
@@ -238,6 +263,17 @@ namespace Catsland.Scripts.Bullets {
       Flame flame = GetComponentInChildren<Flame>();
       if (flame != null) {
         flame.transform.parent = newGO.transform;
+      }
+    }
+
+    private void ReleaseHitEffectParticle() {
+      if (hitEffectPrefab != null) {
+        GameObject hitEffectGo = Instantiate(hitEffectPrefab);
+        hitEffectGo.transform.position = transform.position;
+        hitEffectGo.transform.localScale = transform.lossyScale;
+
+        ParticleSystem particleSystem = hitEffectGo.GetComponent<ParticleSystem>();
+        particleSystem.Play();
       }
     }
   }

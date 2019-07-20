@@ -9,6 +9,7 @@ namespace Catsland.Scripts.Common {
     private static readonly string LAYER_LIGHT = "Light";
     private static readonly string LAYER_VULNERABLE_UNSOLID = "VulnerableUnsolid";
     private static readonly string LAYER_VULNERABLE_OBJECT = "VulnerableObject";
+    private static readonly string LAYER_SELF_ILLUMINATE = "Self-illuminate";
 
     public static readonly int LayerGround = LayerMask.NameToLayer(LAYER_GROUND_NAME);
     public static readonly int LayerCharacter = LayerMask.NameToLayer(LAYER_CHARACTER_NAME);
@@ -17,5 +18,6 @@ namespace Catsland.Scripts.Common {
     public static readonly int LayerLight = LayerMask.NameToLayer(LAYER_LIGHT);
     public static readonly int LayerBeTrigger = LayerMask.NameToLayer(LAYER_VULNERABLE_UNSOLID);
     public static readonly int LayerVulnerableObject = LayerMask.NameToLayer(LAYER_VULNERABLE_OBJECT);
+    public static readonly int LayerSelfIlluminate = LayerMask.NameToLayer(LAYER_SELF_ILLUMINATE);
   }
 }

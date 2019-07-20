@@ -10,7 +10,7 @@ namespace Catsland.Scripts.Controller {
 
   [RequireComponent(typeof(IInput))]
   [RequireComponent(typeof(Animator))]
-  public class PlayerController: MonoBehaviour {
+  public class PlayerController: MonoBehaviour, DustTexture.DustTextureAssignee {
 
     // Locomoation
     [Header("Run")]
@@ -26,6 +26,7 @@ namespace Catsland.Scripts.Controller {
     public float cliffSlidingSpeed = 1.0f;
     public float fallMultiplier = 2.5f;
     public float lowJumMultiplier = 2f;
+    public ParticleSystem smashParticleSystem;
 
     [Header("Dash")]
     public float dashSpeed = 3.0f;
@@ -105,6 +106,14 @@ namespace Catsland.Scripts.Controller {
     public Transform doubleJumpEffectPoint;
     public Animator damageEffectAnimator;
     public ParticleSystem damageEffectParticleSystem;
+
+    public Vector3 footPosition {
+      get {
+        return groundSensorGO.transform.position;
+      }
+    }
+
+
     private ISensor groundSensor;
     private ISensor backSensor;
     private ISensor frontSensor;
@@ -299,9 +308,14 @@ namespace Catsland.Scripts.Controller {
         !isLastUpdateOnGround &&
         groundSensor.isStay() &&
         rb2d.velocity.y < -smashMinSpeed) {
+
+        ReleaseSmashEffect();
+
+        /*
         GameObject smashEffect = Instantiate(smashEffectPrefab);
         smashEffect.transform.position = smashEffectPoint.position;
         Common.Utils.setRelativeRenderLayer(spriteRenderer, smashEffect.GetComponentInChildren<SpriteRenderer>(), 1);
+        */
       }
       isLastUpdateOnGround = groundSensor.isStay();
 
@@ -388,6 +402,12 @@ namespace Catsland.Scripts.Controller {
       animator.SetBool(DASHING, isDashing());
     }
 
+    private void ReleaseSmashEffect() {
+      if (smashParticleSystem != null) {
+        smashParticleSystem.Play();
+      }
+    }
+
     public void damage(DamageInfo damageInfo) {
       if(Time.time - lastGetDamagedTime < immutableTime) {
         return;
@@ -434,7 +454,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void generateDust() {
-      dustParticleSystem.Play();
+      dustParticleSystem.Play(false);
     }
 
     private bool isAllOneSide(HashSet<GameObject> gameObjects) {
@@ -456,15 +476,16 @@ namespace Catsland.Scripts.Controller {
       Debug.Assert(shootPoint != null, "Shoot point is not set");
 
       GameObject arrow = Instantiate(arrowPrefab, shootPoint.position + Vector3.forward * 0.1f, shootPoint.rotation);
+      float drawingRatio =
+        Mathf.Clamp(currentDrawingTime, 0.0f, maxDrawingTime) / maxDrawingTime;
+
       // Set arrow 
       TrailRenderer trailRenderer = arrow.GetComponentInChildren<TrailRenderer>();
       trailRenderer.time = Mathf.Lerp(minTrailTime, maxTrailTime, getDrawIntensity());
       ArrowCarrier arrowCarrier = arrow.GetComponent<ArrowCarrier>();
-      float drawingRatio =
-        Mathf.Clamp(currentDrawingTime, 0.0f, maxDrawingTime) / maxDrawingTime;
       arrowCarrier.repelIntensive = drawingRatio * maxRepelForce;
       float absoluteArrowSpeed = Mathf.Lerp(minArrowSpeed, maxArrowSpeed, drawingRatio);
-      arrowCarrier.isShellBreaking = drawingRatio > strongArrowDrawingRatio;
+      arrowCarrier.SetIsShellBreaking(drawingRatio > strongArrowDrawingRatio);
       arrowCarrier.fire(
         new Vector2(transform.lossyScale.x > 0.0f ? absoluteArrowSpeed : -absoluteArrowSpeed, 0.0f),
         maxArrowLifetime,
@@ -492,6 +513,15 @@ namespace Catsland.Scripts.Controller {
       yield return new WaitForSeconds(dizzyTime);
       isDizzy = false;
       damageEffectAnimator.ResetTrigger("onDamage");
+    }
+
+    public void AssignDustTexture(DustTexture dustTexture) {
+      dustTexture.ApplyTexture(dustParticleSystem);
+      if (smashParticleSystem != null) {
+        foreach (var particleSystem in smashParticleSystem.gameObject.GetComponentsInChildren<ParticleSystem>()) {
+          dustTexture.ApplyTexture(particleSystem);
+        }
+      }
     }
   }
 }

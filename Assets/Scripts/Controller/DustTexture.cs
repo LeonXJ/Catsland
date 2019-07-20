@@ -6,24 +6,28 @@ using Catsland.Scripts.Common;
 namespace Catsland.Scripts.Controller {
   public class DustTexture : MonoBehaviour {
 
+    public interface DustTextureAssignee {
+      void AssignDustTexture(DustTexture dustTexture);
+    }
+
     public bool hasDust = true;
-    public Color startColor = Color.red;
+    public ParticleSystem.MinMaxGradient dustColor;
 
     void OnTriggerEnter2D(Collider2D collider) {
       if (collider.tag == Tags.PLAYER) {
-        ParticleSystem particleSystem = collider.gameObject.GetComponent<ParticleSystem>();
-        if (particleSystem != null) {
-          ApplyTexture(particleSystem);
+        DustTextureAssignee assignee = collider.gameObject.GetComponent<DustTextureAssignee>();
+        if (assignee != null) {
+          assignee.AssignDustTexture(this);
         }
       }
     }
 
-    private void ApplyTexture(ParticleSystem particleSystem) {
+    public void ApplyTexture(ParticleSystem particleSystem) {
       var emissionModule = particleSystem.emission;
       emissionModule.enabled = hasDust;
       if (hasDust) {
-        var mainModule = particleSystem.main;
-        mainModule.startColor = startColor;
+        var colorOverLifetimeModule = particleSystem.colorOverLifetime;
+        colorOverLifetimeModule.color = dustColor;
       }
     }
   }

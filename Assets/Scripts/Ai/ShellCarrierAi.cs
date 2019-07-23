@@ -5,13 +5,13 @@ namespace Catsland.Scripts.Ai {
   public class ShellCarrierAi: MonoBehaviour, IInput {
 
     public LayerMask groundLayerMask;
+    public LayerMask characterLayerMask;
+    public Rect frontCharacterDetector;
     public Rect frontSpaceDetector;
     public Rect frontGroundDetector;
 
-    private float horizontal;
-
     bool IInput.attack() {
-      return false;
+      return isCharacteDetected();
     }
 
     bool IInput.dash() {
@@ -19,7 +19,8 @@ namespace Catsland.Scripts.Ai {
     }
 
     float IInput.getHorizontal() {
-      return horizontal;
+      return (canMoveForward() ? 1.0f : -1.0f) *
+         Mathf.Sign(Common.Utils.getOrientation(gameObject));
     }
 
     float IInput.getVertical() {
@@ -42,12 +43,6 @@ namespace Catsland.Scripts.Ai {
       return false;
     }
 
-    // Update is called once per frame
-    void Update() {
-      horizontal = (canMoveForward() ? 1.0f : -1.0f) *
-         Mathf.Sign(Common.Utils.getOrientation(gameObject));
-    }
-
     private bool canMoveForward() {
       return !isGroundDetected(frontSpaceDetector) && isGroundDetected(frontGroundDetector);
     }
@@ -56,13 +51,14 @@ namespace Catsland.Scripts.Ai {
       return Common.Utils.isRectOverlap(rect, transform, groundLayerMask);
     }
 
-    void OnDrawGizmosSelected() {
-      Common.Utils.drawRectAsGizmos(frontSpaceDetector, isGroundDetected(frontSpaceDetector) ? Color.white : Color.blue, transform);
-      Common.Utils.drawRectAsGizmos(frontGroundDetector, isGroundDetected(frontGroundDetector) ? Color.white : Color.red, transform);
+    private bool isCharacteDetected() {
+      return Common.Utils.isRectOverlap(frontCharacterDetector, transform, characterLayerMask);
     }
 
-    public void resetStatus() {
-      horizontal = 0.0f;
+    void OnDrawGizmosSelected() {
+      Common.Utils.drawRectAsGizmos(frontCharacterDetector, isCharacteDetected() ? Color.white : Color.yellow, transform);
+      Common.Utils.drawRectAsGizmos(frontSpaceDetector, isGroundDetected(frontSpaceDetector) ? Color.white : Color.blue, transform);
+      Common.Utils.drawRectAsGizmos(frontGroundDetector, isGroundDetected(frontGroundDetector) ? Color.white : Color.red, transform);
     }
   }
 }

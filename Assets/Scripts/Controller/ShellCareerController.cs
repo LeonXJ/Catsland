@@ -29,19 +29,18 @@ namespace Catsland.Scripts.Controller {
     private Rigidbody2D rb2d;
     private Animator animator;
 
-    private Status status;
     private float currentDormantTime = 0.0f;
     private Vector2 lastDamageRepelDirection;
     public int curShellHeath;
     private float shellRecoverSlot = 0.0f;
+    private bool isDormant = false;
 
     // Animation
-    private static readonly string IS_DORMANT = "IsDormant";
+    private AnimatorStateInfo currentState;
 
-    public enum Status {
-      IDEAL = 1,
-      DORMANT = 2,
-    }
+    private static readonly string STATUS_WALK = "Walk";
+    private static readonly string IS_DORMANT = "IsDormant";
+    private static readonly string ATTACK = "Attack";
 
     private void Awake() {
       input = GetComponent<IInput>();
@@ -56,6 +55,11 @@ namespace Catsland.Scripts.Controller {
 
     // Update is called once per frame
     void Update() {
+      currentState = animator.GetCurrentAnimatorStateInfo(0);
+
+      if (canAttack() && input.attack()) {
+        animator.SetTrigger(ATTACK);
+      }
 
       float desiredSpeed = input.getHorizontal();
       if(canWalk()) {
@@ -65,7 +69,7 @@ namespace Catsland.Scripts.Controller {
         ControllerUtils.AdjustOrientation(desiredSpeed, gameObject);
       }
 
-      if(status == Status.DORMANT) {
+      if(isDormant) {
         currentDormantTime += Time.deltaTime;
         if(currentDormantTime > dormantDurationInS) {
           enterIdeal();
@@ -100,19 +104,27 @@ namespace Catsland.Scripts.Controller {
       }
 
       // Animation
-      animator.SetBool(IS_DORMANT, status == Status.DORMANT);
+      animator.SetBool(IS_DORMANT, isDormant);
     }
 
     public bool canWalk() {
-      return status == Status.IDEAL;
+      return currentState.IsName(STATUS_WALK);
+    }
+
+    public bool canAttack() {
+      return currentState.IsName(STATUS_WALK);
     }
 
     public bool canAdjustOrientation() {
-      return status == Status.IDEAL;
+      return currentState.IsName(STATUS_WALK);
     }
 
     public bool canGenerateSting() {
-      return stingGenerations != null && status != Status.DORMANT;
+      return stingGenerations != null && currentState.IsName(STATUS_WALK);
+    }
+
+    public void DoAttack() {
+      animator.ResetTrigger(ATTACK);
     }
 
     private void generateStings() {
@@ -132,7 +144,7 @@ namespace Catsland.Scripts.Controller {
 
     private void enterDormant() {
       currentDormantTime = 0.0f;
-      status = Status.DORMANT;
+      isDormant = true;
       // Apply a repel force
       rb2d.AddForce(lastDamageRepelDirection * enterDormantRepelForce);
       // Disable contact damage
@@ -145,7 +157,7 @@ namespace Catsland.Scripts.Controller {
 
     private void enterIdeal() {
       curHealth = maxHealth;
-      status = Status.IDEAL;
+      isDormant = false;
       curShellHeath = maxShellHealth;
       // Enable contact damage
       foreach(ContactDamage cd in GetComponentsInChildren<ContactDamage>()) {

@@ -326,11 +326,17 @@ namespace Catsland.Scripts.Controller {
       */
 
       // Move with the platform.
-      if(gameObject.transform.parent != null && gameObject.transform.parent.gameObject == previousParentGameObject) {
-        gameObject.transform.position += gameObject.transform.parent.position - previousParentPosition;
+      GameObject currentGround = groundSensor.isStay() ? Common.Utils.getAnyFrom(groundSensor.getTriggerGos()) : null;
+      if (currentGround != previousParentGameObject) {
+        previousParentGameObject = currentGround;
+      } else if (currentGround != null){
+        // else move with the ground
+        Vector3 deltaGroundPosition = currentGround.transform.position - previousParentPosition;
+        gameObject.transform.position += new Vector3(deltaGroundPosition.x, deltaGroundPosition.y);
       }
-      previousParentGameObject = gameObject.transform.parent == null ? null : gameObject.transform.parent.gameObject;
-      previousParentPosition = gameObject.transform.parent == null ? Vector3.zero : gameObject.transform.parent.position;
+      if (currentGround != null) {
+        previousParentPosition = currentGround.transform.position;
+      }
 
       if(dashRemainingTime <= 0.0f) {
         if(!isDizzy && !input.meditation()) {

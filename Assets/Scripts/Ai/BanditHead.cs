@@ -9,6 +9,8 @@ namespace Catsland.Scripts.Ai {
     // The function to perform an action.
     delegate void PerformAction();
 
+    public bool activated = false;
+
     public float knifeReachDistance = 10.0f;
     public float chargeReachDistance = 6.0f;
     public float jumpSmashReachDistance = 3.0f;
@@ -18,6 +20,8 @@ namespace Catsland.Scripts.Ai {
     private bool wantJumpSmash;
     private bool wantSpell;
     private bool wantCharge;
+    private bool wantDisplay;
+    private bool hasDisplayed = false;
 
     private bool taskStarted = false;
 
@@ -53,6 +57,7 @@ namespace Catsland.Scripts.Ai {
       wantJumpSmash = false;
       wantSpell = false;
       wantCharge = false;
+      wantDisplay = false;
     }
 
     void Start() {
@@ -65,8 +70,39 @@ namespace Catsland.Scripts.Ai {
     }
 
     [Task]
+    public void holdIfNotActivate() {
+      resetStatus();
+      if (activated) {
+        Task.current.Succeed();
+      } else {
+        Task.current.Fail();
+      }
+    }
+
+    [Task]
     public void isPlayerInKnifeReachDistance() {
       setTaskSucceedElseFailIfInDistance(knifeReachDistance);
+    }
+
+    [Task]
+    public void shouldDisplay() {
+      if (!hasDisplayed) {
+        Task.current.Succeed();
+      } else {
+        Task.current.Fail();
+      }
+    }
+
+    [Task]
+    public void doDisplay() {
+      resetStatus();
+      wantDisplay = true;
+      hasDisplayed = true;
+      performAndWaitDoneAction(
+        controller.canDisplay(), () => {
+          wantDisplay = true;
+        },
+        controller.status == HeadOfBanditController.Status.DISPLAY_DONE);
     }
 
     [Task]
@@ -152,6 +188,14 @@ namespace Catsland.Scripts.Ai {
         Task.current.Succeed();
         return;
       }
+    }
+
+    public bool display() {
+      return wantDisplay;
+    }
+
+    public void activate() {
+      activated = true;
     }
   }
 }

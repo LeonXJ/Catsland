@@ -12,10 +12,15 @@ namespace Catsland.Scripts.Controller {
       bool charge();
       bool jumpSmash();
       bool spell();
+      bool display();
     }
 
     public enum Status {
       IDEAL = 1,
+
+      // Display
+      DISPLAY,
+      DISPLAY_DONE,
 
       // Charge
       CHARGE_PREPARE,
@@ -38,6 +43,8 @@ namespace Catsland.Scripts.Controller {
     }
 
     public Status status = Status.IDEAL;
+
+    public float displayTimeInS = 2.0f;
 
     // Walk
     public float walkingSpeed = 2.0f;
@@ -72,6 +79,7 @@ namespace Catsland.Scripts.Controller {
     public Transform spellTransform;
 
     private float currentChargeStatusRemainingTime;
+    private LinearSequence displaySequence;
     private LinearSequence chargeSequence;
     private LinearSequence jumpSmashSequence;
     private LinearSequence spellSequence;
@@ -103,6 +111,7 @@ namespace Catsland.Scripts.Controller {
     private static readonly string CHARGE_PHASE = "ChargePhase";
     private static readonly string SPELL_PHASE = "SpellPhase";
     private static readonly string DIE = "Die";
+    private static readonly string DISPLAY = "Display";
 
     private static readonly Dictionary<Status, int> JUMP_SMASH_STATUS_TO_PHASE =
       new Dictionary<Status, int>();
@@ -137,6 +146,12 @@ namespace Catsland.Scripts.Controller {
     }
 
     private void Start() {
+      displaySequence = LinearSequence.newBuilder()
+        .append(Status.DISPLAY, displayTimeInS)
+        .append(Status.DISPLAY_DONE, 0.2f)
+        .withEndingStatus(Status.IDEAL)
+        .build();
+
       chargeSequence = LinearSequence.newBuilder()
         .append(Status.CHARGE_PREPARE, chargePrepareTime)
         .append(Status.CHARGE_CHARGING, chargeChargingTime)
@@ -171,12 +186,16 @@ namespace Catsland.Scripts.Controller {
     void Update() {
       Status oldStatus = status;
       // autonamous logic
+      status = (Status)displaySequence.processIfInInterestedStatus(status);
       status = (Status)chargeSequence.processIfInInterestedStatus(status);
       status = (Status)jumpSmashSequence.processIfInInterestedStatus(status);
       status = (Status)spellSequence.processIfInInterestedStatus(status);
       status = (Status)dieSequence.processIfInInterestedStatus(status);
 
       // transition logic
+      if (canDisplay() && input.display()) {
+        status = (Status)displaySequence.start();
+      }
       float desiredSpeed = input.getHorizontal();
       if(canCharge() && input.charge()) {
         status = (Status)chargeSequence.start();
@@ -236,11 +255,11 @@ namespace Catsland.Scripts.Controller {
       // animation
       animator.SetFloat(H_SPEED, Mathf.Abs(rb2d.velocity.x));
       animator.SetFloat(V_SPEED, rb2d.velocity.y);
+      animator.SetBool(DISPLAY, status == Status.DISPLAY);
       setAnimiatorPhaseValue(JUMP_SMASH_PHASE, JUMP_SMASH_STATUS_TO_PHASE);
       setAnimiatorPhaseValue(CHARGE_PHASE, CHARGE_STATUS_TO_PHASE);
       setAnimiatorPhaseValue(SPELL_PHASE, SPELL_STATUS_TO_PHASE);
       animator.SetBool(DIE, isDead());
-
     }
 
     public float getOrientation() {
@@ -268,6 +287,10 @@ namespace Catsland.Scripts.Controller {
     }
 
     public bool canSpell() {
+      return status == Status.IDEAL;
+    }
+
+    public bool canDisplay() {
       return status == Status.IDEAL;
     }
 

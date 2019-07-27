@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using Cinemachine;
 using Catsland.Scripts.Camera;
 using Catsland.Scripts.Misc;
@@ -14,6 +15,8 @@ namespace Catsland.Scripts.Common {
     public Shader defaultDiffuseShader;
     public FocusPointController cameraController;
     public CinemachineImpulseSource stonePillarShakeAgent;
+    public GameObject enemyTitle;
+    public Animator enemyTitleBlack;
 
     public GameObject player;
 
@@ -46,9 +49,24 @@ namespace Catsland.Scripts.Common {
       return defaultDiffuseShader;
     }
 
+    public void DisplayEnemyTitle(string text) {
+      if (enemyTitle == null) {
+        return;
+      }
+      Text title = enemyTitle.GetComponent<Text>();
+      title.text = text;
+      Animator ani = enemyTitle.GetComponent<Animator>();
+      ani.SetTrigger("ShowTitle");
+
+      if (enemyTitleBlack != null) {
+        enemyTitleBlack.SetTrigger("BlackOn");
+      }
+    }
+
     public void stonePillarShake(Vector3 position, Vector3 velocity) {
       Debug.Log("Shake");
       stonePillarShakeAgent.GenerateImpulseAt(position, velocity);
     }
+
   }
 }

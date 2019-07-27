@@ -2,7 +2,6 @@
 
 namespace Catsland.Scripts.Controller {
   public class DeviceInput: MonoBehaviour, IInput,
-    HeadOfBanditController.HeadOfBanditInput,
     RoyalGuardController.RoyalGuardInput,
     EvilFlowerController.EvilFlowerInput,
     BeeController.BeeInput {

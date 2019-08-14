@@ -4,14 +4,20 @@ using Catsland.Scripts.Common;
 namespace Catsland.Scripts.Controller {
   public class RelayPoint: MonoBehaviour {
 
+    public float maxCurrentHintZoom = 2.0f;
     public GameObject currentHintGo;
     public GameObject targetHintGo;
     public int hintCircleSegment = 16;
+    public float hintChangeSpeed = 3.0f;
+    public Color currentReachTargetColor = Color.blue;
 
     private GameObject playerGo;
     private PlayerController playerController;
     private SpriteRenderer currentHintRenderer;
     private SpriteRenderer targetHintRenderer;
+
+    private float initCurrentHintScale;
+    private float targetAlpha = 0.0f;
 
     void Awake() {
       playerGo = GameObject.FindGameObjectWithTag(Tags.PLAYER);
@@ -22,6 +28,10 @@ namespace Catsland.Scripts.Controller {
       targetHintRenderer = targetHintGo.GetComponent<SpriteRenderer>();
     }
 
+    void Start() {
+      initCurrentHintScale = currentHintRenderer.transform.localScale.x;
+    }
+
     void Update() {
       if(!playerController.supportRelay) {
         return;
@@ -30,44 +40,39 @@ namespace Catsland.Scripts.Controller {
       float distance = delta.magnitude;
 
       // update controller info
-      if(distance > playerController.relayEffectDistance) {
+      if(distance > playerController.relayHintDistance) {
         playerController.unregisterRelayPoint(this);
       } else {
         playerController.registerRelayPoint(this);
       }
 
+      targetAlpha = 0.0f;
       // update UI
-      if(distance < playerController.relayHintDistance) {
-        Debug.Log("Show relay");
-        /*
-        // For debug only
-        drawCircle(transform.position, distance, hintCircleSegment, Color.white);
-        drawCircle(
-          transform.position,
-          playerController.relayEffectDistance,
-          hintCircleSegment,
-          Color.green);
-          */
+      if(distance < playerController.relayHintDistance && playerController.isNearestRelayPoint(this)) {
         currentHintRenderer.enabled = true;
         targetHintRenderer.enabled = true;
+
+        float progress = 1.0f - Mathf.Max(distance - playerController.relayEffectDistance, 0.0f) / (playerController.relayHintDistance - playerController.relayEffectDistance);
+        float scale = Mathf.Lerp(maxCurrentHintZoom * initCurrentHintScale, initCurrentHintScale, progress);
         // size
-        currentHintGo.transform.localScale = new Vector2(distance, distance) * 100 * 2 / 64;
-        targetHintGo.transform.localScale =
-          new Vector2(playerController.relayEffectDistance, playerController.relayEffectDistance) * 100 * 2 / 64;
+        currentHintGo.transform.localScale = new Vector2(scale, scale);
         // alpha
-        float alpha =
-          1.0f - (Mathf.Max(distance - playerController.relayEffectDistance, 0.0f)
-                    / (playerController.relayHintDistance - playerController.relayEffectDistance));
-        currentHintRenderer.material.SetColor("_Color", new Color(1.0f, 1.0f, 1.0f, alpha));
-        targetHintRenderer.material.SetColor("_Color", new Color(1.0f, 1.0f, 1.0f, alpha));
+        targetAlpha = progress;
       } else {
         HideCircle();
       }
+
+      bool currentReachTarget = distance < playerController.relayEffectDistance;
+
+      // update alpha
+      float currentAlpha = Mathf.Lerp(currentHintRenderer.material.GetColor("_Color").a, targetAlpha, Time.deltaTime * hintChangeSpeed);
+      currentHintRenderer.material.SetColor(
+        "_Color", currentReachTarget ?  new Color(currentReachTargetColor.r, currentReachTargetColor.g, currentReachTargetColor.b, currentAlpha) : new Color(1.0f, 1.0f, 1.0f, currentAlpha));
+      targetHintRenderer.material.SetColor("_Color", new Color(1.0f, 1.0f, 1.0f, currentAlpha));
     }
 
     public void HideCircle() {
-      currentHintRenderer.enabled = false;
-      targetHintRenderer.enabled = false;
+      targetAlpha = 0.0f;
     }
 
     private static void drawCircle(Vector3 center, float radius, int segments, Color color) {

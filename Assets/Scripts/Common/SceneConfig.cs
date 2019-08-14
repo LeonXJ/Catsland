@@ -59,7 +59,7 @@ namespace Catsland.Scripts.Common {
       ani.SetTrigger("ShowTitle");
 
       if (enemyTitleBlack != null) {
-        enemyTitleBlack.SetTrigger("BlackOn");
+        enemyTitleBlack.SetTrigger("");
       }
     }
 

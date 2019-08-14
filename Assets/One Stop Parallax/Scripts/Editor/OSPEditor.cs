@@ -40,7 +40,7 @@ public class OSPEditor : Editor
         EditorGUILayout.Space();
         EditorGUILayout.Space();
 
-        osp.ParallaxSmoothingX = EditorGUILayout.Slider(new GUIContent("Parallax Smoothing X", "Ranges from 0 to 1 and scales the horizontal speed of all layers."), osp.ParallaxSmoothingX, 0, 1);
+        osp.ParallaxSmoothingX = EditorGUILayout.Slider(new GUIContent("Parallax Smoothing X", "Ranges from 0 to 1 and scales the horizontal speed of all layers."), osp.ParallaxSmoothingX, -1, 1);
         EditorGUILayout.Space();
         osp.ParallaxSmoothingY = EditorGUILayout.Slider(new GUIContent("Parallax Smoothing Y", "Ranges from 0 to 1 and scales the vertical speed of all layers."), osp.ParallaxSmoothingY, 0, 1);
 
@@ -210,7 +210,7 @@ public class OSPObjectEditor : Editor
         EditorGUILayout.Space();
         if (UseParallaxOnXAxisProp.boolValue)
         {
-            EditorGUILayout.Slider(ParallaxSmoothingXProp, 0, 1, new GUIContent("  Parallax Smoothing X", "Ranges from 0 to 1 and scales the horizontal speed of the layer."));
+            EditorGUILayout.Slider(ParallaxSmoothingXProp, -1, 1, new GUIContent("  Parallax Smoothing X", "Ranges from 0 to 1 and scales the horizontal speed of the layer."));
             EditorGUILayout.Space();
         }
         #endregion
@@ -345,8 +345,8 @@ public class OSPObjectEditor : Editor
         if (VerticalDistanceMaxProp.floatValue < 0)
             VerticalDistanceMaxProp.floatValue = 0;
 
-        if (ParallaxSmoothingXProp.floatValue < 0)
-            ParallaxSmoothingXProp.floatValue = 0;
+        if (ParallaxSmoothingXProp.floatValue < -1)
+            ParallaxSmoothingXProp.floatValue = -1;
 
         if (ParallaxSmoothingXProp.floatValue > 1)
             ParallaxSmoothingXProp.floatValue = 1;

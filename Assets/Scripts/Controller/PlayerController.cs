@@ -76,6 +76,7 @@ namespace Catsland.Scripts.Controller {
     private bool isShooting = false;
     private float currentDrawingTime = 0.0f;
     private HashSet<RelayPoint> activeRelayPoints = new HashSet<RelayPoint>();
+    private RelayPoint nearestRelayPoint;
 
     // Health
     [Header("Health")]
@@ -161,6 +162,9 @@ namespace Catsland.Scripts.Controller {
       float currentVerticleVolocity = rb2d.velocity.y;
       Vector2 appliedForce = Vector2.zero;
 
+      // Relay point update
+      updateNearestRelayPoint();
+
       // Cooldown
       if(dashCooldownRemaining > 0.0f) {
         dashCooldownRemaining -= Time.deltaTime;
@@ -219,7 +223,7 @@ namespace Catsland.Scripts.Controller {
       // Relay jump
       if(!isDizzy
         && !groundSensor.isStay()
-        && activeRelayPoints.Count > 0
+        && canRelay()
         && input.jump()) {
         rb2d.velocity = Vector2.zero;
         //rb2d.AddForce(new Vector2(0.0f, jumpForce));
@@ -233,7 +237,7 @@ namespace Catsland.Scripts.Controller {
         remainingDash = 1;
       }
 
-      if (activeRelayPoints.Count > 0) {
+      if (canRelay()) {
         Time.timeScale = timeScaleInRelay;
       } else if (isDizzy) {
         Time.timeScale = timeScaleInDizzy;
@@ -461,6 +465,34 @@ namespace Catsland.Scripts.Controller {
 
     public void generateDust() {
       dustParticleSystem.Play(false);
+    }
+
+    public bool isNearestRelayPoint(RelayPoint relayPoint) {
+      return relayPoint == nearestRelayPoint;
+    }
+
+    private bool canRelay() {
+      return !isDizzy
+        && !groundSensor.isStay()
+        && supportRelay
+        && nearestRelayPoint != null
+        && getRelayPointDistanceSqrt(nearestRelayPoint) < relayEffectDistance * relayEffectDistance;
+    }
+
+    private void updateNearestRelayPoint() {
+      nearestRelayPoint = null;
+      float nearestPointDistanceSqr = Mathf.Infinity;
+      foreach (RelayPoint relayPoint in activeRelayPoints) {
+        float currentDistance = getRelayPointDistanceSqrt(relayPoint);
+        if (currentDistance < nearestPointDistanceSqr) {
+          nearestRelayPoint = relayPoint;
+          nearestPointDistanceSqr = currentDistance;
+        }
+      }
+    }
+
+    private float getRelayPointDistanceSqrt(RelayPoint relayPoint) {
+      return Common.Utils.toVector2(transform.position - relayPoint.transform.position).SqrMagnitude();
     }
 
     private bool isAllOneSide(HashSet<GameObject> gameObjects) {

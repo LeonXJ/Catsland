@@ -358,7 +358,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 221
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -377,9 +377,9 @@ TextureImporter:
       name: Rangerv3_Stand_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 56
         y: 221
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -398,9 +398,9 @@ TextureImporter:
       name: Rangerv3_Stand_2
       rect:
         serializedVersion: 2
-        x: 128
+        x: 112
         y: 221
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -419,9 +419,9 @@ TextureImporter:
       name: Rangerv3_Stand_3
       rect:
         serializedVersion: 2
-        x: 192
+        x: 168
         y: 221
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -440,9 +440,9 @@ TextureImporter:
       name: Rangerv3_Stand_4
       rect:
         serializedVersion: 2
-        x: 256
+        x: 224
         y: 221
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -461,9 +461,9 @@ TextureImporter:
       name: Rangerv3_Stand_5
       rect:
         serializedVersion: 2
-        x: 320
+        x: 280
         y: 221
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -482,9 +482,9 @@ TextureImporter:
       name: Rangerv3_Run_0
       rect:
         serializedVersion: 2
-        x: 384
+        x: 336
         y: 221
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -503,9 +503,9 @@ TextureImporter:
       name: Rangerv3_Run_1
       rect:
         serializedVersion: 2
-        x: 448
+        x: 392
         y: 221
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -524,9 +524,9 @@ TextureImporter:
       name: Rangerv3_Run_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 186
-        width: 64
+        x: 448
+        y: 221
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -545,9 +545,9 @@ TextureImporter:
       name: Rangerv3_Run_3
       rect:
         serializedVersion: 2
-        x: 64
+        x: 0
         y: 186
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -566,9 +566,9 @@ TextureImporter:
       name: Rangerv3_Run_4
       rect:
         serializedVersion: 2
-        x: 128
+        x: 56
         y: 186
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -587,9 +587,9 @@ TextureImporter:
       name: Rangerv3_Run_5
       rect:
         serializedVersion: 2
-        x: 192
+        x: 112
         y: 186
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -608,9 +608,9 @@ TextureImporter:
       name: Rangerv3_Run_6
       rect:
         serializedVersion: 2
-        x: 256
+        x: 168
         y: 186
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -629,9 +629,9 @@ TextureImporter:
       name: Rangerv3_Run_7
       rect:
         serializedVersion: 2
-        x: 320
+        x: 224
         y: 186
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -650,9 +650,9 @@ TextureImporter:
       name: Rangerv3_Shoot_0
       rect:
         serializedVersion: 2
-        x: 384
+        x: 280
         y: 186
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -671,9 +671,9 @@ TextureImporter:
       name: Rangerv3_Shoot_1
       rect:
         serializedVersion: 2
-        x: 448
+        x: 336
         y: 186
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -692,9 +692,9 @@ TextureImporter:
       name: Rangerv3_Shoot_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 151
-        width: 64
+        x: 392
+        y: 186
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -713,9 +713,9 @@ TextureImporter:
       name: Rangerv3_Shoot_3
       rect:
         serializedVersion: 2
-        x: 64
-        y: 151
-        width: 64
+        x: 448
+        y: 186
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -734,9 +734,9 @@ TextureImporter:
       name: Rangerv3_Shoot_4
       rect:
         serializedVersion: 2
-        x: 128
+        x: 0
         y: 151
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -755,9 +755,9 @@ TextureImporter:
       name: Rangerv3_Shoot_5
       rect:
         serializedVersion: 2
-        x: 192
+        x: 56
         y: 151
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -776,9 +776,9 @@ TextureImporter:
       name: Rangerv3_Release_0
       rect:
         serializedVersion: 2
-        x: 256
+        x: 112
         y: 151
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -797,9 +797,9 @@ TextureImporter:
       name: Rangerv3_JumpUp_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 116
-        width: 64
+        x: 336
+        y: 151
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -818,9 +818,9 @@ TextureImporter:
       name: Rangerv3_Fall_0
       rect:
         serializedVersion: 2
-        x: 64
-        y: 116
-        width: 64
+        x: 392
+        y: 151
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -839,9 +839,9 @@ TextureImporter:
       name: Rangerv3_Fall_1
       rect:
         serializedVersion: 2
-        x: 128
-        y: 116
-        width: 64
+        x: 448
+        y: 151
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -860,9 +860,9 @@ TextureImporter:
       name: Rangerv3_TouchGround_0
       rect:
         serializedVersion: 2
-        x: 192
+        x: 0
         y: 116
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -881,9 +881,9 @@ TextureImporter:
       name: Rangerv3_TouchGround_1
       rect:
         serializedVersion: 2
-        x: 256
+        x: 56
         y: 116
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -902,9 +902,9 @@ TextureImporter:
       name: Rangerv3_TouchGround_2
       rect:
         serializedVersion: 2
-        x: 320
+        x: 112
         y: 116
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -923,9 +923,9 @@ TextureImporter:
       name: Rangerv3_CliffSlide_0
       rect:
         serializedVersion: 2
-        x: 384
+        x: 168
         y: 116
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -944,9 +944,9 @@ TextureImporter:
       name: Rangerv3_AirShoot_0
       rect:
         serializedVersion: 2
-        x: 448
+        x: 224
         y: 116
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -965,9 +965,9 @@ TextureImporter:
       name: Rangerv3_AirShoot_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 81
-        width: 64
+        x: 280
+        y: 116
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -986,9 +986,9 @@ TextureImporter:
       name: Rangerv3_AirShoot_2
       rect:
         serializedVersion: 2
-        x: 64
-        y: 81
-        width: 64
+        x: 336
+        y: 116
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -1007,9 +1007,9 @@ TextureImporter:
       name: Rangerv3_AirShoot_3
       rect:
         serializedVersion: 2
-        x: 128
-        y: 81
-        width: 64
+        x: 392
+        y: 116
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -1028,9 +1028,9 @@ TextureImporter:
       name: Rangerv3_AirShoot_4
       rect:
         serializedVersion: 2
-        x: 192
-        y: 81
-        width: 64
+        x: 448
+        y: 116
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -1049,9 +1049,9 @@ TextureImporter:
       name: Rangerv3_AirShoot_5
       rect:
         serializedVersion: 2
-        x: 256
+        x: 0
         y: 81
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -1070,9 +1070,9 @@ TextureImporter:
       name: Rangerv3_Dash_0
       rect:
         serializedVersion: 2
-        x: 320
+        x: 56
         y: 81
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -1091,9 +1091,9 @@ TextureImporter:
       name: Rangerv3_Hurt_0
       rect:
         serializedVersion: 2
-        x: 384
+        x: 112
         y: 81
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}
@@ -1112,9 +1112,9 @@ TextureImporter:
       name: Rangerv3_Die_0
       rect:
         serializedVersion: 2
-        x: 448
+        x: 168
         y: 81
-        width: 64
+        width: 56
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 0.12}

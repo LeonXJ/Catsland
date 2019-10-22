@@ -6,15 +6,13 @@ namespace Catsland.Scripts.Controller {
     EvilFlowerController.EvilFlowerInput,
     BeeController.BeeInput {
 
-    public float dashAxisDeadzone = 0.2f;
-
     private bool lastWantDash = false;
     private bool curWantDash = false;
 
     void Update() {
       // Because controller trigger is axis, we simulate snap button here.
       curWantDash = false;
-      if(Input.GetAxis("Dash") > dashAxisDeadzone) {
+      if(Input.GetButton("Dash")) {
         if(!lastWantDash) {
           curWantDash = true;
         }

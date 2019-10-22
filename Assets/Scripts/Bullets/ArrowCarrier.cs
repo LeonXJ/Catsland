@@ -35,6 +35,8 @@ namespace Catsland.Scripts.Bullets {
     public float attachedPositionOffset = 0.2f;
 
     public GameObject hitEffectPrefab;
+    public GameObject trailGameObject;
+    public GameObject selfDestoryMark;
 
     [Header("Effect")]
     public GameObject lightLayer;
@@ -98,6 +100,13 @@ namespace Catsland.Scripts.Bullets {
 
     private IEnumerator expireAndDestroy(float lifetime) {
       yield return new WaitForSeconds(lifetime);
+
+      // mark
+      if (selfDestoryMark != null) {
+        selfDestoryMark.transform.parent = null;
+        selfDestoryMark.GetComponent<Animator>().SetTrigger("start");
+        Destroy(selfDestoryMark, .5f);
+      }
       safeDestroy();
     }
 
@@ -184,6 +193,8 @@ namespace Catsland.Scripts.Bullets {
     }
 
     private void safeDestroy() {
+      endTrail();
+
       if (gameObject != null) {
         Destroy(gameObject);
       }
@@ -257,6 +268,13 @@ namespace Catsland.Scripts.Bullets {
 
       // delay self-destory
       safeDestroy();
+    }
+
+    private void endTrail() {
+      if (trailGameObject != null) {
+        trailGameObject.transform.parent = null;
+        Destroy(trailGameObject, 2.0f);
+      }
     }
 
     private void transferFlame(GameObject newGO) {

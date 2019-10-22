@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using Cinemachine;
 
 using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Misc;
-using Cinemachine;
+using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Controller {
 
@@ -35,6 +36,14 @@ namespace Catsland.Scripts.Controller {
     public Vector2 dashCameraShakeScale = new Vector2(0.5f, 0.0f);
     // If true, player orientation will affect the sign of x of dashCameraShakeScale.
     public bool dashCameraShakeApplyOrientationImpact = true;
+    public int dashKnowbackParticleNumber = 120;
+    public float dashKnowbackTimeslowDuration = 2f;
+    public float dashKnowbackTimeslowScale = 0.6f;
+    private float dashknowbackTimeslowRemaining = 0f;
+
+    public ParticleSystem dashParticle;
+    public ContactDamage dashKnockbackContactDamage;
+    public ParticleSystem dashKnockbackParticle;
 
     [Header("Relay")]
     public Transform relayDeterminePoint;
@@ -64,9 +73,14 @@ namespace Catsland.Scripts.Controller {
     [Header("Arrow")]
     public float maxArrowSpeed = 15.0f;
     public float minArrowSpeed = 5.0f;
+
+    public float quickArrowLifetime = 1.0f;
     public float maxArrowLifetime = 3.0f;
+
     public float maxRepelForce = 800f;
-    public float maxDrawingTime = 1.0f;
+    public float quickRepelForce = 300f;
+    public float minDrawingTime = 0.5f;
+    public float maxDrawingTime = 2.0f;
     public float strongArrowDrawingRatio = 0.9f;
     public float minTrailTime = 1f;
     public float maxTrailTime = 3f;
@@ -155,6 +169,8 @@ namespace Catsland.Scripts.Controller {
 
     public void Awake() {
       currentHealth = maxHealth;
+      dashKnockbackContactDamage.enabled = false;
+      dashKnockbackContactDamage.onHitEvent = onDashKnockbackEvent;
     }
 
     public void Update() {
@@ -175,7 +191,7 @@ namespace Catsland.Scripts.Controller {
 
       // Draw and shoot 
       bool currentIsDrawing =
-        input.attack() && !isShooting && !isDizzy && !isDashing() && !input.meditation();
+        (input.attack() || (currentDrawingTime > 0f && currentDrawingTime < minDrawingTime)) && !isShooting && !isDizzy && !isDashing() && !input.meditation();
       // Shoot if string is released
       if(isDrawing && !currentIsDrawing && !isDizzy) {
         StartCoroutine(shoot());
@@ -241,6 +257,9 @@ namespace Catsland.Scripts.Controller {
         Time.timeScale = timeScaleInRelay;
       } else if (isDizzy) {
         Time.timeScale = timeScaleInDizzy;
+      } else if (dashknowbackTimeslowRemaining > 0f) {
+        Time.timeScale = dashKnowbackTimeslowScale;
+        dashknowbackTimeslowRemaining -= Time.deltaTime;
       } else {
         Time.timeScale = 1.0f;
       }
@@ -297,6 +316,13 @@ namespace Catsland.Scripts.Controller {
           dashRemainingTime = dashTime;
           remainingDash = 0;
           dashCooldownRemaining = dashCooldown;
+          if (dashParticle != null) {
+            ParticleSystem.EmissionModule emission = dashParticle.emission;
+            emission.enabled = true;
+          }
+          if (dashKnockbackContactDamage != null) {
+            dashKnockbackContactDamage.enabled = true;
+          }
         }
       }
 
@@ -504,9 +530,29 @@ namespace Catsland.Scripts.Controller {
       return true;
     }
 
-    private void exitDash() {
-      dashRemainingTime = 0.0f;
+    private void exitDash(float delayStateChange = 0f) {
+      dashRemainingTime = Mathf.Min(delayStateChange, dashRemainingTime);
       rb2d.gravityScale = gravityScale;
+
+      if (dashParticle != null) {
+        ParticleSystem.EmissionModule emission = dashParticle.emission;
+        emission.enabled = false;
+      }
+
+      if (dashKnockbackContactDamage != null) {
+        dashKnockbackContactDamage.enabled = false;
+      }
+    }
+
+    private void onDashKnockbackEvent() {
+      if (dashKnockbackParticle != null) {
+        ParticleSystem.EmissionModule emission = dashKnockbackParticle.emission;
+        dashKnockbackParticle.Emit(dashKnowbackParticleNumber);
+      }
+      cinemachineImpulseSource.GenerateImpulse();
+      dashknowbackTimeslowRemaining = dashKnowbackTimeslowDuration;
+      // delay exiting dash animiation to have slow motion on dash action
+      exitDash(.1f);
     }
 
     private IEnumerator shoot() {
@@ -516,17 +562,18 @@ namespace Catsland.Scripts.Controller {
       GameObject arrow = Instantiate(arrowPrefab, shootPoint.position + Vector3.forward * 0.1f, shootPoint.rotation);
       float drawingRatio =
         Mathf.Clamp(currentDrawingTime, 0.0f, maxDrawingTime) / maxDrawingTime;
+      bool isStrongArrow = drawingRatio > strongArrowDrawingRatio;
 
       // Set arrow 
       TrailRenderer trailRenderer = arrow.GetComponentInChildren<TrailRenderer>();
       trailRenderer.time = Mathf.Lerp(minTrailTime, maxTrailTime, getDrawIntensity());
       ArrowCarrier arrowCarrier = arrow.GetComponent<ArrowCarrier>();
-      arrowCarrier.repelIntensive = drawingRatio * maxRepelForce;
-      float absoluteArrowSpeed = Mathf.Lerp(minArrowSpeed, maxArrowSpeed, drawingRatio);
-      arrowCarrier.SetIsShellBreaking(drawingRatio > strongArrowDrawingRatio);
+
+      arrowCarrier.SetIsShellBreaking(isStrongArrow);
+      arrowCarrier.repelIntensive = isStrongArrow ? maxRepelForce : quickRepelForce;
       arrowCarrier.fire(
-        new Vector2(transform.lossyScale.x > 0.0f ? absoluteArrowSpeed : -absoluteArrowSpeed, 0.0f),
-        maxArrowLifetime,
+        new Vector2(transform.lossyScale.x > 0.0f ? maxArrowSpeed : -maxArrowSpeed, 0.0f),
+        isStrongArrow ? maxArrowLifetime : quickArrowLifetime,
         gameObject.tag);
       isShooting = true;
       yield return new WaitForSeconds(shootingCd);

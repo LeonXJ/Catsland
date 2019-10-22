@@ -3,12 +3,17 @@ using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Bullets {
   public class ContactDamage: MonoBehaviour {
+
+    public delegate void OnHitEvent();
+
     public int damage;
     public float repelIntensity;
     public GameObject owner;
     public bool isSmashAttack = false;
     public bool canSmashAttakInStay = false;
     public bool tryGetPartyTagFromParent = true;
+
+    public OnHitEvent onHitEvent;
 
     public LayerMask includeLayer;
 
@@ -59,6 +64,7 @@ namespace Catsland.Scripts.Bullets {
             damage, collider.bounds.center, new Vector2(Mathf.Sign(delta.x), 0.0f), repelIntensity,
             isSmashAttack && (canSmashAttakInStay || !isStay)),
           SendMessageOptions.DontRequireReceiver);
+          onHitEvent?.Invoke();
       }
     }
   }

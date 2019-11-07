@@ -424,7 +424,6 @@ namespace OSP {
         pool.SetSiblings(newTile);
 
         // Now that we're in position, set this tile active
-        Debug.Log("Create new at: " + newTile.transform.position);
         newTile.gameObject.SetActive(true);
 
         #endregion

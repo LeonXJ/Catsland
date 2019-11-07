@@ -22,12 +22,17 @@ namespace Catsland.Scripts.Controller {
     [Header("Jump")]
     public float jumpForce = 5.0f;
     public float doubleJumpForce = 10.0f;
-    public float cliffJumpForce = 5.0f;
+    public float cliffInwardJumpForce = 480.0f;
+    public float cliffOutwardJumpForce = 800.0f;
     public float maxFallingSpeed = 5.0f;
     public float cliffSlidingSpeed = 1.0f;
     public float fallMultiplier = 2.5f;
     public float lowJumMultiplier = 2f;
     public ParticleSystem smashParticleSystem;
+
+    public float cliffJumpGravatyScale = 0.5f;
+    public float cliffJumpTime = 0.5f;
+    private float cliffJumpRemaining = 0f;
 
     [Header("Dash")]
     public float dashSpeed = 3.0f;
@@ -54,6 +59,9 @@ namespace Catsland.Scripts.Controller {
     public bool canDetectCliff = true;
     public float timeScaleInRelay = 0.6f;
 
+    public float relayKickIntensity = 200f;
+    public TriggerBasedSensor replyJumpSensor;
+    public GameObject relayKickEffectPrefab;
 
     public float maxSenseAdd = 0.5f;
     public float senseIncreaseSpeed = 0.2f;
@@ -191,9 +199,9 @@ namespace Catsland.Scripts.Controller {
 
       // Draw and shoot 
       bool currentIsDrawing =
-        (input.attack() || (currentDrawingTime > 0f && currentDrawingTime < minDrawingTime)) && !isShooting && !isDizzy && !isDashing() && !input.meditation();
+        (input.attack() || (currentDrawingTime > 0f && currentDrawingTime < minDrawingTime)) && !isShooting && !isDizzy && !isDashing() && !input.meditation() && !isCliffJumping() && !isCliffSliding;
       // Shoot if string is released
-      if(isDrawing && !currentIsDrawing && !isDizzy) {
+      if(isDrawing && !currentIsDrawing && !isDizzy && !isCliffJumping() && !isCliffSliding) {
         StartCoroutine(shoot());
       }
       // Set drawing time
@@ -216,7 +224,7 @@ namespace Catsland.Scripts.Controller {
       // Movement
       // vertical movement
       bool isCrouching = false;
-      if(groundSensor.isStay() && !isDizzy && !input.meditation()) {
+      if(groundSensor.isStay() && !isDizzy && !input.meditation() && !isCliffJumping()) {
         remainingDash = 1;
         if(input.getVertical() < -0.1f) {
           // jump down
@@ -240,17 +248,38 @@ namespace Catsland.Scripts.Controller {
       if(!isDizzy
         && !groundSensor.isStay()
         && canRelay()
+        && !isCliffJumping()
         && input.jump()) {
         rb2d.velocity = Vector2.zero;
         //rb2d.AddForce(new Vector2(0.0f, jumpForce));
         appliedForce = new Vector2(0.0f, doubleJumpForce);
-        // effect
-        GameObject doubleJumpEffect = Instantiate(doubleJumpEffectPrefab);
-        doubleJumpEffect.transform.position = doubleJumpEffectPoint.position;
-        Common.Utils.setRelativeRenderLayer(
-          spriteRenderer, doubleJumpEffect.GetComponentInChildren<SpriteRenderer>(), 1);
         // Reset dash
         remainingDash = 1;
+
+        // For jump on object
+        if (isRelaySensorTriggered()) {
+          foreach (GameObject kicked in replyJumpSensor.getTriggerGos()) {
+            Vector2 delta = kicked.transform.position - transform.position;
+            kicked.SendMessage(
+              MessageNames.DAMAGE_FUNCTION,
+              new DamageInfo(
+                /* damage= */0, replyJumpSensor.transform.position, delta.normalized, relayKickIntensity,
+                false),
+              SendMessageOptions.DontRequireReceiver);
+
+            // Effect
+            GameObject effect = Instantiate(relayKickEffectPrefab);
+            effect.transform.position = new Vector2(replyJumpSensor.transform.position.x, replyJumpSensor.transform.position.y);
+            effect.GetComponent<ParticleSystem>()?.Emit(60);
+            Destroy(effect, 1.0f);
+          }
+        } else {
+          // effect
+          GameObject doubleJumpEffect = Instantiate(doubleJumpEffectPrefab);
+          doubleJumpEffect.transform.position = doubleJumpEffectPoint.position;
+          Common.Utils.setRelativeRenderLayer(
+            spriteRenderer, doubleJumpEffect.GetComponentInChildren<SpriteRenderer>(), 1);
+        }
       }
 
       if (canRelay()) {
@@ -264,36 +293,53 @@ namespace Catsland.Scripts.Controller {
         Time.timeScale = 1.0f;
       }
 
-      // Cliff jump
+      float preCliffJumpRemaining = cliffJumpRemaining;
+      if (cliffJumpRemaining > 0.0f) {
+        cliffJumpRemaining -= Time.deltaTime;
+      }
+      // exit cliff jump
+      if (preCliffJumpRemaining > 0f && cliffJumpRemaining <= 0f) {
+        rb2d.gravityScale = gravityScale;
+      }
+      // Cliff jump / sliding
       float topFallingSpeed = maxFallingSpeed;
       isCliffSliding = false;
-      if(!groundSensor.isStay() && !isDizzy) {
-        bool desiredFacingOrientation = getOrientation() * desiredSpeed > 0.0f;
-        if(canDetectCliff && frontSensor.isStay() && desiredFacingOrientation) {
-          remainingDash = 1;
-          if(input.jump() && canCliffJump) {
-            rb2d.velocity = Vector2.zero;
-            appliedForce = new Vector2(-Mathf.Sign(desiredSpeed) * cliffJumpForce, cliffJumpForce * 0.8f);
-            // cliff jump effect
-            GameObject cliffJumpEffect = GameObject.Instantiate(cliffJumpEffectPrefab);
-            cliffJumpEffect.transform.position = backwardCliffJumpEffectPoint.position;
-            cliffJumpEffect.transform.localScale = new Vector2(-getOrientation(), 1.0f);
-            Common.Utils.setRelativeRenderLayer(
-              spriteRenderer, cliffJumpEffect.GetComponentInChildren<SpriteRenderer>(), 1);
+      if(!groundSensor.isStay() && !isDizzy && !isCliffJumping()) {
+        // cliff jump
+        bool canJumpFront = backSensor.isStay();
+        bool canJumpBack = frontSensor.isStay();
+        if ((canJumpFront || canJumpBack) && canCliffJump && input.jump()) {
+          bool canJumpXPositive = getOrientation() > 0f ? canJumpFront : canJumpBack;
+          bool canJumpXNegative = getOrientation() > 0f ? canJumpBack : canJumpFront;
+          float jumpOrientation = 0f;
+          if (canJumpXPositive && canJumpXNegative) {
+            jumpOrientation = Mathf.Sign(desiredSpeed);
           } else {
-            topFallingSpeed = cliffSlidingSpeed;
-            isCliffSliding = true;
+            jumpOrientation = canJumpXPositive ? 1f : -1f;
           }
-        } else if(canDetectCliff && backSensor.isStay() && desiredFacingOrientation && input.jump() && canCliffJump) {
           remainingDash = 1;
           rb2d.velocity = Vector2.zero;
-          appliedForce = new Vector2(Mathf.Sign(desiredSpeed) * cliffJumpForce, cliffJumpForce);
+          float degree = Mathf.Deg2Rad * ((desiredSpeed * jumpOrientation > 0f) ? 70f : 50f);
+          float cliffJumpForce = (desiredSpeed * jumpOrientation > 0f) ? cliffOutwardJumpForce : cliffInwardJumpForce;
+          appliedForce = new Vector2(jumpOrientation * cliffJumpForce * Mathf.Sin(degree), cliffJumpForce * Mathf.Cos(degree));
+          cliffJumpRemaining = cliffJumpTime;
+
           // cliff jump effect
           GameObject cliffJumpEffect = GameObject.Instantiate(cliffJumpEffectPrefab);
-          cliffJumpEffect.transform.position = forwardCliffJumpEffectPoint.position;
-          cliffJumpEffect.transform.localScale = new Vector2(getOrientation(), 1.0f);
+          rb2d.gravityScale = cliffJumpGravatyScale;
+
+          if (getOrientation() * jumpOrientation < 0f) {
+            cliffJumpEffect.transform.position = backwardCliffJumpEffectPoint.position;
+            cliffJumpEffect.transform.localScale = new Vector2(-getOrientation(), 1.0f);
+          } else {
+            cliffJumpEffect.transform.position = forwardCliffJumpEffectPoint.position;
+            cliffJumpEffect.transform.localScale = new Vector2(getOrientation(), 1.0f);
+          }
           Common.Utils.setRelativeRenderLayer(
             spriteRenderer, cliffJumpEffect.GetComponentInChildren<SpriteRenderer>(), 1);
+        } else if ((canJumpBack || canJumpFront) && canCliffJump && getOrientation() * desiredSpeed > 0f) {
+            topFallingSpeed = cliffSlidingSpeed;
+            isCliffSliding = true;
         }
       }
 
@@ -301,7 +347,7 @@ namespace Catsland.Scripts.Controller {
       if(isDizzy && isDashing()) {
         exitDash();
       }
-      if(!isDizzy && !input.meditation()) {
+      if(!isDizzy && !input.meditation() && !isCliffJumping()) {
         if(isDashing()) {
           dashRemainingTime -= Time.deltaTime;
           if(dashRemainingTime < 0.0f) {
@@ -337,7 +383,8 @@ namespace Catsland.Scripts.Controller {
       if(!isDizzy &&
         !isLastUpdateOnGround &&
         groundSensor.isStay() &&
-        rb2d.velocity.y < -smashMinSpeed) {
+        rb2d.velocity.y < -smashMinSpeed &&
+        !isCliffJumping()) {
 
         ReleaseSmashEffect();
 
@@ -369,7 +416,7 @@ namespace Catsland.Scripts.Controller {
       }
 
       if(dashRemainingTime <= 0.0f) {
-        if(!isDizzy && !input.meditation()) {
+        if(!isDizzy && !input.meditation() && !isCliffJumping()) {
           if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon
             && (!groundSensor.isStay() || !isDrawing)) {
             rb2d.AddForce(new Vector2(acceleration * desiredSpeed, 0.0f));
@@ -394,6 +441,7 @@ namespace Catsland.Scripts.Controller {
       // Update facing
       if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon
         && !isDizzy
+        && !isCliffJumping()
         && !input.meditation()
         && dashRemainingTime < Mathf.Epsilon) {
         float parentLossyScale = gameObject.transform.parent != null
@@ -442,6 +490,10 @@ namespace Catsland.Scripts.Controller {
       if (smashParticleSystem != null) {
         smashParticleSystem.Play();
       }
+    }
+
+    private bool isCliffJumping() {
+      return cliffJumpRemaining > 0f;
     }
 
     public void damage(DamageInfo damageInfo) {
@@ -501,8 +553,8 @@ namespace Catsland.Scripts.Controller {
       return !isDizzy
         && !groundSensor.isStay()
         && supportRelay
-        && nearestRelayPoint != null
-        && getRelayPointDistanceSqrt(nearestRelayPoint) < relayEffectDistance * relayEffectDistance;
+        && ((nearestRelayPoint != null && getRelayPointDistanceSqrt(nearestRelayPoint) < relayEffectDistance * relayEffectDistance)
+          || isRelaySensorTriggered());
     }
 
     private void updateNearestRelayPoint() {
@@ -607,6 +659,10 @@ namespace Catsland.Scripts.Controller {
           dustTexture.ApplyTexture(particleSystem);
         }
       }
+    }
+
+    private bool isRelaySensorTriggered() {
+      return replyJumpSensor.isStay();
     }
   }
 }

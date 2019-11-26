@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Misc;
 
@@ -18,6 +19,7 @@ namespace Catsland.Scripts.Controller {
     public float jumpInternalInS = 1.0f;
 
     public TriggerBasedSensor groundSensor;
+    public float frezeTimeInS = .2f;
 
     public int maxHp = 3;
     private int currentHp;
@@ -79,10 +81,7 @@ namespace Catsland.Scripts.Controller {
 
     public void damage(DamageInfo damageInfo) {
       currentHp -= damageInfo.damage;
-      Utils.ApplyRepel(damageInfo, rb2d);
-      if (currentHp < 0) {
-        enterDie();
-      }
+      StartCoroutine(freezeThen(frezeTimeInS, damageInfo));
     }
 
     private void enterDie() {
@@ -90,6 +89,25 @@ namespace Catsland.Scripts.Controller {
         diamondGenerator.Generate(2, 1);
       }
       Destroy(gameObject);
+    }
+
+    private IEnumerator freezeThen(float time, DamageInfo damageInfo) {
+
+      rb2d.velocity = Vector2.zero;
+      rb2d.bodyType = RigidbodyType2D.Kinematic;
+      animator.speed = 0f;
+
+      transform.DOShakePosition(time, .15f, 30, 120);
+
+      yield return new WaitForSeconds(time);
+
+      animator.speed = 1f;
+      rb2d.bodyType = RigidbodyType2D.Dynamic;
+      Utils.ApplyRepel(damageInfo, rb2d);
+
+      if (currentHp < 0) {
+        enterDie();
+      }
     }
   }
 }

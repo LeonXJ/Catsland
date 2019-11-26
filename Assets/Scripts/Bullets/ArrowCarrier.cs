@@ -25,6 +25,8 @@ namespace Catsland.Scripts.Bullets {
     public float brokenPartSpinSpeed = 4800.0f;
     public float brokenPartBounceSpeedRatio = 0.2f;
 
+    public float frezeTimeInSecond = .08f;
+
     public bool isShellBreaking { get; private set; } = false;
 
     public Transform tailPosition;
@@ -37,6 +39,9 @@ namespace Catsland.Scripts.Bullets {
     public GameObject hitEffectPrefab;
     public GameObject trailGameObject;
     public GameObject selfDestoryMark;
+    public GameObject hitAndHurtEffectPrefab;
+
+    public float frezeSpeed = .1f;
 
     [Header("Effect")]
     public GameObject lightLayer;
@@ -192,19 +197,19 @@ namespace Catsland.Scripts.Bullets {
       //StartCoroutine(breakArrow());
     }
 
-    private void safeDestroy() {
+    private void safeDestroy(float delay = 0.0f) {
       endTrail();
 
       if (gameObject != null) {
-        Destroy(gameObject);
+        Destroy(gameObject, delay);
       }
     }
 
     private void arrowHit(Collider2D collision) {
       status = ArrowStatus.Hit;
       // emit
-      hitEffectparticleSystem.Emit(20);
-      hitEffectparticleSystem.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+      //hitEffectparticleSystem.Emit(20);
+      //hitEffectparticleSystem.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
 
       // make damage
       collision.gameObject.SendMessage(
@@ -213,15 +218,24 @@ namespace Catsland.Scripts.Bullets {
         SendMessageOptions.DontRequireReceiver);
 
       // set complete arrow status
-      spriteRenderer.enabled = false;
-      rb2d.velocity = Vector3.zero;
+      //spriteRenderer.enabled = false;
+      rb2d.velocity = rb2d.velocity.normalized * frezeSpeed;
       collider2d.enabled = false;
-      gameObject.transform.parent = collision.gameObject.transform;
 
+      spriteRenderer.material.SetColor("_AmbientLight", Color.white);
+      ParticleSystem particle = ReleaseHitEffectParticle(hitAndHurtEffectPrefab);
+      //StartCoroutine(slowAndResumeSpeed(0.04f, particle));
 
-      // delay self-destory
-      safeDestroy();
+      // freeze and destory
+      rb2d.bodyType = RigidbodyType2D.Kinematic;
+      safeDestroy(frezeTimeInSecond);
+    }
 
+    private IEnumerator slowAndResumeSpeed(float delay, ParticleSystem particle) {
+      ParticleSystem.MainModule main = particle.main;
+      main.simulationSpeed = .1f;
+      yield return new WaitForSeconds(delay);
+      main.simulationSpeed = 1f;
     }
 
     private void enterAttach(RaycastHit2D hit) {
@@ -264,7 +278,7 @@ namespace Catsland.Scripts.Bullets {
       collider2d.enabled = false;
 
       // spark effect
-      ReleaseHitEffectParticle();
+      ReleaseHitEffectParticle(hitEffectPrefab);
 
       // delay self-destory
       safeDestroy();
@@ -284,15 +298,15 @@ namespace Catsland.Scripts.Bullets {
       }
     }
 
-    private void ReleaseHitEffectParticle() {
-      if (hitEffectPrefab != null) {
-        GameObject hitEffectGo = Instantiate(hitEffectPrefab);
-        hitEffectGo.transform.position = transform.position;
-        hitEffectGo.transform.localScale = transform.lossyScale;
+    private ParticleSystem ReleaseHitEffectParticle(GameObject prefab) {
+      GameObject hitEffectGo = Instantiate(prefab);
+      
+      hitEffectGo.transform.position = new Vector3(headPosition.position.x, headPosition.position.y, hitEffectGo.transform.position.z);
+      hitEffectGo.transform.localScale = transform.lossyScale;
 
-        ParticleSystem particleSystem = hitEffectGo.GetComponent<ParticleSystem>();
-        particleSystem.Play();
-      }
+      ParticleSystem particleSystem = hitEffectGo.GetComponent<ParticleSystem>();
+      particleSystem.Play();
+      return particleSystem;
     }
   }
 }

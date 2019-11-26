@@ -6,45 +6,71 @@ namespace Catsland.Scripts.Controller {
     EvilFlowerController.EvilFlowerInput,
     BeeController.BeeInput {
 
+    private bool wantAttack = false;
+    private float horizontal = 0f;
+    private float vertical = 0f;
+    private bool wantJump = false;
+    private bool wantJumpHigher = false;
+    private bool wantDash = false;
     private bool lastWantDash = false;
-    private bool curWantDash = false;
+    private bool wantInteract = false;
 
     void Update() {
       // Because controller trigger is axis, we simulate snap button here.
-      curWantDash = false;
+      wantDash = false;
       if(Input.GetButton("Dash")) {
         if(!lastWantDash) {
-          curWantDash = true;
+          wantDash = true;
         }
         lastWantDash = true;
       } else {
         lastWantDash = false;
       }
 
+      horizontal = Input.GetAxis("Horizontal");
+      vertical = Input.GetAxis("Vertical");
+      wantAttack = Input.GetButton("Attack");
+      wantJump = Input.GetButtonDown("Jump");
+      wantJumpHigher = Input.GetButton("Jump");
+      wantInteract = Input.GetButton("Interact");
+    }
+
+    void OnDisable() {
+      resetInput();
+    }
+
+    public void resetInput() {
+      horizontal = 0f;
+      vertical = 0f;
+      wantAttack = false;
+      wantJump = false;
+      wantJumpHigher = false;
+      wantDash = false;
+      wantInteract = false;
     }
 
     public bool attack() {
-      return Input.GetButton("Attack");
+      return wantAttack;
     }
 
     public float getHorizontal() {
-      return Input.GetAxis("Horizontal");
+      return horizontal;
     }
 
     public float getVertical() {
-      return Input.GetAxis("Vertical");
+      return vertical;
     }
 
     public bool jump() {
-      return Input.GetButtonDown("Jump");
+      return wantJump;
     }
 
     public bool jumpHigher() {
-      return Input.GetButton("Jump");
+      return wantJumpHigher;
     }
 
     public bool dash() {
-      return Input.GetButtonDown("Dash") || curWantDash;
+      return wantDash;
     }
 
     public bool meditation() {
@@ -64,7 +90,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     public bool interact() {
-      return Input.GetButtonDown("Interact");
+      return wantInteract;
     }
 
     public bool chop() {

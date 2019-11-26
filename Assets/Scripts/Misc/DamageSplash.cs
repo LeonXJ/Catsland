@@ -15,8 +15,12 @@ namespace Catsland.Scripts.Misc {
       if(damageInterceptor != null && !damageInterceptor.shouldSplashOnDamage(damageInfo)) {
         return;
       }
+      if (damageInfo.damage <= 0) {
+        return;
+      }
+
       GameObject splash = Instantiate(splashPrefab);
-      splash.transform.position = damageInfo.damagePosition;
+      splash.transform.position = new Vector3(damageInfo.damagePosition.x, damageInfo.damagePosition.y, splash.transform.position.z);
       splash.transform.localScale =
         new Vector3(Mathf.Sign(damageInfo.repelDirection.x), 1.0f, 1.0f);
     }

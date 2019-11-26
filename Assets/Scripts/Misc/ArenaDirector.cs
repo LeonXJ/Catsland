@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Playables;
 using UnityEngine.UI;
 
 
@@ -14,14 +13,19 @@ namespace Catsland.Scripts.Misc {
     public bool autoStartFirstStage = true;
     public Text stageText;
 
-    public PlayableDirector[] stages;
+    public StageConfig[] stageConfigs;
 
     // Start is called before the first frame update
     void Start() {
-      if (autoStartFirstStage && stages.Length > 0) {
+      if (autoStartFirstStage) {
+        PlayFromBeginning();
+      }
+    }
+
+    public void PlayFromBeginning() {
+      if (stageConfigs.Length > 0) {
         currentStage = 0;
-        stageText.text = "Stage " + (currentStage + 1);
-        stages[currentStage].Play();
+        initStage(stageConfigs[currentStage]);
       }
     }
 
@@ -32,10 +36,10 @@ namespace Catsland.Scripts.Misc {
         if (livingOpponents.Count == 0) {
           // stage clear, next stage.
           currentStage++;
-          if (currentStage < stages.Length) {
-            stageText.text = "Stage " + (currentStage + 1);
-            stages[currentStage].Play();
+          if (currentStage < stageConfigs.Length) {
+            initStage(stageConfigs[currentStage]);
           }
+          roundStarted = false;
         }
       }
     }
@@ -44,8 +48,12 @@ namespace Catsland.Scripts.Misc {
       roundStarted = true;
     }
 
-    public void AddOpponent(GameObject gameObject) {
-      livingOpponents.Add(gameObject);
+    private void initStage(StageConfig stageConfig) {
+      stageText.text = stageConfig.stageName;
+      foreach(GameObject gameObject in stageConfig.opponents) {
+        livingOpponents.Add(gameObject);
+      }
+      stageConfig.stageStartDirector?.Play();
     }
   }
 }

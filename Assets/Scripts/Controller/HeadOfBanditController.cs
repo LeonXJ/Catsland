@@ -294,6 +294,11 @@ namespace Catsland.Scripts.Controller {
       return status == Status.IDEAL;
     }
 
+    // Called by animator.
+    public void selfDestroy() {
+      Destroy(gameObject);
+    }
+
     public void damage(DamageInfo damageInfo) {
       if(isDead()) {
         return;

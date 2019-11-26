@@ -7,6 +7,7 @@ Shader "Sprites/CustomerDiffuse"
     [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
     _Color ("Tint", Color) = (1,1,1,1)
     _AmbientLight ("AmbientLight", Color) = (0,0,0,0)
+    _HueShift ("Shift Hue", Color) = (0,0,0,0)
     [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
   }
 
@@ -50,6 +51,7 @@ Shader "Sprites/CustomerDiffuse"
       
       fixed4 _Color;
       fixed4 _AmbientLight;
+      fixed4 _HueShift;
 
       v2f vert(appdata_t IN)
       {
@@ -71,7 +73,6 @@ Shader "Sprites/CustomerDiffuse"
       fixed4 SampleSpriteTexture (float2 uv)
       {
         fixed4 color = tex2D (_MainTex, uv);
-
 #if UNITY_TEXTURE_ALPHASPLIT_ALLOWED
         if (_AlphaSplitEnabled)
           color.a = tex2D (_AlphaTex, uv).r;
@@ -83,9 +84,16 @@ Shader "Sprites/CustomerDiffuse"
       fixed4 frag(v2f IN) : SV_Target
       {
         fixed4 c = clamp(SampleSpriteTexture (IN.texcoord) * IN.color + fixed4(_AmbientLight.rgb, 0), fixed4(0,0,0,0), fixed4(1,1,1,1));
+        
+        // Hue shift
+        c.rgb = lerp(c.rgb, c.gbr, _HueShift.r); //90 degrees
+        c.rgb = lerp(c.rgb, c.gbr, _HueShift.g); //180 degrees
+        c.rgb = lerp(c.rgb, c.bgr, _HueShift.b); //270 degrees
+
         c.rgb *= c.a;
         return c;
       }
+
     ENDCG
     }
   }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Panda;
 using Catsland.Scripts.Controller;
+using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Ai {
   public class BeeAi: MonoBehaviour, BeeController.BeeInput {
@@ -58,6 +59,14 @@ namespace Catsland.Scripts.Ai {
       } else {
         Task.current.Fail();
       }
+    }
+
+    [Task]
+    public void moveTowardsPlayer() {
+      resetStatus();
+      Vector3 delta = SceneConfig.getSceneConfig().GetPlayer().transform.position - transform.position;
+      v = new Vector2(delta.x, delta.y);
+      Task.current.Succeed();
     }
 
     [Task]

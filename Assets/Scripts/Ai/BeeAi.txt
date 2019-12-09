@@ -2,7 +2,11 @@ tree("Root")
   fallback
     sequence
       isLockOn()
-      doCharge()
+      fallback
+        sequence
+          isPlayerInReactDistance()
+          doCharge()
+        moveTowardsPlayer()
     sequence
       isPlayerInReactDistance()
       doCharge()

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 using Catsland.Scripts.Common;
 using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Misc;
@@ -29,6 +30,16 @@ namespace Catsland.Scripts.Controller {
     public float chargeTimeInSecond = 0.5f;
     public float dizzyTimeInSecond = 0.5f;
     public int health = 3;
+
+    // Swing attributes
+    public float swingCycleInS = 1f;
+    public float swingAmp = .5f;
+    private float swingPhase = 0f;
+
+    // Knockback
+    public float knowbackSpeed = 5f;
+    public float maxKnowbackSpeed = 10f;
+    public float knowbackDrag = 10f;
 
     private Status status = Status.FLYING;
     private Rigidbody2D rb2d;
@@ -62,7 +73,8 @@ namespace Catsland.Scripts.Controller {
 
       // Flying
       if(CanMoveAround()) {
-        rb2d.velocity = wantDirection * flyingSpeed;
+        swingPhase += Time.deltaTime / swingCycleInS;
+        rb2d.velocity = wantDirection * flyingSpeed + new Vector2(0f, swingAmp * Mathf.Sin(swingPhase));
       }
 
       if(CanPrepare()) {
@@ -126,17 +138,23 @@ namespace Catsland.Scripts.Controller {
 
     public void damage(DamageInfo damageInfo) {
       health -= damageInfo.damage;
-      StartCoroutine(dizzy());
-      ApplyRepel(damageInfo, rb2d);
-      if(health <= 0) {
-        enterDie();
-        return;
-      }
+      StartCoroutine(freezeThen(.0f, damageInfo));
     }
-    private IEnumerator dizzy() {
-      status = Status.DIZZY;
-      yield return new WaitForSeconds(dizzyTimeInSecond);
-      status = Status.FLYING;
+
+    private IEnumerator freezeThen(float time, DamageInfo damageInfo) {
+      rb2d.velocity = Vector2.zero;
+      // It makes the knowback effect more strong even if time is set to 0f
+      transform.DOShakePosition(time, .15f, 30, 120);
+
+      yield return new WaitForSeconds(time);
+
+      if (health <= 0) {
+        enterDie();
+      } else {
+        status = Status.DIZZY;
+        yield return ApplyVelocityRepel(damageInfo, rb2d, dizzyTimeInSecond, knowbackSpeed, maxKnowbackSpeed, knowbackDrag);
+        status = Status.FLYING;
+      }
     }
 
     private void enterDie() {

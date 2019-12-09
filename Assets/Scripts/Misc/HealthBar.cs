@@ -14,6 +14,8 @@ namespace Catsland.Scripts.Misc {
     public Sprite emptyHeart;
     public Sprite fullHeart;
 
+    public float opacity = .1f;
+
     private List<Image> hearts;
 
     private void Awake() {
@@ -48,13 +50,14 @@ namespace Catsland.Scripts.Misc {
       int index = 0;
       foreach(Image heart in hearts) {
         if(index < playerController.currentHealth
-          && hearts[index].sprite != fullHeart) {
-          hearts[index].sprite = fullHeart;
+          && heart.sprite != fullHeart) {
+          heart.sprite = fullHeart;
         }
         if(playerController.currentHealth <= index
-          && hearts[index].sprite != emptyHeart) {
-          hearts[index].sprite = emptyHeart;
+          && heart.sprite != emptyHeart) {
+          heart.sprite = emptyHeart;
         }
+        heart.color = new Color(heart.color.r, heart.color.g, heart.color.b, opacity);
         index++;
       }
     }

@@ -14,6 +14,7 @@ namespace Catsland.Scripts.Controller {
     public float regenerationIntervalS = 5.0f;
     public Transform[] patrolPoints;
     public int generateBeeNumberWhenDestroy = 2;
+    public bool initLockOn = false;
 
     public int maxHp = 5;
     private int currrentHp;
@@ -33,7 +34,7 @@ namespace Catsland.Scripts.Controller {
       if(aliveBee == null) {
         regenerationTick += Time.deltaTime;
         if(regenerationTick > regenerationIntervalS) {
-          aliveBee = generateBee(false);
+          aliveBee = generateBee(initLockOn);
           regenerationTick = 0.0f;
         }
       }

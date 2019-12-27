@@ -1,6 +1,10 @@
 tree("Root")
   sequence 
     holdIfNotActivate()
+    mute
+      sequence
+        shouldDisplay()
+        doDisplay()
     repeat 3
       mute
         sequence

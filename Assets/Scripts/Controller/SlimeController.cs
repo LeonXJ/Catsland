@@ -81,6 +81,10 @@ namespace Catsland.Scripts.Controller {
 
     public void damage(DamageInfo damageInfo) {
       currentHp -= damageInfo.damage;
+      if (currentHp < 0) {
+        enterDie();
+        return;
+      }
       StartCoroutine(freezeThen(frezeTimeInS, damageInfo));
     }
 
@@ -104,10 +108,6 @@ namespace Catsland.Scripts.Controller {
       animator.speed = 1f;
       rb2d.bodyType = RigidbodyType2D.Dynamic;
       Utils.ApplyRepel(damageInfo, rb2d);
-
-      if (currentHp < 0) {
-        enterDie();
-      }
     }
   }
 }

@@ -10,6 +10,7 @@ namespace Catsland.Scripts.Ai {
     delegate void PerformAction();
 
     public bool activated = false;
+    public bool willDisplay = true;
 
     public float knifeReachDistance = 10.0f;
     public float chargeReachDistance = 6.0f;
@@ -86,6 +87,9 @@ namespace Catsland.Scripts.Ai {
 
     [Task]
     public void shouldDisplay() {
+      if (!willDisplay) {
+        Task.current.Fail();
+      }
       if (!hasDisplayed) {
         Task.current.Succeed();
       } else {

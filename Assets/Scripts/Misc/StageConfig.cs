@@ -9,5 +9,9 @@ namespace Catsland.Scripts.Misc {
     public GameObject[] opponents;
 
     public PlayableDirector stageStartDirector;
+
+    public PlayableDirector stageEndDirector;
+
+    public bool skip = false;
   }
 }

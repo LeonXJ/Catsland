@@ -149,7 +149,9 @@ namespace Catsland.Scripts.Controller {
 
     private GameObject previousParentGameObject;
     private Vector3 previousParentPosition;
-    private ParticleSystem dustParticleSystem;
+    public ParticleSystem dustParticleSystem;
+    public float dustGenerationIntervalInS = .1f;
+    private float dustGenerationInternalRemainInS = 0f;
 
     // Animation
     private const string H_SPEED = "HSpeed";
@@ -172,7 +174,6 @@ namespace Catsland.Scripts.Controller {
       headCollider = GetComponent<BoxCollider2D>();
       spriteRenderer = GetComponent<SpriteRenderer>();
       cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
-      dustParticleSystem = GetComponent<ParticleSystem>();
     }
 
     public void Awake() {
@@ -226,6 +227,9 @@ namespace Catsland.Scripts.Controller {
       bool isCrouching = false;
       if(groundSensor.isStay() && !isDizzy && !input.meditation() && !isCliffJumping()) {
         remainingDash = 1;
+        // The following code enable one-side platform jump down. However, it creates the 
+        // odds that if player unintentionally press down and jump, the player cannot jump up.
+        /*
         if(input.getVertical() < -0.1f) {
           // jump down
           if(input.jump() && isAllOneSide(groundSensor.getTriggerGos())) {
@@ -239,6 +243,11 @@ namespace Catsland.Scripts.Controller {
           }
         } else if(input.jump()) {
           // jump up
+          rb2d.velocity = new Vector2(rb2d.velocity.x, 0.0f);
+          appliedForce = new Vector2(0.0f, jumpForce);
+        }
+        */
+        if (input.jump()) {
           rb2d.velocity = new Vector2(rb2d.velocity.x, 0.0f);
           appliedForce = new Vector2(0.0f, jumpForce);
         }
@@ -484,6 +493,16 @@ namespace Catsland.Scripts.Controller {
       animator.SetBool(CROUCH, isCrouching);
       animator.SetBool(CLIFF_SLIDING, isCliffSliding && rb2d.velocity.y < Mathf.Epsilon);
       animator.SetBool(DASHING, isDashing());
+
+      // dush effect
+      if (groundSensor.isStay() && Mathf.Abs(rb2d.velocity.x) > .1f) {
+        if (dustGenerationInternalRemainInS < 0f) {
+          generateDust();
+          dustGenerationInternalRemainInS = dustGenerationIntervalInS;
+        } else {
+          dustGenerationInternalRemainInS -= Time.deltaTime;
+        }
+      }
     }
 
     private void ReleaseSmashEffect() {

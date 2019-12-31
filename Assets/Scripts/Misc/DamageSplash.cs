@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Catsland.Scripts.Bullets;
+using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Misc {
   public class DamageSplash: MonoBehaviour {
@@ -20,7 +21,7 @@ namespace Catsland.Scripts.Misc {
       }
 
       GameObject splash = Instantiate(splashPrefab);
-      splash.transform.position = new Vector3(damageInfo.damagePosition.x, damageInfo.damagePosition.y, splash.transform.position.z);
+      splash.transform.position = new Vector3(damageInfo.damagePosition.x, damageInfo.damagePosition.y, AxisZ.SPLASH);
       splash.transform.localScale =
         new Vector3(Mathf.Sign(damageInfo.repelDirection.x), 1.0f, 1.0f);
     }

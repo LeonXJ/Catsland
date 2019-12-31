@@ -30,7 +30,7 @@ namespace Catsland.Scripts.Misc {
     // Update is called once per frame
     void Update() {
       if (Input.GetKeyDown(KeyCode.F8)) {
-        Debug.Log("Code input: kill all");
+        Debug.Log("Code input: kill all in stage# " + currentStage);
         foreach (GameObject opponent in livingOpponents) {
           if (opponent!= null) {
             opponent.SendMessage(
@@ -56,7 +56,7 @@ namespace Catsland.Scripts.Misc {
     }
 
     public void PlayNextStage() {
-      Debug.Log("PlayNextStage called");
+      Debug.Log("PlayNextStage called. Current stage# " + currentStage);
       currentStage++;
       while (currentStage < stageConfigs.Length) {
         if (!stageConfigs[currentStage].skip) {

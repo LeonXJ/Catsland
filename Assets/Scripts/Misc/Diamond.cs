@@ -10,26 +10,37 @@ namespace Catsland.Scripts.Misc {
     public int value = 1;
     private bool collected = false;
 
+    private Collider2D collider;
 
-    private void OnTriggerEnter2D(Collider2D collision) {
-      onHit(collision.gameObject);
+    void Start() {
+      collider = GetComponent<Collider2D>();
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collider2d) {
+      onHit(collider2d);
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
-      onHit(collision.gameObject);
+      onHit(collision.collider);
     }
 
-    private void onHit(GameObject other) {
+    private void onHit(Collider2D other) {
       if (collected) {
         return;
       }
-      if (other.CompareTag(Tags.PLAYER)) {
-        PlayerController playerController = other.GetComponent<PlayerController>();
+      if (other.gameObject.CompareTag(Tags.PLAYER)) {
+        PlayerController playerController = other.gameObject.GetComponent<PlayerController>();
         playerController.score += value;
         collected = true;
-
         Destroy(gameObject);
+        return;
       }
+      // Other character will not collider with diamond
+      if (other.gameObject.layer == Common.Layers.LayerCharacter) {
+        Physics2D.IgnoreCollision(other, collider);
+      
+      } 
     }
   }
 }

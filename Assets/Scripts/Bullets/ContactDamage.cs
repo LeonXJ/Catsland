@@ -13,6 +13,9 @@ namespace Catsland.Scripts.Bullets {
     public bool canSmashAttakInStay = false;
     public bool tryGetPartyTagFromParent = true;
 
+    public bool presetRepelDirection = false;
+    public Vector2 repelDirection;
+
     public OnHitEvent onHitEvent;
 
     public LayerMask includeLayer;
@@ -61,7 +64,7 @@ namespace Catsland.Scripts.Bullets {
         collidingGameObject.SendMessage(
           MessageNames.DAMAGE_FUNCTION,
           new DamageInfo(
-            damage, collider.bounds.center, new Vector2(Mathf.Sign(delta.x), 0.0f), repelIntensity,
+            damage, collider.bounds.center, presetRepelDirection ? repelDirection : new Vector2(Mathf.Sign(delta.x), 0.0f), repelIntensity,
             isSmashAttack && (canSmashAttakInStay || !isStay)),
           SendMessageOptions.DontRequireReceiver);
           onHitEvent?.Invoke();

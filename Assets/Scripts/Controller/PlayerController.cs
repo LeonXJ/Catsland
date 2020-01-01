@@ -62,6 +62,7 @@ namespace Catsland.Scripts.Controller {
     public float relayKickIntensity = 200f;
     public TriggerBasedSensor replyJumpSensor;
     public GameObject relayKickEffectPrefab;
+    public Transform relayKickEffectPosition;
 
     public float maxSenseAdd = 0.5f;
     public float senseIncreaseSpeed = 0.2f;
@@ -268,17 +269,16 @@ namespace Catsland.Scripts.Controller {
         // For jump on object
         if (isRelaySensorTriggered()) {
           foreach (GameObject kicked in replyJumpSensor.getTriggerGos()) {
-            Vector2 delta = kicked.transform.position - transform.position;
             kicked.SendMessage(
               MessageNames.DAMAGE_FUNCTION,
               new DamageInfo(
-                /* damage= */0, replyJumpSensor.transform.position, delta.normalized, relayKickIntensity,
+                /* damage= */0, replyJumpSensor.transform.position, Vector2.down, relayKickIntensity,
                 false),
               SendMessageOptions.DontRequireReceiver);
 
             // Effect
             GameObject effect = Instantiate(relayKickEffectPrefab);
-            effect.transform.position = new Vector2(replyJumpSensor.transform.position.x, replyJumpSensor.transform.position.y);
+            effect.transform.position = new Vector3(relayKickEffectPosition.position.x, relayKickEffectPosition.position.y, AxisZ.RELAY_KICK_EFFECT);
             effect.GetComponent<ParticleSystem>()?.Emit(60);
             Destroy(effect, 1.0f);
           }
@@ -376,6 +376,7 @@ namespace Catsland.Scripts.Controller {
             emission.enabled = true;
           }
           if (dashKnockbackContactDamage != null) {
+            dashKnockbackContactDamage.repelDirection = new Vector2(getOrientation(), 0f);
             dashKnockbackContactDamage.enabled = true;
           }
         }

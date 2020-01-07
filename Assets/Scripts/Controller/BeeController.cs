@@ -31,6 +31,9 @@ namespace Catsland.Scripts.Controller {
     public float dizzyTimeInSecond = 0.5f;
     public int health = 3;
 
+    public float chargeCooldownInSecond = 1.5f;
+    private float chargeCooldownRemainInSecond = 0f;
+
     // Swing attributes
     public float swingCycleInS = 1f;
     public float swingAmp = .5f;
@@ -77,6 +80,11 @@ namespace Catsland.Scripts.Controller {
         rb2d.velocity = wantDirection * flyingSpeed + new Vector2(0f, swingAmp * Mathf.Sin(swingPhase));
       }
 
+      // Charge
+      if (status != Status.CHARING && chargeCooldownRemainInSecond > -Mathf.Epsilon) {
+        chargeCooldownRemainInSecond -= Time.deltaTime;
+      }
+
       if(CanPrepare()) {
         if(input.attack()) {
           status = Status.PREPARING;
@@ -106,7 +114,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     public bool CanPrepare() {
-      return status == Status.FLYING || status == Status.PREPARING;
+      return (status == Status.FLYING || status == Status.PREPARING) && chargeCooldownRemainInSecond < Mathf.Epsilon;
     }
 
     public bool consumeHasCharged() {
@@ -132,6 +140,7 @@ namespace Catsland.Scripts.Controller {
 
     IEnumerator waitAndStopCharge() {
       yield return new WaitForSeconds(chargeTimeInSecond);
+      chargeCooldownRemainInSecond = chargeCooldownInSecond;
       status = Status.FLYING;
       rb2d.velocity = Vector2.zero;
     }

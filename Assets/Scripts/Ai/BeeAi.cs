@@ -14,6 +14,9 @@ namespace Catsland.Scripts.Ai {
     public GameObject playerSensorGo;
     public bool lockOn = false;
 
+    // Preferred height to perform charge.
+    public float chargeHeightDelta = 1.5f;
+
     private bool wantAttack;
     private Vector2 v;
 
@@ -62,10 +65,19 @@ namespace Catsland.Scripts.Ai {
     }
 
     [Task]
+    public void canPrepare() {
+      if (controller.CanPrepare()) {
+        Task.current.Succeed();
+      } else {
+        Task.current.Fail();
+      }
+    }
+
+    [Task]
     public void moveTowardsPlayer() {
       resetStatus();
       Vector3 delta = SceneConfig.getSceneConfig().GetPlayer().transform.position - transform.position;
-      v = new Vector2(delta.x, delta.y);
+      v = new Vector2(delta.x, delta.y + chargeHeightDelta);
       Task.current.Succeed();
     }
 
@@ -99,6 +111,10 @@ namespace Catsland.Scripts.Ai {
     public void resetStatus() {
       v = Vector2.zero;
       wantAttack = false;
+    }
+
+    void OnDrawGizmos() {
+      Common.Utils.DrawCircleAsGizmos(.1f, Color.red, transform.position - new Vector3(0f, chargeHeightDelta), 8);
     }
   }
 }

@@ -5,9 +5,17 @@ tree("Root")
       fallback
         sequence
           isPlayerInReactDistance()
-          doCharge()
+          fallback
+            sequence
+              canPrepare()
+              doCharge()
+            moveTowardsPlayer()
         moveTowardsPlayer()
     sequence
       isPlayerInReactDistance()
-      doCharge()
+      fallback
+        sequence
+          canPrepare()
+          doCharge()
+        moveTowardsPlayer()
     patrol()

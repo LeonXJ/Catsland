@@ -2,20 +2,8 @@ tree("Root")
   fallback
     sequence
       isLockOn()
-      fallback
-        sequence
-          isPlayerInReactDistance()
-          fallback
-            sequence
-              canPrepare()
-              doCharge()
-            moveTowardsPlayer()
-        moveTowardsPlayer()
+      moveTowardsPlayer()
     sequence
       isPlayerInReactDistance()
-      fallback
-        sequence
-          canPrepare()
-          doCharge()
-        moveTowardsPlayer()
+      moveTowardsPlayer()
     patrol()

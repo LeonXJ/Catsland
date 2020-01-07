@@ -1,0 +1,21 @@
+tree("Root")
+  fallback
+    sequence
+      isLockOn()
+      fallback
+        sequence
+          isPlayerInReactDistance()
+          fallback
+            sequence
+              canPrepare()
+              doCharge()
+            moveTowardsPlayer()
+        moveTowardsPlayer()
+    sequence
+      isPlayerInReactDistance()
+      fallback
+        sequence
+          canPrepare()
+          doCharge()
+        moveTowardsPlayer()
+    patrol()

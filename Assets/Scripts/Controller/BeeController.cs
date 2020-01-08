@@ -22,6 +22,7 @@ namespace Catsland.Scripts.Controller {
       PREPARING = 1,
       CHARING = 2,
       DIZZY = 3,
+      DIE = 4,
     }
 
     public float flyingSpeed = 1.0f;
@@ -43,6 +44,11 @@ namespace Catsland.Scripts.Controller {
     public float knowbackSpeed = 5f;
     public float maxKnowbackSpeed = 10f;
     public float knowbackDrag = 10f;
+  
+    // Die
+    public GameObject dieEffectPrefab;
+    public float dieRepelVelocity = 10f;
+    public float dieRepelAngularSpeed = 900f;
 
     private Status status = Status.FLYING;
     private Rigidbody2D rb2d;
@@ -56,6 +62,7 @@ namespace Catsland.Scripts.Controller {
     private static readonly string IS_PREPARING = "IsPreparing";
     private static readonly string IS_CHARGING = "IsCharging";
     private static readonly string IS_DIZZY = "IsDizzy";
+    private static readonly string IS_DIE = "IsDie";
 
     private void Awake() {
       rb2d = GetComponent<Rigidbody2D>();
@@ -103,6 +110,7 @@ namespace Catsland.Scripts.Controller {
       animator.SetBool(IS_PREPARING, status == Status.PREPARING);
       animator.SetBool(IS_CHARGING, status == Status.CHARING);
       animator.SetBool(IS_DIZZY, status == Status.DIZZY);
+      animator.SetBool(IS_DIE, status == Status.DIE);
     }
 
     public bool CanMoveAround() {
@@ -157,8 +165,11 @@ namespace Catsland.Scripts.Controller {
 
       yield return new WaitForSeconds(time);
 
+      if (status == Status.DIE) {
+        yield break;
+      }
       if (health <= 0) {
-        enterDie();
+        enterDie(damageInfo);
       } else {
         status = Status.DIZZY;
         yield return ApplyVelocityRepel(damageInfo, rb2d, dizzyTimeInSecond, knowbackSpeed, maxKnowbackSpeed, knowbackDrag);
@@ -166,11 +177,23 @@ namespace Catsland.Scripts.Controller {
       }
     }
 
-    private void enterDie() {
+    private void enterDie(DamageInfo damageInfo) {
       if (diamondGenerator != null) {
         diamondGenerator.Generate(5, 1);
       }
-      Destroy(gameObject);
+      if (dieEffectPrefab != null) {
+        GameObject dieEffect = Instantiate(dieEffectPrefab);
+        dieEffect.transform.position = new Vector3(transform.position.x, transform.position.y, AxisZ.SPLASH);
+        dieEffect.GetComponent<ParticleSystem>()?.Play(true);
+        Destroy(dieEffect, 3f);
+      }
+
+      status = Status.DIE;
+      rb2d.freezeRotation = false;
+      rb2d.velocity = (damageInfo.repelDirection.normalized + Vector2.up).normalized * dieRepelVelocity;
+      rb2d.angularVelocity = dieRepelAngularSpeed;
+      rb2d.gravityScale = 1f;
+      Destroy(gameObject, 3f);
     }
   }
 }

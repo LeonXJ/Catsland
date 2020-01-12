@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Catsland.Scripts.Common;
@@ -9,7 +8,7 @@ using static Catsland.Scripts.Bullets.Utils;
 
 namespace Catsland.Scripts.Controller {
   [RequireComponent(typeof(Rigidbody2D)), RequireComponent(typeof(BeeInput)), RequireComponent(typeof(Animator))]
-  public class BeeController: MonoBehaviour {
+  public class BeeController : MonoBehaviour {
 
     public interface BeeInput {
       float getHorizontal();
@@ -44,7 +43,7 @@ namespace Catsland.Scripts.Controller {
     public float knowbackSpeed = 5f;
     public float maxKnowbackSpeed = 10f;
     public float knowbackDrag = 10f;
-  
+
     // Die
     public GameObject dieEffectPrefab;
     public float dieRepelVelocity = 10f;
@@ -77,12 +76,12 @@ namespace Catsland.Scripts.Controller {
       Vector2 wantDirection = new Vector2(input.getHorizontal(), input.getVertical()).normalized;
 
       // Orientation
-      if(CanAdjustOrientation()) {
+      if (CanAdjustOrientation()) {
         ControllerUtils.AdjustOrientation(wantDirection.x, gameObject);
       }
 
       // Flying
-      if(CanMoveAround()) {
+      if (CanMoveAround()) {
         swingPhase += Time.deltaTime / swingCycleInS;
         rb2d.velocity = wantDirection * flyingSpeed + new Vector2(0f, swingAmp * Mathf.Sin(swingPhase));
       }
@@ -92,12 +91,12 @@ namespace Catsland.Scripts.Controller {
         chargeCooldownRemainInSecond -= Time.deltaTime;
       }
 
-      if(CanPrepare()) {
-        if(input.attack()) {
+      if (CanPrepare()) {
+        if (input.attack()) {
           status = Status.PREPARING;
           rb2d.velocity = Vector2.zero;
           currentPrepareTimeInSecond += Time.deltaTime;
-          if(currentPrepareTimeInSecond > prepareTimeInSecond) {
+          if (currentPrepareTimeInSecond > prepareTimeInSecond) {
             exitPrepare();
             enterCharge();
           }

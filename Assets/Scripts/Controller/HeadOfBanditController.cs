@@ -65,6 +65,8 @@ namespace Catsland.Scripts.Controller {
     public float jumpSmashRestTime = 0.5f;
     public GameObject jumpSmashEffectPrefab;
     public Transform jumpSmashEffectTransform;
+    public float rippleSpeed = 5f;
+    public GameObject ripplePrefab;
     public float jumpSmashShakeAmp = 1.5f;
     private bool isLastOnGround = false;
 
@@ -236,6 +238,14 @@ namespace Catsland.Scripts.Controller {
         && (status == Status.JUMP_SMASH_JUMPING || status == Status.JUMP_SMASH_SMASHING)) {
         GameObject jumpSmashEffect = Instantiate(jumpSmashEffectPrefab);
         jumpSmashEffect.transform.position = jumpSmashEffectTransform.position;
+
+        // Ripple
+        GameObject ripple = Instantiate(ripplePrefab);
+        ripple.transform.position = transform.position;
+        Rigidbody2D rippleRb2d = ripple.GetComponent<Rigidbody2D>();
+        rippleRb2d.velocity = new Vector2(
+          getOrientation() * rippleSpeed, 0f);
+
         Common.Utils.setRelativeRenderLayer(spriteRenderer, jumpSmashEffect.GetComponent<SpriteRenderer>(), 1);
       }
       isLastOnGround = groundSensor.isStay();

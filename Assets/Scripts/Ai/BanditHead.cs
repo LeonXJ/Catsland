@@ -119,12 +119,57 @@ namespace Catsland.Scripts.Ai {
     }
 
     [Task]
+    public void waitTillCanThrowKnife() {
+      resetStatus();
+      if (controller.canSpell()) {
+        Task.current.Succeed();
+      }
+    }
+
+    [Task]
+    public void doThrowKnife() {
+      resetStatus();
+      wantSpell = true;
+      Task.current.Succeed();
+    }
+
+    [Task]
     public void performCharge() {
       performAndWaitDoneAction(
         controller.canCharge(), () => {
           wantCharge = true;
         },
         controller.status == HeadOfBanditController.Status.CHARGE_REST);
+    }
+
+    [Task]
+    public void waitTillCanCharge() {
+      resetStatus();
+      if (controller.canCharge()) {
+        Task.current.Succeed();
+      }
+    }
+
+    [Task]
+    public void doCharge() {
+      resetStatus();
+      wantCharge = true;
+      Task.current.Succeed();
+    }
+
+    [Task]
+    public void waitTillCanJumpSmash() {
+      resetStatus();
+      if (controller.canJumpSmash()) {
+        Task.current.Succeed();
+      }
+    }
+
+    [Task]
+    public void doJumpSmash() {
+      resetStatus();
+      wantJumpSmash = true;
+      Task.current.Succeed();
     }
 
     [Task]
@@ -149,15 +194,17 @@ namespace Catsland.Scripts.Ai {
     [Task]
     public void faceToPlayer() {
       resetStatus();
+      if (!controller.canAdjustOrientation()) {
+        // controller might be in previous action, not finish yet.
+        return;
+      }
       float horizontalDelta = getDistanceToPlayer().x;
       // Keep checking the orientation until successfully set orientation.
       if(controller.getOrientation() * horizontalDelta > 0.0f) {
         Task.current.Succeed();
         return;
       }
-      if(controller.canAdjustOrientation()) {
-        horizontal = Mathf.Sign(horizontalDelta);
-      }
+      horizontal = Mathf.Sign(horizontalDelta);
     }
 
     private void setTaskSucceedElseFailIfInDistance(float distance) {

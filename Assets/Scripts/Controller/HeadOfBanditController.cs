@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System;
 using UnityEngine;
+using DG.Tweening;
+using Catsland.Scripts.Common;
 using Catsland.Scripts.Bullets;
 using Cinemachine;
 
 namespace Catsland.Scripts.Controller {
-  public class HeadOfBanditController: MonoBehaviour {
+  public class HeadOfBanditController: MonoBehaviour, IDamageInterceptor {
 
     public interface HeadOfBanditInput {
       float getHorizontal();
@@ -37,6 +40,9 @@ namespace Catsland.Scripts.Controller {
       SPELL_PREAPRE,
       SPELL_SPELLING,
       SPELL_REST,
+
+      // DIZZY
+      DIZZY,
 
       DIE_THROW,
       DIE_STAY,
@@ -78,6 +84,11 @@ namespace Catsland.Scripts.Controller {
     public float spellPrepareTime = 0.3f;
     public float spellSpellTime = 0.3f;
     public float spellRestTime = 0.2f;
+    [Range(0f, 1.0f)]
+    public float chanceMultiThrow = 0.2f;
+    public float multiSpellMaxAngle = 60f;
+    [Range(2, 100)]
+    public int multiSpellNumber = 5;
     public Transform spellTransform;
 
     private float currentChargeStatusRemainingTime;
@@ -86,6 +97,12 @@ namespace Catsland.Scripts.Controller {
     private LinearSequence jumpSmashSequence;
     private LinearSequence spellSequence;
     private LinearSequence dieSequence;
+
+    // Dizzy
+    public float freezeTimeInS = .3f;
+    public float dizzyTimeInS = .3f;
+    public float maxRepelForce = 100f;
+    private float dizzyRemainInS = 0f;
 
     // Die
     public float throwForceOnDie = 10.0f;
@@ -114,6 +131,7 @@ namespace Catsland.Scripts.Controller {
     private static readonly string SPELL_PHASE = "SpellPhase";
     private static readonly string DIE = "Die";
     private static readonly string DISPLAY = "Display";
+    private static readonly string IS_DIZZY = "IsDizzy";
 
     private static readonly Dictionary<Status, int> JUMP_SMASH_STATUS_TO_PHASE =
       new Dictionary<Status, int>();
@@ -194,6 +212,13 @@ namespace Catsland.Scripts.Controller {
       status = (Status)spellSequence.processIfInInterestedStatus(status);
       status = (Status)dieSequence.processIfInInterestedStatus(status);
 
+      if (status == Status.DIZZY) {
+        dizzyRemainInS -= Time.deltaTime;
+        if (dizzyRemainInS <= Mathf.Epsilon) {
+          status = Status.IDEAL;
+        }
+      }
+
       // transition logic
       if (canDisplay() && input.display()) {
         status = (Status)displaySequence.start();
@@ -203,6 +228,7 @@ namespace Catsland.Scripts.Controller {
         status = (Status)chargeSequence.start();
       }
       if(canJumpSmash() && input.jumpSmash()) {
+        Debug.Log("Start Jump.");
         status = (Status)jumpSmashSequence.start();
       }
       if(canSpell() && input.spell()) {
@@ -266,6 +292,7 @@ namespace Catsland.Scripts.Controller {
       animator.SetFloat(H_SPEED, Mathf.Abs(rb2d.velocity.x));
       animator.SetFloat(V_SPEED, rb2d.velocity.y);
       animator.SetBool(DISPLAY, status == Status.DISPLAY);
+      animator.SetBool(IS_DIZZY, status == Status.DIZZY);
       setAnimiatorPhaseValue(JUMP_SMASH_PHASE, JUMP_SMASH_STATUS_TO_PHASE);
       setAnimiatorPhaseValue(CHARGE_PHASE, CHARGE_STATUS_TO_PHASE);
       setAnimiatorPhaseValue(SPELL_PHASE, SPELL_STATUS_TO_PHASE);
@@ -314,11 +341,27 @@ namespace Catsland.Scripts.Controller {
         return;
       }
 
-      Bullets.Utils.ApplyRepel(damageInfo, rb2d);
       curHealth -= damageInfo.damage;
       if(curHealth <= 0) {
         enterDie();
+        return;
       }
+      status = Status.DIZZY;
+      dizzyRemainInS = dizzyTimeInS;
+      StartCoroutine(freezeThen(freezeTimeInS, damageInfo));
+    }
+
+    private IEnumerator freezeThen(float time, DamageInfo damageInfo) {
+      rb2d.velocity = Vector2.zero;
+      rb2d.bodyType = RigidbodyType2D.Kinematic;
+    
+      transform.DOShakePosition(time, .15f, 30, 120);
+
+      yield return new WaitForSeconds(time);
+
+      rb2d.bodyType = RigidbodyType2D.Dynamic;
+
+      Bullets.Utils.ApplyRepel(damageInfo, rb2d, maxRepelForce);
     }
 
     public bool isDead() {
@@ -347,18 +390,39 @@ namespace Catsland.Scripts.Controller {
       return status == Status.IDEAL;
     }
 
+    private void multiSpell() {
+      Debug.Assert(multiSpellNumber > 1, "Multi spell number should >1");
+
+      float halfMaxAngel = multiSpellMaxAngle * 0.5f;
+      float step = multiSpellMaxAngle / (multiSpellNumber - 1);
+      Vector2 mainDirection = getOrientation() > 0f ? Vector2.right : Vector2.left;
+
+      for (int i = 0; i < multiSpellNumber; i++) {
+        float rotateAngle = -halfMaxAngel + step * i;
+        Vector2 direction = mainDirection.Rotate(rotateAngle);
+        castOneKnife(direction, rotateAngle);
+      }
+    }
+
     private void spell() {
+
+      float random = UnityEngine.Random.Range(0f, 1f);
+      if (random < chanceMultiThrow) {
+        multiSpell();
+      } else {
+        castOneKnife(getOrientation() > 0 ? Vector2.right : Vector2.left, 0f);
+      }
+    }
+
+    private void castOneKnife(Vector2 direction, float rotateAngle) {
       GameObject knife = Instantiate(throwingKnifePrefab);
       knife.transform.position = spellTransform.position;
-      knife.transform.localScale = new Vector2(getOrientation(), 1.0f);
-      // renderer
-      SpriteRenderer knifeRenderer = knife.GetComponent<SpriteRenderer>();
-      Common.Utils.setRelativeRenderLayer(spriteRenderer, knifeRenderer, 1);
+      knife.transform.rotation = Quaternion.AngleAxis(rotateAngle, Vector3.forward);
+      knife.transform.localScale = new Vector3((direction.x > 0f ? 1f : -1f), 1f, 1f);
 
       // velocity
       Rigidbody2D knifeRb2d = knife.GetComponent<Rigidbody2D>();
-      knifeRb2d.velocity = new Vector2(getOrientation() * knifeSpeed, 0.0f);
-
+      knifeRb2d.velocity = direction * knifeSpeed;
       knife.GetComponent<Spell>().fire(gameObject);
     }
 
@@ -366,6 +430,17 @@ namespace Catsland.Scripts.Controller {
       int phase = 0;
       statusToPhase.TryGetValue(status, out phase);
       animator.SetInteger(variableName, phase);
+    }
+
+    public ArrowResult getArrowResult(ArrowCarrier arrowCarrier) {
+      /*
+      if (status == Status.JUMP_SMASH_JUMPING
+        || status == Status.JUMP_SMASH_SMASHING
+        || status == Status.JUMP_SMASH_PREPARE
+        || status == Status.JUMP_SMASH_REST) {
+        return ArrowResult.BROKEN;
+      }*/
+      return ArrowResult.HIT;
     }
   }
 }

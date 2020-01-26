@@ -12,11 +12,14 @@ namespace Catsland.Scripts.Bullets {
     public int damage = 1;
     public float repelIntense = 10f;
     public float destroyAfterHitGroundInSeconds = 1f;
+    public LayerMask rippleLayerMask;
 
     private bool hasApplied = false;
 
     private Rigidbody2D rb2d;
     private new ParticleSystem particleSystem;
+    private ParticleSystem.Particle[] particles;
+
 
 
     // Start is called before the first frame update
@@ -33,15 +36,14 @@ namespace Catsland.Scripts.Bullets {
       if (Input.GetKey(KeyCode.X)) {
         rb2d.velocity += new Vector2(1f, 0);
       }
-
+      detectCollision();
     }
 
-    void OnTriggerEnter2D(Collider2D other) {
-      onRippleHit(other);
+    void OnTriggerEnter2D(Collider2D collider) {
+      onRippleHit(collider);
     }
-
-    void OnTriggerStay2D(Collider2D other) {
-      onRippleHit(other);
+    void OnTriggerStay2D(Collider2D collider) {
+      onRippleHit(collider);
     }
 
     private void onRippleHit(Collider2D other) {
@@ -69,6 +71,32 @@ namespace Catsland.Scripts.Bullets {
         new DamageInfo(damage, player.transform.position, Vector2.up, repelIntense),
         SendMessageOptions.DontRequireReceiver);
       hasApplied = true;
+    }
+
+    private void detectCollision() {
+      if (particles == null || particles.Length < particleSystem.main.maxParticles) {
+        particles = new ParticleSystem.Particle[particleSystem.main.maxParticles];
+      }
+      int aliveParticleNum = particleSystem.GetParticles(particles);
+      for (int i = 0; i < aliveParticleNum; i++) {
+        ParticleSystem.Particle particle = particles[i];
+        Vector3 position = particle.position;
+        Vector3 size = particle.GetCurrentSize3D(particleSystem);
+        Rect rect = new Rect(position + new Vector3(0f, size.y * .25f, 0f), size * .5f);
+
+        Common.Utils.drawRectAsDebug(rect, Color.blue);
+        foreach (Collider2D collider in Physics2D.OverlapBoxAll(rect.position, rect.size, 0, rippleLayerMask)) {
+          if (collider.gameObject.layer == Layers.LayerCharacter
+            && collider.gameObject.CompareTag(Tags.PLAYER)
+            && !hasApplied) {
+            collider.gameObject.SendMessage(
+              MessageNames.DAMAGE_FUNCTION,
+              new DamageInfo(damage, collider.gameObject.transform.position, Vector2.up, repelIntense),
+              SendMessageOptions.DontRequireReceiver);
+            hasApplied = true;
+          }
+        }
+      }
     }
   }
 }

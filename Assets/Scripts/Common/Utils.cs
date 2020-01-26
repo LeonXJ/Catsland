@@ -23,8 +23,8 @@ namespace Catsland.Scripts.Common {
       return gameObject.transform.lossyScale.x > 0.0f ? 1.0f : -1.0f;
     }
 
-    public static void drawRectAsGizmos(Rect rect, Color color, Transform transform) {
-      Vector3 pos = transform.TransformPoint(rect.position);
+    public static void drawRectAsGizmos(Rect rect, Color color, Transform transform = null) {
+      Vector3 pos = transform == null ? new Vector3(rect.position.x, rect.position.y, 0f) : transform.TransformPoint(rect.position);
       Vector3 widthOffset = new Vector3(rect.width / 2.0f, 0.0f);
       Vector3 heightOffset = new Vector3(0.0f, rect.height / 2.0f);
 
@@ -41,6 +41,25 @@ namespace Catsland.Scripts.Common {
         Gizmos.DrawLine(pos + points[fromIndex], pos + points[toIndex]);
       }
     }
+    public static void drawRectAsDebug(Rect rect, Color color, Transform transform = null) {
+      Vector3 pos = transformToDebugAxisZ(transform == null ? new Vector3(rect.position.x, rect.position.y, 0f) : transform.TransformPoint(rect.position));
+      Vector3 widthOffset = new Vector3(rect.width / 2.0f, 0.0f);
+      Vector3 heightOffset = new Vector3(0.0f, rect.height / 2.0f);
+
+      Vector3[] points = new Vector3[4] {
+        -widthOffset - heightOffset,
+        widthOffset - heightOffset,
+        widthOffset + heightOffset,
+        -widthOffset + heightOffset
+      };
+
+      for(int fromIndex = 0; fromIndex < points.Length; fromIndex++) {
+        int toIndex = (fromIndex + 1) % points.Length;
+        Debug.DrawLine(pos + points[fromIndex], pos + points[toIndex], color);
+      }
+    }
+
+    private static Vector3 transformToDebugAxisZ(Vector3 v) => new Vector3(v.x, v.y, AxisZ.DEBUG);
 
     public static void DrawCircleAsGizmos(float radius, Color color, Vector3 center, int segments = 16) {
       float deltaArc = 2 * Mathf.PI / segments;

@@ -62,6 +62,8 @@ namespace Catsland.Scripts.Controller {
     public float chargeChargingTime = 2.0f;
     public float chargeRestTime = 1.0f;
     public float chargingShakeAmp = 0.1f;
+    public AnimationCurve chargeSpeedCurve;
+    private float startChargeTime;
 
     // Jump Smash
     [Header("Jump Smash")]
@@ -239,10 +241,19 @@ namespace Catsland.Scripts.Controller {
       }
 
       // apply velocity
+      if (status == Status.CHARGE_CHARGING) {
+        if (startChargeTime < Mathf.Epsilon) {
+          startChargeTime = Time.time;
+        }
+      } else {
+        startChargeTime = -Mathf.Epsilon;
+      }
       if(status == Status.CHARGE_CHARGING) {
         cinemachineImpulseSource.m_ImpulseDefinition.m_AmplitudeGain = chargingShakeAmp;
         cinemachineImpulseSource.GenerateImpulse();
-        rb2d.velocity = new Vector2(getOrientation() * chargeSpeed, rb2d.velocity.y);
+        float v = chargeSpeed * chargeSpeedCurve.Evaluate((Time.time - startChargeTime) / chargeChargingTime);
+        Debug.Log("start charge time: " + startChargeTime + " ratio: " + (Time.time - startChargeTime) / chargeChargingTime + " value: " + v);
+        rb2d.velocity = new Vector2(getOrientation() * v, rb2d.velocity.y);
       } else if(status == Status.JUMP_SMASH_JUMPING) {
         if(oldStatus != status) {
           rb2d.velocity = Vector2.zero;

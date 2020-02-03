@@ -28,6 +28,5 @@ namespace Catsland.Scripts.Bullets {
   public interface IDamageInterceptor {
 
     ArrowResult getArrowResult(ArrowCarrier arrowCarrier);
-
   }
 }

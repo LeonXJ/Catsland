@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
+[ObsoleteAttribute("Use LightComposerPostProcessingEffect instead.")]
 [ExecuteInEditMode]
 public class ComposeLightmap: MonoBehaviour {
 
@@ -18,8 +20,5 @@ public class ComposeLightmap: MonoBehaviour {
     lightmapMaterial.SetTexture("_Lightmap", lightmapRenderTexture);
 
     Graphics.Blit(source, destination, lightmapMaterial);
-
-
-
   }
 }

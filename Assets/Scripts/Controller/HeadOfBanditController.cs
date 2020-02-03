@@ -8,7 +8,7 @@ using Catsland.Scripts.Bullets;
 using Cinemachine;
 
 namespace Catsland.Scripts.Controller {
-  public class HeadOfBanditController: MonoBehaviour, IDamageInterceptor {
+  public class HeadOfBanditController: MonoBehaviour, IDamageInterceptor, IMeleeDamageInterceptor {
 
     public interface HeadOfBanditInput {
       float getHorizontal();
@@ -72,6 +72,7 @@ namespace Catsland.Scripts.Controller {
     public float jumpSmashSmashTime = 0.3f;
     public float jumpSmashRestTime = 0.5f;
     public GameObject jumpSmashEffectPrefab;
+    public GameObject jumpSmashDustPrefab;
     public Transform jumpSmashEffectTransform;
     public float rippleSpeed = 5f;
     public GameObject ripplePrefab;
@@ -104,6 +105,8 @@ namespace Catsland.Scripts.Controller {
     public float freezeTimeInS = .3f;
     public float dizzyTimeInS = .3f;
     public float maxRepelForce = 100f;
+    public float repelInitSpeed = 5.0f;
+
     private float dizzyRemainInS = 0f;
 
     // Die
@@ -252,7 +255,6 @@ namespace Catsland.Scripts.Controller {
         cinemachineImpulseSource.m_ImpulseDefinition.m_AmplitudeGain = chargingShakeAmp;
         cinemachineImpulseSource.GenerateImpulse();
         float v = chargeSpeed * chargeSpeedCurve.Evaluate((Time.time - startChargeTime) / chargeChargingTime);
-        Debug.Log("start charge time: " + startChargeTime + " ratio: " + (Time.time - startChargeTime) / chargeChargingTime + " value: " + v);
         rb2d.velocity = new Vector2(getOrientation() * v, rb2d.velocity.y);
       } else if(status == Status.JUMP_SMASH_JUMPING) {
         if(oldStatus != status) {
@@ -273,8 +275,17 @@ namespace Catsland.Scripts.Controller {
       // effect
       if(!isLastOnGround && groundSensor.isStay()
         && (status == Status.JUMP_SMASH_JUMPING || status == Status.JUMP_SMASH_SMASHING)) {
-        GameObject jumpSmashEffect = Instantiate(jumpSmashEffectPrefab);
-        jumpSmashEffect.transform.position = jumpSmashEffectTransform.position;
+        if (jumpSmashEffectPrefab != null) {
+          GameObject jumpSmashEffect = Instantiate(jumpSmashEffectPrefab);
+          jumpSmashEffect.transform.position = jumpSmashEffectTransform.position;
+          Destroy(jumpSmashEffect, 1f);
+        }
+
+        if (jumpSmashDustPrefab != null) {
+          GameObject jumpSmashDust = Instantiate(jumpSmashDustPrefab);
+          jumpSmashDust.transform.position = jumpSmashEffectTransform.position;
+          Destroy(jumpSmashDust, 2f);
+        }
 
         // Ripple
         GameObject ripple = Instantiate(ripplePrefab);
@@ -282,8 +293,6 @@ namespace Catsland.Scripts.Controller {
         Rigidbody2D rippleRb2d = ripple.GetComponent<Rigidbody2D>();
         rippleRb2d.velocity = new Vector2(
           getOrientation() * rippleSpeed, 0f);
-
-        Common.Utils.setRelativeRenderLayer(spriteRenderer, jumpSmashEffect.GetComponent<SpriteRenderer>(), 1);
       }
       isLastOnGround = groundSensor.isStay();
 
@@ -372,7 +381,7 @@ namespace Catsland.Scripts.Controller {
 
       rb2d.bodyType = RigidbodyType2D.Dynamic;
 
-      Bullets.Utils.ApplyRepel(damageInfo, rb2d, maxRepelForce);
+      rb2d.velocity = damageInfo.repelDirection.normalized * repelInitSpeed;
     }
 
     public bool isDead() {
@@ -444,14 +453,21 @@ namespace Catsland.Scripts.Controller {
     }
 
     public ArrowResult getArrowResult(ArrowCarrier arrowCarrier) {
-      /*
-      if (status == Status.JUMP_SMASH_JUMPING
-        || status == Status.JUMP_SMASH_SMASHING
-        || status == Status.JUMP_SMASH_PREPARE
-        || status == Status.JUMP_SMASH_REST) {
+      if (status == Status.CHARGE_CHARGING
+        || status == Status.JUMP_SMASH_JUMPING
+        || status == Status.JUMP_SMASH_SMASHING) {
         return ArrowResult.BROKEN;
-      }*/
+      }
       return ArrowResult.HIT;
+    }
+
+    public MeleeResult getMeleeResult() {
+      if (status == Status.CHARGE_CHARGING
+        || status == Status.JUMP_SMASH_JUMPING
+        || status == Status.JUMP_SMASH_SMASHING) {
+        return MeleeResult.VOID;
+      }
+      return MeleeResult.HIT;
     }
   }
 }

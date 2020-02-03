@@ -17,6 +17,7 @@ namespace Catsland.Scripts.Common {
     public CinemachineImpulseSource stonePillarShakeAgent;
     public GameObject enemyTitle;
     public Animator enemyTitleBlack;
+    public UnityEngine.Camera lightCamera;
 
     public GameObject player;
 

@@ -44,6 +44,7 @@ namespace Catsland.Scripts.Controller {
     public int dashKnowbackParticleNumber = 120;
     public float dashKnowbackTimeslowDuration = 2f;
     public float dashKnowbackTimeslowScale = 0.6f;
+    public float dashKnowbackRepelSpeed = 2f;
     private float dashknowbackTimeslowRemaining = 0f;
 
     public ParticleSystem dashParticle;
@@ -602,9 +603,12 @@ namespace Catsland.Scripts.Controller {
       return true;
     }
 
-    private void exitDash(float delayStateChange = 0f) {
+    private void exitDash(float delayStateChange = 0f, bool repel = false) {
       dashRemainingTime = Mathf.Min(delayStateChange, dashRemainingTime);
       rb2d.gravityScale = gravityScale;
+      if (repel) {
+        rb2d.velocity = new Vector2(-Mathf.Sign(rb2d.velocity.x) * dashKnowbackRepelSpeed, rb2d.velocity.y);
+      }
 
       if (dashParticle != null) {
         ParticleSystem.EmissionModule emission = dashParticle.emission;
@@ -624,7 +628,7 @@ namespace Catsland.Scripts.Controller {
       cinemachineImpulseSource.GenerateImpulse();
       dashknowbackTimeslowRemaining = dashKnowbackTimeslowDuration;
       // delay exiting dash animiation to have slow motion on dash action
-      exitDash(.1f);
+      exitDash(.1f, true);
     }
 
     private IEnumerator shoot() {

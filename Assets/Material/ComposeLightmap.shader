@@ -4,6 +4,8 @@
     _Lightmap ("Lightmap", 2D) = "white" {}
 	}
 	SubShader {
+    Cull Off ZWrite Off ZTest Always
+
     Pass {
       CGPROGRAM
       #pragma vertex vert_img
@@ -16,7 +18,8 @@
       fixed4 frag (v2f_img i) : COLOR {
         fixed4 light = tex2D(_Lightmap, i.uv);
         fixed4 base = tex2D(_MainTex, i.uv);
-        return fixed4(base.rgb * light.rgb, base.a);
+        //return fixed4(base.rgb * light.rgb, base.a);
+        return base;
       }
       ENDCG
     }

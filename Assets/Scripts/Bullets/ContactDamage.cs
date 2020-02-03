@@ -2,7 +2,7 @@
 using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Bullets {
-  public class ContactDamage: MonoBehaviour {
+  public class ContactDamage : MonoBehaviour {
 
     public delegate void OnHitEvent();
 
@@ -52,22 +52,25 @@ namespace Catsland.Scripts.Bullets {
     }
 
     private void onHitGameObject(Collider2D collider, bool isStay) {
-      if(!enabled) {
+      if (!enabled) {
         return;
       }
       GameObject collidingGameObject = collider.gameObject;
 
       bool masked = (includeLayer & (1 << collider.gameObject.layer)) == 0x0;
       PartyTag otherPartyTag = collidingGameObject.GetComponent<PartyTag>();
-      if(!masked && collidingGameObject != owner && PartyTag.ShouldTakeDamage(partyTag, otherPartyTag)) {
-        Vector2 delta = collidingGameObject.transform.position - transform.position;
-        collidingGameObject.SendMessage(
-          MessageNames.DAMAGE_FUNCTION,
-          new DamageInfo(
-            damage, collider.bounds.center, presetRepelDirection ? repelDirection : new Vector2(Mathf.Sign(delta.x), 0.0f), repelIntensity,
-            isSmashAttack && (canSmashAttakInStay || !isStay)),
-          SendMessageOptions.DontRequireReceiver);
+      if (!masked && collidingGameObject != owner && PartyTag.ShouldTakeDamage(partyTag, otherPartyTag)) {
+        IMeleeDamageInterceptor interceptor = collidingGameObject.GetComponent<IMeleeDamageInterceptor>();
+        if (interceptor == null || interceptor.getMeleeResult().status == MeleeResultStatus.HIT) {
+          Vector2 delta = collidingGameObject.transform.position - transform.position;
+          collidingGameObject.SendMessage(
+            MessageNames.DAMAGE_FUNCTION,
+            new DamageInfo(
+              damage, collider.bounds.center, presetRepelDirection ? repelDirection : new Vector2(Mathf.Sign(delta.x), 0.0f), repelIntensity,
+              isSmashAttack && (canSmashAttakInStay || !isStay)),
+            SendMessageOptions.DontRequireReceiver);
           onHitEvent?.Invoke();
+        }
       }
     }
   }

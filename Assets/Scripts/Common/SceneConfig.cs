@@ -19,8 +19,11 @@ namespace Catsland.Scripts.Common {
     public Animator enemyTitleBlack;
     public UnityEngine.Camera lightCamera;
 
+
     public GameObject player;
 
+    [Header("Debug")]
+    public Transform playerInitialPosition;
 
     public static SceneConfig getSceneConfig() {
       return sceneConfig;
@@ -29,6 +32,13 @@ namespace Catsland.Scripts.Common {
     SceneConfig() {
       sceneConfig = this;
       progressManager = new ProgressManager();
+    }
+
+    public void Start() {
+      if (playerInitialPosition != null) {
+        player.transform.position = playerInitialPosition.transform.position;
+      }
+    
     }
 
     public GameObject GetPlayer() {
@@ -65,7 +75,6 @@ namespace Catsland.Scripts.Common {
     }
 
     public void stonePillarShake(Vector3 position, Vector3 velocity) {
-      Debug.Log("Shake");
       stonePillarShakeAgent.GenerateImpulseAt(position, velocity);
     }
 

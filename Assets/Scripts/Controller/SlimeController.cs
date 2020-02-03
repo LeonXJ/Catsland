@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Catsland.Scripts.Bullets;
@@ -21,6 +19,9 @@ namespace Catsland.Scripts.Controller {
     public TriggerBasedSensor groundSensor;
     public float frezeTimeInS = .2f;
 
+    public GameObject dustPrefab;
+    public Transform dustPosition;
+
     public int maxHp = 3;
     private int currentHp;
 
@@ -38,6 +39,8 @@ namespace Catsland.Scripts.Controller {
     private static readonly string IS_ON_GROUND = "IsOnGround";
     private static readonly string VSpeed = "VSpeed";
     private static readonly string JUMP = "Jump";
+
+    private bool isLastOnGround = false;
 
     private void Awake() {
       input = GetComponent<SlimeInput>();
@@ -59,8 +62,20 @@ namespace Catsland.Scripts.Controller {
         }
       }
 
+      // Dust effect
+      bool isOnGround = groundSensor.isStay();
+      if (isOnGround && !isLastOnGround) {
+        if (dustPrefab != null) {
+          GameObject dust = Instantiate(dustPrefab);
+          dust.transform.position = new Vector3(
+            dustPosition.position.x, dustPosition.position.y, dust.transform.position.z);
+          dust.GetComponent<ParticleSystem>()?.Play();
+          Destroy(dust, 5f);
+        }
+      }
+      isLastOnGround = isOnGround;
 
-      animator.SetBool(IS_ON_GROUND, groundSensor.isStay());
+      animator.SetBool(IS_ON_GROUND, isOnGround);
       animator.SetFloat(VSpeed, rb2d.velocity.y);
     }
 

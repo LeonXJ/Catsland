@@ -2,6 +2,7 @@
 using UnityEngine;
 using DG.Tweening;
 using Catsland.Scripts.Bullets;
+using Catsland.Scripts.Common;
 using Catsland.Scripts.Misc;
 
 namespace Catsland.Scripts.Controller {
@@ -21,6 +22,8 @@ namespace Catsland.Scripts.Controller {
 
     public GameObject dustPrefab;
     public Transform dustPosition;
+    public float heightToGenerateDust = 5f;
+    private float maxInAirHeight = 0f;
 
     public int maxHp = 3;
     private int currentHp;
@@ -62,16 +65,26 @@ namespace Catsland.Scripts.Controller {
         }
       }
 
-      // Dust effect
+      // Ground-based events.
       bool isOnGround = groundSensor.isStay();
-      if (isOnGround && !isLastOnGround) {
-        if (dustPrefab != null) {
+      if (!isOnGround) {
+        maxInAirHeight = Mathf.Max(maxInAirHeight, transform.position.y);
+      }
+      if (isOnGround) {
+        // Just touch ground.
+        // Generate dust.
+        if (!isLastOnGround
+          && (maxInAirHeight - transform.position.y) > heightToGenerateDust
+          && dustPrefab != null) {
           GameObject dust = Instantiate(dustPrefab);
           dust.transform.position = new Vector3(
-            dustPosition.position.x, dustPosition.position.y, dust.transform.position.z);
+            dustPosition.position.x, dustPosition.position.y, AxisZ.SPLASH);
           dust.GetComponent<ParticleSystem>()?.Play();
           Destroy(dust, 5f);
+        
         }
+        // Reset max in air
+        maxInAirHeight = float.MinValue;
       }
       isLastOnGround = isOnGround;
 
@@ -122,7 +135,7 @@ namespace Catsland.Scripts.Controller {
 
       animator.speed = 1f;
       rb2d.bodyType = RigidbodyType2D.Dynamic;
-      Utils.ApplyRepel(damageInfo, rb2d);
+      Bullets.Utils.ApplyRepel(damageInfo, rb2d);
     }
   }
 }

@@ -12,16 +12,6 @@ namespace Catsland.scripts.controller {
 
     public ArenaDirector arenaDirector;
 
-    // Start is called before the first frame update
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
-
     public void damage(DamageInfo damageInfo) {
       transform.DOShakePosition(shakeInS, .15f, 30, 120);
 

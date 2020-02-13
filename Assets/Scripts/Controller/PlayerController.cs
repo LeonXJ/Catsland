@@ -42,7 +42,7 @@ namespace Catsland.Scripts.Controller {
     // If true, player orientation will affect the sign of x of dashCameraShakeScale.
     public bool dashCameraShakeApplyOrientationImpact = true;
     public int dashKnowbackParticleNumber = 120;
-    public float dashKnowbackTimeslowDuration = 2f;
+    //public float dashKnowbackTimeslowDuration = 2f;
     public float dashKnowbackTimeslowScale = 0.6f;
     public float dashKnowbackRepelSpeed = 2f;
     private float dashknowbackTimeslowRemaining = 0f;
@@ -113,6 +113,8 @@ namespace Catsland.Scripts.Controller {
 
     private bool isDizzy = false;
     private float lastGetDamagedTime = 0.0f;
+
+    public Timing timing;
 
     // References
     public GameObject groundSensorGO;
@@ -287,6 +289,7 @@ namespace Catsland.Scripts.Controller {
           // effect
           GameObject doubleJumpEffect = Instantiate(doubleJumpEffectPrefab);
           doubleJumpEffect.transform.position = doubleJumpEffectPoint.position;
+          // TODO: clean up
           Common.Utils.setRelativeRenderLayer(
             spriteRenderer, doubleJumpEffect.GetComponentInChildren<SpriteRenderer>(), 1);
         }
@@ -299,6 +302,9 @@ namespace Catsland.Scripts.Controller {
       } else if (dashknowbackTimeslowRemaining > 0f) {
         Time.timeScale = dashKnowbackTimeslowScale;
         dashknowbackTimeslowRemaining -= Time.deltaTime;
+        if (dashknowbackTimeslowRemaining <= 0f) {
+          exitDashKnockback();
+        } 
       } else {
         Time.timeScale = 1.0f;
       }
@@ -426,7 +432,7 @@ namespace Catsland.Scripts.Controller {
         previousParentPosition = currentGround.transform.position;
       }
 
-      if(dashRemainingTime <= 0.0f) {
+      if(!isDashing() && !isDashKnockingBack()) {
         if(!isDizzy && !input.meditation() && !isCliffJumping()) {
           if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon
             && (!groundSensor.isStay() || !isDrawing)) {
@@ -449,12 +455,13 @@ namespace Catsland.Scripts.Controller {
       // Apply force
       rb2d.AddForce(appliedForce);
 
-      // Update facing
+      // Update orientation
       if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon
         && !isDizzy
         && !isCliffJumping()
         && !input.meditation()
-        && dashRemainingTime < Mathf.Epsilon) {
+        && !isDashing()
+        && !isDashKnockingBack()) {
         float parentLossyScale = gameObject.transform.parent != null
             ? gameObject.transform.parent.lossyScale.x : 1.0f;
         if(desiredSpeed * parentLossyScale > 0.0f) {
@@ -494,7 +501,7 @@ namespace Catsland.Scripts.Controller {
       animator.SetBool(DIZZY, isDizzy);
       animator.SetBool(CROUCH, isCrouching);
       animator.SetBool(CLIFF_SLIDING, isCliffSliding && rb2d.velocity.y < Mathf.Epsilon);
-      animator.SetBool(DASHING, isDashing());
+      animator.SetBool(DASHING, isDashing() || isDashKnockingBack());
 
       // dush effect
       if (groundSensor.isStay() && Mathf.Abs(rb2d.velocity.x) > .1f) {
@@ -550,6 +557,10 @@ namespace Catsland.Scripts.Controller {
       return dashRemainingTime > 0.0f;
     }
 
+    public bool isDashKnockingBack() {
+      return dashknowbackTimeslowRemaining > 0f;
+    }
+
     public bool canDash(bool isCliffSliding) {
       return remainingDash > 0 && dashCooldownRemaining <= 0.0f && !isCliffSliding;
     }
@@ -603,12 +614,9 @@ namespace Catsland.Scripts.Controller {
       return true;
     }
 
-    private void exitDash(float delayStateChange = 0f, bool repel = false) {
-      dashRemainingTime = Mathf.Min(delayStateChange, dashRemainingTime);
+    private void exitDash() {
+      dashRemainingTime = 0f;
       rb2d.gravityScale = gravityScale;
-      if (repel) {
-        rb2d.velocity = new Vector2(-Mathf.Sign(rb2d.velocity.x) * dashKnowbackRepelSpeed, rb2d.velocity.y);
-      }
 
       if (dashParticle != null) {
         ParticleSystem.EmissionModule emission = dashParticle.emission;
@@ -620,15 +628,25 @@ namespace Catsland.Scripts.Controller {
       }
     }
 
+    // Invoked when dash hit opponent.
     private void onDashKnockbackEvent() {
       if (dashKnockbackParticle != null) {
         ParticleSystem.EmissionModule emission = dashKnockbackParticle.emission;
         dashKnockbackParticle.Emit(dashKnowbackParticleNumber);
       }
       cinemachineImpulseSource.GenerateImpulse();
-      dashknowbackTimeslowRemaining = dashKnowbackTimeslowDuration;
       // delay exiting dash animiation to have slow motion on dash action
-      exitDash(.1f, true);
+      //animator.speed = 0f;
+      exitDash();
+
+      // set DashKnockback status
+      rb2d.gravityScale = 0f;
+      rb2d.velocity = new Vector2(-Mathf.Sign(getOrientation()) * dashKnowbackRepelSpeed, rb2d.velocity.y);
+      dashknowbackTimeslowRemaining = timing.DashKnockFreezeTime;
+    }
+
+    private void exitDashKnockback() {
+      rb2d.gravityScale = gravityScale;
     }
 
     private IEnumerator shoot() {

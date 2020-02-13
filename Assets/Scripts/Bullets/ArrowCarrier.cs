@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Catsland.Scripts.Common;
 using Catsland.Scripts.Controller;
@@ -58,6 +59,8 @@ namespace Catsland.Scripts.Bullets {
     private Collider2D collider2d;
     private Rigidbody2D rb2d;
     private Trail trail;
+    // Only need for shell-breaking arrow.
+    private HashSet<GameObject> hitGameObjects;
 
     private Vector3 lastTailPosition;
 
@@ -206,7 +209,11 @@ namespace Catsland.Scripts.Bullets {
     }
 
     private void arrowHit(Collider2D collision) {
-      status = ArrowStatus.Hit;
+      if (hitGameObjects != null && hitGameObjects.Contains(collision.gameObject)) {
+        // Skip already hit.
+        return;
+      }
+
       // emit
       //hitEffectparticleSystem.Emit(20);
       //hitEffectparticleSystem.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
@@ -217,6 +224,16 @@ namespace Catsland.Scripts.Bullets {
         new DamageInfo(damageValue, collision.bounds.center, rb2d.velocity, repelIntensive),
         SendMessageOptions.DontRequireReceiver);
 
+      if (isShellBreaking) {
+        if (hitGameObjects == null) {
+          hitGameObjects = new HashSet<GameObject>();
+        }
+        hitGameObjects.Add(collision.gameObject);
+        StartCoroutine(slowAndResume());
+        return;
+      }
+
+      status = ArrowStatus.Hit;
       // set complete arrow status
       //spriteRenderer.enabled = false;
       rb2d.velocity = rb2d.velocity.normalized * frezeSpeed;
@@ -236,6 +253,18 @@ namespace Catsland.Scripts.Bullets {
       main.simulationSpeed = .1f;
       yield return new WaitForSeconds(delay);
       main.simulationSpeed = 1f;
+    }
+
+    private IEnumerator slowAndResume() {
+      rb2d.velocity = rb2d.velocity.normalized * frezeSpeed;
+      rb2d.bodyType = RigidbodyType2D.Kinematic;
+      status = ArrowStatus.Hit;
+
+      yield return new WaitForSeconds(frezeTimeInSecond);
+
+      status = ArrowStatus.Flying;
+      rb2d.bodyType = RigidbodyType2D.Dynamic;
+      rb2d.velocity = velocity;      
     }
 
     private void enterAttach(RaycastHit2D hit) {

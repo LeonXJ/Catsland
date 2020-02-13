@@ -25,8 +25,14 @@ namespace Catsland.Scripts.Controller {
     public float heightToGenerateDust = 5f;
     private float maxInAirHeight = 0f;
 
+    public float knockRepelSpeed = 6f;
+    public float hitRepelSpeed = 2f;
+    public float StrongHitRepelSpeed = 4f;
+
     public int maxHp = 3;
     private int currentHp;
+
+    public Timing timing;
 
     private float wantJumpHorizon = 0.0f;
     private SlimeInput input;
@@ -115,6 +121,9 @@ namespace Catsland.Scripts.Controller {
       }
       StartCoroutine(freezeThen(frezeTimeInS, damageInfo));
     }
+    public float getOrientation() {
+      return transform.lossyScale.x > 0.0f ? 1.0f : -1.0f;
+    }
 
     private void enterDie() {
       if (diamondGenerator != null) {
@@ -125,7 +134,15 @@ namespace Catsland.Scripts.Controller {
 
     private IEnumerator freezeThen(float time, DamageInfo damageInfo) {
 
-      rb2d.velocity = Vector2.zero;
+      float repelSpeed = hitRepelSpeed;
+      if (damageInfo.isKnockback()) {
+        repelSpeed = knockRepelSpeed;
+      }
+      if (damageInfo.isSmashAttack) {
+        repelSpeed = StrongHitRepelSpeed;
+      } 
+
+      rb2d.velocity = new Vector2(-Mathf.Sign(getOrientation()) * repelSpeed * 0.5f , rb2d.velocity.y);
       rb2d.bodyType = RigidbodyType2D.Kinematic;
       animator.speed = 0f;
 
@@ -135,7 +152,7 @@ namespace Catsland.Scripts.Controller {
 
       animator.speed = 1f;
       rb2d.bodyType = RigidbodyType2D.Dynamic;
-      Bullets.Utils.ApplyRepel(damageInfo, rb2d);
+      Bullets.Utils.ApplyVelocityRepel(damageInfo.repelDirection.normalized * repelSpeed, rb2d);
     }
   }
 }

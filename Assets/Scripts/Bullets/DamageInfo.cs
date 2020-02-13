@@ -8,6 +8,10 @@ namespace Catsland.Scripts.Bullets {
     public readonly Vector2 repelDirection;
     public readonly Vector2 damagePosition;
 
+    public bool isKnockback() {
+      return damage == 0;
+    }
+
     public readonly bool isSmashAttack = false;
 
     public DamageInfo(

@@ -12,6 +12,10 @@ namespace Catsland.Scripts.Bullets {
       rb2d.AddForce(damageInfo.repelDirection.normalized * Mathf.Min(damageInfo.repelIntense, maxRepelForce));
     }
 
+    public static void ApplyVelocityRepel(Vector2 velocity, Rigidbody2D rb2d) {
+      rb2d.velocity = velocity;
+    }
+
     public static IEnumerator ApplyVelocityRepel(
       DamageInfo damageInfo, Rigidbody2D rb2d, float dizzyTimeInS,
       float knockbackCoherence = 1f, float maxKnockbackSpeed = MAX_KNOCKBACK_SPEED,

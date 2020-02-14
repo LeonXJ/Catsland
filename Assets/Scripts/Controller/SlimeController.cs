@@ -29,6 +29,8 @@ namespace Catsland.Scripts.Controller {
     public float hitRepelSpeed = 2f;
     public float StrongHitRepelSpeed = 4f;
 
+    public GameObject dieEffectPrefab;
+
     public int maxHp = 3;
     private int currentHp;
 
@@ -126,6 +128,13 @@ namespace Catsland.Scripts.Controller {
     }
 
     private void enterDie() {
+      if (dieEffectPrefab != null) {
+        GameObject dieEffect = Instantiate(dieEffectPrefab);
+        dieEffect.transform.position = Vector3Builder.From(transform.position).SetZ(AxisZ.SPLASH).Build();
+        Debug.Log("Debug: (o) " + transform.position);
+        Debug.Log("Debug: (e)" + dieEffect.transform.position);
+        dieEffect.GetComponent<ParticleSystem>()?.Play(true);
+      }
       if (diamondGenerator != null) {
         diamondGenerator.Generate(2, 1);
       }

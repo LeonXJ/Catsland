@@ -632,7 +632,8 @@ namespace Catsland.Scripts.Controller {
     private void onDashKnockbackEvent() {
       if (dashKnockbackParticle != null) {
         ParticleSystem.EmissionModule emission = dashKnockbackParticle.emission;
-        dashKnockbackParticle.Emit(dashKnowbackParticleNumber);
+        //dashKnockbackParticle.Emit(dashKnowbackParticleNumber);
+        dashKnockbackParticle.Play(true);
       }
       cinemachineImpulseSource.GenerateImpulse();
       // delay exiting dash animiation to have slow motion on dash action

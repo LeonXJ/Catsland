@@ -31,6 +31,9 @@ namespace Catsland.Scripts.Controller {
 
     public GameObject dieEffectPrefab;
 
+    public Sound.Sound damageSound;
+    public Sound.Sound dieSound;
+
     public int maxHp = 3;
     private int currentHp;
 
@@ -41,6 +44,7 @@ namespace Catsland.Scripts.Controller {
     private Animator animator;
     private Rigidbody2D rb2d;
     private DiamondGenerator diamondGenerator;
+    private AudioSource audioSource;
 
     private AnimatorStateInfo currentState;
     private float lastJumpTime = -10000.0f;
@@ -58,6 +62,7 @@ namespace Catsland.Scripts.Controller {
       animator = GetComponent<Animator>();
       rb2d = GetComponent<Rigidbody2D>();
       diamondGenerator = GetComponent<DiamondGenerator>();
+      audioSource = GetComponent<AudioSource>();
       currentHp = maxHp;
     }
 
@@ -121,6 +126,7 @@ namespace Catsland.Scripts.Controller {
         enterDie();
         return;
       }
+      damageSound.Play(audioSource);
       StartCoroutine(freezeThen(frezeTimeInS, damageInfo));
     }
     public float getOrientation() {
@@ -135,6 +141,7 @@ namespace Catsland.Scripts.Controller {
         Debug.Log("Debug: (e)" + dieEffect.transform.position);
         dieEffect.GetComponent<ParticleSystem>()?.Play(true);
       }
+      dieSound?.PlayOneShot(transform.position);
       if (diamondGenerator != null) {
         diamondGenerator.Generate(2, 1);
       }

@@ -46,6 +46,7 @@ namespace Catsland.Scripts.Bullets {
 
     [Header("Effect")]
     public GameObject lightLayer;
+    public Sound.Sound arrowBrokenSound;
 
     private ArrowStatus status = ArrowStatus.Flying;
     private string tagForOwner;
@@ -61,6 +62,7 @@ namespace Catsland.Scripts.Bullets {
     private Trail trail;
     // Only need for shell-breaking arrow.
     private HashSet<GameObject> hitGameObjects;
+    private AudioSource audioSource;
 
     private Vector3 lastTailPosition;
 
@@ -130,6 +132,7 @@ namespace Catsland.Scripts.Bullets {
           enterAttach(hit);
           return true;
           case ArrowResult.BROKEN:
+          playOnlyBrokenSound();
           breakArrow();
           return true;
           case ArrowResult.DISAPPEAR:
@@ -162,6 +165,10 @@ namespace Catsland.Scripts.Bullets {
       }
     }
 
+    private void playOnlyBrokenSound() {
+      arrowBrokenSound?.PlayOneShot(transform.position);
+    }
+
     private bool defaultHitBehavior(RaycastHit2D hit) {
 
       // Ground: attach / break
@@ -171,6 +178,7 @@ namespace Catsland.Scripts.Bullets {
           enterAttach(hit);
           return true;
         }
+        playOnlyBrokenSound();
         breakArrow();
         return true;
       }

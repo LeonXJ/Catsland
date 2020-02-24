@@ -4,8 +4,9 @@ using UnityEngine;
 using Cinemachine;
 
 using Catsland.Scripts.Bullets;
-using Catsland.Scripts.Misc;
 using Catsland.Scripts.Common;
+using Catsland.Scripts.Misc;
+using Catsland.Scripts.Sound;
 
 namespace Catsland.Scripts.Controller {
 
@@ -18,6 +19,8 @@ namespace Catsland.Scripts.Controller {
     public float maxRunningSpeed = 1.0f;
     public float maxCrouchSpeed = 0.5f;
     public float acceleration = 1.0f;
+
+    public AudioClip runAudioClip;
 
     [Header("Jump")]
     public float jumpForce = 5.0f;
@@ -45,6 +48,8 @@ namespace Catsland.Scripts.Controller {
     //public float dashKnowbackTimeslowDuration = 2f;
     public float dashKnowbackTimeslowScale = 0.6f;
     public float dashKnowbackRepelSpeed = 2f;
+    public AudioSource dashAudioSource;
+    public Sound.Sound dashSound;
     private float dashknowbackTimeslowRemaining = 0f;
 
     public ParticleSystem dashParticle;
@@ -83,6 +88,10 @@ namespace Catsland.Scripts.Controller {
     [Header("Arrow")]
     public float maxArrowSpeed = 15.0f;
     public float minArrowSpeed = 5.0f;
+
+    public AudioSource shootAudioSource;
+    public Sound.Sound quickShotSound;
+    public Sound.Sound strongShotSound;
 
     public float quickArrowLifetime = 1.0f;
     public float maxArrowLifetime = 3.0f;
@@ -133,6 +142,7 @@ namespace Catsland.Scripts.Controller {
     public Transform doubleJumpEffectPoint;
     public Animator damageEffectAnimator;
     public ParticleSystem damageEffectParticleSystem;
+    private AudioSource audioSource;
 
     public Vector3 footPosition {
       get {
@@ -178,6 +188,7 @@ namespace Catsland.Scripts.Controller {
       headCollider = GetComponent<BoxCollider2D>();
       spriteRenderer = GetComponent<SpriteRenderer>();
       cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
+      audioSource = GetComponent<AudioSource>();
     }
 
     public void Awake() {
@@ -372,6 +383,8 @@ namespace Catsland.Scripts.Controller {
           }
         } else if(input.dash() && canDash(isCliffSliding)) {
           // enter dash
+
+          dashSound?.Play(dashAudioSource);
           rb2d.velocity = new Vector2(Mathf.Sign(getOrientation()) * dashSpeed, 0.0f);
           gravityScale = rb2d.gravityScale;
           rb2d.gravityScale = 0.0f;
@@ -512,6 +525,9 @@ namespace Catsland.Scripts.Controller {
           dustGenerationInternalRemainInS -= Time.deltaTime;
         }
       }
+
+      // sound effect
+      //updateSoundEffect();
     }
 
     private void ReleaseSmashEffect() {
@@ -671,6 +687,16 @@ namespace Catsland.Scripts.Controller {
         isStrongArrow ? maxArrowLifetime : quickArrowLifetime,
         gameObject.tag);
       isShooting = true;
+
+      // Sound effect
+      if (shootAudioSource != null) {
+        if (isStrongArrow) {
+          strongShotSound?.Play(shootAudioSource);
+        } else {
+          quickShotSound?.Play(shootAudioSource);
+        }
+      }
+
       yield return new WaitForSeconds(shootingCd);
       isShooting = false;
     }
@@ -704,6 +730,12 @@ namespace Catsland.Scripts.Controller {
       }
     }
 
+    public void PlayFootstep() {
+      if (runAudioClip != null) {
+        audioSource.clip = runAudioClip;
+        audioSource.Play();
+      }
+    }
     private bool isRelaySensorTriggered() {
       return replyJumpSensor.isStay();
     }

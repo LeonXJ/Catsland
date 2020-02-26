@@ -39,5 +39,20 @@ namespace Catsland.Scripts.Sound {
       float length = Play(audioSource);
       Destroy(gameObject, length + extraLifetimeForOneshot);
     }
+
+    public void PlayIfNotPlaying(AudioSource audioSource) {
+      // TODO: check whether the clip is within the clip list.
+      bool isCurrentClipDesired = false;
+      foreach(AudioClip clip in audioClips) {
+        if (clip == audioSource.clip) {
+          isCurrentClipDesired = true;
+          break;
+        }
+      }
+
+      if (!audioSource.isPlaying || !isCurrentClipDesired) {
+        Play(audioSource);
+      }
+    }
   }
 }

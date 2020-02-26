@@ -20,7 +20,8 @@ namespace Catsland.Scripts.Controller {
     public float maxCrouchSpeed = 0.5f;
     public float acceleration = 1.0f;
 
-    public AudioClip runAudioClip;
+    private Sound.Sound footstepSound;
+    private GameObject lastGroundObject;
 
     [Header("Jump")]
     public float jumpForce = 5.0f;
@@ -32,6 +33,9 @@ namespace Catsland.Scripts.Controller {
     public float fallMultiplier = 2.5f;
     public float lowJumMultiplier = 2f;
     public ParticleSystem smashParticleSystem;
+    public Sound.Sound jumpSound;
+    public Sound.Sound landSoftSound;
+    public AudioSource jumpAudioSource;
 
     public float cliffJumpGravatyScale = 0.5f;
     public float cliffJumpTime = 0.5f;
@@ -119,6 +123,8 @@ namespace Catsland.Scripts.Controller {
     public float timeScaleInDizzy = 0.4f;
     public float immutableTime = 0.5f;
     public int score = 0;
+    public AudioSource damageAudioSource;
+    public Sound.Sound damageSound;
 
     private bool isDizzy = false;
     private float lastGetDamagedTime = 0.0f;
@@ -526,14 +532,32 @@ namespace Catsland.Scripts.Controller {
         }
       }
 
+      GameObject currentGroundObject = null;
+      if (groundSensor.isStay() && groundSensor.getTriggerGos().Count > 0) {
+        currentGroundObject = Common.Utils.getAnyFrom(groundSensor.getTriggerGos());
+      }
+      if (lastGroundObject != currentGroundObject) {
+        Ground ground = currentGroundObject?.GetComponent<Ground>();
+        if (ground != null) {
+          footstepSound = ground.getFootstepSound();
+        } else {
+          footstepSound = null;
+        }
+      }
+      lastGroundObject = currentGroundObject;
+
       // sound effect
-      //updateSoundEffect();
+      updateFootstepSound();
     }
 
     private void ReleaseSmashEffect() {
+      // TODO: improve the particle
+      /*
       if (smashParticleSystem != null) {
         smashParticleSystem.Play();
       }
+      */
+      landSoftSound?.Play(jumpAudioSource);
     }
 
     private bool isCliffJumping() {
@@ -730,12 +754,24 @@ namespace Catsland.Scripts.Controller {
       }
     }
 
-    public void PlayFootstep() {
-      if (runAudioClip != null) {
-        audioSource.clip = runAudioClip;
-        audioSource.Play();
+    private void updateFootstepSound() {
+      bool isRunning = groundSensor.isStay() && Mathf.Abs(rb2d.velocity.x) > 0.1f;
+      if (isRunning && footstepSound != null) {
+        footstepSound.PlayIfNotPlaying(audioSource);
+      } else {
+        audioSource.Stop();
       }
     }
+
+    public void PlayJumpSound() {
+      jumpSound?.Play(jumpAudioSource);
+    }
+
+    public void PlayDamageSound() {
+      Debug.Log("Play damage");
+      damageSound?.Play(damageAudioSource);
+    }
+
     private bool isRelaySensorTriggered() {
       return replyJumpSensor.isStay();
     }

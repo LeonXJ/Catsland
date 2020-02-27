@@ -34,6 +34,11 @@ namespace Catsland.Scripts.Controller {
     public float chargeCooldownInSecond = 1.5f;
     private float chargeCooldownRemainInSecond = 0f;
 
+    public AudioSource wingAudioSource;
+    public Sound.Sound wingSound;
+    public Sound.Sound prepareSound;
+    public Sound.Sound chargeSound;
+
     // Swing attributes
     public float swingCycleInS = 1f;
     public float swingAmp = .5f;
@@ -43,11 +48,13 @@ namespace Catsland.Scripts.Controller {
     public float knowbackSpeed = 5f;
     public float maxKnowbackSpeed = 10f;
     public float knowbackDrag = 10f;
+    public Sound.Sound damageSound;
 
     // Die
     public GameObject dieEffectPrefab;
     public float dieRepelVelocity = 10f;
     public float dieRepelAngularSpeed = 900f;
+    public Sound.Sound dieSound;
 
     private Status status = Status.FLYING;
     private Rigidbody2D rb2d;
@@ -57,6 +64,7 @@ namespace Catsland.Scripts.Controller {
 
     private float currentPrepareTimeInSecond = 0.0f;
     private ConsumableBool hasCharged = new ConsumableBool();
+    private AudioSource audioSource;
 
     private static readonly string IS_PREPARING = "IsPreparing";
     private static readonly string IS_CHARGING = "IsCharging";
@@ -68,6 +76,7 @@ namespace Catsland.Scripts.Controller {
       input = GetComponent<BeeInput>();
       animator = GetComponent<Animator>();
       diamondGenerator = GetComponent<DiamondGenerator>();
+      audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -110,6 +119,9 @@ namespace Catsland.Scripts.Controller {
       animator.SetBool(IS_CHARGING, status == Status.CHARING);
       animator.SetBool(IS_DIZZY, status == Status.DIZZY);
       animator.SetBool(IS_DIE, status == Status.DIE);
+
+      // Sound
+      updateWingSound();
     }
 
     public bool CanMoveAround() {
@@ -126,6 +138,14 @@ namespace Catsland.Scripts.Controller {
 
     public bool consumeHasCharged() {
       return hasCharged.getAndReset();
+    }
+
+    private void updateWingSound() {
+      if (status == Status.FLYING || status == Status.PREPARING) {
+        wingSound.PlayIfNotPlaying(wingAudioSource);
+      } else {
+        wingAudioSource.Stop();
+      }
     }
 
     private void exitPrepare() {
@@ -154,7 +174,16 @@ namespace Catsland.Scripts.Controller {
 
     public void damage(DamageInfo damageInfo) {
       health -= damageInfo.damage;
+      damageSound?.Play(audioSource);
       StartCoroutine(freezeThen(.0f, damageInfo));
+    }
+
+    public void PlayPrepareSound() {
+      prepareSound?.Play(audioSource);
+    }
+
+    public void PlayChargeSound() {
+      chargeSound?.Play(audioSource);
     }
 
     private IEnumerator freezeThen(float time, DamageInfo damageInfo) {
@@ -186,6 +215,7 @@ namespace Catsland.Scripts.Controller {
         dieEffect.GetComponent<ParticleSystem>()?.Play(true);
         Destroy(dieEffect, 3f);
       }
+      dieSound?.PlayOneShot(transform.position);
 
       status = Status.DIE;
       rb2d.freezeRotation = false;

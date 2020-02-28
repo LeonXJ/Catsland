@@ -15,10 +15,12 @@ namespace Catsland.Scripts.Bullets {
     public LayerMask rippleLayerMask;
 
     private bool hasApplied = false;
+    private bool isExiting = false;
 
     private Rigidbody2D rb2d;
     private new ParticleSystem particleSystem;
     private ParticleSystem.Particle[] particles;
+    private AudioSource audioSource;
 
 
 
@@ -26,6 +28,7 @@ namespace Catsland.Scripts.Bullets {
     void Start() {
       rb2d = GetComponent<Rigidbody2D>();
       particleSystem = GetComponent<ParticleSystem>();
+      audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -37,6 +40,10 @@ namespace Catsland.Scripts.Bullets {
         rb2d.velocity += new Vector2(1f, 0);
       }
       detectCollision();
+
+      if (isExiting) {
+        audioSource.volume = Mathf.Lerp(audioSource.volume, 0f, Time.deltaTime);
+      }
     }
 
     void OnTriggerEnter2D(Collider2D collider) {
@@ -55,6 +62,7 @@ namespace Catsland.Scripts.Bullets {
 
     private void enterExitStage() {
       rb2d.velocity = Vector2.zero;
+      isExiting = true;
       Destroy(gameObject, particleSystem.main.startLifetime.Evaluate(.5f));
     }
 

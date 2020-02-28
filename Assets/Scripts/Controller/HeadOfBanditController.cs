@@ -127,6 +127,7 @@ namespace Catsland.Scripts.Controller {
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     private CinemachineImpulseSource cinemachineImpulseSource;
+    private BanditEventSounds banditEventSounds;
 
     // Animation
     private static readonly string H_SPEED = "HSpeed";
@@ -168,6 +169,7 @@ namespace Catsland.Scripts.Controller {
       animator = GetComponent<Animator>();
       spriteRenderer = GetComponent<SpriteRenderer>();
       cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
+      banditEventSounds = GetComponent<BanditEventSounds>();
     }
 
     private void Start() {
@@ -281,6 +283,8 @@ namespace Catsland.Scripts.Controller {
           Destroy(jumpSmashEffect, 1f);
         }
 
+        banditEventSounds.PlayJumpLand();
+
         if (jumpSmashDustPrefab != null) {
           GameObject jumpSmashDust = Instantiate(jumpSmashDustPrefab);
           jumpSmashDust.transform.position = jumpSmashEffectTransform.position;
@@ -317,6 +321,12 @@ namespace Catsland.Scripts.Controller {
       setAnimiatorPhaseValue(CHARGE_PHASE, CHARGE_STATUS_TO_PHASE);
       setAnimiatorPhaseValue(SPELL_PHASE, SPELL_STATUS_TO_PHASE);
       animator.SetBool(DIE, isDead());
+
+      // update sound
+      if (oldStatus != Status.CHARGE_CHARGING && status == Status.CHARGE_CHARGING) {
+        banditEventSounds.PlayChargeSound();
+      }
+
     }
 
     public float getOrientation() {
@@ -368,6 +378,7 @@ namespace Catsland.Scripts.Controller {
       }
       status = Status.DIZZY;
       dizzyRemainInS = dizzyTimeInS;
+      banditEventSounds.PlayOnDamageSound();
       StartCoroutine(freezeThen(freezeTimeInS, damageInfo));
     }
 
@@ -403,7 +414,7 @@ namespace Catsland.Scripts.Controller {
         battleTrap.SetRise(false);
         battleTrap.SetEnable(false);
       }
-
+      banditEventSounds.PlayOnDieSound();
     }
 
     private bool canWalk() {

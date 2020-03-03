@@ -4,8 +4,11 @@ using UnityEngine;
 
 namespace Catsland.Scripts.Bullets {
   public class BasicCharacterArrowDammageInterceptor : MonoBehaviour, IDamageInterceptor {
+
+    public bool canBeShoot = true;
+
     ArrowResult IDamageInterceptor.getArrowResult(ArrowCarrier arrowCarrier) {
-      return ArrowResult.HIT;
+      return canBeShoot ? ArrowResult.HIT : ArrowResult.SKIP;
     }
   }
 }

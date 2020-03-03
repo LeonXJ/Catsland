@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using DG.Tweening;
 using Catsland.Scripts.Common;
@@ -23,6 +24,8 @@ namespace Catsland.Scripts.Controller {
       DIZZY = 3,
       DIE = 4,
     }
+
+    private HashSet<Status> immotalStatuses;
 
     public float flyingSpeed = 1.0f;
     public float prepareTimeInSecond = 1.0f;
@@ -77,6 +80,8 @@ namespace Catsland.Scripts.Controller {
       animator = GetComponent<Animator>();
       diamondGenerator = GetComponent<DiamondGenerator>();
       audioSource = GetComponent<AudioSource>();
+      immotalStatuses = new HashSet<Status>();
+      immotalStatuses.Add(Status.CHARING);
     }
 
     // Update is called once per frame
@@ -167,12 +172,23 @@ namespace Catsland.Scripts.Controller {
 
     IEnumerator waitAndStopCharge() {
       yield return new WaitForSeconds(chargeTimeInSecond);
-      chargeCooldownRemainInSecond = chargeCooldownInSecond;
-      status = Status.FLYING;
-      rb2d.velocity = Vector2.zero;
+      if (status != Status.DIE) {
+        chargeCooldownRemainInSecond = chargeCooldownInSecond;
+        status = Status.FLYING;
+        rb2d.velocity = Vector2.zero;
+      }
     }
 
     public void damage(DamageInfo damageInfo) {
+      if (status == Status.DIE) {
+        return;
+      }
+      if (immotalStatuses.Contains(status)) {
+        damageInfo.onDamageFeedback?.Invoke(new DamageInfo.DamageFeedback(false));
+        return;
+      }
+
+      damageInfo.onDamageFeedback?.Invoke(new DamageInfo.DamageFeedback(true));
       health -= damageInfo.damage;
       damageSound?.Play(audioSource);
       StartCoroutine(freezeThen(.0f, damageInfo));
@@ -187,6 +203,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     private IEnumerator freezeThen(float time, DamageInfo damageInfo) {
+      status = Status.DIZZY;
       rb2d.velocity = Vector2.zero;
       // It makes the knowback effect more strong even if time is set to 0f
       transform.DOShakePosition(time, .15f, 30, 120);
@@ -199,8 +216,10 @@ namespace Catsland.Scripts.Controller {
       if (health <= 0) {
         enterDie(damageInfo);
       } else {
-        status = Status.DIZZY;
+        rb2d.gravityScale = 2f;
         yield return ApplyVelocityRepel(damageInfo, rb2d, dizzyTimeInSecond, knowbackSpeed, maxKnowbackSpeed, knowbackDrag);
+        rb2d.gravityScale = 0f;
+        currentPrepareTimeInSecond = 0.0f;
         status = Status.FLYING;
       }
     }
@@ -216,6 +235,7 @@ namespace Catsland.Scripts.Controller {
         Destroy(dieEffect, 3f);
       }
       dieSound?.PlayOneShot(transform.position);
+      wingAudioSource.Stop();
 
       status = Status.DIE;
       rb2d.freezeRotation = false;

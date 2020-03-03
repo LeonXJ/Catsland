@@ -10,13 +10,16 @@ namespace Catsland.Scripts.Bullets {
     public float repelIntensity;
     public GameObject owner;
     public bool isSmashAttack = false;
+    public bool isDash = false;
     public bool canSmashAttakInStay = false;
     public bool tryGetPartyTagFromParent = true;
+    public bool damageDashStatus = true;
 
     public bool presetRepelDirection = false;
     public Vector2 repelDirection;
 
     public OnHitEvent onHitEvent;
+    public DamageInfo.OnDamageFeedback onDamageFeedback;
 
     public LayerMask includeLayer;
 
@@ -67,7 +70,12 @@ namespace Catsland.Scripts.Bullets {
             MessageNames.DAMAGE_FUNCTION,
             new DamageInfo(
               damage, collider.bounds.center, presetRepelDirection ? repelDirection : new Vector2(Mathf.Sign(delta.x), 0.0f), repelIntensity,
-              isSmashAttack && (canSmashAttakInStay || !isStay)),
+              isSmashAttack && (canSmashAttakInStay || !isStay),
+              /* isDash= */isDash,
+              /* isKick= */false,
+              /* owner= */owner,
+              /* damageDashStatus= */damageDashStatus,
+              /* onDamageFeedback= */onDamageFeedback),
             SendMessageOptions.DontRequireReceiver);
           onHitEvent?.Invoke();
         }

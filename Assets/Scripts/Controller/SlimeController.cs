@@ -31,9 +31,6 @@ namespace Catsland.Scripts.Controller {
 
     public GameObject dieEffectPrefab;
 
-    public Sound.Sound damageSound;
-    public Sound.Sound dieSound;
-
     public int maxHp = 3;
     private int currentHp;
 
@@ -44,10 +41,10 @@ namespace Catsland.Scripts.Controller {
     private Animator animator;
     private Rigidbody2D rb2d;
     private DiamondGenerator diamondGenerator;
-    private AudioSource audioSource;
 
     private AnimatorStateInfo currentState;
     private float lastJumpTime = -10000.0f;
+    private SlimeEventSounds slimeEventSounds;
 
     private static readonly string STATUS_IDEAL = "Ideal";
 
@@ -62,7 +59,7 @@ namespace Catsland.Scripts.Controller {
       animator = GetComponent<Animator>();
       rb2d = GetComponent<Rigidbody2D>();
       diamondGenerator = GetComponent<DiamondGenerator>();
-      audioSource = GetComponent<AudioSource>();
+      slimeEventSounds = GetComponent<SlimeEventSounds>();
       currentHp = maxHp;
     }
 
@@ -86,15 +83,15 @@ namespace Catsland.Scripts.Controller {
       if (isOnGround) {
         // Just touch ground.
         // Generate dust.
-        if (!isLastOnGround
-          && (maxInAirHeight - transform.position.y) > heightToGenerateDust
-          && dustPrefab != null) {
-          GameObject dust = Instantiate(dustPrefab);
-          dust.transform.position = new Vector3(
-            dustPosition.position.x, dustPosition.position.y, AxisZ.SPLASH);
-          dust.GetComponent<ParticleSystem>()?.Play();
-          Destroy(dust, 5f);
-        
+        if (!isLastOnGround) {
+          slimeEventSounds?.PlayLandSound();
+          if ((maxInAirHeight - transform.position.y) > heightToGenerateDust && dustPrefab != null) {
+            GameObject dust = Instantiate(dustPrefab);
+            dust.transform.position = new Vector3(
+              dustPosition.position.x, dustPosition.position.y, AxisZ.SPLASH);
+            dust.GetComponent<ParticleSystem>()?.Play();
+            Destroy(dust, 5f);
+          }
         }
         // Reset max in air
         maxInAirHeight = float.MinValue;
@@ -106,7 +103,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     public bool CanMove() {
-      return currentState.IsName(STATUS_IDEAL) && (Time.time - lastJumpTime > jumpInternalInS); 
+      return currentState.IsName(STATUS_IDEAL) && (Time.time - lastJumpTime > jumpInternalInS);
     }
 
     private void Jump(float horizontalSpeed) {
@@ -118,15 +115,18 @@ namespace Catsland.Scripts.Controller {
       rb2d.AddForce(new Vector2(Mathf.Sign(wantJumpHorizon) * jumpForce.x, jumpForce.y));
       animator.ResetTrigger(JUMP);
       lastJumpTime = Time.time;
+      slimeEventSounds?.PlayJumpOffSound();
     }
 
     public void damage(DamageInfo damageInfo) {
+      damageInfo.onDamageFeedback?.Invoke(new DamageInfo.DamageFeedback(true));
+
       currentHp -= damageInfo.damage;
       if (currentHp < 0) {
         enterDie();
         return;
       }
-      damageSound.Play(audioSource);
+      slimeEventSounds?.PlayOnDamageSound();
       StartCoroutine(freezeThen(frezeTimeInS, damageInfo));
     }
     public float getOrientation() {
@@ -137,11 +137,10 @@ namespace Catsland.Scripts.Controller {
       if (dieEffectPrefab != null) {
         GameObject dieEffect = Instantiate(dieEffectPrefab);
         dieEffect.transform.position = Vector3Builder.From(transform.position).SetZ(AxisZ.SPLASH).Build();
-        Debug.Log("Debug: (o) " + transform.position);
-        Debug.Log("Debug: (e)" + dieEffect.transform.position);
         dieEffect.GetComponent<ParticleSystem>()?.Play(true);
       }
-      dieSound?.PlayOneShot(transform.position);
+
+      slimeEventSounds?.PlayOnDieSound();
       if (diamondGenerator != null) {
         diamondGenerator.Generate(2, 1);
       }
@@ -156,9 +155,9 @@ namespace Catsland.Scripts.Controller {
       }
       if (damageInfo.isSmashAttack) {
         repelSpeed = StrongHitRepelSpeed;
-      } 
+      }
 
-      rb2d.velocity = new Vector2(-Mathf.Sign(getOrientation()) * repelSpeed * 0.5f , rb2d.velocity.y);
+      rb2d.velocity = new Vector2(-Mathf.Sign(getOrientation()) * repelSpeed * 0.5f, rb2d.velocity.y);
       rb2d.bodyType = RigidbodyType2D.Kinematic;
       animator.speed = 0f;
 

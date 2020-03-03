@@ -48,6 +48,8 @@ namespace Catsland.Scripts.Controller {
       DIE_STAY,
     }
 
+    private HashSet<Status> immotalStatuses;
+
     public Status status = Status.IDEAL;
 
     public float displayTimeInS = 2.0f;
@@ -170,6 +172,10 @@ namespace Catsland.Scripts.Controller {
       spriteRenderer = GetComponent<SpriteRenderer>();
       cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
       banditEventSounds = GetComponent<BanditEventSounds>();
+      immotalStatuses = new HashSet<Status>();
+      immotalStatuses.Add(Status.CHARGE_CHARGING);
+      immotalStatuses.Add(Status.JUMP_SMASH_JUMPING);
+      immotalStatuses.Add(Status.JUMP_SMASH_SMASHING);
     }
 
     private void Start() {
@@ -370,7 +376,11 @@ namespace Catsland.Scripts.Controller {
       if(isDead()) {
         return;
       }
+      if (immotalStatuses.Contains(status)) {
+        damageInfo.onDamageFeedback?.Invoke(new DamageInfo.DamageFeedback(false));
+      }
 
+      damageInfo.onDamageFeedback?.Invoke(new DamageInfo.DamageFeedback(true));
       curHealth -= damageInfo.damage;
       if(curHealth <= 0) {
         enterDie();

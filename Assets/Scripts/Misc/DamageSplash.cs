@@ -6,6 +6,7 @@ namespace Catsland.Scripts.Misc {
   public class DamageSplash: MonoBehaviour {
 
     public GameObject splashPrefab;
+    public bool enable = true;
     public IDamageInterceptor damageInterceptor;
 
     void Awake() {
@@ -13,6 +14,9 @@ namespace Catsland.Scripts.Misc {
     }
 
     public void damage(DamageInfo damageInfo) {
+      if (!enable) {
+        return;
+      }
       if(damageInterceptor != null && !damageInterceptor.shouldSplashOnDamage(damageInfo)) {
         return;
       }

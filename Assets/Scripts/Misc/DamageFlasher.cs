@@ -8,6 +8,7 @@ namespace Catsland.Scripts.Misc {
     public bool adjustChildren = false;
     public bool childerenCacheSafe = true;
     public float flashSecond = 0.2f;
+    public bool enable = true;
 
     private IDamageInterceptor damageInterceptor;
     private SpriteRenderer[] childrenRenderers;
@@ -23,6 +24,9 @@ namespace Catsland.Scripts.Misc {
     }
 
     void damage(DamageInfo damageInfo) {
+      if (!enable) {
+        return;
+      }
       if(damageInterceptor != null && !damageInterceptor.shouldFlashOnDamage(damageInfo)) {
         return;
       }

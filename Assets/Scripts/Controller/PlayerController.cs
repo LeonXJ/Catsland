@@ -56,6 +56,8 @@ namespace Catsland.Scripts.Controller {
     public Sound.Sound dashSound;
     private float dashknowbackTimeslowRemaining = 0f;
 
+    public Sound.Sound dashKnockbackSuccessSound;
+
     public ParticleSystem dashParticle;
     public ContactDamage dashKnockbackContactDamage;
     public ParticleSystem dashKnockbackParticle;
@@ -201,6 +203,7 @@ namespace Catsland.Scripts.Controller {
       currentHealth = maxHealth;
       dashKnockbackContactDamage.enabled = false;
       dashKnockbackContactDamage.onHitEvent = onDashKnockbackEvent;
+      dashKnockbackContactDamage.onDamageFeedback = onDashKnockbackFeedbackEvent;
     }
 
     public void Update() {
@@ -293,7 +296,9 @@ namespace Catsland.Scripts.Controller {
               MessageNames.DAMAGE_FUNCTION,
               new DamageInfo(
                 /* damage= */0, replyJumpSensor.transform.position, Vector2.down, relayKickIntensity,
-                false),
+                /* isSmashAttack= */false,
+                /* isDash= */false,
+                /* isKick= */true),
               SendMessageOptions.DontRequireReceiver);
 
             // Effect
@@ -569,6 +574,10 @@ namespace Catsland.Scripts.Controller {
         return;
       }
 
+      if ((isDashing() || isDashKnockingBack()) && !damageInfo.damageDashStatus) {
+        return;
+      }
+
       lastGetDamagedTime = Time.time;
       Bullets.Utils.ApplyRepel(damageInfo, rb2d);
       currentHealth -= damageInfo.damage;
@@ -670,20 +679,29 @@ namespace Catsland.Scripts.Controller {
 
     // Invoked when dash hit opponent.
     private void onDashKnockbackEvent() {
-      if (dashKnockbackParticle != null) {
-        ParticleSystem.EmissionModule emission = dashKnockbackParticle.emission;
-        //dashKnockbackParticle.Emit(dashKnowbackParticleNumber);
-        dashKnockbackParticle.Play(true);
+    }
+
+    private void onDashKnockbackFeedbackEvent(DamageInfo.DamageFeedback damageFeedback) {
+      if (damageFeedback.damageSuccess) {
+        dashKnockbackSuccessSound?.Play(damageAudioSource);
+        if (dashKnockbackParticle != null) {
+          ParticleSystem.EmissionModule emission = dashKnockbackParticle.emission;
+          dashKnockbackParticle.Play(true);
+        }
       }
+      // else what?
+
+      // No matter what, exit dash status
       cinemachineImpulseSource.GenerateImpulse();
       // delay exiting dash animiation to have slow motion on dash action
-      //animator.speed = 0f;
       exitDash();
 
-      // set DashKnockback status
-      rb2d.gravityScale = 0f;
-      rb2d.velocity = new Vector2(-Mathf.Sign(getOrientation()) * dashKnowbackRepelSpeed, rb2d.velocity.y);
-      dashknowbackTimeslowRemaining = timing.DashKnockFreezeTime;
+      if (damageFeedback.damageSuccess) {
+        // set DashKnockback status
+        rb2d.gravityScale = 0f;
+        rb2d.velocity = new Vector2(-Mathf.Sign(getOrientation()) * dashKnowbackRepelSpeed, rb2d.velocity.y);
+        dashknowbackTimeslowRemaining = timing.DashKnockFreezeTime;
+      }
     }
 
     private void exitDashKnockback() {
@@ -768,7 +786,6 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void PlayDamageSound() {
-      Debug.Log("Play damage");
       damageSound?.Play(damageAudioSource);
     }
 

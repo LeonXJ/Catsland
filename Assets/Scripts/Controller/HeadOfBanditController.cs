@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using DG.Tweening;
+using Cinemachine;
 using Catsland.Scripts.Common;
 using Catsland.Scripts.Bullets;
-using Cinemachine;
+using Catsland.Scripts.Ui;
 
 namespace Catsland.Scripts.Controller {
-  public class HeadOfBanditController: MonoBehaviour, IDamageInterceptor, IMeleeDamageInterceptor {
+  public class HeadOfBanditController: MonoBehaviour, IDamageInterceptor, IMeleeDamageInterceptor, IHealthBarQuery {
 
     public interface HeadOfBanditInput {
       float getHorizontal();
@@ -53,6 +54,8 @@ namespace Catsland.Scripts.Controller {
     public Status status = Status.IDEAL;
 
     public float displayTimeInS = 2.0f;
+
+    public string displayName = "Bandit Head";
 
     // Walk
     public float walkingSpeed = 2.0f;
@@ -489,6 +492,10 @@ namespace Catsland.Scripts.Controller {
         return MeleeResult.VOID;
       }
       return MeleeResult.HIT;
+    }
+
+    public HealthCondition GetHealthCondition() {
+      return new HealthCondition(maxHealth, curHealth, displayName);
     }
   }
 }

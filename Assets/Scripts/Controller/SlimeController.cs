@@ -4,11 +4,12 @@ using DG.Tweening;
 using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Common;
 using Catsland.Scripts.Misc;
+using Catsland.Scripts.Ui;
 
 namespace Catsland.Scripts.Controller {
 
   [RequireComponent(typeof(Rigidbody2D)), RequireComponent(typeof(Animator)), RequireComponent(typeof(SlimeInput))]
-  public class SlimeController : MonoBehaviour {
+  public class SlimeController : MonoBehaviour, IHealthBarQuery  {
 
     public interface SlimeInput {
       float getHorizontal();
@@ -19,6 +20,7 @@ namespace Catsland.Scripts.Controller {
 
     public TriggerBasedSensor groundSensor;
     public float frezeTimeInS = .2f;
+    public string displayName = "Slime";
 
     public GameObject dustPrefab;
     public Transform dustPosition;
@@ -122,7 +124,7 @@ namespace Catsland.Scripts.Controller {
       damageInfo.onDamageFeedback?.Invoke(new DamageInfo.DamageFeedback(true));
 
       currentHp -= damageInfo.damage;
-      if (currentHp < 0) {
+      if (currentHp <= 0) {
         enterDie();
         return;
       }
@@ -168,6 +170,10 @@ namespace Catsland.Scripts.Controller {
       animator.speed = 1f;
       rb2d.bodyType = RigidbodyType2D.Dynamic;
       Bullets.Utils.ApplyVelocityRepel(damageInfo.repelDirection.normalized * repelSpeed, rb2d);
+    }
+
+    public HealthCondition GetHealthCondition() {
+      return new HealthCondition(maxHp, currentHp, displayName);
     }
   }
 }

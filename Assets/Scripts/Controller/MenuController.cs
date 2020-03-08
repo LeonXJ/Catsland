@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Controller {
   public class MenuController : MonoBehaviour {
@@ -9,6 +10,8 @@ namespace Catsland.Scripts.Controller {
     private const string SHOW_MENU = "ShowMenu";
 
     public PlayableDirector exitMenuDirector;
+    public Sound.Sound uiConfirm;
+    public bool showMenu = true;
 
     private Animator menuAnimator;
 
@@ -20,8 +23,11 @@ namespace Catsland.Scripts.Controller {
 
     // Update is called once per frame
     void Update() {
-      if (Input.GetButtonDown("Attack")) {
+      if (showMenu && Input.GetButtonDown("Attack")) {
+        showMenu = false;
         exitMenuDirector.Play();
+        uiConfirm?.Play(SceneConfig.getSceneConfig().GetUiAudioSource());
+        SceneConfig.getSceneConfig().GetMusicManager().Stop(3f);
       }
     }
 

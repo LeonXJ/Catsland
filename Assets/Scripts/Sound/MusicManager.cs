@@ -29,6 +29,7 @@ namespace Catsland.Scripts.Sound {
 
       public void SetVolume(float volume) {
         audioSource.volume = volume;
+        targetVolume = volume;
       }
 
       public float getVolume() {
@@ -39,9 +40,9 @@ namespace Catsland.Scripts.Sound {
         return audioSource.isPlaying;
       }
 
-      public void StartTransition(float targetVolume, float transitionSpeedPerS, float offsetInS = 0f) {
+      public void StartTransition(float targetVolume, float transitionInS, float offsetInS = 0f) {
         this.targetVolume = targetVolume;
-        this.transitionSpeedPerS = transitionSpeedPerS;
+        this.transitionSpeedPerS = transitionInS == 0 ? Mathf.Infinity : 1f / transitionInS;
         this.offsetInS = offsetInS;
         this.currentOffsetInS = 0f;
       }
@@ -91,25 +92,6 @@ namespace Catsland.Scripts.Sound {
       musicTracks[mainSource].Play(sound, loop);
     }
 
-    public void PlayWithTransition(Sound sound, float transitionTimeS, bool loop = true) {
-      MusicTrack primary = musicTracks[mainSource];
-
-      if (!primary.IsPlaying()) {
-        PlayImmediately(sound, loop);
-        return;
-      }
-
-      MusicTrack secondary = mainSource == 0 ? musicTracks[1] : musicTracks[0];
-      if (!secondary.IsPlaying()) {
-        // Ramp down primary and ramp up secondary
-        mainSource = 1;
-        primary.StartTransition(0f, 1f / transitionTimeS);
-        secondary.Play(sound, loop);
-        secondary.SetVolume(0f);
-        secondary.StartTransition(1f, 1f / transitionTimeS);
-      }
-    }
-
     public void PlayWithTransition(
         Sound sound, float outTransitionInS,
         float inOffsetInS, float inTransitionInS, bool loop = true) {
@@ -119,7 +101,7 @@ namespace Catsland.Scripts.Sound {
         PlayImmediately(sound, loop);
         primary.Play(sound, loop);
         primary.SetVolume(0f);
-        primary.StartTransition(0f, 1f / inTransitionInS, inOffsetInS);
+        primary.StartTransition(1f, inTransitionInS, inOffsetInS);
         return;
       }
 
@@ -127,19 +109,21 @@ namespace Catsland.Scripts.Sound {
       if (!secondary.IsPlaying()) {
         // Ramp down primary and ramp up secondary
         mainSource = 1;
-        primary.StartTransition(0f, 1f / outTransitionInS);
+        primary.StartTransition(0f, outTransitionInS);
         secondary.Play(sound, loop);
         secondary.SetVolume(0f);
-        secondary.StartTransition(1f, 1f / inTransitionInS, inOffsetInS);
+        secondary.StartTransition(1f, inTransitionInS, inOffsetInS);
       }
     }
 
     public void Stop(float transitionTimeS) {
+      Debug.Log("MusicManager is stopping all playings.");
       MusicTrack primary = musicTracks[mainSource];
       if (!primary.IsPlaying()) {
+        Debug.Log("Didn't stop anything because nothing is playing.");
         return;
       }
-      primary.StartTransition(0f, primary.getVolume() / transitionTimeS);
+      primary.StartTransition(0f, transitionTimeS);
     }
 
     void FixedUpdate() {

@@ -5,11 +5,12 @@ using DG.Tweening;
 using Catsland.Scripts.Common;
 using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Misc;
+using Catsland.Scripts.Ui;
 using static Catsland.Scripts.Bullets.Utils;
 
 namespace Catsland.Scripts.Controller {
   [RequireComponent(typeof(Rigidbody2D)), RequireComponent(typeof(BeeInput)), RequireComponent(typeof(Animator))]
-  public class BeeController : MonoBehaviour {
+  public class BeeController : MonoBehaviour, IHealthBarQuery {
 
     public interface BeeInput {
       float getHorizontal();
@@ -32,7 +33,9 @@ namespace Catsland.Scripts.Controller {
     public float chargeSpeed = 5.0f;
     public float chargeTimeInSecond = 0.5f;
     public float dizzyTimeInSecond = 0.5f;
-    public int health = 3;
+    public int maxHealth = 3;
+    public int currentHealth = 3;
+    public string displayName = "Bee";
 
     public float chargeCooldownInSecond = 1.5f;
     private float chargeCooldownRemainInSecond = 0f;
@@ -82,6 +85,7 @@ namespace Catsland.Scripts.Controller {
       audioSource = GetComponent<AudioSource>();
       immotalStatuses = new HashSet<Status>();
       immotalStatuses.Add(Status.CHARING);
+      currentHealth = maxHealth;
     }
 
     // Update is called once per frame
@@ -189,7 +193,7 @@ namespace Catsland.Scripts.Controller {
       }
 
       damageInfo.onDamageFeedback?.Invoke(new DamageInfo.DamageFeedback(true));
-      health -= damageInfo.damage;
+      currentHealth -= damageInfo.damage;
       damageSound?.Play(audioSource);
       StartCoroutine(freezeThen(.0f, damageInfo));
     }
@@ -213,7 +217,7 @@ namespace Catsland.Scripts.Controller {
       if (status == Status.DIE) {
         yield break;
       }
-      if (health <= 0) {
+      if (currentHealth <= 0) {
         enterDie(damageInfo);
       } else {
         rb2d.gravityScale = 2f;
@@ -243,6 +247,10 @@ namespace Catsland.Scripts.Controller {
       rb2d.angularVelocity = dieRepelAngularSpeed;
       rb2d.gravityScale = 1f;
       Destroy(gameObject, 3f);
+    }
+
+    public HealthCondition GetHealthCondition() {
+      return new HealthCondition(maxHealth, currentHealth, displayName);
     }
   }
 }

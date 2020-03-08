@@ -5,6 +5,7 @@ using Catsland.Scripts.Common;
 using Catsland.Scripts.Controller;
 using Catsland.Scripts.Misc;
 using Catsland.Scripts.Physics;
+using Catsland.Scripts.Ui;
 
 namespace Catsland.Scripts.Bullets {
   [RequireComponent(typeof(Rigidbody2D))]
@@ -231,6 +232,12 @@ namespace Catsland.Scripts.Bullets {
         MessageNames.DAMAGE_FUNCTION,
         new DamageInfo(damageValue, collision.bounds.center, rb2d.velocity, repelIntensive),
         SendMessageOptions.DontRequireReceiver);
+
+      // show health bar
+      IHealthBarQuery healthBarQuery = collision.gameObject.GetComponent<IHealthBarQuery>();
+      if (healthBarQuery != null) {
+        SceneConfig.getSceneConfig().GetOpponentHealthBar().ShowForQuery(healthBarQuery);
+      } 
 
       if (isShellBreaking) {
         if (hitGameObjects == null) {

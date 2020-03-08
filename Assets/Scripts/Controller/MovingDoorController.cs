@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using Catsland.Scripts.Common;
+using Catsland.Scripts.Sound;
 
 namespace Catsland.Scripts.Controller {
   public class MovingDoorController : MonoBehaviour {
@@ -13,13 +14,17 @@ namespace Catsland.Scripts.Controller {
     public ParticleSystem ceilingDoorstepParticle;
     public ParticleSystem floorDoorstepParticle;
 
+    public Sound.Sound doorStunSound;
+
     private CinemachineImpulseSource impluseSource;
     private Animator animator;
+    private AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start() {
       impluseSource = GetComponent<CinemachineImpulseSource>();
       animator = GetComponent<Animator>();
+      audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -33,6 +38,10 @@ namespace Catsland.Scripts.Controller {
 
     public void Close() {
       animator.SetBool(IS_OPEN, false);
+    }
+
+    public void PlayStun() {
+      doorStunSound?.Play(audioSource);
     }
 
     void OnTriggerEnter2D(Collider2D collider) {
@@ -54,6 +63,7 @@ namespace Catsland.Scripts.Controller {
       if (impluseSource != null) {
         impluseSource.GenerateImpulse();
       }
+      PlayStun();
     }
 
     void OnDoorCloseComplete() {
@@ -63,6 +73,7 @@ namespace Catsland.Scripts.Controller {
       if (impluseSource != null) {
         impluseSource.GenerateImpulse();
       }
+      PlayStun();
     }
   }
 }

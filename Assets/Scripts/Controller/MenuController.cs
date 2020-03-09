@@ -12,6 +12,7 @@ namespace Catsland.Scripts.Controller {
     public PlayableDirector exitMenuDirector;
     public Sound.Sound uiConfirm;
     public bool showMenu = true;
+    public float musicFadeOutInS = 5f;
 
     private Animator menuAnimator;
 
@@ -27,7 +28,7 @@ namespace Catsland.Scripts.Controller {
         showMenu = false;
         exitMenuDirector.Play();
         uiConfirm?.Play(SceneConfig.getSceneConfig().GetUiAudioSource());
-        SceneConfig.getSceneConfig().GetMusicManager().Stop(3f);
+        SceneConfig.getSceneConfig().GetMusicManager().Stop(musicFadeOutInS);
       }
     }
 

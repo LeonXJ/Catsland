@@ -8,6 +8,8 @@ namespace Catsland.Scripts.Misc {
   public class Diamond : MonoBehaviour {
 
     public int value = 1;
+    public Sound.Sound diamondCollect;
+    public Sound.Sound diamondHitGround;
     private bool collected = false;
 
     private Collider2D collider;
@@ -33,8 +35,12 @@ namespace Catsland.Scripts.Misc {
         PlayerController playerController = other.gameObject.GetComponent<PlayerController>();
         playerController.score += value;
         collected = true;
+        diamondCollect?.PlayOneShot(transform.position);
         Destroy(gameObject);
         return;
+      }
+      if (other.gameObject.layer == Layers.LayerGround) {
+        diamondHitGround?.PlayOneShot(transform.position);
       }
       // Other character will not collider with diamond
       if (other.gameObject.layer == Common.Layers.LayerCharacter) {

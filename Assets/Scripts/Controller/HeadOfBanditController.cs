@@ -6,10 +6,11 @@ using DG.Tweening;
 using Cinemachine;
 using Catsland.Scripts.Common;
 using Catsland.Scripts.Bullets;
+using Catsland.Scripts.Misc;
 using Catsland.Scripts.Ui;
 
 namespace Catsland.Scripts.Controller {
-  public class HeadOfBanditController: MonoBehaviour, IDamageInterceptor, IMeleeDamageInterceptor, IHealthBarQuery {
+  public class HeadOfBanditController: MonoBehaviour, Bullets.IDamageInterceptor, IMeleeDamageInterceptor, IHealthBarQuery {
 
     public interface HeadOfBanditInput {
       float getHorizontal();
@@ -133,6 +134,7 @@ namespace Catsland.Scripts.Controller {
     private SpriteRenderer spriteRenderer;
     private CinemachineImpulseSource cinemachineImpulseSource;
     private BanditEventSounds banditEventSounds;
+    private DiamondGenerator diamondGenerator;
 
     // Animation
     private static readonly string H_SPEED = "HSpeed";
@@ -175,6 +177,7 @@ namespace Catsland.Scripts.Controller {
       spriteRenderer = GetComponent<SpriteRenderer>();
       cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
       banditEventSounds = GetComponent<BanditEventSounds>();
+      diamondGenerator = GetComponent<DiamondGenerator>();
       immotalStatuses = new HashSet<Status>();
       immotalStatuses.Add(Status.CHARGE_CHARGING);
       immotalStatuses.Add(Status.JUMP_SMASH_JUMPING);
@@ -422,6 +425,8 @@ namespace Catsland.Scripts.Controller {
       rb2d.AddForce(new Vector2(-getOrientation() * throwForceOnDie, throwForceOnDie));
 
       status = (Status)dieSequence.start();
+
+      diamondGenerator?.GenerateDiamond();
 
       if (battleTrap != null) {
         battleTrap.SetRise(false);

@@ -18,6 +18,7 @@ namespace Catsland.Scripts.Sound {
       public float currentVolume;
       private float currentOffsetInS = 0f;
 
+
       public void Stop() {
         audioSource.Stop();
       }
@@ -40,14 +41,20 @@ namespace Catsland.Scripts.Sound {
         return audioSource.isPlaying;
       }
 
-      public void StartTransition(float targetVolume, float transitionInS, float offsetInS = 0f) {
+      public void StartTransition(float targetVolume, float transitionInS, float offsetInS = 0f, bool resetVolume = true) {
         this.targetVolume = targetVolume;
         this.transitionSpeedPerS = transitionInS == 0 ? Mathf.Infinity : 1f / transitionInS;
         this.offsetInS = offsetInS;
         this.currentOffsetInS = 0f;
+        if (resetVolume) {
+          this.audioSource.volume = 0f;
+        }
       }
 
       public void Update(float deltaTime) {
+
+
+
         float delta = targetVolume - audioSource.volume;
         if (delta * delta > Mathf.Epsilon) {
           currentOffsetInS += deltaTime;
@@ -56,6 +63,10 @@ namespace Catsland.Scripts.Sound {
               audioSource.volume = Mathf.Min(targetVolume, audioSource.volume + transitionSpeedPerS * deltaTime);
             } else {
               audioSource.volume = Mathf.Max(targetVolume, audioSource.volume - transitionSpeedPerS * deltaTime);
+            }
+            // if not playing, start playing
+            if (!audioSource.isPlaying) {
+              audioSource.Play();
             }
           }
         }
@@ -66,8 +77,16 @@ namespace Catsland.Scripts.Sound {
       }
     }
 
+
     public MusicTrack[] musicTracks = new MusicTrack[2];
     private int mainSource = 0;
+
+    [Header("Debug")]
+    public Sound[] debugSounds;
+    public int debugSoundIndex = -1;
+    public float debugOutTransitionInS = 1f;
+    public float debugInTransitionInS = 2f;
+    public float debugInOffsetInS = 2f;
 
     public static MusicManager getInstance() {
       return instance;
@@ -98,9 +117,7 @@ namespace Catsland.Scripts.Sound {
       MusicTrack primary = musicTracks[mainSource];
 
       if (!primary.IsPlaying()) {
-        PlayImmediately(sound, loop);
-        primary.Play(sound, loop);
-        primary.SetVolume(0f);
+        primary.audioSource.clip = sound.GetAudioClip();
         primary.StartTransition(1f, inTransitionInS, inOffsetInS);
         return;
       }
@@ -108,10 +125,10 @@ namespace Catsland.Scripts.Sound {
       MusicTrack secondary = mainSource == 0 ? musicTracks[1] : musicTracks[0];
       if (!secondary.IsPlaying()) {
         // Ramp down primary and ramp up secondary
-        mainSource = 1;
-        primary.StartTransition(0f, outTransitionInS);
-        secondary.Play(sound, loop);
-        secondary.SetVolume(0f);
+        // Switch main source.
+        mainSource = 1 - mainSource;
+        primary.StartTransition(0f, outTransitionInS, /*offsetInS=*/ 0f, /*resetVolume=*/ false);
+        secondary.audioSource.clip = sound.GetAudioClip();
         secondary.StartTransition(1f, inTransitionInS, inOffsetInS);
       }
     }
@@ -123,12 +140,31 @@ namespace Catsland.Scripts.Sound {
         Debug.Log("Didn't stop anything because nothing is playing.");
         return;
       }
-      primary.StartTransition(0f, transitionTimeS);
+      primary.StartTransition(0f, transitionTimeS, /*offsetInS=*/ 0f, /*resetVolume=*/ false);
+    }
+
+    void Update() {
+      debugUpdate();
     }
 
     void FixedUpdate() {
       foreach (MusicTrack track in musicTracks) {
         track.Update(Time.deltaTime);
+      }
+    }
+    private void debugUpdate() {
+      if (Input.GetKeyDown(KeyCode.Alpha1)) {
+        if (debugSounds.Length == 0) {
+          Debug.Log("Debug MusicManager> error: no debug sound is set.");
+          return;
+        }
+
+        debugSoundIndex = (debugSoundIndex + 1) % debugSounds.Length;
+        Debug.Log("Debug MusicManager> Play next index: " + debugSoundIndex);
+        PlayWithTransition(debugSounds[debugSoundIndex], debugOutTransitionInS, debugInOffsetInS, debugInTransitionInS, true);
+      }
+      if (Input.GetKeyDown(KeyCode.Alpha2)) {
+        Stop(debugOutTransitionInS);
       }
     }
   }

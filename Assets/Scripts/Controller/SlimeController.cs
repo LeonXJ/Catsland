@@ -143,9 +143,7 @@ namespace Catsland.Scripts.Controller {
       }
 
       slimeEventSounds?.PlayOnDieSound();
-      if (diamondGenerator != null) {
-        diamondGenerator.Generate(2, 1);
-      }
+      diamondGenerator?.GenerateDiamond();
       Destroy(gameObject);
     }
 

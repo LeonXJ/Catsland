@@ -105,7 +105,6 @@ namespace Catsland.Scripts.Bullets {
             ? Mathf.Abs(transform.localScale.x)
             : -Mathf.Abs(transform.localScale.x),
         1.0f);
-
       StartCoroutine(expireAndDestroy(lifetime));
     }
 

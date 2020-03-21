@@ -94,6 +94,8 @@ namespace Catsland.Scripts.Controller {
     [Header("Arrow")]
     public float maxArrowSpeed = 15.0f;
     public float minArrowSpeed = 5.0f;
+    public float maxDirectionAngle = 30f;
+    public float shootDirectionAngle = 0f;
 
     public AudioSource shootAudioSource;
     public Sound.Sound quickShotSound;
@@ -185,6 +187,7 @@ namespace Catsland.Scripts.Controller {
     private const string CROUCH = "Crouch";
     private const string CLIFF_SLIDING = "CliffSliding";
     private const string DASHING = "Dashing";
+    private const string DIRECTION = "UpperBodyDirection";
 
 
     public void Start() {
@@ -230,6 +233,8 @@ namespace Catsland.Scripts.Controller {
       if(isDrawing && !currentIsDrawing && !isDizzy && !isCliffJumping() && !isCliffSliding) {
         StartCoroutine(shoot());
       }
+      // clear up shoot direction.
+      shootDirectionAngle = 0f;
       // Set drawing time
       if(currentIsDrawing) {
         currentDrawingTime += Time.deltaTime;
@@ -238,6 +243,15 @@ namespace Catsland.Scripts.Controller {
           float velocity = Mathf.Lerp(minArrowSpeed, maxArrowSpeed, getDrawIntensity());
           trailIndicator.isShow = true;
           trailIndicator.initVelocity = new Vector2(velocity, 0.0f);
+        }
+        // direction
+        Vector2 desiredDirection = new Vector2(input.getHorizontal(), input.getVertical());
+        if (desiredDirection.sqrMagnitude > Mathf.Epsilon) {
+          if (desiredDirection.x > 0f) {
+            shootDirectionAngle = Mathf.Clamp(Vector2.SignedAngle(Vector2.right, desiredDirection), -maxDirectionAngle, maxDirectionAngle);
+          } else {
+            shootDirectionAngle = Mathf.Clamp(Vector2.SignedAngle(desiredDirection, Vector2.left), -maxDirectionAngle, maxDirectionAngle);
+          }
         }
       } else {
         currentDrawingTime = 0.0f;
@@ -527,6 +541,7 @@ namespace Catsland.Scripts.Controller {
       animator.SetBool(CROUCH, isCrouching);
       animator.SetBool(CLIFF_SLIDING, isCliffSliding && rb2d.velocity.y < Mathf.Epsilon);
       animator.SetBool(DASHING, isDashing() || isDashKnockingBack());
+      animator.SetFloat(DIRECTION, (shootDirectionAngle + maxDirectionAngle) * .5f / maxDirectionAngle);
 
       // dush effect
       if (groundSensor.isStay() && Mathf.Abs(rb2d.velocity.x) > .1f) {
@@ -726,7 +741,7 @@ namespace Catsland.Scripts.Controller {
       arrowCarrier.SetIsShellBreaking(isStrongArrow);
       arrowCarrier.repelIntensive = isStrongArrow ? maxRepelForce : quickRepelForce;
       arrowCarrier.fire(
-        new Vector2(transform.lossyScale.x > 0.0f ? maxArrowSpeed : -maxArrowSpeed, 0.0f),
+        (getOrientation() > 0f ? arrow.transform.right.normalized : - arrow.transform.right.normalized) * maxArrowSpeed,
         isStrongArrow ? maxArrowLifetime : quickArrowLifetime,
         gameObject.tag);
       isShooting = true;

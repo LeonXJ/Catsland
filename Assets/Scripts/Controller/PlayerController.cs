@@ -113,7 +113,8 @@ namespace Catsland.Scripts.Controller {
     private bool isDrawing = false;
     private float shootingCd = 0.5f;
     private bool isShooting = false;
-    private float currentDrawingTime = 0.0f;
+    // TODO: hide after debug
+    public float currentDrawingTime = 0.0f;
     private HashSet<RelayPoint> activeRelayPoints = new HashSet<RelayPoint>();
     private RelayPoint nearestRelayPoint;
 

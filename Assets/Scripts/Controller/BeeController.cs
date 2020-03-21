@@ -17,13 +17,13 @@ namespace Catsland.Scripts.Controller {
       float getVertical();
       bool attack();
     }
-
     enum Status {
       FLYING = 0,
       PREPARING = 1,
       CHARING = 2,
       DIZZY = 3,
       DIE = 4,
+      CHARGE_COOLDOWN = 5,
     }
 
     private HashSet<Status> immotalStatuses;
@@ -32,6 +32,7 @@ namespace Catsland.Scripts.Controller {
     public float prepareTimeInSecond = 1.0f;
     public float chargeSpeed = 5.0f;
     public float chargeTimeInSecond = 0.5f;
+    private float chargeRemindingTimeInSecond = 0f;
     public float dizzyTimeInSecond = 0.5f;
     public int maxHealth = 3;
     public int currentHealth = 3;
@@ -123,6 +124,20 @@ namespace Catsland.Scripts.Controller {
         }
       }
 
+      if (IsCharging()) {
+        chargeRemindingTimeInSecond -= Time.deltaTime;
+        if (chargeRemindingTimeInSecond < 0f) {
+          exitCharge();
+        }
+      }
+
+      if (IsChargeCooldown()) {
+        chargeCooldownRemainInSecond -= Time.deltaTime;
+        if (chargeCooldownRemainInSecond < 0f) {
+          exitChargeCooldown();
+        }
+      }
+
       // Set animation
       animator.SetBool(IS_PREPARING, status == Status.PREPARING);
       animator.SetBool(IS_CHARGING, status == Status.CHARING);
@@ -131,6 +146,14 @@ namespace Catsland.Scripts.Controller {
 
       // Sound
       updateWingSound();
+    }
+
+    public bool IsCharging() {
+      return status == Status.CHARING;
+    }
+
+    public bool IsChargeCooldown() {
+      return status == Status.CHARGE_COOLDOWN;
     }
 
     public bool CanMoveAround() {
@@ -147,6 +170,12 @@ namespace Catsland.Scripts.Controller {
 
     public bool consumeHasCharged() {
       return hasCharged.getAndReset();
+    }
+
+    void OnCollisionEnter2D(Collision2D collision) {
+      if (status == Status.CHARING && collision.gameObject.layer == Layers.LayerGround) {
+        exitCharge();
+      }
     }
 
     private void updateWingSound() {
@@ -170,18 +199,23 @@ namespace Catsland.Scripts.Controller {
       Vector2 delta = targetPosition - transform.position;
       rb2d.velocity = delta.normalized * chargeSpeed;
       ControllerUtils.AdjustOrientation(delta.x, gameObject);
-
-      StartCoroutine(waitAndStopCharge());
+      chargeRemindingTimeInSecond = chargeTimeInSecond;
     }
 
-    IEnumerator waitAndStopCharge() {
-      yield return new WaitForSeconds(chargeTimeInSecond);
-      if (status != Status.DIE) {
-        chargeCooldownRemainInSecond = chargeCooldownInSecond;
-        status = Status.FLYING;
-        rb2d.velocity = Vector2.zero;
-      }
+    private void exitCharge() {
+      rb2d.velocity = Vector2.zero;
+      enterChargeCooldown();
     }
+
+
+    private void enterChargeCooldown() {
+      chargeCooldownRemainInSecond = chargeCooldownInSecond;
+      status = Status.CHARGE_COOLDOWN;
+    }
+    private void exitChargeCooldown() {
+      status = Status.FLYING;
+    }
+
 
     public void damage(DamageInfo damageInfo) {
       if (status == Status.DIE) {
@@ -194,6 +228,11 @@ namespace Catsland.Scripts.Controller {
 
       damageInfo.onDamageFeedback?.Invoke(new DamageInfo.DamageFeedback(true));
       currentHealth -= damageInfo.damage;
+      if (currentHealth <= 0) {
+        // Set status first to prevent other updates.
+        enterDie(damageInfo);
+        return;
+      }
       damageSound?.Play(audioSource);
       StartCoroutine(freezeThen(.0f, damageInfo));
     }
@@ -214,23 +253,17 @@ namespace Catsland.Scripts.Controller {
 
       yield return new WaitForSeconds(time);
 
-      if (status == Status.DIE) {
-        yield break;
-      }
-      if (currentHealth <= 0) {
-        enterDie(damageInfo);
-      } else {
-        rb2d.gravityScale = 2f;
-        yield return ApplyVelocityRepel(damageInfo, rb2d, dizzyTimeInSecond, knowbackSpeed, maxKnowbackSpeed, knowbackDrag);
-        rb2d.gravityScale = 0f;
-        currentPrepareTimeInSecond = 0.0f;
-        status = Status.FLYING;
-      }
+      rb2d.gravityScale = 2f;
+      yield return ApplyVelocityRepel(damageInfo, rb2d, dizzyTimeInSecond, knowbackSpeed, maxKnowbackSpeed, knowbackDrag);
+      rb2d.gravityScale = 0f;
+      currentPrepareTimeInSecond = 0.0f;
+      status = Status.FLYING;
     }
 
     private void enterDie(DamageInfo damageInfo) {
+      status = Status.DIE;
       if (diamondGenerator != null) {
-        diamondGenerator.Generate(5, 1);
+        diamondGenerator.GenerateDiamond();
       }
       if (dieEffectPrefab != null) {
         GameObject dieEffect = Instantiate(dieEffectPrefab);
@@ -241,7 +274,6 @@ namespace Catsland.Scripts.Controller {
       dieSound?.PlayOneShot(transform.position);
       wingAudioSource.Stop();
 
-      status = Status.DIE;
       rb2d.freezeRotation = false;
       rb2d.velocity = (damageInfo.repelDirection.normalized + Vector2.up).normalized * dieRepelVelocity;
       rb2d.angularVelocity = dieRepelAngularSpeed;

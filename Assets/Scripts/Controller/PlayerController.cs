@@ -96,6 +96,11 @@ namespace Catsland.Scripts.Controller {
     public float minArrowSpeed = 5.0f;
     public float maxDirectionAngle = 30f;
     public float shootDirectionAngle = 0f;
+    public float maxArrowDirectionSpreadAngle = 10f;
+    public float maxBowHeat = 10;
+    public float bowHeatIncreasePerShoot = 1f;
+    public float bowHeatCooldownPerSecond = 2f;
+    private float currentBowHeat = 0f;
 
     public AudioSource shootAudioSource;
     public Sound.Sound quickShotSound;
@@ -188,6 +193,12 @@ namespace Catsland.Scripts.Controller {
     private const string CLIFF_SLIDING = "CliffSliding";
     private const string DASHING = "Dashing";
     private const string DIRECTION = "UpperBodyDirection";
+    private const string IS_IN_DRAWING_CYCLE = "IsInDrawingCycle";
+
+    private const string DRAWING_STATE_NAME = "Drawing";
+    private const string PREPARING_STATE_NAME = "Upper_Preparing";
+    private const string FAST_RELOAD_STATE_NAME = "Upper_FastReload";
+    private const string NON_DRAWING_CYCLE_STATE = "Empty";
 
 
     public void Start() {
@@ -225,10 +236,18 @@ namespace Catsland.Scripts.Controller {
       if(!input.meditation()) {
         currentSense = Mathf.Max(currentSense - senseIncreaseSpeed * Time.deltaTime, 0.0f);
       }
+      if (currentBowHeat > 0f) {
+        currentBowHeat -= Time.deltaTime * bowHeatCooldownPerSecond;
+      }
 
       // Draw and shoot 
+      AnimatorStateInfo upperBodySpriteLayerState = animator.GetCurrentAnimatorStateInfo(2);
       bool currentIsDrawing =
-        (input.attack() || (currentDrawingTime > 0f && currentDrawingTime < minDrawingTime)) && !isShooting && !isDizzy && !isDashing() && !input.meditation() && !isCliffJumping() && !isCliffSliding;
+        (input.attack() || (currentDrawingTime > 0f && currentDrawingTime < minDrawingTime) 
+          || upperBodySpriteLayerState.IsName(PREPARING_STATE_NAME)
+          || upperBodySpriteLayerState.IsName(FAST_RELOAD_STATE_NAME))
+        && !isShooting && !isDizzy && !isDashing() && !input.meditation() && !isCliffJumping() && !isCliffSliding;
+
       // Shoot if string is released
       if(isDrawing && !currentIsDrawing && !isDizzy && !isCliffJumping() && !isCliffSliding) {
         StartCoroutine(shoot());
@@ -237,7 +256,10 @@ namespace Catsland.Scripts.Controller {
       shootDirectionAngle = 0f;
       // Set drawing time
       if(currentIsDrawing) {
-        currentDrawingTime += Time.deltaTime;
+        // Do not accumulate time in preparing state.
+        if (upperBodySpriteLayerState.IsName(DRAWING_STATE_NAME)) {
+          currentDrawingTime += Time.deltaTime;
+        }
         // render indicator
         if(trailIndicator != null) {
           float velocity = Mathf.Lerp(minArrowSpeed, maxArrowSpeed, getDrawIntensity());
@@ -474,7 +496,7 @@ namespace Catsland.Scripts.Controller {
       if(!isDashing() && !isDashKnockingBack()) {
         if(!isDizzy && !input.meditation() && !isCliffJumping()) {
           if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon
-            && (!groundSensor.isStay() || !isDrawing)) {
+            && (!groundSensor.isStay() || !isInDrawingCycle())) {
             rb2d.AddForce(new Vector2(acceleration * desiredSpeed, 0.0f));
             float maxHorizontalSpeed = isCrouching ? maxCrouchSpeed : maxRunningSpeed;
             rb2d.velocity = new Vector2(
@@ -542,6 +564,7 @@ namespace Catsland.Scripts.Controller {
       animator.SetBool(CLIFF_SLIDING, isCliffSliding && rb2d.velocity.y < Mathf.Epsilon);
       animator.SetBool(DASHING, isDashing() || isDashKnockingBack());
       animator.SetFloat(DIRECTION, (shootDirectionAngle + maxDirectionAngle) * .5f / maxDirectionAngle);
+      animator.SetBool(IS_IN_DRAWING_CYCLE, isInDrawingCycle());
 
       // dush effect
       if (groundSensor.isStay() && Mathf.Abs(rb2d.velocity.x) > .1f) {
@@ -579,6 +602,11 @@ namespace Catsland.Scripts.Controller {
       }
       */
       landSoftSound?.Play(jumpAudioSource);
+    }
+
+    private bool isInDrawingCycle() {
+      AnimatorStateInfo upperBodySpriteLayerState = animator.GetCurrentAnimatorStateInfo(2);
+      return !upperBodySpriteLayerState.IsName(NON_DRAWING_CYCLE_STATE) || isDrawing;
     }
 
     private bool isCliffJumping() {
@@ -728,7 +756,10 @@ namespace Catsland.Scripts.Controller {
       Debug.Assert(arrowPrefab != null, "Arrow prefab is not set");
       Debug.Assert(shootPoint != null, "Shoot point is not set");
 
-      GameObject arrow = Instantiate(arrowPrefab, shootPoint.position + Vector3.forward * 0.1f, shootPoint.rotation);
+      var arrowSpreadAngel = Mathf.Clamp01(currentBowHeat / maxBowHeat) * maxArrowDirectionSpreadAngle;
+      var shootDirection = shootPoint.rotation.eulerAngles;
+      shootDirection.z += Random.Range(-arrowSpreadAngel, arrowSpreadAngel);
+      GameObject arrow = Instantiate(arrowPrefab, shootPoint.position + Vector3.forward * 0.1f, Quaternion.Euler(shootDirection));
       float drawingRatio =
         Mathf.Clamp(currentDrawingTime, 0.0f, maxDrawingTime) / maxDrawingTime;
       bool isStrongArrow = drawingRatio > strongArrowDrawingRatio;
@@ -746,6 +777,11 @@ namespace Catsland.Scripts.Controller {
         gameObject.tag);
       isShooting = true;
 
+      // Bow heat
+      if (currentBowHeat < maxBowHeat) {
+        currentBowHeat += bowHeatIncreasePerShoot;
+      }
+
       // Sound effect
       if (shootAudioSource != null) {
         if (isStrongArrow) {
@@ -755,7 +791,9 @@ namespace Catsland.Scripts.Controller {
         }
       }
 
-      yield return new WaitForSeconds(shootingCd);
+      // Use Animator to control Cd.
+      //yield return new WaitForSeconds(shootingCd);
+      yield return null;
       isShooting = false;
     }
 

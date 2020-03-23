@@ -102,6 +102,11 @@ namespace Catsland.Scripts.Controller {
     public float bowHeatCooldownPerSecond = 2f;
     private float currentBowHeat = 0f;
 
+    public float jumpAimTimeScale = 0.3f;
+    public bool enableAutoAim = true;
+    public float autoAimDetectRadius = 8f;
+    public float autoAimCoverAngle = 10f;
+
     public AudioSource shootAudioSource;
     public Sound.Sound quickShotSound;
     public Sound.Sound strongShotSound;
@@ -200,6 +205,7 @@ namespace Catsland.Scripts.Controller {
     private const string FAST_RELOAD_STATE_NAME = "Upper_FastReload";
     private const string NON_DRAWING_CYCLE_STATE = "Empty";
 
+    private const float DEFAULT_PHYSICS_TIMESTAMP = .02f;
 
     public void Start() {
       input = GetComponent<IInput>();
@@ -253,12 +259,16 @@ namespace Catsland.Scripts.Controller {
         StartCoroutine(shoot());
       }
       // clear up shoot direction.
-      shootDirectionAngle = 0f;
+      if (!isInDrawingCycle()) {
+        // Immediately reset to 0 for non-drawing statuses.
+        shootDirectionAngle = 0f;
+      }
       // Set drawing time
       if(currentIsDrawing) {
         // Do not accumulate time in preparing state.
         if (upperBodySpriteLayerState.IsName(DRAWING_STATE_NAME)) {
-          currentDrawingTime += Time.deltaTime;
+          // Use unscaled time so the player gains extra time during time slow.
+          currentDrawingTime += Time.unscaledDeltaTime;
         }
         // render indicator
         if(trailIndicator != null) {
@@ -268,12 +278,14 @@ namespace Catsland.Scripts.Controller {
         }
         // direction
         Vector2 desiredDirection = new Vector2(input.getHorizontal(), input.getVertical());
-        if (desiredDirection.sqrMagnitude > Mathf.Epsilon) {
-          if (desiredDirection.x > 0f) {
-            shootDirectionAngle = Mathf.Clamp(Vector2.SignedAngle(Vector2.right, desiredDirection), -maxDirectionAngle, maxDirectionAngle);
-          } else {
-            shootDirectionAngle = Mathf.Clamp(Vector2.SignedAngle(desiredDirection, Vector2.left), -maxDirectionAngle, maxDirectionAngle);
-          }
+        if (desiredDirection.sqrMagnitude < Mathf.Epsilon) {
+          desiredDirection = new Vector2(getOrientation(), 0f);
+        }
+        desiredDirection = autoAim(desiredDirection);
+        if (desiredDirection.x > 0f) {
+          shootDirectionAngle = Mathf.Clamp(Vector2.SignedAngle(Vector2.right, desiredDirection), -maxDirectionAngle, maxDirectionAngle);
+        } else {
+          shootDirectionAngle = Mathf.Clamp(Vector2.SignedAngle(desiredDirection, Vector2.left), -maxDirectionAngle, maxDirectionAngle);
         }
       } else {
         currentDrawingTime = 0.0f;
@@ -355,17 +367,19 @@ namespace Catsland.Scripts.Controller {
       }
 
       if (canRelay()) {
-        Time.timeScale = timeScaleInRelay;
+        setTimeScale(timeScaleInRelay);
       } else if (isDizzy) {
-        Time.timeScale = timeScaleInDizzy;
+        setTimeScale(timeScaleInDizzy);
       } else if (dashknowbackTimeslowRemaining > 0f) {
-        Time.timeScale = dashKnowbackTimeslowScale;
+        setTimeScale(dashKnowbackTimeslowScale);
         dashknowbackTimeslowRemaining -= Time.deltaTime;
         if (dashknowbackTimeslowRemaining <= 0f) {
           exitDashKnockback();
-        } 
+        }
+      } else if (input.timeSlow() && isInDrawingCycle() && !groundSensor.isStay()) {
+        setTimeScale(jumpAimTimeScale, /* Animator unscaled */ true);
       } else {
-        Time.timeScale = 1.0f;
+        setTimeScale(1f);
       }
 
       float preCliffJumpRemaining = cliffJumpRemaining;
@@ -592,6 +606,8 @@ namespace Catsland.Scripts.Controller {
 
       // sound effect
       updateFootstepSound();
+
+      debugDrawAimDirection();
     }
 
     private void ReleaseSmashEffect() {
@@ -672,6 +688,12 @@ namespace Catsland.Scripts.Controller {
 
     public bool isNearestRelayPoint(RelayPoint relayPoint) {
       return relayPoint == nearestRelayPoint;
+    }
+
+    private void setTimeScale(float timeScale, bool isAnimatorUnscaled = false) {
+      Time.timeScale = timeScale;
+      Time.fixedDeltaTime = timeScale * DEFAULT_PHYSICS_TIMESTAMP;
+      animator.updateMode = isAnimatorUnscaled ? AnimatorUpdateMode.UnscaledTime : AnimatorUpdateMode.Normal; 
     }
 
     private bool canRelay() {
@@ -845,6 +867,52 @@ namespace Catsland.Scripts.Controller {
 
     private bool isRelaySensorTriggered() {
       return replyJumpSensor.isStay();
+    }
+
+    private void debugDrawAimDirection() {
+      Debug.DrawLine(shootPoint.transform.position, shootPoint.transform.position + aimDirection * 10f, Color.red);
+    }
+
+    private Vector3 aimDirection =>  (getOrientation() > 0f ? 1f : -1f) * shootPoint.transform.right;
+
+    private Vector2 autoAim(Vector2 desireDirection) {
+      // TODO: Experimental
+      if (!enableAutoAim) {
+        return desireDirection;
+      }
+      GameObject aimGO = null;
+      float aimAngle = float.MaxValue;
+
+
+      foreach (Collider2D collider2d in
+        Physics2D.OverlapCircleAll(shootPoint.transform.position, autoAimDetectRadius)) {
+
+        if (collider2d.gameObject.CompareTag(Tags.PLAYER) 
+          || (collider2d.gameObject.transform.parent != null && collider2d.gameObject.transform.parent.CompareTag(Tags.PLAYER))) {
+          continue;
+        }
+
+        if (collider2d.gameObject.layer != Layers.LayerCharacter) {
+          continue;
+        }
+
+        Vector3 delta = collider2d.gameObject.transform.position - shootPoint.transform.position;
+        float curAngle = Vector2.Angle(desireDirection, delta);
+        float angleToOrientation = Vector2.Angle(new Vector2(getOrientation(), 0f), delta);
+        if (curAngle > autoAimCoverAngle || angleToOrientation > maxDirectionAngle) {
+          continue;
+        }
+        if (curAngle < aimAngle) {
+          aimGO = collider2d.gameObject;
+          aimAngle = curAngle;
+        }
+      }
+      if (aimGO != null) {
+        Debug.Log("Auto aims at " + aimGO.name);
+        return aimGO.transform.position - transform.position;
+      }
+      Debug.Log("Auto aim finds nothing");
+      return desireDirection;
     }
   }
 }

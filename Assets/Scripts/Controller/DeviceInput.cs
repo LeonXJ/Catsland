@@ -14,6 +14,7 @@ namespace Catsland.Scripts.Controller {
     private bool wantDash = false;
     private bool lastWantDash = false;
     private bool wantInteract = false;
+    private bool wantTimeSlow = false;
 
     void Update() {
       // Because controller trigger is axis, we simulate snap button here.
@@ -33,6 +34,7 @@ namespace Catsland.Scripts.Controller {
       wantJump = Input.GetButtonDown("Jump");
       wantJumpHigher = Input.GetButton("Jump");
       wantInteract = Input.GetButton("Interact");
+      wantTimeSlow = Input.GetButton("TimeSlow");
     }
 
     void OnDisable() {
@@ -47,10 +49,15 @@ namespace Catsland.Scripts.Controller {
       wantJumpHigher = false;
       wantDash = false;
       wantInteract = false;
+      wantTimeSlow = false;
     }
 
     public bool attack() {
       return wantAttack;
+    }
+
+    public bool timeSlow() {
+      return wantTimeSlow;
     }
 
     public float getHorizontal() {

@@ -153,5 +153,9 @@ namespace Catsland.Scripts.Ai {
       wantHorizontal = 0.0f;
       wantAttack = false;
     }
+
+    public bool timeSlow() {
+      return false;
+    }
   }
 }

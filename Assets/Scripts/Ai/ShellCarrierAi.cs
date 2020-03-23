@@ -60,6 +60,10 @@ namespace Catsland.Scripts.Ai {
       Common.Utils.drawRectAsGizmos(frontSpaceDetector, isGroundDetected(frontSpaceDetector) ? Color.white : Color.blue, transform);
       Common.Utils.drawRectAsGizmos(frontGroundDetector, isGroundDetected(frontGroundDetector) ? Color.white : Color.red, transform);
     }
+
+    public bool timeSlow() {
+      return false;
+    }
   }
 }
 

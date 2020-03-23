@@ -16,5 +16,7 @@
     bool meditation();
 
     bool interact();
+
+    bool timeSlow();
   }
 }

@@ -6,13 +6,16 @@ using Cinemachine;
 using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Common;
 using Catsland.Scripts.Misc;
-using Catsland.Scripts.Sound;
+using Catsland.Scripts.Fx;
 
 namespace Catsland.Scripts.Controller {
 
   [RequireComponent(typeof(IInput))]
   [RequireComponent(typeof(Animator))]
   public class PlayerController: MonoBehaviour, DustTexture.DustTextureAssignee {
+
+    public float timeScaleChangeSpeed = 1f;
+    private GhostSprite ghostSprite;
 
     // Locomoation
     [Header("Run")]
@@ -218,6 +221,7 @@ namespace Catsland.Scripts.Controller {
       spriteRenderer = GetComponent<SpriteRenderer>();
       cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
       audioSource = GetComponent<AudioSource>();
+      ghostSprite = GetComponent<GhostSprite>();
     }
 
     public void Awake() {
@@ -366,6 +370,10 @@ namespace Catsland.Scripts.Controller {
         }
       }
 
+      bool enableGhost = !groundSensor.isStay();
+      // TODO: make this parameters
+      float ghostLifetime = .15f;
+      float ghostInterval = .01f;
       if (canRelay()) {
         setTimeScale(timeScaleInRelay);
       } else if (isDizzy) {
@@ -377,10 +385,16 @@ namespace Catsland.Scripts.Controller {
           exitDashKnockback();
         }
       } else if (input.timeSlow() && isInDrawingCycle() && !groundSensor.isStay()) {
-        setTimeScale(jumpAimTimeScale, /* Animator unscaled */ true);
+        setTimeScaleLerp(jumpAimTimeScale, timeScaleChangeSpeed, /* Animator unscaled */ true);
+        ghostLifetime = .5f;
+        ghostInterval = .08f;
       } else {
-        setTimeScale(1f);
+        setTimeScaleLerp(1f, timeScaleChangeSpeed);
       }
+      // Ghost Fx
+      ghostSprite.emit = enableGhost;
+      ghostSprite.ghostLifetimeSecond = ghostLifetime;
+      ghostSprite.spawnInterval = ghostInterval;
 
       float preCliffJumpRemaining = cliffJumpRemaining;
       if (cliffJumpRemaining > 0.0f) {
@@ -690,6 +704,10 @@ namespace Catsland.Scripts.Controller {
       return relayPoint == nearestRelayPoint;
     }
 
+    private void setTimeScaleLerp(float targetTimeScale, float lerpRatio, bool isAnimatorUnscaled = false) {
+      float timeScale = Mathf.Lerp(Time.timeScale, targetTimeScale, lerpRatio * Time.deltaTime);
+      setTimeScale(timeScale, isAnimatorUnscaled);
+    }
     private void setTimeScale(float timeScale, bool isAnimatorUnscaled = false) {
       Time.timeScale = timeScale;
       Time.fixedDeltaTime = timeScale * DEFAULT_PHYSICS_TIMESTAMP;
@@ -908,10 +926,8 @@ namespace Catsland.Scripts.Controller {
         }
       }
       if (aimGO != null) {
-        Debug.Log("Auto aims at " + aimGO.name);
         return aimGO.transform.position - transform.position;
       }
-      Debug.Log("Auto aim finds nothing");
       return desireDirection;
     }
   }

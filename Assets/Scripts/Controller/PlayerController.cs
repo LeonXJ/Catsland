@@ -103,6 +103,7 @@ namespace Catsland.Scripts.Controller {
     public float maxBowHeat = 10;
     public float bowHeatIncreasePerShoot = 1f;
     public float bowHeatCooldownPerSecond = 2f;
+    public ParticleSystem shootEffectParticle;
     private float currentBowHeat = 0f;
 
     public float jumpAimTimeScale = 0.3f;
@@ -821,6 +822,9 @@ namespace Catsland.Scripts.Controller {
       if (currentBowHeat < maxBowHeat) {
         currentBowHeat += bowHeatIncreasePerShoot;
       }
+
+      // Particle
+      shootEffectParticle?.Play(false);
 
       // Sound effect
       if (shootAudioSource != null) {

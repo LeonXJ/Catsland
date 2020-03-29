@@ -1,16 +1,13 @@
 fileFormatVersion: 2
-guid: fc2b852781802bc4bb6db8de50e74202
+guid: de226f734a7f8084bb9c8f9c47fbe6b1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 21300000
-    second: Arrow2
+      213: -8997880460374639150
+    second: Arrow2_BrokenTail
   - first:
-      213: 21300002
-    second: Arrow2_broken_tail
-  - first:
-      213: 21300004
-    second: Arrow2_broken_head
+      213: -3583368850303119114
+    second: Arrow2_BrokenHead
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -95,64 +92,43 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Arrow2
+      name: Arrow2_BrokenTail
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 25
-        height: 3
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 02305410000000000800000000000000
-      internalID: 21300000
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Arrow2_broken_tail
-      rect:
-        serializedVersion: 2
-        x: 0
+        x: 8
         y: 0
         width: 9
         height: 3
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 22305410000000000800000000000000
-      internalID: 21300002
+      spriteID: fc5149c71c35162419b5c1bde8ef34fa
+      internalID: -8997880460374639150
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Arrow2_broken_head
+      name: Arrow2_BrokenHead
       rect:
         serializedVersion: 2
-        x: 9
+        x: 17
         y: 0
         width: 8
         height: 3
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 42305410000000000800000000000000
-      internalID: 21300004
+      spriteID: e55f2b3a73466684c9f07072263675ee
+      internalID: -3583368850303119114
       vertices: []
       indices: 
       edges: []
@@ -160,7 +136,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5bfe278f8100a104683a3882a2e5be6d
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 

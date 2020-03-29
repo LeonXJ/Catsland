@@ -9,6 +9,7 @@ namespace Catsland.Scripts.Misc {
     public bool childerenCacheSafe = true;
     public float flashSecond = 0.2f;
     public bool enable = true;
+    public SpriteRenderer[] additionalSpriteRenderers;
 
     private IDamageInterceptor damageInterceptor;
     private SpriteRenderer[] childrenRenderers;
@@ -39,6 +40,9 @@ namespace Catsland.Scripts.Misc {
           renderer.material.SetColor("_AmbientLight", flashColor);
         }
       }
+      foreach(SpriteRenderer renderer in additionalSpriteRenderers) {
+        renderer.material.SetColor("_AmbientLight", flashColor);
+      }
       spriteRenderer.material.SetColor("_AmbientLight", flashColor);
 
       yield return new WaitForSeconds(flashSecond);
@@ -48,6 +52,9 @@ namespace Catsland.Scripts.Misc {
           renderer.material.SetColor("_AmbientLight", new Color(0.0f, 0.0f, 0.0f, 0.0f));
         }
       }
+        foreach(SpriteRenderer renderer in additionalSpriteRenderers) {
+          renderer.material.SetColor("_AmbientLight", new Color(0.0f, 0.0f, 0.0f, 0.0f));
+        }
       spriteRenderer.material.SetColor("_AmbientLight", new Color(0.0f, 0.0f, 0.0f, 0.0f));
     }
 

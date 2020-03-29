@@ -117,7 +117,7 @@ namespace Catsland.Scripts.Bullets {
         selfDestoryMark.GetComponent<Animator>().SetTrigger("start");
         Destroy(selfDestoryMark, .5f);
       }
-      safeDestroy();
+      StartCoroutine(safeDestroy());
     }
 
     private bool onArrowHitNew(RaycastHit2D hit) {
@@ -136,7 +136,7 @@ namespace Catsland.Scripts.Bullets {
           breakArrow();
           return true;
           case ArrowResult.DISAPPEAR:
-          safeDestroy();
+          StartCoroutine(safeDestroy());
           return true;
           case ArrowResult.HIT:
           arrowHit(collider);
@@ -208,11 +208,19 @@ namespace Catsland.Scripts.Bullets {
       //StartCoroutine(breakArrow());
     }
 
-    private void safeDestroy(float delay = 0.0f) {
-      endTrail();
+    private IEnumerator safeDestroy(float delay = 0.0f) {
+      if (status == ArrowStatus.Flying) {
+        status = ArrowStatus.Broken;
+      }
+
+      yield return new WaitForSeconds(delay);
+
+      spriteRenderer.enabled = false;
+      rb2d.bodyType = RigidbodyType2D.Kinematic;
+      rb2d.velocity = Vector3.zero;
 
       if (gameObject != null) {
-        Destroy(gameObject, delay);
+        Destroy(gameObject, 5f);
       }
     }
 
@@ -259,7 +267,7 @@ namespace Catsland.Scripts.Bullets {
 
       // freeze and destory
       rb2d.bodyType = RigidbodyType2D.Kinematic;
-      safeDestroy(frezeTimeInSecond);
+      StartCoroutine(safeDestroy(frezeTimeInSecond));
     }
 
     private IEnumerator slowAndResumeSpeed(float delay, ParticleSystem particle) {
@@ -296,7 +304,7 @@ namespace Catsland.Scripts.Bullets {
 
       transferFlame(attached);
 
-      safeDestroy();
+      StartCoroutine(safeDestroy());
     }
 
     private void breakArrow() {
@@ -324,14 +332,7 @@ namespace Catsland.Scripts.Bullets {
       ReleaseHitEffectParticle(hitEffectPrefab);
 
       // delay self-destory
-      safeDestroy();
-    }
-
-    private void endTrail() {
-      if (trailGameObject != null) {
-        trailGameObject.transform.parent = null;
-        Destroy(trailGameObject, 2.0f);
-      }
+      StartCoroutine(safeDestroy());
     }
 
     private void transferFlame(GameObject newGO) {

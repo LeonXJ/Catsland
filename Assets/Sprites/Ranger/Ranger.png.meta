@@ -1,82 +1,225 @@
 fileFormatVersion: 2
 guid: 08d7888d650360744a2d386f600c169e
-timeCreated: 1532498525
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: Ranger_Stand_0
-    21300002: Ranger_Stand_1
-    21300004: Ranger_StandShoot_0
-    21300006: Ranger_StandShoot_1
-    21300008: Ranger_StandShoot_2
-    21300010: Ranger_StandShoot_3
-    21300012: Ranger_StandShoot_4
-    21300014: Ranger_StandShoot_5
-    21300016: Ranger_Run_0
-    21300018: Ranger_Run_1
-    21300020: Ranger_Run_2
-    21300022: Ranger_Run_3
-    21300024: Ranger_Run_4
-    21300026: Ranger_Run_5
-    21300028: Ranger_Run_6
-    21300030: Ranger_Run_7
-    21300032: Ranger_Jump_0
-    21300034: Ranger_Jump_1
-    21300036: Ranger_Jump_2
-    21300038: Ranger_Jump_3
-    21300040: Ranger_Jump_4
-    21300042: Ranger_AirShoot_0
-    21300044: Ranger_AirShoot_1
-    21300046: Ranger_AirShoot_2
-    21300048: Ranger_AirShoot_3
-    21300050: Ranger_AirShoot_4
-    21300052: Ranger_Crouch_0
-    21300054: Ranger_Crouch_1
-    21300056: Ranger_Crouch_2
-    21300058: Ranger_Crouch_3
-    21300060: Ranger_Crouch_4
-    21300062: Ranger_Crouch_5
-    21300064: Ranger_Crouch_6
-    21300066: Ranger_Crouch_7
-    21300068: Ranger_CrouchShoot_0
-    21300070: Ranger_CrouchShoot_1
-    21300072: Ranger_CrouchShoot_2
-    21300074: Ranger_CrouchShoot_3
-    21300076: Ranger_CrouchShoot_4
-    21300078: Ranger_CrouchShoot_5
-    21300080: Ranger_JumpUp_0
-    21300082: Ranger_JumpUp_1
-    21300084: Ranger_JumpUp_2
-    21300086: Ranger_Fall_0
-    21300088: Ranger_Fall_1
-    21300090: Ranger_StandDraw_0
-    21300092: Ranger_StandDraw_1
-    21300094: Ranger_StandDraw_2
-    21300096: Ranger_StandDraw_3
-    21300098: Ranger_StandDraw_4
-    21300100: Ranger_JumpUpDraw_0
-    21300102: Ranger_JumpUpDraw_1
-    21300104: Ranger_JumpUpDraw_2
-    21300106: Ranger_JumpUpDraw_3
-    21300108: Ranger_FallDraw_0
-    21300110: Ranger_FallDraw_1
-    21300112: Ranger_FallDraw_2
-    21300114: Ranger_FallDraw_3
-    21300116: Ranger_Stand_2
-    21300118: Ranger_Stand_3
-    21300120: Ranger_Stand_4
-    21300122: Ranger_Stand_5
-    21300124: Ranger_CrouchWalk_0
-    21300126: Ranger_CrouchWalk_1
-    21300128: Ranger_CrouchWalk_2
-    21300130: Ranger_CrouchWalk_3
-    21300132: Ranger_CrouchWalk_4
-    21300134: Ranger_CrouchWalk_5
-    21300136: Ranger_CrouchWalk_6
-    21300138: Ranger_CrouchWalk_7
-    21300140: Ranger_Dash_0
-    21300142: Ranger_CliffSliding_0
-  serializedVersion: 4
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: Ranger_Stand_0
+  - first:
+      213: 21300002
+    second: Ranger_Stand_1
+  - first:
+      213: 21300004
+    second: Ranger_StandShoot_0
+  - first:
+      213: 21300006
+    second: Ranger_StandShoot_1
+  - first:
+      213: 21300008
+    second: Ranger_StandShoot_2
+  - first:
+      213: 21300010
+    second: Ranger_StandShoot_3
+  - first:
+      213: 21300012
+    second: Ranger_StandShoot_4
+  - first:
+      213: 21300014
+    second: Ranger_StandShoot_5
+  - first:
+      213: 21300016
+    second: Ranger_Run_0
+  - first:
+      213: 21300018
+    second: Ranger_Run_1
+  - first:
+      213: 21300020
+    second: Ranger_Run_2
+  - first:
+      213: 21300022
+    second: Ranger_Run_3
+  - first:
+      213: 21300024
+    second: Ranger_Run_4
+  - first:
+      213: 21300026
+    second: Ranger_Run_5
+  - first:
+      213: 21300028
+    second: Ranger_Run_6
+  - first:
+      213: 21300030
+    second: Ranger_Run_7
+  - first:
+      213: 21300032
+    second: Ranger_Jump_0
+  - first:
+      213: 21300034
+    second: Ranger_Jump_1
+  - first:
+      213: 21300036
+    second: Ranger_Jump_2
+  - first:
+      213: 21300038
+    second: Ranger_Jump_3
+  - first:
+      213: 21300040
+    second: Ranger_Jump_4
+  - first:
+      213: 21300042
+    second: Ranger_AirShoot_0
+  - first:
+      213: 21300044
+    second: Ranger_AirShoot_1
+  - first:
+      213: 21300046
+    second: Ranger_AirShoot_2
+  - first:
+      213: 21300048
+    second: Ranger_AirShoot_3
+  - first:
+      213: 21300050
+    second: Ranger_AirShoot_4
+  - first:
+      213: 21300052
+    second: Ranger_Crouch_0
+  - first:
+      213: 21300054
+    second: Ranger_Crouch_1
+  - first:
+      213: 21300056
+    second: Ranger_Crouch_2
+  - first:
+      213: 21300058
+    second: Ranger_Crouch_3
+  - first:
+      213: 21300060
+    second: Ranger_Crouch_4
+  - first:
+      213: 21300062
+    second: Ranger_Crouch_5
+  - first:
+      213: 21300064
+    second: Ranger_Crouch_6
+  - first:
+      213: 21300066
+    second: Ranger_Crouch_7
+  - first:
+      213: 21300068
+    second: Ranger_CrouchShoot_0
+  - first:
+      213: 21300070
+    second: Ranger_CrouchShoot_1
+  - first:
+      213: 21300072
+    second: Ranger_CrouchShoot_2
+  - first:
+      213: 21300074
+    second: Ranger_CrouchShoot_3
+  - first:
+      213: 21300076
+    second: Ranger_CrouchShoot_4
+  - first:
+      213: 21300078
+    second: Ranger_CrouchShoot_5
+  - first:
+      213: 21300080
+    second: Ranger_JumpUp_0
+  - first:
+      213: 21300082
+    second: Ranger_JumpUp_1
+  - first:
+      213: 21300084
+    second: Ranger_JumpUp_2
+  - first:
+      213: 21300086
+    second: Ranger_Fall_0
+  - first:
+      213: 21300088
+    second: Ranger_Fall_1
+  - first:
+      213: 21300090
+    second: Ranger_StandDraw_0
+  - first:
+      213: 21300092
+    second: Ranger_StandDraw_1
+  - first:
+      213: 21300094
+    second: Ranger_StandDraw_2
+  - first:
+      213: 21300096
+    second: Ranger_StandDraw_3
+  - first:
+      213: 21300098
+    second: Ranger_StandDraw_4
+  - first:
+      213: 21300100
+    second: Ranger_JumpUpDraw_0
+  - first:
+      213: 21300102
+    second: Ranger_JumpUpDraw_1
+  - first:
+      213: 21300104
+    second: Ranger_JumpUpDraw_2
+  - first:
+      213: 21300106
+    second: Ranger_JumpUpDraw_3
+  - first:
+      213: 21300108
+    second: Ranger_FallDraw_0
+  - first:
+      213: 21300110
+    second: Ranger_FallDraw_1
+  - first:
+      213: 21300112
+    second: Ranger_FallDraw_2
+  - first:
+      213: 21300114
+    second: Ranger_FallDraw_3
+  - first:
+      213: 21300116
+    second: Ranger_Stand_2
+  - first:
+      213: 21300118
+    second: Ranger_Stand_3
+  - first:
+      213: 21300120
+    second: Ranger_Stand_4
+  - first:
+      213: 21300122
+    second: Ranger_Stand_5
+  - first:
+      213: 21300124
+    second: Ranger_CrouchWalk_0
+  - first:
+      213: 21300126
+    second: Ranger_CrouchWalk_1
+  - first:
+      213: 21300128
+    second: Ranger_CrouchWalk_2
+  - first:
+      213: 21300130
+    second: Ranger_CrouchWalk_3
+  - first:
+      213: 21300132
+    second: Ranger_CrouchWalk_4
+  - first:
+      213: 21300134
+    second: Ranger_CrouchWalk_5
+  - first:
+      213: 21300136
+    second: Ranger_CrouchWalk_6
+  - first:
+      213: 21300138
+    second: Ranger_CrouchWalk_7
+  - first:
+      213: 21300140
+    second: Ranger_Dash_0
+  - first:
+      213: 21300142
+    second: Ranger_CliffSliding_0
+  externalObjects: {}
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -84,6 +227,8 @@ TextureImporter:
     linearTexture: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
@@ -92,6 +237,8 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -99,10 +246,13 @@ TextureImporter:
   textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: 0
     aniso: -1
-    mipBias: -1
-    wrapMode: 1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -111,33 +261,44 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 25
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
+  singleChannelComponent: 0
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  applyGammaDecoding: 1
   platformSettings:
-  - buildTarget: DefaultTexturePlatform
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
     maxTextureSize: 256
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Standalone
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
     maxTextureSize: 256
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -153,7 +314,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 02305410000000000800000000000000
+      internalID: 21300000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Stand_1
       rect:
@@ -166,7 +335,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 22305410000000000800000000000000
+      internalID: 21300002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Stand_2
       rect:
@@ -179,7 +356,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 49305410000000000800000000000000
+      internalID: 21300116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Stand_3
       rect:
@@ -192,7 +377,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 69305410000000000800000000000000
+      internalID: 21300118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Stand_4
       rect:
@@ -205,7 +398,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 89305410000000000800000000000000
+      internalID: 21300120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Stand_5
       rect:
@@ -218,7 +419,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a9305410000000000800000000000000
+      internalID: 21300122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_StandDraw_0
       rect:
@@ -231,7 +440,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a7305410000000000800000000000000
+      internalID: 21300090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_StandDraw_1
       rect:
@@ -244,7 +461,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c7305410000000000800000000000000
+      internalID: 21300092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_StandDraw_2
       rect:
@@ -257,7 +482,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e7305410000000000800000000000000
+      internalID: 21300094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_StandDraw_3
       rect:
@@ -270,7 +503,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 08305410000000000800000000000000
+      internalID: 21300096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_StandDraw_4
       rect:
@@ -283,7 +524,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 28305410000000000800000000000000
+      internalID: 21300098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_StandShoot_0
       rect:
@@ -296,7 +545,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 42305410000000000800000000000000
+      internalID: 21300004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Run_0
       rect:
@@ -309,7 +566,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 03305410000000000800000000000000
+      internalID: 21300016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Run_1
       rect:
@@ -322,7 +587,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 23305410000000000800000000000000
+      internalID: 21300018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Run_2
       rect:
@@ -335,7 +608,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 43305410000000000800000000000000
+      internalID: 21300020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Run_3
       rect:
@@ -348,7 +629,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 63305410000000000800000000000000
+      internalID: 21300022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Run_4
       rect:
@@ -361,7 +650,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 83305410000000000800000000000000
+      internalID: 21300024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Run_5
       rect:
@@ -374,7 +671,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a3305410000000000800000000000000
+      internalID: 21300026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Run_6
       rect:
@@ -387,7 +692,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c3305410000000000800000000000000
+      internalID: 21300028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Run_7
       rect:
@@ -400,7 +713,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e3305410000000000800000000000000
+      internalID: 21300030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_JumpUp_0
       rect:
@@ -413,7 +734,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 07305410000000000800000000000000
+      internalID: 21300080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_JumpUp_1
       rect:
@@ -426,7 +755,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 27305410000000000800000000000000
+      internalID: 21300082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_JumpUp_2
       rect:
@@ -439,7 +776,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 47305410000000000800000000000000
+      internalID: 21300084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Fall_0
       rect:
@@ -452,7 +797,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 67305410000000000800000000000000
+      internalID: 21300086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_JumpUpDraw_0
       rect:
@@ -465,7 +818,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 48305410000000000800000000000000
+      internalID: 21300100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_JumpUpDraw_1
       rect:
@@ -478,7 +839,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 68305410000000000800000000000000
+      internalID: 21300102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_JumpUpDraw_2
       rect:
@@ -491,7 +860,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 88305410000000000800000000000000
+      internalID: 21300104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_JumpUpDraw_3
       rect:
@@ -504,7 +881,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a8305410000000000800000000000000
+      internalID: 21300106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_FallDraw_0
       rect:
@@ -517,7 +902,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c8305410000000000800000000000000
+      internalID: 21300108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_FallDraw_1
       rect:
@@ -530,7 +923,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e8305410000000000800000000000000
+      internalID: 21300110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_FallDraw_2
       rect:
@@ -543,7 +944,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 09305410000000000800000000000000
+      internalID: 21300112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_FallDraw_3
       rect:
@@ -556,7 +965,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 29305410000000000800000000000000
+      internalID: 21300114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Crouch_0
       rect:
@@ -569,7 +986,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 45305410000000000800000000000000
+      internalID: 21300052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Crouch_1
       rect:
@@ -582,7 +1007,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 65305410000000000800000000000000
+      internalID: 21300054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Crouch_2
       rect:
@@ -595,7 +1028,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 85305410000000000800000000000000
+      internalID: 21300056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Crouch_3
       rect:
@@ -608,7 +1049,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a5305410000000000800000000000000
+      internalID: 21300058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Crouch_4
       rect:
@@ -621,7 +1070,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c5305410000000000800000000000000
+      internalID: 21300060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Crouch_5
       rect:
@@ -634,7 +1091,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e5305410000000000800000000000000
+      internalID: 21300062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_CrouchWalk_0
       rect:
@@ -647,7 +1112,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c9305410000000000800000000000000
+      internalID: 21300124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_CrouchWalk_1
       rect:
@@ -660,7 +1133,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e9305410000000000800000000000000
+      internalID: 21300126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_CrouchWalk_2
       rect:
@@ -673,7 +1154,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 0a305410000000000800000000000000
+      internalID: 21300128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_CrouchWalk_3
       rect:
@@ -686,7 +1175,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 2a305410000000000800000000000000
+      internalID: 21300130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_CrouchWalk_4
       rect:
@@ -699,7 +1196,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 4a305410000000000800000000000000
+      internalID: 21300132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_CrouchWalk_5
       rect:
@@ -712,7 +1217,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 6a305410000000000800000000000000
+      internalID: 21300134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_CrouchWalk_6
       rect:
@@ -725,7 +1238,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 8a305410000000000800000000000000
+      internalID: 21300136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_CrouchWalk_7
       rect:
@@ -738,7 +1259,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: aa305410000000000800000000000000
+      internalID: 21300138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_CrouchShoot_0
       rect:
@@ -751,7 +1280,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 46305410000000000800000000000000
+      internalID: 21300068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_CrouchShoot_1
       rect:
@@ -764,7 +1301,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 66305410000000000800000000000000
+      internalID: 21300070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_CrouchShoot_2
       rect:
@@ -777,7 +1322,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 86305410000000000800000000000000
+      internalID: 21300072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_CrouchShoot_3
       rect:
@@ -790,7 +1343,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a6305410000000000800000000000000
+      internalID: 21300074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_CrouchShoot_4
       rect:
@@ -803,7 +1364,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c6305410000000000800000000000000
+      internalID: 21300076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_CrouchShoot_5
       rect:
@@ -816,7 +1385,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e6305410000000000800000000000000
+      internalID: 21300078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_Dash_0
       rect:
@@ -829,7 +1406,15 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ca305410000000000800000000000000
+      internalID: 21300140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: Ranger_CliffSliding_0
       rect:
@@ -842,9 +1427,28 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ea305410000000000800000000000000
+      internalID: 21300142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

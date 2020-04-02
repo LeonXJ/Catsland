@@ -16,6 +16,7 @@ namespace Catsland.Scripts.Controller {
 
     public float timeScaleChangeSpeed = 1f;
     private GhostSprite ghostSprite;
+    public float timeSlowPitch = .5f;
 
     // Locomoation
     [Header("Run")]
@@ -712,7 +713,7 @@ namespace Catsland.Scripts.Controller {
     private void setTimeScale(float timeScale, bool isAnimatorUnscaled = false) {
       Time.timeScale = timeScale;
       Time.fixedDeltaTime = timeScale * DEFAULT_PHYSICS_TIMESTAMP;
-      animator.updateMode = isAnimatorUnscaled ? AnimatorUpdateMode.UnscaledTime : AnimatorUpdateMode.Normal; 
+      animator.updateMode = isAnimatorUnscaled ? AnimatorUpdateMode.UnscaledTime : AnimatorUpdateMode.Normal;
     }
 
     private bool canRelay() {

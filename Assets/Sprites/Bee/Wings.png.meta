@@ -1,12 +1,18 @@
 fileFormatVersion: 2
 guid: 31298092b8eb37f43a8e0af354db4554
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: Wings_Flying_0
-    21300002: Wings_Flying_1
-    21300004: Wings_Charge_0
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: Wings_Flying_0
+  - first:
+      213: 21300002
+    second: Wings_Flying_1
+  - first:
+      213: 21300004
+    second: Wings_Charge_0
   externalObjects: {}
-  serializedVersion: 9
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -60,8 +66,9 @@ TextureImporter:
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  applyGammaDecoding: 1
   platformSettings:
-  - serializedVersion: 2
+  - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 64
     resizeAlgorithm: 0
@@ -72,6 +79,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -91,6 +99,7 @@ TextureImporter:
       tessellationDetail: -1
       bones: []
       spriteID: 52eb942214ad80247b39df8bed20dcaa
+      internalID: 21300000
       vertices: []
       indices: 
       edges: []
@@ -111,6 +120,7 @@ TextureImporter:
       tessellationDetail: -1
       bones: []
       spriteID: 5b616fdec3410fb4e80b2a22e101a7a1
+      internalID: 21300002
       vertices: []
       indices: 
       edges: []
@@ -131,6 +141,7 @@ TextureImporter:
       tessellationDetail: -1
       bones: []
       spriteID: e1e5ff63d76dce34983f0bec5417d229
+      internalID: 21300004
       vertices: []
       indices: 
       edges: []
@@ -139,10 +150,12 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: f39fbad1c47f65343b8eda07704a170e
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
+    secondaryTextures: []
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

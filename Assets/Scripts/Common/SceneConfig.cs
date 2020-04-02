@@ -22,6 +22,7 @@ namespace Catsland.Scripts.Common {
     public UnityEngine.Camera lightCamera;
     public OpponentHealthBar opponentHealthBar;
     public GameObject player;
+    public ArenaDirector arenaDirector;
 
     [Header("Sound")]
     public AudioSource uiAudioSource;

@@ -71,6 +71,10 @@ namespace Catsland.Scripts.Misc {
       roundStarted = true;
     }
 
+    public void addOpponent(GameObject opponent) {
+      livingOpponents.Add(opponent);
+    }
+
     private void initStage(StageConfig stageConfig) {
       Debug.Log("Init stage: " + stageConfig.stageName);
       stageText.text = stageConfig.stageName;

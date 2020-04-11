@@ -116,5 +116,14 @@ namespace Catsland.Scripts.Fx {
       ghost.ghostGo.SetActive(false);
       idleGhosts.Enqueue(ghost);
     }
+
+    private void OnDestroy() {
+      foreach (Ghost ghost in idleGhosts) {
+        Destroy(ghost.ghostGo);
+      }
+      foreach (Ghost ghost in livingGhosts) {
+        Destroy(ghost.ghostGo, ghost.remainLifetimeSecond);
+      }
+    }
   }
 }

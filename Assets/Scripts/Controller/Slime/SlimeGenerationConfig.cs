@@ -11,6 +11,7 @@ namespace Catsland.Scripts.Controller.Slime {
     public float silhouetteJumpUpSpeedMin = 8f;
     public float silhouetteJumpUpSpeedMax = 9f;
 
+    public GameObject silhouettePrefab;
     public GameObject slimePrefab;
     public float slimeZ = .1f;
 

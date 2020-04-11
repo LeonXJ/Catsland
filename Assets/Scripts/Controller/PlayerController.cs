@@ -271,7 +271,7 @@ namespace Catsland.Scripts.Controller {
       }
       // Set drawing time
       if(currentIsDrawing) {
-        // Do not accumulate time in preparing state.
+        // Do not accumulate time in preparing state: PREPARING_STATE_NAME and FAST_RELOAD_STATE_NAME
         if (upperBodySpriteLayerState.IsName(DRAWING_STATE_NAME)) {
           // Use unscaled time so the player gains extra time during time slow.
           currentDrawingTime += Time.unscaledDeltaTime;

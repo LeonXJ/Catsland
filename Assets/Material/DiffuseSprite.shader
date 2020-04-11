@@ -4,7 +4,7 @@ Shader "Sprites/CustomerDiffuse"
 {
   Properties
   {
-    [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
+    _MainTex ("Sprite Texture", 2D) = "white" {}
     _Color ("Tint", Color) = (1,1,1,1)
     _AmbientLight ("AmbientLight", Color) = (0,0,0,0)
     _HueShift ("Shift Hue", Color) = (0,0,0,0)

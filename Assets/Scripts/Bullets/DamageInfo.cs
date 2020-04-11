@@ -7,6 +7,7 @@ namespace Catsland.Scripts.Bullets {
     public readonly float repelIntense;
     public readonly Vector2 repelDirection;
     public readonly Vector2 damagePosition;
+    public readonly bool isShellBreaking;
     public readonly bool isDash;
     public readonly bool isKick;
     public readonly GameObject owner;
@@ -36,7 +37,8 @@ namespace Catsland.Scripts.Bullets {
       bool isKick = false,
       GameObject owner = null,
       bool damageDashStatus = true,
-      OnDamageFeedback onDamageFeedback = null) {
+      OnDamageFeedback onDamageFeedback = null,
+      bool isShellBreaking = false) {
       this.damage = damage;
       this.repelDirection = repelDirection;
       this.repelIntense = repelIntense;
@@ -47,6 +49,7 @@ namespace Catsland.Scripts.Bullets {
       this.owner = owner;
       this.damageDashStatus = damageDashStatus;
       this.onDamageFeedback = onDamageFeedback;
+      this.isShellBreaking = isShellBreaking;
     }
   }
 }

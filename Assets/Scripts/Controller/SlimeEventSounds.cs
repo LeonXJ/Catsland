@@ -9,6 +9,7 @@ namespace Catsland.Scripts.Controller {
 
     public Sound.Sound jumpOffSound;
     public Sound.Sound jumpLandSound;
+    public Sound.Sound shieldHitSound;
 
     public void PlayJumpOffSound() {
       jumpOffSound?.Play(eventAudioSource);
@@ -16,6 +17,10 @@ namespace Catsland.Scripts.Controller {
 
     public void PlayLandSound() {
       jumpLandSound?.Play(eventAudioSource);
+    }
+
+    public void PlayShieldHitSound() {
+      shieldHitSound?.Play(eventAudioSource);
     }
   }
 }

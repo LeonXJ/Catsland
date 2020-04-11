@@ -237,7 +237,7 @@ namespace Catsland.Scripts.Bullets {
       // make damage
       collision.gameObject.SendMessage(
         MessageNames.DAMAGE_FUNCTION,
-        new DamageInfo(damageValue, collision.bounds.center, rb2d.velocity, repelIntensive),
+        new DamageInfo(damageValue, collision.bounds.center, rb2d.velocity, repelIntensive, isShellBreaking: isShellBreaking),
         SendMessageOptions.DontRequireReceiver);
 
       // show health bar

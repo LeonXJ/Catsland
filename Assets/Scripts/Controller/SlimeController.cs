@@ -13,6 +13,7 @@ namespace Catsland.Scripts.Controller {
 
     public interface SlimeInput {
       float getHorizontal();
+      bool wantGenerateShield();
     }
 
     public Vector2 jumpForce = new Vector2(1.0f, 1.0f);
@@ -30,13 +31,21 @@ namespace Catsland.Scripts.Controller {
     public float knockRepelSpeed = 6f;
     public float hitRepelSpeed = 2f;
     public float StrongHitRepelSpeed = 4f;
+    public bool canBeKnockback = true;
 
     public GameObject dieEffectPrefab;
 
     public int maxHp = 3;
     private int currentHp;
 
+    public int maxSheildHp = 1;
+    public int currentShildHp = 0;
+
     public Timing timing;
+
+    public float shieldGenerationTimeS = 2f;
+    // negative means the generation has not been started.
+    private float shieldGenerateTimeRemaining = -1f;
 
     private float wantJumpHorizon = 0.0f;
     private SlimeInput input;
@@ -47,10 +56,13 @@ namespace Catsland.Scripts.Controller {
     private AnimatorStateInfo currentState;
     private float lastJumpTime = -10000.0f;
     private SlimeEventSounds slimeEventSounds;
+    private Vector2 velocityBeforeKnockback;
+
 
     private static readonly string STATUS_IDEAL = "Ideal";
 
     private static readonly string IS_ON_GROUND = "IsOnGround";
+    private static readonly string HAS_SHIELD= "HasShield";
     private static readonly string VSpeed = "VSpeed";
     private static readonly string JUMP = "Jump";
 
@@ -69,12 +81,24 @@ namespace Catsland.Scripts.Controller {
     void Update() {
       currentState = animator.GetCurrentAnimatorStateInfo(0);
 
+
       if (CanMove()) {
         float wantHorizontal = input.getHorizontal();
         if (Mathf.Abs(wantHorizontal) > 0.1f) {
           // jump
           Jump(wantHorizontal);
         }
+      }
+
+      if (isGeneratingShield) {
+        shieldGenerateTimeRemaining -= Time.deltaTime;
+        if (shieldGenerateTimeRemaining < Mathf.Epsilon) {
+          GenerateShield();
+        }
+      }
+
+      if (input.wantGenerateShield()) {
+        DoGenerateShild();
       }
 
       // Ground-based events.
@@ -101,11 +125,12 @@ namespace Catsland.Scripts.Controller {
       isLastOnGround = isOnGround;
 
       animator.SetBool(IS_ON_GROUND, isOnGround);
+      animator.SetBool(HAS_SHIELD, hasShield);
       animator.SetFloat(VSpeed, rb2d.velocity.y);
     }
 
     public bool CanMove() {
-      return currentState.IsName(STATUS_IDEAL) && (Time.time - lastJumpTime > jumpInternalInS);
+      return currentState.IsName(STATUS_IDEAL) && (Time.time - lastJumpTime > jumpInternalInS) && !isGeneratingShield;
     }
 
     private void Jump(float horizontalSpeed) {
@@ -157,6 +182,7 @@ namespace Catsland.Scripts.Controller {
         repelSpeed = StrongHitRepelSpeed;
       }
 
+      velocityBeforeKnockback = rb2d.velocity;
       rb2d.velocity = new Vector2(-Mathf.Sign(getOrientation()) * repelSpeed * 0.5f, rb2d.velocity.y);
       rb2d.bodyType = RigidbodyType2D.Kinematic;
       animator.speed = 0f;
@@ -167,11 +193,39 @@ namespace Catsland.Scripts.Controller {
 
       animator.speed = 1f;
       rb2d.bodyType = RigidbodyType2D.Dynamic;
-      Bullets.Utils.ApplyVelocityRepel(damageInfo.repelDirection.normalized * repelSpeed, rb2d);
+      if (canBeKnockback) {
+        Bullets.Utils.ApplyVelocityRepel(damageInfo.repelDirection.normalized * repelSpeed, rb2d);
+      } else {
+        rb2d.velocity = velocityBeforeKnockback;
+      }
     }
 
     public HealthCondition GetHealthCondition() {
       return new HealthCondition(maxHp, currentHp, displayName);
+    }
+
+    public  bool hasShield => currentShildHp > 0;
+
+    public void DoGenerateShild() {
+      if (!canGenerateShild()) {
+        return;
+      }
+      shieldGenerateTimeRemaining = shieldGenerationTimeS;
+    }
+
+    private bool isGeneratingShield => shieldGenerateTimeRemaining > Mathf.Epsilon;
+
+    public bool canGenerateShild() => groundSensor.isStay() && !hasShield && !isGeneratingShield;
+
+    private void GenerateShield() {
+      if (!hasShield) {
+        currentShildHp = maxSheildHp;
+      }
+    }
+
+    public void onShieldHit() {
+      currentShildHp -= 1;
+      slimeEventSounds.PlayShieldHitSound();
     }
   }
 }

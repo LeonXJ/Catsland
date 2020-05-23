@@ -6,6 +6,7 @@ using Cinemachine;
 using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Common;
 using Catsland.Scripts.Misc;
+using Catsland.Scripts.Physics;
 using Catsland.Scripts.Fx;
 
 namespace Catsland.Scripts.Controller {
@@ -37,6 +38,7 @@ namespace Catsland.Scripts.Controller {
     public float fallMultiplier = 2.5f;
     public float lowJumMultiplier = 2f;
     public ParticleSystem smashParticleSystem;
+    public ParticleSystem jumpUpDustParticle;
     public Sound.Sound jumpSound;
     public Sound.Sound landSoftSound;
     public AudioSource jumpAudioSource;
@@ -97,6 +99,7 @@ namespace Catsland.Scripts.Controller {
     // Attack
     [Header("Arrow")]
     public float maxArrowSpeed = 15.0f;
+    public float strongArrowSpeed = 30f;
     public float minArrowSpeed = 5.0f;
     public float maxDirectionAngle = 30f;
     public float shootDirectionAngle = 0f;
@@ -106,6 +109,8 @@ namespace Catsland.Scripts.Controller {
     public float bowHeatCooldownPerSecond = 2f;
     public ParticleSystem shootEffectParticle;
     private float currentBowHeat = 0f;
+
+    public ParticleSystem quickDrawParticle;
 
     public float jumpAimTimeScale = 0.3f;
     public bool enableAutoAim = true;
@@ -126,9 +131,14 @@ namespace Catsland.Scripts.Controller {
     public float strongArrowDrawingRatio = 0.9f;
     public float minTrailTime = 1f;
     public float maxTrailTime = 3f;
+
+    public int rapidShootLimit = 3;
+    public int rapidShootRemain;
+
+    public float shootingCooldownSeconds = .5f;
+    private float shootingCooldownRemainSeconds = 0f;
     
     private bool isDrawing = false;
-    private float shootingCd = 0.5f;
     private bool isShooting = false;
     // TODO: hide after debug
     public float currentDrawingTime = 0.0f;
@@ -139,12 +149,15 @@ namespace Catsland.Scripts.Controller {
     [Header("Health")]
     public int maxHealth = 3;
     public int currentHealth;
+    public float repelHorizontalVelocity = 1f;
+    public float repelVerticalVelocity = 1f;
     public float dizzyTime = 1.0f;
     public float timeScaleInDizzy = 0.4f;
     public float immutableTime = 0.5f;
     public int score = 0;
     public AudioSource damageAudioSource;
     public Sound.Sound damageSound;
+
 
     private bool isDizzy = false;
     private float lastGetDamagedTime = 0.0f;
@@ -157,6 +170,7 @@ namespace Catsland.Scripts.Controller {
     public GameObject frontSensorGo;
     public GameObject backSensorGo;
     public GameObject arrowPrefab;
+    public GameObject strongArrowPrefab;
     public Transform shootPoint;
     public TrailIndicator trailIndicator;
     public GameObject cliffJumpEffectPrefab;
@@ -166,9 +180,11 @@ namespace Catsland.Scripts.Controller {
     public Transform backwardCliffJumpEffectPoint;
     public GameObject doubleJumpEffectPrefab;
     public Transform doubleJumpEffectPoint;
-    public Animator damageEffectAnimator;
     public ParticleSystem damageEffectParticleSystem;
     private AudioSource audioSource;
+
+    [Header("Experiment")]
+    public bool fireArrow;
 
     public Vector3 footPosition {
       get {
@@ -224,6 +240,8 @@ namespace Catsland.Scripts.Controller {
       cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
       audioSource = GetComponent<AudioSource>();
       ghostSprite = GetComponent<GhostSprite>();
+
+      rapidShootRemain = rapidShootLimit;
     }
 
     public void Awake() {
@@ -251,14 +269,19 @@ namespace Catsland.Scripts.Controller {
       if (currentBowHeat > 0f) {
         currentBowHeat -= Time.deltaTime * bowHeatCooldownPerSecond;
       }
-
+      if (shootingCooldownRemainSeconds > 0f) {
+        shootingCooldownRemainSeconds -= Time.deltaTime;
+      } else {
+        rapidShootRemain = rapidShootLimit;
+      }
       // Draw and shoot 
       AnimatorStateInfo upperBodySpriteLayerState = animator.GetCurrentAnimatorStateInfo(2);
       bool currentIsDrawing =
         (input.attack() || (currentDrawingTime > 0f && currentDrawingTime < minDrawingTime) 
           || upperBodySpriteLayerState.IsName(PREPARING_STATE_NAME)
           || upperBodySpriteLayerState.IsName(FAST_RELOAD_STATE_NAME))
-        && !isShooting && !isDizzy && !isDashing() && !input.meditation() && !isCliffJumping() && !isCliffSliding;
+        && !isShooting && !isDizzy && !isDashing() && !input.meditation() && !isCliffJumping() && !isCliffSliding
+        && (shootingCooldownRemainSeconds < Mathf.Epsilon || rapidShootRemain > 0);
 
       // Shoot if string is released
       if(isDrawing && !currentIsDrawing && !isDizzy && !isCliffJumping() && !isCliffSliding) {
@@ -329,6 +352,8 @@ namespace Catsland.Scripts.Controller {
         if (input.jump()) {
           rb2d.velocity = new Vector2(rb2d.velocity.x, 0.0f);
           appliedForce = new Vector2(0.0f, jumpForce);
+          // jump up dust.
+          generateJumpUpDust();
         }
       }
 
@@ -502,7 +527,6 @@ namespace Catsland.Scripts.Controller {
         Common.Utils.setRelativeRenderLayer(spriteRenderer, smashEffect.GetComponentInChildren<SpriteRenderer>(), 1);
         */
       }
-      isLastUpdateOnGround = groundSensor.isStay();
 
       // horizontal movement
       /*
@@ -538,8 +562,10 @@ namespace Catsland.Scripts.Controller {
           // else, keep same speed
         } else {
           // dizzy, damp on horizontal speed
+          /*
           rb2d.velocity =
             new Vector2(rb2d.velocity.x * 0.8f, rb2d.velocity.y);
+            */
         }
       }
 
@@ -596,7 +622,7 @@ namespace Catsland.Scripts.Controller {
       animator.SetFloat(DIRECTION, (shootDirectionAngle + maxDirectionAngle) * .5f / maxDirectionAngle);
       animator.SetBool(IS_IN_DRAWING_CYCLE, isInDrawingCycle());
 
-      // dush effect
+      // running dust effect
       if (groundSensor.isStay() && Mathf.Abs(rb2d.velocity.x) > .1f) {
         if (dustGenerationInternalRemainInS < 0f) {
           generateDust();
@@ -604,6 +630,10 @@ namespace Catsland.Scripts.Controller {
         } else {
           dustGenerationInternalRemainInS -= Time.deltaTime;
         }
+      }
+      // land dust effect 
+      if (!isLastUpdateOnGround && groundSensor.isStay()) {
+          generateDust();
       }
 
       GameObject currentGroundObject = null;
@@ -624,6 +654,8 @@ namespace Catsland.Scripts.Controller {
       updateFootstepSound();
 
       debugDrawAimDirection();
+
+      isLastUpdateOnGround = groundSensor.isStay();
     }
 
     private void ReleaseSmashEffect() {
@@ -655,7 +687,7 @@ namespace Catsland.Scripts.Controller {
       }
 
       lastGetDamagedTime = Time.time;
-      Bullets.Utils.ApplyRepel(damageInfo, rb2d);
+      StartCoroutine(Bullets.Utils.ApplyVelocityRepel(damageInfo, rb2d, dizzyTime));
       currentHealth -= damageInfo.damage;
       if(currentHealth <= 0) {
         // Die
@@ -665,8 +697,7 @@ namespace Catsland.Scripts.Controller {
         cinemachineImpulseSource.GenerateImpulse();
         StartCoroutine(dizzy());
         // Effect
-        damageEffectAnimator.SetTrigger("onDamage");
-        damageEffectParticleSystem.Emit(30);
+        damageEffectParticleSystem.Play(true);
       }
     }
 
@@ -700,6 +731,10 @@ namespace Catsland.Scripts.Controller {
 
     public void generateDust() {
       dustParticleSystem.Play(false);
+    }
+
+    public void generateJumpUpDust() {
+      jumpUpDustParticle?.Play();
     }
 
     public bool isNearestRelayPoint(RelayPoint relayPoint) {
@@ -801,10 +836,12 @@ namespace Catsland.Scripts.Controller {
       var arrowSpreadAngel = Mathf.Clamp01(currentBowHeat / maxBowHeat) * maxArrowDirectionSpreadAngle;
       var shootDirection = shootPoint.rotation.eulerAngles;
       shootDirection.z += Random.Range(-arrowSpreadAngel, arrowSpreadAngel);
-      GameObject arrow = Instantiate(arrowPrefab, shootPoint.position + Vector3.forward * 0.1f, Quaternion.Euler(shootDirection));
       float drawingRatio =
         Mathf.Clamp(currentDrawingTime, 0.0f, maxDrawingTime) / maxDrawingTime;
       bool isStrongArrow = drawingRatio > strongArrowDrawingRatio;
+      GameObject arrow = Instantiate(
+        isStrongArrow ? strongArrowPrefab : arrowPrefab,
+        shootPoint.position + Vector3.forward * 0.1f, Quaternion.Euler(shootDirection));
 
       // Set arrow 
       TrailRenderer trailRenderer = arrow.GetComponentInChildren<TrailRenderer>();
@@ -813,8 +850,15 @@ namespace Catsland.Scripts.Controller {
 
       arrowCarrier.SetIsShellBreaking(isStrongArrow);
       arrowCarrier.repelIntensive = isStrongArrow ? maxRepelForce : quickRepelForce;
+
+      if (fireArrow && isStrongArrow) {
+        arrow.GetComponent<SmallCombustable>()?.ignite();
+      }
+
+      float arrowSpeed = isStrongArrow ? strongArrowSpeed : maxArrowSpeed;
+
       arrowCarrier.fire(
-        (getOrientation() > 0f ? arrow.transform.right.normalized : - arrow.transform.right.normalized) * maxArrowSpeed,
+        (getOrientation() > 0f ? arrow.transform.right.normalized : - arrow.transform.right.normalized) * arrowSpeed,
         isStrongArrow ? maxArrowLifetime : quickArrowLifetime,
         gameObject.tag);
       isShooting = true;
@@ -825,7 +869,7 @@ namespace Catsland.Scripts.Controller {
       }
 
       // Particle
-      shootEffectParticle?.Play(false);
+      shootEffectParticle?.Play(true);
 
       // Sound effect
       if (shootAudioSource != null) {
@@ -836,8 +880,8 @@ namespace Catsland.Scripts.Controller {
         }
       }
 
-      // Use Animator to control Cd.
-      //yield return new WaitForSeconds(shootingCd);
+      shootingCooldownRemainSeconds = shootingCooldownSeconds;
+      rapidShootRemain--;
       yield return null;
       isShooting = false;
     }
@@ -859,7 +903,10 @@ namespace Catsland.Scripts.Controller {
       isDizzy = true;
       yield return new WaitForSeconds(dizzyTime);
       isDizzy = false;
-      damageEffectAnimator.ResetTrigger("onDamage");
+    }
+
+    public void playQuickDrawParticle() {
+      quickDrawParticle?.Play();
     }
 
     public void AssignDustTexture(DustTexture dustTexture) {

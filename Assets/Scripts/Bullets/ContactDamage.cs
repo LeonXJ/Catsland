@@ -69,7 +69,7 @@ namespace Catsland.Scripts.Bullets {
           collidingGameObject.SendMessage(
             MessageNames.DAMAGE_FUNCTION,
             new DamageInfo(
-              damage, collider.bounds.center, presetRepelDirection ? repelDirection : new Vector2(Mathf.Sign(delta.x), 0.0f), repelIntensity,
+              damage, collider.bounds.center, presetRepelDirection ? repelDirection : delta, repelIntensity,
               isSmashAttack && (canSmashAttakInStay || !isStay),
               /* isDash= */isDash,
               /* isKick= */false,

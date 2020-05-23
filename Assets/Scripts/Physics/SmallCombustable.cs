@@ -32,6 +32,12 @@ namespace Catsland.Scripts.Physics {
       flame.transform.parent = gameObject.transform;
     }
 
+    public void exstinguish() {
+      if (flame != null) {
+        flame.GetComponent<Flame>()?.extinguish();
+      }
+    }
+
     // Update is called once per frame
     void Update() {
       // TODO: implement cooldown

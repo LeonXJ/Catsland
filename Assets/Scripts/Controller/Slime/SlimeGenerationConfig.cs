@@ -31,10 +31,12 @@ namespace Catsland.Scripts.Controller.Slime {
     }
 
     void Update() {
+      /*
       if (Input.GetKeyDown(debugGenerationKeyCode)) {
         SlimeGenerator generator = FindObjectOfType<SlimeGenerator>();
         generator.Generate(this);
       }
+      */
     }
   }
 }

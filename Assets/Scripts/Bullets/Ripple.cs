@@ -33,12 +33,14 @@ namespace Catsland.Scripts.Bullets {
 
     // Update is called once per frame
     void Update() {
+      /*
       if (Input.GetKey(KeyCode.Z)) {
         rb2d.velocity -= new Vector2(1f, 0);
       }
       if (Input.GetKey(KeyCode.X)) {
         rb2d.velocity += new Vector2(1f, 0);
       }
+      */
       detectCollision();
 
       if (isExiting) {

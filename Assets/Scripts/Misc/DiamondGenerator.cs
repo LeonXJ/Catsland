@@ -56,10 +56,12 @@ namespace Catsland.Scripts.Misc {
     }
 
     void Update() {
+      /*
       if (Input.GetKeyDown(KeyCode.Alpha3)) {
         Debug.Log("Debug DimamondGenerator> Generate diamonds.");
         GenerateDiamond();
       }
+      */
     }
   }
 }

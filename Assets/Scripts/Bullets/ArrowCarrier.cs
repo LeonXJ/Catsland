@@ -43,6 +43,9 @@ namespace Catsland.Scripts.Bullets {
     public GameObject selfDestoryMark;
     public GameObject hitAndHurtEffectPrefab;
 
+    public SpriteRenderer[] spriteRendererToStopWhenBreak;
+    public ParticleSystem[] particleToStopWhenBreak;
+
     public float frezeSpeed = .1f;
 
     [Header("Effect")]
@@ -53,14 +56,11 @@ namespace Catsland.Scripts.Bullets {
     private string tagForOwner;
     private Vector2 velocity;
 
-    private static Random random = new Random();
-
     // References
     public ParticleSystem hitEffectparticleSystem;
     private SpriteRenderer spriteRenderer;
     private Collider2D collider2d;
     private Rigidbody2D rb2d;
-    private Trail trail;
     // Only need for shell-breaking arrow.
     private HashSet<GameObject> hitGameObjects;
     private AudioSource audioSource;
@@ -69,7 +69,6 @@ namespace Catsland.Scripts.Bullets {
 
     public void Awake() {
       rb2d = GetComponent<Rigidbody2D>();
-      trail = GetComponent<Trail>();
       spriteRenderer = GetComponent<SpriteRenderer>();
       collider2d = GetComponent<Collider2D>();
     }
@@ -111,8 +110,8 @@ namespace Catsland.Scripts.Bullets {
     private IEnumerator expireAndDestroy(float lifetime) {
       yield return new WaitForSeconds(lifetime);
 
-      // mark
-      if (selfDestoryMark != null) {
+      // self destroy mark is shown if the arrow is still flying.
+      if (selfDestoryMark != null && status == ArrowStatus.Flying) {
         selfDestoryMark.transform.parent = null;
         selfDestoryMark.GetComponent<Animator>().SetTrigger("start");
         Destroy(selfDestoryMark, .5f);
@@ -218,6 +217,16 @@ namespace Catsland.Scripts.Bullets {
       spriteRenderer.enabled = false;
       rb2d.bodyType = RigidbodyType2D.Kinematic;
       rb2d.velocity = Vector3.zero;
+
+      // stop particle and flame
+      GetComponent<SmallCombustable>()?.exstinguish();
+
+      foreach (SpriteRenderer spriteRenderer in spriteRendererToStopWhenBreak) {
+        spriteRenderer.enabled = false;
+      }
+      foreach (ParticleSystem particleSystem in particleToStopWhenBreak) {
+        particleSystem.Stop(true);
+      }
 
       if (gameObject != null) {
         Destroy(gameObject, 5f);

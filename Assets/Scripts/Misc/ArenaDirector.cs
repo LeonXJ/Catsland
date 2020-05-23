@@ -29,6 +29,7 @@ namespace Catsland.Scripts.Misc {
 
     // Update is called once per frame
     void Update() {
+      /*
       if (Input.GetKeyDown(KeyCode.F8)) {
         Debug.Log("Code input: kill all in stage# " + currentStage);
         foreach (GameObject opponent in livingOpponents) {
@@ -40,6 +41,7 @@ namespace Catsland.Scripts.Misc {
           }
         }
       }
+      */
 
       if (roundStarted) {
         livingOpponents.RemoveWhere(g => g == null);

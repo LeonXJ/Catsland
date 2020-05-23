@@ -153,6 +153,7 @@ namespace Catsland.Scripts.Sound {
       }
     }
     private void debugUpdate() {
+      /*
       if (Input.GetKeyDown(KeyCode.Alpha1)) {
         if (debugSounds.Length == 0) {
           Debug.Log("Debug MusicManager> error: no debug sound is set.");
@@ -166,6 +167,7 @@ namespace Catsland.Scripts.Sound {
       if (Input.GetKeyDown(KeyCode.Alpha2)) {
         Stop(debugOutTransitionInS);
       }
+      */
     }
   }
 }

@@ -6,106 +6,80 @@ namespace Catsland.Scripts.Controller {
     EvilFlowerController.EvilFlowerInput,
     BeeController.BeeInput {
 
-    private bool wantAttack = false;
-    private float horizontal = 0f;
-    private float vertical = 0f;
-    private bool wantJump = false;
-    private bool wantJumpHigher = false;
-    private bool wantDash = false;
-    private bool lastWantDash = false;
-    private bool wantInteract = false;
-    private bool wantTimeSlow = false;
+    private InputMaster inputMaster;
 
-    void Update() {
-      // Because controller trigger is axis, we simulate snap button here.
-      wantDash = false;
-      if(Input.GetButton("Dash")) {
-        if(!lastWantDash) {
-          wantDash = true;
-        }
-        lastWantDash = true;
-      } else {
-        lastWantDash = false;
-      }
-
-      horizontal = Input.GetAxis("Horizontal");
-      vertical = Input.GetAxis("Vertical");
-      wantAttack = Input.GetButton("Attack");
-      wantJump = Input.GetButtonDown("Jump");
-      wantJumpHigher = Input.GetButton("Jump");
-      wantInteract = Input.GetButton("Interact");
-      wantTimeSlow = Input.GetButton("TimeSlow");
-    }
-
-    void OnDisable() {
-      resetInput();
-    }
-
-    public void resetInput() {
-      horizontal = 0f;
-      vertical = 0f;
-      wantAttack = false;
-      wantJump = false;
-      wantJumpHigher = false;
-      wantDash = false;
-      wantInteract = false;
-      wantTimeSlow = false;
+    void Awake() {
+      inputMaster = new InputMaster();
     }
 
     public bool attack() {
-      return wantAttack;
+      return inputMaster.General.Shoot.ReadValue<float>() > Mathf.Epsilon;
     }
 
     public bool timeSlow() {
-      return wantTimeSlow;
+      return inputMaster.General.Focus.ReadValue<float>() > Mathf.Epsilon;
     }
 
     public float getHorizontal() {
-      return horizontal;
+      return inputMaster.General.Move.ReadValue<Vector2>().x;
     }
 
     public float getVertical() {
-      return vertical;
+      return inputMaster.General.Move.ReadValue<Vector2>().y;
     }
 
     public bool jump() {
-      return wantJump;
+      return inputMaster.General.Jump.triggered;
     }
 
     public bool jumpHigher() {
-      return wantJumpHigher;
+      return inputMaster.General.JumpHigher.ReadValue<float>() > Mathf.Epsilon;
     }
 
     public bool dash() {
-      return wantDash;
+      return inputMaster.General.Dash.triggered;
     }
 
     public bool meditation() {
-      return Input.GetButton("Interact");
+      return false;
+      //return Input.GetButton("Interact");
     }
 
     public bool charge() {
-      return Input.GetButtonDown("Charge");
+      return false;
+      // return Input.GetButtonDown("Charge");
     }
 
     public bool jumpSmash() {
-      return Input.GetButtonDown("Jump");
+      return false;
+      // return Input.GetButtonDown("Jump");
     }
 
     public bool spell() {
-      return Input.GetButtonDown("Dash");
+      return false;
+      // return Input.GetButtonDown("Dash");
     }
 
     public bool interact() {
-      return wantInteract;
+      return inputMaster.General.Interact.triggered;
     }
 
     public bool chop() {
-      return Input.GetButtonDown("Attack");
+      return false;
+      //return Input.GetButtonDown("Attack");
     }
 
     public bool summon() {
-      return Input.GetButton("Interact");
+      return false;
+      //return Input.GetButton("Interact");
+    }
+
+    private void OnEnable() {
+      inputMaster.General.Enable();
+    }
+
+    private void OnDisable() {
+      inputMaster.General.Disable();
     }
   }
 }

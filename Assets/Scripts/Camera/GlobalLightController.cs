@@ -6,21 +6,22 @@ namespace Catsland.Scripts.Camera {
   [ExecuteInEditMode]
   public class GlobalLightController: StackEffectController<GlobalLightConfig> {
 
-    public Color backupAmbientColor = Color.white;
-    public Light2D globalLight;
-
-    void Awake() {
-      base.Awake();
-    }
+    [Header("Lights")]
+    public Light2D globalForegroundLight;
+    public Light2D globalBackgroundLight;
 
     private void Update() {
-      if (globalLight != null) {
-        Color targetColor = topPrioritizedColor != null ? topPrioritizedColor.color : backupAmbientColor;
-        float colorChangeSpeed = topPrioritizedColor != null ? topPrioritizedColor.valueChangeSpeed : backupColorChangeSpeed;
-        globalLight.color =
-          Color.Lerp(globalLight.color, targetColor, colorChangeSpeed * Time.deltaTime);
-      
+      if (globalForegroundLight != null) {
+        updateLight(globalForegroundLight, selectedConfig.foregroundColor, selectedConfig.foregroundIntensity, selectedConfig.valueChangeSpeed);
       }
+      if (globalBackgroundLight != null) {
+        updateLight(globalBackgroundLight, selectedConfig.backgroundColor, selectedConfig.backgroundIntensity, selectedConfig.valueChangeSpeed);
+      }
+    }
+
+    void updateLight(Light2D light, Color color, float intensity, float changeSpeed) {
+      light.color = Color.Lerp(light.color, color, changeSpeed * Time.deltaTime);
+      light.intensity = Mathf.Lerp(light.intensity, intensity, changeSpeed * Time.deltaTime);
     }
   }
 }

@@ -1,4 +1,5 @@
-﻿using Catsland.Scripts.Camera;
+﻿using System;
+using Catsland.Scripts.Camera;
 using UnityEngine;
 
 namespace Catsland.Scripts.Controller {
@@ -10,8 +11,11 @@ namespace Catsland.Scripts.Controller {
 
     public override void applyEffect() {
       // Deprecated
+      throw new NotImplementedException();
+      /*
       globalLightController.backupAmbientColor =
         Color.Lerp(globalLightController.backupAmbientColor, targetAmbientColor, transistSpeed);
+      */
     }
   }
 }

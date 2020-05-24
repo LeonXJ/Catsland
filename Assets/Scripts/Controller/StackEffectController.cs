@@ -4,10 +4,16 @@ using UnityEngine;
 namespace Catsland.Scripts.Controller {
   public abstract class StackEffectController<T>: MonoBehaviour where T : StackEffectConfig {
 
-    public float backupColorChangeSpeed = 0.1f;
     public Dictionary<string, T> stackEffectConfigs;
 
-    protected T topPrioritizedColor;
+    public T backupConfig;
+
+    [Header("Debug")]
+    public T debugDiffConfig;
+    public bool debugUseDebugDiffConfig = false;
+
+    protected T selectedConfig => debugUseDebugDiffConfig ? debugDiffConfig : topPrioritizedConfig ?? backupConfig;
+    protected T topPrioritizedConfig;
 
     protected virtual void Awake() {
       stackEffectConfigs = new Dictionary<string, T>();
@@ -33,11 +39,11 @@ namespace Catsland.Scripts.Controller {
 
     private void updateTopPriority() {
       int topPriority = int.MinValue;
-      topPrioritizedColor = null;
+      topPrioritizedConfig = null;
       foreach(T color in stackEffectConfigs.Values) {
         if(color.priority > topPriority) {
           topPriority = color.priority;
-          topPrioritizedColor = color;
+          topPrioritizedConfig = color;
         }
       }
     }

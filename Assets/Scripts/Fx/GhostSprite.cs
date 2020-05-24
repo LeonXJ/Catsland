@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Fx {
   public class Ghost {
@@ -53,9 +54,11 @@ namespace Catsland.Scripts.Fx {
         ghost.remainLifetimeSecond -= getDeltaTime();
         // ghost lifecycle attribute update
         ghost.ghostGo.GetComponent<SpriteRenderer>().material.SetColor(
-          "_Color", Color.Lerp(finalGhostColor, initialGhostColor, ghost.remainLifetimeSecond / ghost.lifetimeSecond));
+          Materials.MATERIAL_ATTRIBUTE_TINT,
+          Color.Lerp(finalGhostColor, initialGhostColor, ghost.remainLifetimeSecond / ghost.lifetimeSecond));
         ghost.ghostGo.GetComponent<SpriteRenderer>().material.SetColor(
-          "_AmbientLight", Color.Lerp(finalGhostAmbientColor, initialGhostAmbientColor, ghost.remainLifetimeSecond / ghost.lifetimeSecond));
+          Materials.MATERIAL_ATTRIBUTE_AMBIENT,
+          Color.Lerp(finalGhostAmbientColor, initialGhostAmbientColor, ghost.remainLifetimeSecond / ghost.lifetimeSecond));
         // return ghost
         if (!ghost.isAlive) {
           returnGhost(ghost);

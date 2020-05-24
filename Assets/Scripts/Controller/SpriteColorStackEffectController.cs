@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
+using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Controller {
+  [ExecuteInEditMode]
   public class SpriteColorStackEffectController : StackEffectController<SpriteColorConfig> {
 
-    public Color backupSpriteColor = Color.white;
     // Only support spriteRenderer
     public bool includeChildren = false;
 
@@ -29,13 +30,17 @@ namespace Catsland.Scripts.Controller {
     }
 
     private void updateRenderer(SpriteRenderer spriteRenderer, TilemapRenderer tileRenderer) {
-      Color targetColor = topPrioritizedColor != null ? topPrioritizedColor.color : backupSpriteColor;
-      float colorChangeSpeed = topPrioritizedColor != null ? topPrioritizedColor.valueChangeSpeed : backupColorChangeSpeed;
+      Color targetColor = selectedConfig.color;
+      float colorChangeSpeed = selectedConfig.valueChangeSpeed;
       if (spriteRenderer != null) {
-        spriteRenderer.material.SetColor("_Color", Color.Lerp(spriteRenderer.material.GetColor("_Color"), targetColor, colorChangeSpeed * Time.deltaTime));
+        spriteRenderer.material.SetColor(
+          Materials.MATERIAL_ATTRIBUTE_TINT,
+          Color.Lerp(spriteRenderer.material.GetColor(Materials.MATERIAL_ATTRIBUTE_TINT), targetColor, colorChangeSpeed * Time.deltaTime));
       }
       if (tileRenderer != null) {
-        tileRenderer.material.SetColor("_Color", Color.Lerp(tileRenderer.material.GetColor("_Color"), targetColor, colorChangeSpeed * Time.deltaTime));
+        tileRenderer.material.SetColor(
+          Materials.MATERIAL_ATTRIBUTE_TINT,
+          Color.Lerp(tileRenderer.material.GetColor(Materials.MATERIAL_ATTRIBUTE_TINT), targetColor, colorChangeSpeed * Time.deltaTime));
       }
     }
   }

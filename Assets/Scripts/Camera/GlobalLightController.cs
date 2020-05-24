@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 using Catsland.Scripts.Controller;
 
 namespace Catsland.Scripts.Camera {
@@ -7,19 +7,19 @@ namespace Catsland.Scripts.Camera {
   public class GlobalLightController: StackEffectController<GlobalLightConfig> {
 
     public Color backupAmbientColor = Color.white;
-    private UnityEngine.Camera lightmapCamera;
+    public Light2D globalLight;
 
     void Awake() {
       base.Awake();
-      lightmapCamera = GetComponent<UnityEngine.Camera>();
     }
 
     private void Update() {
-      if(lightmapCamera != null) {
+      if (globalLight != null) {
         Color targetColor = topPrioritizedColor != null ? topPrioritizedColor.color : backupAmbientColor;
         float colorChangeSpeed = topPrioritizedColor != null ? topPrioritizedColor.valueChangeSpeed : backupColorChangeSpeed;
-        lightmapCamera.backgroundColor =
-          Color.Lerp(lightmapCamera.backgroundColor, targetColor, colorChangeSpeed * Time.deltaTime);
+        globalLight.color =
+          Color.Lerp(globalLight.color, targetColor, colorChangeSpeed * Time.deltaTime);
+      
       }
     }
   }

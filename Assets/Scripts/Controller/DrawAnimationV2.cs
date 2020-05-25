@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Catsland.Scripts.Controller {
-  [ExecuteInEditMode]
   [RequireComponent(typeof(PlayerController), typeof(Animator))]
   public class DrawAnimationV2 : MonoBehaviour {
 

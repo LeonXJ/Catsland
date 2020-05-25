@@ -3,7 +3,6 @@ using UnityEngine.Tilemaps;
 using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Controller {
-  [ExecuteInEditMode]
   public class SpriteColorStackEffectController : StackEffectController<SpriteColorConfig> {
 
     // Only support spriteRenderer

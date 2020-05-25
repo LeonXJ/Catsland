@@ -8,8 +8,6 @@ namespace Catsland.Scripts.Controller {
   [ExecuteInEditMode]
   public class GrassModel : MonoBehaviour {
 
-    private static Dictionary<string, Material> materials = new Dictionary<string, Material>();
-
     // The center of swing.
     public enum SwingCenter {
       BOTTOM,
@@ -25,6 +23,7 @@ namespace Catsland.Scripts.Controller {
 
     // Mesh and sprite attributes.
     public Sprite sprite;
+    public Material material;
     public float width = 1.0f;
     public float height = 0.3f;
     public int heightSegment = 2;
@@ -103,16 +102,7 @@ namespace Catsland.Scripts.Controller {
       }
     }
 
-    private Material GetMaterial() {
-      string materialName = sprite.name;
-      if (!materials.ContainsKey(materialName)) {
-        Material m = new Material(SceneConfig.getSceneConfig().GetDefaultDiffuseShader()) {
-          name = materialName
-        };
-        materials.Add(materialName, m);
-      }
-      return materials[materialName];
-    }
+    private Material GetMaterial() => material;
 
     void Update() {
       if (!hasInitialized) {
@@ -162,7 +152,7 @@ namespace Catsland.Scripts.Controller {
       if (meshRenderer.sharedMaterial == null || meshRenderer.sharedMaterial.name != sprite.name) {
         meshRenderer.sharedMaterial = GetMaterial();
       }
-      Debug.Assert(meshRenderer.sharedMaterial != null);
+      Debug.Assert(meshRenderer.sharedMaterial != null, "Material is null for object: " + gameObject.name);
       meshRenderer.sharedMaterial.mainTexture = sprite.texture;
     }
 

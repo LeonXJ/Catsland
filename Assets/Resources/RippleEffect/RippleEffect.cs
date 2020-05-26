@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.Rendering.PostProcessing;
+using Catsland.Scripts.Controller;
 
 public class RippleEffect : MonoBehaviour {
   public AnimationCurve waveform = new AnimationCurve(
@@ -65,6 +66,9 @@ public class RippleEffect : MonoBehaviour {
   Material material;
   float timer;
   int dropCount;
+  private InputMaster inputMaster;
+
+  public Material GetMaterial() => material;
 
   void UpdateShaderParameters() {
     var c = GetComponent<Camera>();
@@ -76,6 +80,22 @@ public class RippleEffect : MonoBehaviour {
     material.SetColor("_Reflection", reflectionColor);
     material.SetVector("_Params1", new Vector4(c.aspect, 1, 1 / waveSpeed, 0));
     material.SetVector("_Params2", new Vector4(1, 1 / c.aspect, refractionStrength, reflectionStrength));
+  }
+
+  public PropertySheet PopulateShaderParameters(PropertySheet sheet) {
+    var c = GetComponent<Camera>();
+
+    if (droplets != null) {
+      sheet.properties.SetVector("_Drop1", droplets[0].MakeShaderParameter(c.aspect));
+      sheet.properties.SetVector("_Drop2", droplets[1].MakeShaderParameter(c.aspect));
+      sheet.properties.SetVector("_Drop3", droplets[2].MakeShaderParameter(c.aspect));
+    }
+
+    sheet.properties.SetColor("_Reflection", reflectionColor);
+    sheet.properties.SetVector("_Params1", new Vector4(c.aspect, 1, 1 / waveSpeed, 0));
+    sheet.properties.SetVector("_Params2", new Vector4(1, 1 / c.aspect, refractionStrength, reflectionStrength));
+
+    return sheet;
   }
 
   void Awake() {
@@ -99,6 +119,12 @@ public class RippleEffect : MonoBehaviour {
     material.SetTexture("_GradTex", gradTexture);
 
     UpdateShaderParameters();
+
+    inputMaster = new InputMaster();
+    inputMaster.Debug.Ripple.performed += _ => { 
+      Debug.Log("Debug: Generate Ripple.");
+      Emit();
+    };
   }
 
   void Update() {
@@ -127,5 +153,13 @@ public class RippleEffect : MonoBehaviour {
 
   public void Emit(Vector2 position) {
     droplets[dropCount++ % droplets.Length].Reset(position);
+  }
+
+  private void OnEnable() {
+    inputMaster.Enable();
+  }
+
+  private void OnDisable() {
+    inputMaster.Disable();
   }
 }

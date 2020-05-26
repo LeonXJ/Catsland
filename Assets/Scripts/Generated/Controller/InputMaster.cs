@@ -277,6 +277,33 @@ namespace Catsland.Scripts.Controller
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Debug"",
+            ""id"": ""5a2aa1e7-2d4f-47c8-b793-e5eda8d95c06"",
+            ""actions"": [
+                {
+                    ""name"": ""Ripple"",
+                    ""type"": ""Button"",
+                    ""id"": ""8cf853fe-e6c6-44a1-9184-7a2e08c88a0d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""fd77f56d-dcb2-455a-8ef1-2b34b78696f3"",
+                    ""path"": ""<Keyboard>/numpad1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ripple"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -313,6 +340,9 @@ namespace Catsland.Scripts.Controller
             m_General_Focus = m_General.FindAction("Focus", throwIfNotFound: true);
             m_General_JumpHigher = m_General.FindAction("JumpHigher", throwIfNotFound: true);
             m_General_Interact = m_General.FindAction("Interact", throwIfNotFound: true);
+            // Debug
+            m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
+            m_Debug_Ripple = m_Debug.FindAction("Ripple", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -439,6 +469,39 @@ namespace Catsland.Scripts.Controller
             }
         }
         public GeneralActions @General => new GeneralActions(this);
+
+        // Debug
+        private readonly InputActionMap m_Debug;
+        private IDebugActions m_DebugActionsCallbackInterface;
+        private readonly InputAction m_Debug_Ripple;
+        public struct DebugActions
+        {
+            private @InputMaster m_Wrapper;
+            public DebugActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Ripple => m_Wrapper.m_Debug_Ripple;
+            public InputActionMap Get() { return m_Wrapper.m_Debug; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(DebugActions set) { return set.Get(); }
+            public void SetCallbacks(IDebugActions instance)
+            {
+                if (m_Wrapper.m_DebugActionsCallbackInterface != null)
+                {
+                    @Ripple.started -= m_Wrapper.m_DebugActionsCallbackInterface.OnRipple;
+                    @Ripple.performed -= m_Wrapper.m_DebugActionsCallbackInterface.OnRipple;
+                    @Ripple.canceled -= m_Wrapper.m_DebugActionsCallbackInterface.OnRipple;
+                }
+                m_Wrapper.m_DebugActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Ripple.started += instance.OnRipple;
+                    @Ripple.performed += instance.OnRipple;
+                    @Ripple.canceled += instance.OnRipple;
+                }
+            }
+        }
+        public DebugActions @Debug => new DebugActions(this);
         private int m_KeyboardSchemeIndex = -1;
         public InputControlScheme KeyboardScheme
         {
@@ -466,6 +529,10 @@ namespace Catsland.Scripts.Controller
             void OnFocus(InputAction.CallbackContext context);
             void OnJumpHigher(InputAction.CallbackContext context);
             void OnInteract(InputAction.CallbackContext context);
+        }
+        public interface IDebugActions
+        {
+            void OnRipple(InputAction.CallbackContext context);
         }
     }
 }

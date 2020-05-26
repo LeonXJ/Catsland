@@ -262,6 +262,33 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Debug",
+            "id": "5a2aa1e7-2d4f-47c8-b793-e5eda8d95c06",
+            "actions": [
+                {
+                    "name": "Ripple",
+                    "type": "Button",
+                    "id": "8cf853fe-e6c6-44a1-9184-7a2e08c88a0d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "fd77f56d-dcb2-455a-8ef1-2b34b78696f3",
+                    "path": "<Keyboard>/numpad1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Ripple",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

@@ -23,6 +23,7 @@ namespace Catsland.Scripts.Common {
     public OpponentHealthBar opponentHealthBar;
     public GameObject player;
     public ArenaDirector arenaDirector;
+    public RippleEffect rippleEffect;
 
     [Header("Sound")]
     public AudioSource uiAudioSource;

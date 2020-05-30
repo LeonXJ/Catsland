@@ -1,0 +1,446 @@
+fileFormatVersion: 2
+guid: a18d29d52327a62409252fcb40950e08
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -707671567546898250
+    second: ShieldMan_Walk_0
+  - first:
+      213: 4922286831860829299
+    second: ShieldMan_Walk_1
+  - first:
+      213: -4955410001611678670
+    second: ShieldMan_Walk_2
+  - first:
+      213: -1018068140894361479
+    second: ShieldMan_Walk_3
+  - first:
+      213: 8024666274007363369
+    second: ShieldMan_Attack_0
+  - first:
+      213: -1238368005659362388
+    second: ShieldMan_Attack_1
+  - first:
+      213: -2650055193510107852
+    second: ShieldMan_Attack_2
+  - first:
+      213: -6632412915541944884
+    second: ShieldMan_Attack_3
+  - first:
+      213: -4221414832574464262
+    second: ShieldMan_Unbalance_0
+  - first:
+      213: 8349263904082154113
+    second: ShieldMan_Unbalance_1
+  - first:
+      213: 1285655357604620278
+    second: ShieldMan_Unbalance_2
+  - first:
+      213: -7547859555677528151
+    second: ShieldMan_Unbalance_3
+  - first:
+      213: 7852353580672225089
+    second: ShieldMan_Stand_0
+  - first:
+      213: -4246690739949165340
+    second: ShieldMan_Stand_1
+  - first:
+      213: 901470599480772401
+    second: ShieldMan 0
+  - first:
+      213: -3001353989767696031
+    second: ShieldMan 1
+  - first:
+      213: -2807330557868225657
+    second: ShieldMan 2
+  - first:
+      213: -343286192296574841
+    second: ShieldMan 3
+  - first:
+      213: -7653631444029484812
+    second: ShieldMan 4
+  - first:
+      213: -1297780317328908499
+    second: ShieldMan 5
+  - first:
+      213: -1942837541322540413
+    second: ShieldMan 6
+  - first:
+      213: 7816574898595268496
+    second: ShieldMan 7
+  - first:
+      213: -3596902883457814314
+    second: ShieldMan 8
+  - first:
+      213: 7983750497433741835
+    second: ShieldMan 9
+  - first:
+      213: 3737563767866603407
+    second: ShieldMan 10
+  - first:
+      213: 7558627432032725994
+    second: ShieldMan 11
+  - first:
+      213: 7545161101307214149
+    second: ShieldMan 12
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 320
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ShieldMan_Stand_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14f0cb26af929fc60800000000000000
+      internalID: 7852353580672225089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Stand_1
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 96
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e4a36e9549b015c0800000000000000
+      internalID: -4246690739949165340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Walk_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b829be6578dd26f0800000000000000
+      internalID: -707671567546898250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Walk_1
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 96
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37cc5af4bc97f4440800000000000000
+      internalID: 4922286831860829299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Walk_2
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 96
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23c9481cbd8da3bb0800000000000000
+      internalID: -4955410001611678670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Walk_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 48
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97869d87b681fd1f0800000000000000
+      internalID: -1018068140894361479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Attack_0
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 48
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92f244fa5775d5f60800000000000000
+      internalID: 8024666274007363369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Attack_1
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 48
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cabf6792cde60dee0800000000000000
+      internalID: -1238368005659362388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Attack_2
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 48
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 435a6a397dc193bd0800000000000000
+      internalID: -2650055193510107852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Attack_3
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 48
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc5d865e79fe4f3a0800000000000000
+      internalID: -6632412915541944884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Unbalance_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afe75d663958a65c0800000000000000
+      internalID: -4221414832574464262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Unbalance_1
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 182dec2d84b8ed370800000000000000
+      internalID: 8349263904082154113
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Unbalance_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f7e99d6cb097d110800000000000000
+      internalID: 1285655357604620278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

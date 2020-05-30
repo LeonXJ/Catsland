@@ -106,6 +106,7 @@ namespace AnimationImporter {
 
 			// check if animation file already exists
 			clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(fileName);
+			bool animationExists = (clip != null);
 			if (clip != null)
 			{
 				// get previous animation settings
@@ -117,16 +118,20 @@ namespace AnimationImporter {
 				AssetDatabase.CreateAsset(clip, fileName);
 			}
 
+			// Respect existing settings.
+			// TODO: make this a setting in the editor window.
 			// change loop settings
-			if (isLooping)
-			{
-				clip.wrapMode = WrapMode.Loop;
-				clip.SetLoop(true);
-			}
-			else
-			{
-				clip.wrapMode = WrapMode.Clamp;
-				clip.SetLoop(false);
+			if (!animationExists) {
+        if (isLooping)
+        {
+          clip.wrapMode = WrapMode.Loop;
+          clip.SetLoop(true);
+        }
+        else
+        {
+          clip.wrapMode = WrapMode.Clamp;
+          clip.SetLoop(false);
+        }
 			}
 
 			ObjectReferenceKeyframe[] keyFrames = new ObjectReferenceKeyframe[anim.Count + 1]; // one more than sprites because we repeat the last sprite

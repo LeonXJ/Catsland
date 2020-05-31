@@ -83,6 +83,27 @@ TextureImporter:
   - first:
       213: 7545161101307214149
     second: ShieldMan 12
+  - first:
+      213: -7004408313606598260
+    second: ShieldMan 13
+  - first:
+      213: -8546633694709319596
+    second: ShieldMan 14
+  - first:
+      213: -7883523002136586574
+    second: ShieldMan 15
+  - first:
+      213: -1344644251477935911
+    second: ShieldMan_Attack_backup_0
+  - first:
+      213: 3890037943181723212
+    second: ShieldMan_Die_0
+  - first:
+      213: -1831782539749561419
+    second: ShieldMan_Die_1
+  - first:
+      213: 2956033943578268548
+    second: ShieldMan_Die_2
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -160,7 +181,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 96
+        y: 144
         width: 80
         height: 48
       alignment: 9
@@ -181,7 +202,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 80
-        y: 96
+        y: 144
         width: 80
         height: 48
       alignment: 9
@@ -202,7 +223,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 96
+        y: 144
         width: 80
         height: 48
       alignment: 9
@@ -223,7 +244,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 160
-        y: 96
+        y: 144
         width: 80
         height: 48
       alignment: 9
@@ -244,7 +265,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 240
-        y: 96
+        y: 144
         width: 80
         height: 48
       alignment: 9
@@ -265,7 +286,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 48
+        y: 96
         width: 80
         height: 48
       alignment: 9
@@ -285,8 +306,8 @@ TextureImporter:
       name: ShieldMan_Attack_0
       rect:
         serializedVersion: 2
-        x: 80
-        y: 48
+        x: 240
+        y: 144
         width: 80
         height: 48
       alignment: 9
@@ -306,8 +327,8 @@ TextureImporter:
       name: ShieldMan_Attack_1
       rect:
         serializedVersion: 2
-        x: 160
-        y: 48
+        x: 80
+        y: 96
         width: 80
         height: 48
       alignment: 9
@@ -327,8 +348,8 @@ TextureImporter:
       name: ShieldMan_Attack_2
       rect:
         serializedVersion: 2
-        x: 240
-        y: 48
+        x: 160
+        y: 96
         width: 80
         height: 48
       alignment: 9
@@ -348,8 +369,8 @@ TextureImporter:
       name: ShieldMan_Attack_3
       rect:
         serializedVersion: 2
-        x: 240
-        y: 48
+        x: 160
+        y: 96
         width: 80
         height: 48
       alignment: 9
@@ -369,8 +390,8 @@ TextureImporter:
       name: ShieldMan_Unbalance_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 240
+        y: 96
         width: 80
         height: 48
       alignment: 9
@@ -390,8 +411,8 @@ TextureImporter:
       name: ShieldMan_Unbalance_1
       rect:
         serializedVersion: 2
-        x: 80
-        y: 0
+        x: 0
+        y: 48
         width: 80
         height: 48
       alignment: 9
@@ -408,10 +429,73 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ShieldMan_Unbalance_2
+      name: ShieldMan_Attack_backup_0
       rect:
         serializedVersion: 2
         x: 80
+        y: 48
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d8f2617d2dd65de0800000000000000
+      internalID: -1344644251477935911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Die_0
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 48
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c46432626e03cf530800000000000000
+      internalID: 3890037943181723212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Die_1
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 48
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5bbe67c3c733496e0800000000000000
+      internalID: -1831782539749561419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Die_2
+      rect:
+        serializedVersion: 2
+        x: 0
         y: 0
         width: 80
         height: 48
@@ -422,8 +506,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6f7e99d6cb097d110800000000000000
-      internalID: 1285655357604620278
+      spriteID: 483dafeb531f50920800000000000000
+      internalID: 2956033943578268548
       vertices: []
       indices: 
       edges: []

@@ -14,6 +14,8 @@ namespace Catsland.Scripts.Bullets {
     public readonly bool damageDashStatus;
     public readonly OnDamageFeedback onDamageFeedback;
 
+    public Collider2D hitCollider;
+
     public class DamageFeedback {
       public bool damageSuccess;
 
@@ -50,6 +52,11 @@ namespace Catsland.Scripts.Bullets {
       this.damageDashStatus = damageDashStatus;
       this.onDamageFeedback = onDamageFeedback;
       this.isShellBreaking = isShellBreaking;
+    }
+
+    public DamageInfo setHitCollider(Collider2D collider) {
+      this.hitCollider = collider;
+      return this;
     }
   }
 }

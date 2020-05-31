@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using Catsland.Scripts.Bullets;
+using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Misc {
   public class DamageFlasher: MonoBehaviour {
@@ -37,25 +38,25 @@ namespace Catsland.Scripts.Misc {
     private IEnumerator flash() {
       if(adjustChildren) {
         foreach(SpriteRenderer renderer in getChildrenRenderers()) {
-          renderer.material.SetColor("_AmbientLight", flashColor);
+          renderer.material.SetColor(Materials.MATERIAL_ATTRIBUTE_AMBIENT, flashColor);
         }
       }
       foreach(SpriteRenderer renderer in additionalSpriteRenderers) {
-        renderer.material.SetColor("_AmbientLight", flashColor);
+        renderer.material.SetColor(Materials.MATERIAL_ATTRIBUTE_AMBIENT, flashColor);
       }
-      spriteRenderer.material.SetColor("_AmbientLight", flashColor);
+      spriteRenderer.material.SetColor(Materials.MATERIAL_ATTRIBUTE_AMBIENT, flashColor);
 
       yield return new WaitForSeconds(flashSecond);
 
       if(adjustChildren) {
         foreach(SpriteRenderer renderer in getChildrenRenderers()) {
-          renderer.material.SetColor("_AmbientLight", new Color(0.0f, 0.0f, 0.0f, 0.0f));
+          renderer.material.SetColor(Materials.MATERIAL_ATTRIBUTE_AMBIENT, new Color(0.0f, 0.0f, 0.0f, 0.0f));
         }
       }
         foreach(SpriteRenderer renderer in additionalSpriteRenderers) {
-          renderer.material.SetColor("_AmbientLight", new Color(0.0f, 0.0f, 0.0f, 0.0f));
+          renderer.material.SetColor(Materials.MATERIAL_ATTRIBUTE_AMBIENT, new Color(0.0f, 0.0f, 0.0f, 0.0f));
         }
-      spriteRenderer.material.SetColor("_AmbientLight", new Color(0.0f, 0.0f, 0.0f, 0.0f));
+      spriteRenderer.material.SetColor(Materials.MATERIAL_ATTRIBUTE_AMBIENT, new Color(0.0f, 0.0f, 0.0f, 0.0f));
     }
 
     private SpriteRenderer[] getChildrenRenderers() {

@@ -65,10 +65,11 @@ namespace Catsland.Scripts.Controller {
       bool currentReachTarget = distance < playerController.relayEffectDistance;
 
       // update alpha
-      float currentAlpha = Mathf.Lerp(currentHintRenderer.material.GetColor("_Color").a, targetAlpha, Time.deltaTime * hintChangeSpeed);
+      float currentAlpha = Mathf.Lerp(
+        currentHintRenderer.material.GetColor(Materials.MATERIAL_ATTRIBUTE_TINT).a, targetAlpha, Time.deltaTime * hintChangeSpeed);
       currentHintRenderer.material.SetColor(
-        "_Color", currentReachTarget ?  new Color(currentReachTargetColor.r, currentReachTargetColor.g, currentReachTargetColor.b, currentAlpha) : new Color(1.0f, 1.0f, 1.0f, currentAlpha));
-      targetHintRenderer.material.SetColor("_Color", new Color(1.0f, 1.0f, 1.0f, currentAlpha));
+        Materials.MATERIAL_ATTRIBUTE_TINT, currentReachTarget ?  new Color(currentReachTargetColor.r, currentReachTargetColor.g, currentReachTargetColor.b, currentAlpha) : new Color(1.0f, 1.0f, 1.0f, currentAlpha));
+      targetHintRenderer.material.SetColor(Materials.MATERIAL_ATTRIBUTE_TINT, new Color(1.0f, 1.0f, 1.0f, currentAlpha));
     }
 
     public void HideCircle() {

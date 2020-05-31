@@ -233,8 +233,8 @@ namespace Catsland.Scripts.Bullets {
       }
     }
 
-    private void arrowHit(Collider2D collision) {
-      if (hitGameObjects != null && hitGameObjects.Contains(collision.gameObject)) {
+    private void arrowHit(Collider2D collider) {
+      if (hitGameObjects != null && hitGameObjects.Contains(collider.gameObject)) {
         // Skip already hit.
         return;
       }
@@ -244,13 +244,14 @@ namespace Catsland.Scripts.Bullets {
       //hitEffectparticleSystem.gameObject.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
 
       // make damage
-      collision.gameObject.SendMessage(
+      collider.gameObject.SendMessage(
         MessageNames.DAMAGE_FUNCTION,
-        new DamageInfo(damageValue, collision.bounds.center, rb2d.velocity, repelIntensive, isShellBreaking: isShellBreaking),
+        new DamageInfo(damageValue, collider.bounds.center, rb2d.velocity, repelIntensive, isShellBreaking: isShellBreaking)
+          .setHitCollider(collider),
         SendMessageOptions.DontRequireReceiver);
 
       // show health bar
-      IHealthBarQuery healthBarQuery = collision.gameObject.GetComponent<IHealthBarQuery>();
+      IHealthBarQuery healthBarQuery = collider.gameObject.GetComponent<IHealthBarQuery>();
       if (healthBarQuery != null) {
         SceneConfig.getSceneConfig().GetOpponentHealthBar().ShowForQuery(healthBarQuery);
       } 
@@ -259,7 +260,7 @@ namespace Catsland.Scripts.Bullets {
         if (hitGameObjects == null) {
           hitGameObjects = new HashSet<GameObject>();
         }
-        hitGameObjects.Add(collision.gameObject);
+        hitGameObjects.Add(collider.gameObject);
         StartCoroutine(slowAndResume());
         return;
       }
@@ -304,7 +305,8 @@ namespace Catsland.Scripts.Bullets {
 
       // find the exact hit point
       GameObject attached = Instantiate(attachedArrowPrefab);
-      attached.transform.position = hit.point - new Vector2(attachedPositionOffset * transform.lossyScale.x, 0.0f);
+      attached.transform.position = hit.point; // - new Vector2(attachedPositionOffset * transform.lossyScale.x, 0.0f);
+      attached.transform.rotation = transform.rotation;
       attached.transform.localScale = transform.lossyScale;
       attached.transform.parent = hit.collider.gameObject.transform;
 

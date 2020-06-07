@@ -23,12 +23,7 @@ namespace Catsland.Scripts.Bullets {
 
     public LayerMask includeLayer;
 
-    private PartyTag partyTag;
-
-    private void Start() {
-      partyTag = transform.parent.GetComponent<PartyTag>();
-    }
-
+    public Party.WeaponPartyConfig weaponPartyConfig;
 
     void OnCollisionEnter2D(Collision2D collision) {
       onHit(collision, false);
@@ -61,8 +56,8 @@ namespace Catsland.Scripts.Bullets {
       GameObject collidingGameObject = collider.gameObject;
 
       bool masked = (includeLayer & (1 << collider.gameObject.layer)) == 0x0;
-      PartyTag otherPartyTag = collidingGameObject.GetComponent<PartyTag>();
-      if (!masked && collidingGameObject != owner && PartyTag.ShouldTakeDamage(partyTag, otherPartyTag)) {
+      Party otherParty = collidingGameObject.GetComponent<Party>();
+      if (!masked && collidingGameObject != owner && weaponPartyConfig.shouldHitParty(otherParty)) {
         IMeleeDamageInterceptor interceptor = collidingGameObject.GetComponent<IMeleeDamageInterceptor>();
         if (interceptor == null || interceptor.getMeleeResult().status == MeleeResultStatus.HIT) {
           Vector2 delta = collidingGameObject.transform.position - transform.position;

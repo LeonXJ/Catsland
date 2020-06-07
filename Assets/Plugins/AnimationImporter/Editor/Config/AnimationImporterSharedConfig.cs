@@ -121,7 +121,7 @@ namespace AnimationImporter {
 			set { _animationControllersTargetLocation = value; }
 		}
 
-		private SpriteNamingScheme _spriteNamingScheme = SpriteNamingScheme.Classic;
+		private SpriteNamingScheme _spriteNamingScheme = SpriteNamingScheme.FileAnimationZero;
 		public SpriteNamingScheme spriteNamingScheme
 		{
 			get { return _spriteNamingScheme; }

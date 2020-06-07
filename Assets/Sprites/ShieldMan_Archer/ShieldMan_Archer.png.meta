@@ -1,0 +1,584 @@
+fileFormatVersion: 2
+guid: 4f926acc4b277ca4fb34beb4f1706717
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2288845758592078631
+    second: ShieldMan_Archer_Stand_0
+  - first:
+      213: -8739189393747563634
+    second: ShieldMan_Archer_Stand_1
+  - first:
+      213: 1942789775440650932
+    second: ShieldMan_Archer_Walk_0
+  - first:
+      213: 2689030277299404461
+    second: ShieldMan_Archer_Walk_1
+  - first:
+      213: -5221530094990644971
+    second: ShieldMan_Archer_Walk_2
+  - first:
+      213: 3816874524699245346
+    second: ShieldMan_Archer_Walk_3
+  - first:
+      213: 4759529680659716980
+    second: ShieldMan_Archer_Attack_0
+  - first:
+      213: 7457462889572934894
+    second: ShieldMan_Archer_Attack_1
+  - first:
+      213: 2848999401009435067
+    second: ShieldMan_Archer_Attack_2
+  - first:
+      213: 2647081662336361806
+    second: ShieldMan_Archer_Attack_3
+  - first:
+      213: 2591447734928429453
+    second: ShieldMan_Archer_Unbalance_0
+  - first:
+      213: -7902207224959864319
+    second: ShieldMan_Archer_Unbalance_1
+  - first:
+      213: 435326623360345223
+    second: ShieldMan_Archer_Attack_backup_0
+  - first:
+      213: 7782304297398972058
+    second: ShieldMan_Archer_Die_0
+  - first:
+      213: -6960363233412210404
+    second: ShieldMan_Archer_Die_1
+  - first:
+      213: 8369851713310613165
+    second: ShieldMan_Archer_Die_2
+  - first:
+      213: 8302301393297294845
+    second: ShieldMan_Archer 0
+  - first:
+      213: -2397008286581141490
+    second: ShieldMan_Archer 1
+  - first:
+      213: 4572221242042147668
+    second: ShieldMan_Archer 2
+  - first:
+      213: -7988652774004364979
+    second: ShieldMan_Archer 3
+  - first:
+      213: 5821074415946225790
+    second: ShieldMan_Archer 4
+  - first:
+      213: -377958598469918569
+    second: ShieldMan_Archer 5
+  - first:
+      213: -590204678558883398
+    second: ShieldMan_Archer 6
+  - first:
+      213: 8290631623650677970
+    second: ShieldMan_Archer 7
+  - first:
+      213: -3663589938820874516
+    second: ShieldMan_Archer 8
+  - first:
+      213: -8064897485618293577
+    second: ShieldMan_Archer 9
+  - first:
+      213: 3989136765786163577
+    second: ShieldMan_Archer 10
+  - first:
+      213: -4147447231057373777
+    second: ShieldMan_Archer 11
+  - first:
+      213: -3937561370036895228
+    second: ShieldMan_Archer 12
+  - first:
+      213: -1418066960204556720
+    second: ShieldMan_Archer 13
+  - first:
+      213: -4209956868157219867
+    second: ShieldMan_Archer 14
+  - first:
+      213: -5584379599908801703
+    second: ShieldMan_Archer 15
+  - first:
+      213: -8645284551071902419
+    second: ShieldMan_Archer 16
+  - first:
+      213: 643361711849340366
+    second: ShieldMan_Archer 17
+  - first:
+      213: 1435059344970737881
+    second: ShieldMan_Archer 18
+  - first:
+      213: -5406931619514841163
+    second: ShieldMan_Archer 19
+  - first:
+      213: 7110809749318082551
+    second: ShieldMan_Archer_Attack_4
+  - first:
+      213: -2263249602276748378
+    second: ShieldMan_Archer_Attack_5
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 400
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Stand_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 144
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7235a82371d93cf10800000000000000
+      internalID: 2288845758592078631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Stand_1
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 144
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8ba0d07c8928b680800000000000000
+      internalID: -8739189393747563634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Walk_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 144
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b2a666e10d26fa10800000000000000
+      internalID: 1942789775440650932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Walk_1
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 144
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dae73b44aca515520800000000000000
+      internalID: 2689030277299404461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Walk_2
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 144
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51922102b066987b0800000000000000
+      internalID: -5221530094990644971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Walk_3
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 144
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22bbfe4582348f430800000000000000
+      internalID: 3816874524699245346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Attack_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47b96a9070f3d0240800000000000000
+      internalID: 4759529680659716980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Attack_1
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 96
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee427aa9cfa3e7760800000000000000
+      internalID: 7457462889572934894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Attack_2
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 96
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb1d77e4cdda98720800000000000000
+      internalID: 2848999401009435067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Attack_3
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 96
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e45620f3fb25cb420800000000000000
+      internalID: 2647081662336361806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Attack_4
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 96
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ff1d75dacbaea260800000000000000
+      internalID: 7110809749318082551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Attack_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 48
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a3104a5a725790e0800000000000000
+      internalID: -2263249602276748378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Unbalance_0
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 48
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d81566e1cfba6f320800000000000000
+      internalID: 2591447734928429453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Unbalance_1
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 48
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 102fdb68568b55290800000000000000
+      internalID: -7902207224959864319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Attack_backup_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 784e9aae1479a0600800000000000000
+      internalID: 435326623360345223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Die_0
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9e267ca68c400c60800000000000000
+      internalID: 7782304297398972058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Die_1
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c11a6cc4482d76f90800000000000000
+      internalID: -6960363233412210404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShieldMan_Archer_Die_2
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 80
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: daed292b9cfa72470800000000000000
+      internalID: 8369851713310613165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

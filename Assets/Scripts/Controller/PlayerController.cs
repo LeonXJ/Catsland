@@ -8,12 +8,13 @@ using Catsland.Scripts.Common;
 using Catsland.Scripts.Misc;
 using Catsland.Scripts.Physics;
 using Catsland.Scripts.Fx;
+using IDamageInterceptor = Catsland.Scripts.Bullets.IDamageInterceptor;
 
 namespace Catsland.Scripts.Controller {
 
   [RequireComponent(typeof(IInput))]
   [RequireComponent(typeof(Animator))]
-  public class PlayerController: MonoBehaviour, DustTexture.DustTextureAssignee {
+  public class PlayerController : MonoBehaviour, DustTexture.DustTextureAssignee, IDamageInterceptor{
 
     public float timeScaleChangeSpeed = 1f;
     private GhostSprite ghostSprite;
@@ -98,6 +99,7 @@ namespace Catsland.Scripts.Controller {
 
     // Attack
     [Header("Arrow")]
+    public Party.WeaponPartyConfig weaponPartyConfig;
     public float maxArrowSpeed = 15.0f;
     public float strongArrowSpeed = 30f;
     public float minArrowSpeed = 5.0f;
@@ -860,7 +862,8 @@ namespace Catsland.Scripts.Controller {
       arrowCarrier.fire(
         (getOrientation() > 0f ? arrow.transform.right.normalized : - arrow.transform.right.normalized) * arrowSpeed,
         isStrongArrow ? maxArrowLifetime : quickArrowLifetime,
-        gameObject.tag);
+        gameObject.tag,
+        weaponPartyConfig);
       isShooting = true;
 
       // Bow heat
@@ -981,6 +984,10 @@ namespace Catsland.Scripts.Controller {
         return aimGO.transform.position - transform.position;
       }
       return desireDirection;
+    }
+
+    public ArrowResult getArrowResult(ArrowCarrier arrowCarrier) {
+      return ArrowResult.HIT;
     }
   }
 }

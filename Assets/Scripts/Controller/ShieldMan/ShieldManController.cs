@@ -15,6 +15,7 @@ namespace Catsland.Scripts.Controller.ShieldMan {
     // Animation state names.
     private const string ANI_STAND = "ShieldMan_Stand";
     private const string ANI_WALK = "ShieldMan_Walk";
+    private const string ANI_ATTACK = "ShieldMan_Attack";
 
     // Animation parameters.
     private const string PAR_H_SPEED = "HSpeed";
@@ -103,7 +104,6 @@ namespace Catsland.Scripts.Controller.ShieldMan {
       CircleCollider2D headCollider = GetComponent<CircleCollider2D>();
       bool isCriticalHit = (headCollider != null && damageInfo.hitCollider == headCollider);
       if (isCriticalHit) {
-        Debug.Log("Head shot!");
         currentHp = 0;
       } else {
         currentHp -= damageInfo.damage;
@@ -155,7 +155,7 @@ namespace Catsland.Scripts.Controller.ShieldMan {
       rb2d.AddForce(new Vector2(getOrientation() * dieRepal.x, dieRepal.y));
     }
 
-    private float getOrientation() {
+    public float getOrientation() {
       return transform.lossyScale.x > 0.0f ? 1.0f : -1.0f;
     }
 
@@ -173,12 +173,14 @@ namespace Catsland.Scripts.Controller.ShieldMan {
 
     private bool isDead() => currentHp <= 0;
 
+    private bool isAttacking() => animator.GetCurrentAnimatorStateInfo(0).IsName(ANI_ATTACK);
+
     public ArrowResult getArrowResult(ArrowCarrier arrowCarrier) {
       return isDead() ? ArrowResult.SKIP : ArrowResult.HIT;
     }
 
     public MeleeResult getMeleeResult() {
-      return isDead() ? MeleeResult.VOID : MeleeResult.HIT;
+      return (isDead() || isAttacking()) ? MeleeResult.VOID : MeleeResult.HIT;
     }
 
     public void onShieldDamage(DamageInfo damageInfo) {

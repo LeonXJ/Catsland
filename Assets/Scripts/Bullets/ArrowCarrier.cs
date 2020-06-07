@@ -6,6 +6,7 @@ using Catsland.Scripts.Controller;
 using Catsland.Scripts.Misc;
 using Catsland.Scripts.Physics;
 using Catsland.Scripts.Ui;
+using System.Linq;
 
 namespace Catsland.Scripts.Bullets {
   [RequireComponent(typeof(Rigidbody2D))]
@@ -47,6 +48,9 @@ namespace Catsland.Scripts.Bullets {
     public ParticleSystem[] particleToStopWhenBreak;
 
     public float frezeSpeed = .1f;
+
+    [Header("Party")]
+    public Party.WeaponPartyConfig weaponPartyConfig;
 
     [Header("Effect")]
     public GameObject lightLayer;
@@ -93,8 +97,9 @@ namespace Catsland.Scripts.Bullets {
       }
     }
 
-    public void fire(Vector2 direction, float lifetime, string tagForOwner) {
+    public void fire(Vector2 direction, float lifetime, string tagForOwner, Party.WeaponPartyConfig weaponPartyConfig = null) {
       this.tagForOwner = tagForOwner;
+      this.weaponPartyConfig = weaponPartyConfig;
 
       // velocity and orientation
       rb2d.velocity = direction;
@@ -123,6 +128,15 @@ namespace Catsland.Scripts.Bullets {
 
       // ArrowResult interceptor
       Collider2D collider = hit.collider;
+
+      // Party filter for character
+      if (collider.gameObject.layer == Layers.LayerCharacter && weaponPartyConfig != null) {
+        Party colliderParty = collider.gameObject.GetComponent<Party>();
+        if (colliderParty != null && !weaponPartyConfig.shouldHitParty(colliderParty)) {
+          return false;
+        }
+      }
+
       IDamageInterceptor interceptor = hit.collider.gameObject.GetComponent<IDamageInterceptor>();
       if (interceptor != null) {
         ArrowResult result = interceptor.getArrowResult(this);
@@ -221,11 +235,15 @@ namespace Catsland.Scripts.Bullets {
       // stop particle and flame
       GetComponent<SmallCombustable>()?.exstinguish();
 
-      foreach (SpriteRenderer spriteRenderer in spriteRendererToStopWhenBreak) {
-        spriteRenderer.enabled = false;
+      if (spriteRendererToStopWhenBreak != null) {
+        foreach (SpriteRenderer spriteRenderer in spriteRendererToStopWhenBreak) {
+          spriteRenderer.enabled = false;
+        }
       }
-      foreach (ParticleSystem particleSystem in particleToStopWhenBreak) {
-        particleSystem.Stop(true);
+      if (particleToStopWhenBreak != null) {
+        foreach (ParticleSystem particleSystem in particleToStopWhenBreak) {
+          particleSystem.Stop(true);
+        }
       }
 
       if (gameObject != null) {
@@ -311,7 +329,7 @@ namespace Catsland.Scripts.Bullets {
       attached.transform.parent = hit.collider.gameObject.transform;
 
       RelayPoint relay = attached.GetComponent<RelayPoint>();
-      relay.HideCircle();
+      relay?.HideCircle();
 
       transferFlame(attached);
 
@@ -345,6 +363,7 @@ namespace Catsland.Scripts.Bullets {
       // delay self-destory
       StartCoroutine(safeDestroy());
     }
+
 
     private void transferFlame(GameObject newGO) {
       Flame flame = GetComponentInChildren<Flame>();

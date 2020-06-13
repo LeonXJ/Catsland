@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Catsland.Scripts.Bullets;
+using UnityEngine.Rendering.Universal.Internal;
 
 namespace Catsland.Scripts.Controller {
   public static class ControllerUtils {
@@ -33,5 +34,37 @@ namespace Catsland.Scripts.Controller {
       }
       return defaultStatus;
     }
+
+    public static void ApplyHorizontalVelocity(Rigidbody2D rb2d, float inputVelocity, float acceleration, float maxSpeed) {
+      if (Mathf.Abs(inputVelocity) > Mathf.Epsilon) {
+        rb2d.AddForce(new Vector2(acceleration * inputVelocity, 0f));
+        rb2d.velocity = new Vector2(Mathf.Clamp(rb2d.velocity.x, -maxSpeed, maxSpeed), rb2d.velocity.y);
+      } else {
+        rb2d.velocity = new Vector2(0f, rb2d.velocity.y);
+      }
+    }
+
+    public static IEnumerator freezeThen(
+      Transform transform,
+      Rigidbody2D rb2d,
+      Animator animator,
+      float freezeTime,
+      Vector2 velocityDuringFreeze,
+      Vector2 velocityAfterFreeze) {
+
+      rb2d.velocity = velocityDuringFreeze;
+      rb2d.bodyType = RigidbodyType2D.Kinematic;
+      animator.speed = 0f;
+      transform.DOShakePosition(freezeTime, .15f, 30, 120);
+      yield return new WaitForSeconds(freezeTime);
+
+      animator.speed = 1f;
+      rb2d.bodyType = RigidbodyType2D.Dynamic;
+
+      Utils.ApplyVelocityRepel(velocityAfterFreeze, rb2d);
+    }
+
+
+
   }
 }

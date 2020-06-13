@@ -118,6 +118,7 @@ namespace Catsland.Scripts.Sound {
 
       if (!primary.IsPlaying()) {
         primary.audioSource.clip = sound.GetAudioClip();
+        primary.audioSource.loop = loop;
         primary.StartTransition(1f, inTransitionInS, inOffsetInS);
         return;
       }
@@ -129,6 +130,7 @@ namespace Catsland.Scripts.Sound {
         mainSource = 1 - mainSource;
         primary.StartTransition(0f, outTransitionInS, /*offsetInS=*/ 0f, /*resetVolume=*/ false);
         secondary.audioSource.clip = sound.GetAudioClip();
+        secondary.audioSource.loop = loop;
         secondary.StartTransition(1f, inTransitionInS, inOffsetInS);
       }
     }

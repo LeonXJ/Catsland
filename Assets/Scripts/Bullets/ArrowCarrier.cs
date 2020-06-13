@@ -380,6 +380,7 @@ namespace Catsland.Scripts.Bullets {
 
       ParticleSystem particleSystem = hitEffectGo.GetComponent<ParticleSystem>();
       particleSystem.Play();
+
       return particleSystem;
     }
   }

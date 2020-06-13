@@ -124,7 +124,7 @@
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Xbox One",
+                    "groups": "Xbox One;PS4",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -146,7 +146,7 @@
                     "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Xbox One",
+                    "groups": "Xbox One;PS4",
                     "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -168,7 +168,7 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Xbox One",
+                    "groups": "Xbox One;PS4",
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -190,7 +190,7 @@
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "Press",
                     "processors": "",
-                    "groups": "Xbox One",
+                    "groups": "Xbox One;PS4",
                     "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -212,7 +212,7 @@
                     "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Xbox One",
+                    "groups": "Xbox One;PS4",
                     "action": "Focus",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -223,7 +223,7 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Xbox One",
+                    "groups": "Xbox One;PS4",
                     "action": "JumpHigher",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -256,7 +256,7 @@
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Xbox One",
+                    "groups": "Xbox One;PS4",
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -309,6 +309,17 @@
             "devices": [
                 {
                     "devicePath": "<XboxOneGampadiOS>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "PS4",
+            "bindingGroup": "PS4",
+            "devices": [
+                {
+                    "devicePath": "<DualShockGamepad>",
                     "isOptional": false,
                     "isOR": false
                 }

@@ -68,6 +68,9 @@ namespace Catsland.Scripts.Controller.ShieldMan {
       // Movement
       float inputHVelocity = input.getHorizontal();
       if (canWalk()) {
+        ControllerUtils.ApplyHorizontalVelocity(rb2d, inputHVelocity, walkAcceleration, walkSpeed);
+
+
         if (inputHVelocity * inputHVelocity > Mathf.Epsilon) {
           rb2d.AddForce(new Vector2(walkAcceleration * inputHVelocity, 0.0f));
           rb2d.velocity = new Vector2(Mathf.Clamp(rb2d.velocity.x, -walkSpeed, walkSpeed), rb2d.velocity.y);
@@ -113,10 +116,7 @@ namespace Catsland.Scripts.Controller.ShieldMan {
         return;
       }
 
-      StartCoroutine(freezeThen(frezeTime, damageInfo));
-    }
-
-    private IEnumerator freezeThen(float time, DamageInfo damageInfo) {
+      // Repel speed
       float repelSpeed = arrowRepelSpeed;
       if (damageInfo.isDash) {
         repelSpeed = dashRepelSpeed;
@@ -126,17 +126,13 @@ namespace Catsland.Scripts.Controller.ShieldMan {
         unbalanceRemainingTime = unbalanceTime;
       }
 
-      rb2d.velocity = new Vector2(-Mathf.Sign(damageInfo.repelDirection.x) * repelSpeed * 0.5f, rb2d.velocity.y);
-      rb2d.bodyType = RigidbodyType2D.Kinematic;
-      animator.speed = 0f;
-
-      transform.DOShakePosition(time, .15f, 30, 120);
-
-      yield return new WaitForSeconds(time);
-
-      animator.speed = 1f;
-      rb2d.bodyType = RigidbodyType2D.Dynamic;
-      Bullets.Utils.ApplyVelocityRepel(damageInfo.repelDirection.normalized * repelSpeed, rb2d);
+      StartCoroutine(ControllerUtils.freezeThen(
+        transform,
+        rb2d,
+        animator,
+        frezeTime,
+        new Vector2(-Mathf.Sign(damageInfo.repelDirection.x) * repelSpeed * .5f, rb2d.velocity.y),
+        damageInfo.repelDirection.normalized * repelSpeed));
     }
 
     public void generateDieEffect() {

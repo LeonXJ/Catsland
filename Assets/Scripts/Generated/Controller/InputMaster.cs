@@ -139,7 +139,7 @@ namespace Catsland.Scripts.Controller
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Xbox One"",
+                    ""groups"": ""Xbox One;PS4"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -161,7 +161,7 @@ namespace Catsland.Scripts.Controller
                     ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Xbox One"",
+                    ""groups"": ""Xbox One;PS4"",
                     ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -183,7 +183,7 @@ namespace Catsland.Scripts.Controller
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Xbox One"",
+                    ""groups"": ""Xbox One;PS4"",
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -205,7 +205,7 @@ namespace Catsland.Scripts.Controller
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": ""Press"",
                     ""processors"": """",
-                    ""groups"": ""Xbox One"",
+                    ""groups"": ""Xbox One;PS4"",
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -227,7 +227,7 @@ namespace Catsland.Scripts.Controller
                     ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Xbox One"",
+                    ""groups"": ""Xbox One;PS4"",
                     ""action"": ""Focus"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -238,7 +238,7 @@ namespace Catsland.Scripts.Controller
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Xbox One"",
+                    ""groups"": ""Xbox One;PS4"",
                     ""action"": ""JumpHigher"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -271,7 +271,7 @@ namespace Catsland.Scripts.Controller
                     ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Xbox One"",
+                    ""groups"": ""Xbox One;PS4"",
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -324,6 +324,17 @@ namespace Catsland.Scripts.Controller
             ""devices"": [
                 {
                     ""devicePath"": ""<XboxOneGampadiOS>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""PS4"",
+            ""bindingGroup"": ""PS4"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<DualShockGamepad>"",
                     ""isOptional"": false,
                     ""isOR"": false
                 }
@@ -518,6 +529,15 @@ namespace Catsland.Scripts.Controller
             {
                 if (m_XboxOneSchemeIndex == -1) m_XboxOneSchemeIndex = asset.FindControlSchemeIndex("Xbox One");
                 return asset.controlSchemes[m_XboxOneSchemeIndex];
+            }
+        }
+        private int m_PS4SchemeIndex = -1;
+        public InputControlScheme PS4Scheme
+        {
+            get
+            {
+                if (m_PS4SchemeIndex == -1) m_PS4SchemeIndex = asset.FindControlSchemeIndex("PS4");
+                return asset.controlSchemes[m_PS4SchemeIndex];
             }
         }
         public interface IGeneralActions

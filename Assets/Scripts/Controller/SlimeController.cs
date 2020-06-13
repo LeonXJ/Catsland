@@ -16,24 +16,28 @@ namespace Catsland.Scripts.Controller {
       bool wantGenerateShield();
     }
 
-    public Vector2 jumpForce = new Vector2(1.0f, 1.0f);
-    public float jumpInternalInS = 1.0f;
-
-    public TriggerBasedSensor groundSensor;
-    public float frezeTimeInS = .2f;
+    [Header("Common")]
     public string displayName = "Slime";
 
+    [Header("Movement")]
+    public Vector2 jumpForce = new Vector2(1.0f, 1.0f);
+    public float jumpInternal = 1f;
     public GameObject dustPrefab;
     public Transform dustPosition;
     public float heightToGenerateDust = 5f;
+    public GameObject dieEffectPrefab;
+
     private float maxInAirHeight = 0f;
 
+    [Header("OnDamage")]
+    public float frezeTimeInS = .2f;
     public float knockRepelSpeed = 6f;
     public float hitRepelSpeed = 2f;
     public float StrongHitRepelSpeed = 4f;
     public bool canBeKnockback = true;
 
-    public GameObject dieEffectPrefab;
+    [Header("Component")]
+    public TriggerBasedSensor groundSensor;
 
     public int maxHp = 3;
     private int currentHp;
@@ -80,8 +84,6 @@ namespace Catsland.Scripts.Controller {
     // Update is called once per frame
     void Update() {
       currentState = animator.GetCurrentAnimatorStateInfo(0);
-
-
       if (CanMove()) {
         float wantHorizontal = input.getHorizontal();
         if (Mathf.Abs(wantHorizontal) > 0.1f) {
@@ -130,7 +132,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     public bool CanMove() {
-      return currentState.IsName(STATUS_IDEAL) && (Time.time - lastJumpTime > jumpInternalInS) && !isGeneratingShield;
+      return currentState.IsName(STATUS_IDEAL) && (Time.time - lastJumpTime > jumpInternal) && !isGeneratingShield;
     }
 
     private void Jump(float horizontalSpeed) {

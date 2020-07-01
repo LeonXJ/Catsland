@@ -7,6 +7,7 @@ using Catsland.Scripts.Misc;
 using Catsland.Scripts.Physics;
 using Catsland.Scripts.Ui;
 using System.Linq;
+using Catsland.Scripts.Bullets.Arrow;
 
 namespace Catsland.Scripts.Bullets {
   [RequireComponent(typeof(Rigidbody2D))]
@@ -48,6 +49,7 @@ namespace Catsland.Scripts.Bullets {
     public ParticleSystem[] particleToStopWhenBreak;
 
     public float frezeSpeed = .1f;
+    public float arrowHitMoveableObjectForce = 200f;
 
     [Header("Party")]
     public Party.WeaponPartyConfig weaponPartyConfig;
@@ -70,11 +72,13 @@ namespace Catsland.Scripts.Bullets {
     private AudioSource audioSource;
 
     private Vector3 lastTailPosition;
+    private Arrow.Rope rope;
 
     public void Awake() {
       rb2d = GetComponent<Rigidbody2D>();
       spriteRenderer = GetComponent<SpriteRenderer>();
       collider2d = GetComponent<Collider2D>();
+      rope = GetComponentInChildren<Arrow.Rope>();
     }
 
     public void Start() {
@@ -321,6 +325,12 @@ namespace Catsland.Scripts.Bullets {
       // This is necessray because another update cycle can happen before self-destroy.
       status = ArrowStatus.Attached;
 
+      // Apply a force to the hit object.
+      Rigidbody2D hitRb2d = hit.collider.gameObject.GetComponent<Rigidbody2D>();
+      if (hitRb2d != null) {
+        hitRb2d.AddForceAtPosition(arrowHitMoveableObjectForce * transform.right, hit.point);
+      }
+      
       // find the exact hit point
       GameObject attached = Instantiate(attachedArrowPrefab);
       attached.transform.position = hit.point; // - new Vector2(attachedPositionOffset * transform.lossyScale.x, 0.0f);
@@ -332,6 +342,12 @@ namespace Catsland.Scripts.Bullets {
       relay?.HideCircle();
 
       transferFlame(attached);
+
+      if (rope != null) {
+        rope.transform.parent = attached.transform;
+        rope.setAttachedPhysicsGo(hit.collider.gameObject);
+        rope.startEffect();
+      }
 
       StartCoroutine(safeDestroy());
     }

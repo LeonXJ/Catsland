@@ -138,7 +138,7 @@ namespace Catsland.Scripts.Controller
                     ""id"": ""cf870307-e02e-4ef3-985d-3bc3e6289d2d"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone"",
                     ""groups"": ""Xbox One;PS4"",
                     ""action"": ""Move"",
                     ""isComposite"": false,

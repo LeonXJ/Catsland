@@ -1,0 +1,28 @@
+*Changelog:
+
+ v2.0
+ More Trees
+ More customizable
+
+
+ v2.1
+ More customizable tileset
+ More Backgrounds
+
+ v2.2
+ Added contact.txt
+ Added a tileset preview.
+
+ v2.2
+ Added readme.txt
+ Added changelog.txt (This file!)
+ Added lisense.txt
+
+ v2.3
+ Bush tree.png modified to have a better space between the bushes
+ Added Tiles configuration, tiles is a special feature in Unity
+ Added Tiles folder that contains all the tiles packages
+ Modified the demo scene in Unity, now is made all using the tiles feature
+ 
+
+

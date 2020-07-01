@@ -9,6 +9,7 @@ using Catsland.Scripts.Misc;
 using Catsland.Scripts.Physics;
 using Catsland.Scripts.Fx;
 using IDamageInterceptor = Catsland.Scripts.Bullets.IDamageInterceptor;
+using Catsland.Scripts.Bullets.Arrow;
 
 namespace Catsland.Scripts.Controller {
 
@@ -43,6 +44,7 @@ namespace Catsland.Scripts.Controller {
     public Sound.Sound jumpSound;
     public Sound.Sound landSoftSound;
     public AudioSource jumpAudioSource;
+    public float leaveGroundGracePeroid = .1f;
 
     public float cliffJumpGravatyScale = 0.5f;
     public float cliffJumpTime = 0.5f;
@@ -96,6 +98,7 @@ namespace Catsland.Scripts.Controller {
 
     public float smashMinSpeed = 1.0f;
     private bool isLastUpdateOnGround = false;
+    private float lastOnGroundTimestamp = 0f;
 
     // Attack
     [Header("Arrow")]
@@ -139,6 +142,13 @@ namespace Catsland.Scripts.Controller {
 
     public float shootingCooldownSeconds = .5f;
     private float shootingCooldownRemainSeconds = 0f;
+
+    // Experimental
+    public bool isRopeArrow = true;
+    public GameObject ropeArrowPrefab;
+    public float ropeForceApplyTime = 0.4f;
+    public Transform arrowRopeAttachPoint;
+    private bool hasRopeLinked = false;
     
     private bool isDrawing = false;
     private bool isShooting = false;
@@ -160,6 +170,8 @@ namespace Catsland.Scripts.Controller {
     public AudioSource damageAudioSource;
     public Sound.Sound damageSound;
 
+
+    private float ropeForceRemaining = 0f;
 
     private bool isDizzy = false;
     private float lastGetDamagedTime = 0.0f;
@@ -258,6 +270,10 @@ namespace Catsland.Scripts.Controller {
       float currentVerticleVolocity = rb2d.velocity.y;
       Vector2 appliedForce = Vector2.zero;
 
+      if (ropeForceRemaining > 0f) {
+        ropeForceRemaining -= Time.deltaTime;
+      }
+
       // Relay point update
       updateNearestRelayPoint();
 
@@ -308,7 +324,9 @@ namespace Catsland.Scripts.Controller {
           trailIndicator.initVelocity = new Vector2(velocity, 0.0f);
         }
         // direction
-        Vector2 desiredDirection = new Vector2(input.getHorizontal(), input.getVertical());
+        Vector2 desiredDirection = input.timeSlow()
+          ? new Vector2(input.getHorizontal(), input.getVertical())
+          : new Vector2(getOrientation(), 0f);
         if (desiredDirection.sqrMagnitude < Mathf.Epsilon) {
           desiredDirection = new Vector2(getOrientation(), 0f);
         }
@@ -329,7 +347,7 @@ namespace Catsland.Scripts.Controller {
       // Movement
       // vertical movement
       bool isCrouching = false;
-      if(groundSensor.isStay() && !isDizzy && !input.meditation() && !isCliffJumping()) {
+      if(canNormalJump()) {
         remainingDash = 1;
         // The following code enable one-side platform jump down. However, it creates the 
         // odds that if player unintentionally press down and jump, the player cannot jump up.
@@ -550,7 +568,7 @@ namespace Catsland.Scripts.Controller {
       }
 
       if(!isDashing() && !isDashKnockingBack()) {
-        if(!isDizzy && !input.meditation() && !isCliffJumping()) {
+        if(!isDizzy && !input.meditation() && !isCliffJumping() && !isApplyingRopeForce()) {
           if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon
             && (!groundSensor.isStay() || !isInDrawingCycle())) {
             rb2d.AddForce(new Vector2(acceleration * desiredSpeed, 0.0f));
@@ -658,6 +676,19 @@ namespace Catsland.Scripts.Controller {
       debugDrawAimDirection();
 
       isLastUpdateOnGround = groundSensor.isStay();
+      if (isLastUpdateOnGround) {
+        lastOnGroundTimestamp = Time.time;
+      }
+    }
+
+    private bool canNormalJump()
+      => (groundSensor.isStay() || (Time.time - lastOnGroundTimestamp) < leaveGroundGracePeroid)
+        && !isDizzy && !input.meditation() && !isCliffJumping();
+
+    private bool isApplyingRopeForce() => ropeForceRemaining > 0f;
+
+    public void applyRopeForce(Vector2 force) {
+      ropeForceRemaining = ropeForceApplyTime;
     }
 
     private void ReleaseSmashEffect() {
@@ -841,14 +872,20 @@ namespace Catsland.Scripts.Controller {
       float drawingRatio =
         Mathf.Clamp(currentDrawingTime, 0.0f, maxDrawingTime) / maxDrawingTime;
       bool isStrongArrow = drawingRatio > strongArrowDrawingRatio;
+
       GameObject arrow = Instantiate(
-        isStrongArrow ? strongArrowPrefab : arrowPrefab,
+        isStrongArrow ? (isRopeArrow ? ropeArrowPrefab : strongArrowPrefab) : arrowPrefab,
         shootPoint.position + Vector3.forward * 0.1f, Quaternion.Euler(shootDirection));
 
       // Set arrow 
       TrailRenderer trailRenderer = arrow.GetComponentInChildren<TrailRenderer>();
       trailRenderer.time = Mathf.Lerp(minTrailTime, maxTrailTime, getDrawIntensity());
       ArrowCarrier arrowCarrier = arrow.GetComponent<ArrowCarrier>();
+
+      if (isRopeArrow && isStrongArrow) {
+        Bullets.Arrow.Rope rope = arrow.GetComponentInChildren<Bullets.Arrow.Rope>();
+        rope.onShoot(arrowRopeAttachPoint, this.gameObject, rope.gameObject.transform, null);
+      }
 
       arrowCarrier.SetIsShellBreaking(isStrongArrow);
       arrowCarrier.repelIntensive = isStrongArrow ? maxRepelForce : quickRepelForce;

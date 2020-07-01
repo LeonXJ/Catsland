@@ -15,7 +15,7 @@ namespace Catsland.Scripts.Controller {
 
   [RequireComponent(typeof(IInput))]
   [RequireComponent(typeof(Animator))]
-  public class PlayerController : MonoBehaviour, DustTexture.DustTextureAssignee, IDamageInterceptor{
+  public class PlayerController : MonoBehaviour, DustTexture.DustTextureAssignee, IDamageInterceptor {
 
     public float timeScaleChangeSpeed = 1f;
     private GhostSprite ghostSprite;
@@ -149,7 +149,7 @@ namespace Catsland.Scripts.Controller {
     public float ropeForceApplyTime = 0.4f;
     public Transform arrowRopeAttachPoint;
     private bool hasRopeLinked = false;
-    
+
     private bool isDrawing = false;
     private bool isShooting = false;
     // TODO: hide after debug
@@ -278,10 +278,10 @@ namespace Catsland.Scripts.Controller {
       updateNearestRelayPoint();
 
       // Cooldown
-      if(dashCooldownRemaining > 0.0f) {
+      if (dashCooldownRemaining > 0.0f) {
         dashCooldownRemaining -= Time.deltaTime;
       }
-      if(!input.meditation()) {
+      if (!input.meditation()) {
         currentSense = Mathf.Max(currentSense - senseIncreaseSpeed * Time.deltaTime, 0.0f);
       }
       if (currentBowHeat > 0f) {
@@ -295,14 +295,14 @@ namespace Catsland.Scripts.Controller {
       // Draw and shoot 
       AnimatorStateInfo upperBodySpriteLayerState = animator.GetCurrentAnimatorStateInfo(2);
       bool currentIsDrawing =
-        (input.attack() || (currentDrawingTime > 0f && currentDrawingTime < minDrawingTime) 
+        (input.attack() || (currentDrawingTime > 0f && currentDrawingTime < minDrawingTime)
           || upperBodySpriteLayerState.IsName(PREPARING_STATE_NAME)
           || upperBodySpriteLayerState.IsName(FAST_RELOAD_STATE_NAME))
         && !isShooting && !isDizzy && !isDashing() && !input.meditation() && !isCliffJumping() && !isCliffSliding
         && (shootingCooldownRemainSeconds < Mathf.Epsilon || rapidShootRemain > 0);
 
       // Shoot if string is released
-      if(isDrawing && !currentIsDrawing && !isDizzy && !isCliffJumping() && !isCliffSliding) {
+      if (isDrawing && !currentIsDrawing && !isDizzy && !isCliffJumping() && !isCliffSliding) {
         StartCoroutine(shoot());
       }
       // clear up shoot direction.
@@ -311,17 +311,21 @@ namespace Catsland.Scripts.Controller {
         shootDirectionAngle = 0f;
       }
       // Set drawing time
-      if(currentIsDrawing) {
+      if (currentIsDrawing) {
         // Do not accumulate time in preparing state: PREPARING_STATE_NAME and FAST_RELOAD_STATE_NAME
         if (upperBodySpriteLayerState.IsName(DRAWING_STATE_NAME)) {
           // Use unscaled time so the player gains extra time during time slow.
           currentDrawingTime += Time.unscaledDeltaTime;
         }
         // render indicator
-        if(trailIndicator != null) {
-          float velocity = Mathf.Lerp(minArrowSpeed, maxArrowSpeed, getDrawIntensity());
-          trailIndicator.isShow = true;
-          trailIndicator.initVelocity = new Vector2(velocity, 0.0f);
+        if (trailIndicator != null) {
+          if (input.timeSlow()) {
+            float velocity = Mathf.Lerp(minArrowSpeed, maxArrowSpeed, getDrawIntensity());
+            trailIndicator.isShow = true;
+            trailIndicator.initVelocity = new Vector2(velocity, 0.0f);
+          } else {
+            trailIndicator.isShow = false;
+          }
         }
         // direction
         Vector2 desiredDirection = input.timeSlow()
@@ -338,7 +342,7 @@ namespace Catsland.Scripts.Controller {
         }
       } else {
         currentDrawingTime = 0.0f;
-        if(trailIndicator != null) {
+        if (trailIndicator != null) {
           trailIndicator.isShow = false;
         }
       }
@@ -347,7 +351,7 @@ namespace Catsland.Scripts.Controller {
       // Movement
       // vertical movement
       bool isCrouching = false;
-      if(canNormalJump()) {
+      if (canNormalJump()) {
         remainingDash = 1;
         // The following code enable one-side platform jump down. However, it creates the 
         // odds that if player unintentionally press down and jump, the player cannot jump up.
@@ -378,7 +382,7 @@ namespace Catsland.Scripts.Controller {
       }
 
       // Relay jump
-      if(!isDizzy
+      if (!isDizzy
         && !groundSensor.isStay()
         && canRelay()
         && !isCliffJumping()
@@ -454,7 +458,7 @@ namespace Catsland.Scripts.Controller {
       // Cliff jump / sliding
       float topFallingSpeed = maxFallingSpeed;
       isCliffSliding = false;
-      if(!groundSensor.isStay() && !isDizzy && !isCliffJumping()) {
+      if (!groundSensor.isStay() && !isDizzy && !isCliffJumping()) {
         // cliff jump
         bool canJumpFront = backSensor.isStay();
         bool canJumpBack = frontSensor.isStay();
@@ -488,23 +492,23 @@ namespace Catsland.Scripts.Controller {
           Common.Utils.setRelativeRenderLayer(
             spriteRenderer, cliffJumpEffect.GetComponentInChildren<SpriteRenderer>(), 1);
         } else if ((canJumpBack || canJumpFront) && canCliffJump && getOrientation() * desiredSpeed > 0f) {
-            topFallingSpeed = cliffSlidingSpeed;
-            isCliffSliding = true;
+          topFallingSpeed = cliffSlidingSpeed;
+          isCliffSliding = true;
         }
       }
 
       // Dash
-      if(isDizzy && isDashing()) {
+      if (isDizzy && isDashing()) {
         exitDash();
       }
-      if(!isDizzy && !input.meditation() && !isCliffJumping()) {
-        if(isDashing()) {
+      if (!isDizzy && !input.meditation() && !isCliffJumping()) {
+        if (isDashing()) {
           dashRemainingTime -= Time.deltaTime;
-          if(dashRemainingTime < 0.0f) {
+          if (dashRemainingTime < 0.0f) {
             // exit dash
             exitDash();
           }
-        } else if(input.dash() && canDash(isCliffSliding)) {
+        } else if (input.dash() && canDash(isCliffSliding)) {
           // enter dash
 
           dashSound?.Play(dashAudioSource);
@@ -527,13 +531,13 @@ namespace Catsland.Scripts.Controller {
 
       // meditation
       isMeditation = false;
-      if(!isDizzy && groundSensor.isStay() && input.meditation()) {
+      if (!isDizzy && groundSensor.isStay() && input.meditation()) {
         currentSense = Mathf.Min(maxSenseAdd, currentSense + senseIncreaseSpeed * Time.deltaTime);
         isMeditation = true;
       }
 
       // smash
-      if(!isDizzy &&
+      if (!isDizzy &&
         !isLastUpdateOnGround &&
         groundSensor.isStay() &&
         rb2d.velocity.y < -smashMinSpeed &&
@@ -558,7 +562,7 @@ namespace Catsland.Scripts.Controller {
       GameObject currentGround = groundSensor.isStay() ? Common.Utils.getAnyFrom(groundSensor.getTriggerGos()) : null;
       if (currentGround != previousParentGameObject) {
         previousParentGameObject = currentGround;
-      } else if (currentGround != null){
+      } else if (currentGround != null) {
         // else move with the ground
         Vector3 deltaGroundPosition = currentGround.transform.position - previousParentPosition;
         gameObject.transform.position += new Vector3(deltaGroundPosition.x, deltaGroundPosition.y);
@@ -567,9 +571,9 @@ namespace Catsland.Scripts.Controller {
         previousParentPosition = currentGround.transform.position;
       }
 
-      if(!isDashing() && !isDashKnockingBack()) {
-        if(!isDizzy && !input.meditation() && !isCliffJumping() && !isApplyingRopeForce()) {
-          if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon
+      if (!isDashing() && !isDashKnockingBack()) {
+        if (!isDizzy && !input.meditation() && !isCliffJumping() && !isApplyingRopeForce()) {
+          if (Mathf.Abs(desiredSpeed) > Mathf.Epsilon
             && (!groundSensor.isStay() || !isInDrawingCycle())) {
             rb2d.AddForce(new Vector2(acceleration * desiredSpeed, 0.0f));
             float maxHorizontalSpeed = isCrouching ? maxCrouchSpeed : maxRunningSpeed;
@@ -593,7 +597,7 @@ namespace Catsland.Scripts.Controller {
       rb2d.AddForce(appliedForce);
 
       // Update orientation
-      if(Mathf.Abs(desiredSpeed) > Mathf.Epsilon
+      if (Mathf.Abs(desiredSpeed) > Mathf.Epsilon
         && !isDizzy
         && !isCliffJumping()
         && !input.meditation()
@@ -601,18 +605,18 @@ namespace Catsland.Scripts.Controller {
         && !isDashKnockingBack()) {
         float parentLossyScale = gameObject.transform.parent != null
             ? gameObject.transform.parent.lossyScale.x : 1.0f;
-        if(desiredSpeed * parentLossyScale > 0.0f) {
+        if (desiredSpeed * parentLossyScale > 0.0f) {
           transform.localScale = new Vector3(
             Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
-        if(desiredSpeed * parentLossyScale < 0.0f) {
+        if (desiredSpeed * parentLossyScale < 0.0f) {
           transform.localScale = new Vector3(
             -Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
       }
 
       // limit falling speed
-      if(rb2d.velocity.y < 0.0f) {
+      if (rb2d.velocity.y < 0.0f) {
         rb2d.velocity = new Vector2(rb2d.velocity.x, Mathf.Max(rb2d.velocity.y, -topFallingSpeed));
       }
 
@@ -653,7 +657,7 @@ namespace Catsland.Scripts.Controller {
       }
       // land dust effect 
       if (!isLastUpdateOnGround && groundSensor.isStay()) {
-          generateDust();
+        generateDust();
       }
 
       GameObject currentGroundObject = null;
@@ -711,7 +715,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void damage(DamageInfo damageInfo) {
-      if(Time.time - lastGetDamagedTime < immutableTime) {
+      if (Time.time - lastGetDamagedTime < immutableTime) {
         return;
       }
 
@@ -722,7 +726,7 @@ namespace Catsland.Scripts.Controller {
       lastGetDamagedTime = Time.time;
       StartCoroutine(Bullets.Utils.ApplyVelocityRepel(damageInfo, rb2d, dizzyTime));
       currentHealth -= damageInfo.damage;
-      if(currentHealth <= 0) {
+      if (currentHealth <= 0) {
         // Die
         Common.SceneConfig.getSceneConfig().getProgressManager().Load();
       } else {
@@ -809,8 +813,8 @@ namespace Catsland.Scripts.Controller {
     }
 
     private bool isAllOneSide(HashSet<GameObject> gameObjects) {
-      foreach(GameObject gameObject in gameObjects) {
-        if(!gameObject.CompareTag(Common.Tags.ONESIDE)) {
+      foreach (GameObject gameObject in gameObjects) {
+        if (!gameObject.CompareTag(Common.Tags.ONESIDE)) {
           return false;
         }
       }
@@ -897,7 +901,7 @@ namespace Catsland.Scripts.Controller {
       float arrowSpeed = isStrongArrow ? strongArrowSpeed : maxArrowSpeed;
 
       arrowCarrier.fire(
-        (getOrientation() > 0f ? arrow.transform.right.normalized : - arrow.transform.right.normalized) * arrowSpeed,
+        (getOrientation() > 0f ? arrow.transform.right.normalized : -arrow.transform.right.normalized) * arrowSpeed,
         isStrongArrow ? maxArrowLifetime : quickArrowLifetime,
         gameObject.tag,
         weaponPartyConfig);
@@ -928,7 +932,7 @@ namespace Catsland.Scripts.Controller {
 
     private IEnumerator jumpDown(HashSet<GameObject> onesideGos) {
       List<GameObject> disabledColliders = new List<GameObject>(onesideGos);
-      foreach(GameObject gameObject in disabledColliders) {
+      foreach (GameObject gameObject in disabledColliders) {
         Collider2D collider = gameObject.GetComponent<Collider2D>();
         collider.enabled = false;
       }
@@ -983,7 +987,7 @@ namespace Catsland.Scripts.Controller {
       Debug.DrawLine(shootPoint.transform.position, shootPoint.transform.position + aimDirection * 10f, Color.red);
     }
 
-    private Vector3 aimDirection =>  (getOrientation() > 0f ? 1f : -1f) * shootPoint.transform.right;
+    private Vector3 aimDirection => (getOrientation() > 0f ? 1f : -1f) * shootPoint.transform.right;
 
     private Vector2 autoAim(Vector2 desireDirection) {
       // TODO: Experimental
@@ -997,7 +1001,7 @@ namespace Catsland.Scripts.Controller {
       foreach (Collider2D collider2d in
         Physics2D.OverlapCircleAll(shootPoint.transform.position, autoAimDetectRadius)) {
 
-        if (collider2d.gameObject.CompareTag(Tags.PLAYER) 
+        if (collider2d.gameObject.CompareTag(Tags.PLAYER)
           || (collider2d.gameObject.transform.parent != null && collider2d.gameObject.transform.parent.CompareTag(Tags.PLAYER))) {
           continue;
         }

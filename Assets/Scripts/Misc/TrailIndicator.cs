@@ -27,7 +27,7 @@ namespace Catsland.Scripts.Misc {
         alpha,
         isShow ? maxAlpha : 0.0f,
         Time.deltaTime * (isShow ? showTransitSpeed : hideTransitSpeed));
-      lineRenderer.material.SetColor("_TintColor", new Color(1.0f, 1.0f, 1.0f, alpha));
+      lineRenderer.material.SetColor(Common.Materials.MATERIAL_ATTRIBUTE_TINT, new Color(1.0f, 1.0f, 1.0f, alpha));
 
       if(alpha > Mathf.Epsilon) {
         int pointCount = lineRenderer.positionCount;

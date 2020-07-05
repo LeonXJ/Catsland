@@ -891,6 +891,7 @@ namespace Catsland.Scripts.Controller {
         rope.onShoot(arrowRopeAttachPoint, this.gameObject, rope.gameObject.transform, null);
       }
 
+      arrowCarrier.arrowHitMoveableObjectForce = isStrongArrow ? 1000f : 200f;
       arrowCarrier.SetIsShellBreaking(isStrongArrow);
       arrowCarrier.repelIntensive = isStrongArrow ? maxRepelForce : quickRepelForce;
 

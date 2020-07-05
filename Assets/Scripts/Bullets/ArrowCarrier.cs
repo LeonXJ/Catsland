@@ -328,7 +328,7 @@ namespace Catsland.Scripts.Bullets {
       // Apply a force to the hit object.
       Rigidbody2D hitRb2d = hit.collider.gameObject.GetComponent<Rigidbody2D>();
       if (hitRb2d != null) {
-        hitRb2d.AddForceAtPosition(arrowHitMoveableObjectForce * transform.right, hit.point);
+        hitRb2d.AddForceAtPosition(arrowHitMoveableObjectForce * rb2d.velocity.normalized, hit.point);
       }
       
       // find the exact hit point

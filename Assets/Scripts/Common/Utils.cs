@@ -15,6 +15,10 @@ namespace Catsland.Scripts.Common {
       subRenderer.sortingOrder = mainRenderer.sortingOrder + offset;
     }
 
+    public static Vector3 overrideXy(Vector3 original, Vector3 other) {
+      return new Vector3(other.x, other.y, original.z);
+    }
+
     public static Vector2 toVector2(Vector3 vector) {
       return new Vector2(vector.x, vector.y);
     }

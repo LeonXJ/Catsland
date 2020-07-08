@@ -178,6 +178,8 @@ namespace Catsland.Scripts.Controller {
 
     public Timing timing;
 
+    private bool isDead = false;
+
     // References
     public GameObject groundSensorGO;
     public GameObject headSenserGo;
@@ -241,6 +243,12 @@ namespace Catsland.Scripts.Controller {
     private const string NON_DRAWING_CYCLE_STATE = "Empty";
 
     private const float DEFAULT_PHYSICS_TIMESTAMP = .02f;
+
+    [System.Serializable]
+    public class Snapshot {
+      public int currentHp;
+    }
+
 
     public void Start() {
       input = GetComponent<IInput>();
@@ -715,6 +723,9 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void damage(DamageInfo damageInfo) {
+      if (isDead) {
+        return;
+      }
       if (Time.time - lastGetDamagedTime < immutableTime) {
         return;
       }
@@ -727,14 +738,17 @@ namespace Catsland.Scripts.Controller {
       StartCoroutine(Bullets.Utils.ApplyVelocityRepel(damageInfo, rb2d, dizzyTime));
       currentHealth -= damageInfo.damage;
       if (currentHealth <= 0) {
+        isDead = true;
+      } 
+
+      // Dizzy
+      cinemachineImpulseSource.GenerateImpulse();
+      StartCoroutine(dizzy());
+      // Effect
+      damageEffectParticleSystem.Play(true);
+      if (currentHealth <= 0) {
         // Die
-        Common.SceneConfig.getSceneConfig().getProgressManager().Load();
-      } else {
-        // Dizzy
-        cinemachineImpulseSource.GenerateImpulse();
-        StartCoroutine(dizzy());
-        // Effect
-        damageEffectParticleSystem.Play(true);
+        SceneMaster.getInstance().LoadLatest();
       }
     }
 
@@ -776,6 +790,16 @@ namespace Catsland.Scripts.Controller {
 
     public bool isNearestRelayPoint(RelayPoint relayPoint) {
       return relayPoint == nearestRelayPoint;
+    }
+
+    public Snapshot generateSnapshot() {
+      Snapshot snapshot = new Snapshot();
+      snapshot.currentHp = currentHealth;
+      return snapshot;
+    }
+
+    public void syncToSnapshot(Snapshot snapshot) {
+      currentHealth = snapshot.currentHp;
     }
 
     private void setTimeScaleLerp(float targetTimeScale, float lerpRatio, bool isAnimatorUnscaled = false) {
@@ -947,7 +971,9 @@ namespace Catsland.Scripts.Controller {
     private IEnumerator dizzy() {
       isDizzy = true;
       yield return new WaitForSeconds(dizzyTime);
-      isDizzy = false;
+      if (currentHealth > 0) {
+        isDizzy = false;
+      }
     }
 
     public void playQuickDrawParticle() {

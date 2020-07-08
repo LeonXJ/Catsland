@@ -49,10 +49,7 @@ namespace Catsland.Scripts.Common {
     }
 
     public GameObject GetPlayer() {
-      if(player == null) {
-        player = GameObject.FindGameObjectWithTag(Tags.PLAYER);
-      }
-      return player;
+      return GameObject.FindGameObjectWithTag(Tags.PLAYER);
     }
 
     public ProgressManager getProgressManager() {

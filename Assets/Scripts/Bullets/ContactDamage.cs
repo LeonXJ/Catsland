@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using Catsland.Scripts.Common;
+using Catsland.Scripts.Misc;
+using Boo.Lang;
+using System.Collections;
 
 namespace Catsland.Scripts.Bullets {
   public class ContactDamage : MonoBehaviour {
@@ -14,6 +17,9 @@ namespace Catsland.Scripts.Bullets {
     public bool canSmashAttakInStay = false;
     public bool tryGetPartyTagFromParent = true;
     public bool damageDashStatus = true;
+
+    public bool throwToCheckpoint = false;
+    public float throwCheckpointDelay = .5f;
 
     public bool presetRepelDirection = false;
     public Vector2 repelDirection;
@@ -73,8 +79,21 @@ namespace Catsland.Scripts.Bullets {
               /* onDamageFeedback= */onDamageFeedback),
             SendMessageOptions.DontRequireReceiver);
           onHitEvent?.Invoke();
+
+          if (throwToCheckpoint && collidingGameObject.CompareTag(Tags.PLAYER)) {
+            StartCoroutine(delayLoadCheckpoint());
+          }
         }
       }
+    }
+
+    private IEnumerator delayLoadCheckpoint() {
+      yield return new WaitForSeconds(throwCheckpointDelay);
+      SceneInitializer sceneInitializer = FindObjectOfType<SceneInitializer>();
+      Debug.Assert(sceneInitializer != null, "The scene doesn't have ScenenInitializer.");
+
+      sceneInitializer.loadCheckpoint();
+
     }
   }
 }

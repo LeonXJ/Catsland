@@ -309,7 +309,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     private bool isInMainCamera() {
-      Vector3 cameraPosition = SceneConfig.getSceneConfig().MainCamera.transform.position;
+      Vector3 cameraPosition = UnityEngine.Camera.main.transform.position;
       return Vector2.SqrMagnitude(cameraPosition - transform.position) < stopUpdateDistance * stopUpdateDistance;
     }
   }

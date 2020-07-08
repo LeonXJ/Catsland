@@ -289,6 +289,14 @@ namespace Catsland.Scripts.Controller
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""LoadScene1"",
+                    ""type"": ""Button"",
+                    ""id"": ""a5e64995-6e9e-4f42-9aae-35dc54bed274"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -298,8 +306,19 @@ namespace Catsland.Scripts.Controller
                     ""path"": ""<Keyboard>/numpad1"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard"",
                     ""action"": ""Ripple"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2c2f03fd-786d-4b48-bb9b-822cc44303f2"",
+                    ""path"": ""<Keyboard>/numpad4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LoadScene1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -354,6 +373,7 @@ namespace Catsland.Scripts.Controller
             // Debug
             m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
             m_Debug_Ripple = m_Debug.FindAction("Ripple", throwIfNotFound: true);
+            m_Debug_LoadScene1 = m_Debug.FindAction("LoadScene1", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -485,11 +505,13 @@ namespace Catsland.Scripts.Controller
         private readonly InputActionMap m_Debug;
         private IDebugActions m_DebugActionsCallbackInterface;
         private readonly InputAction m_Debug_Ripple;
+        private readonly InputAction m_Debug_LoadScene1;
         public struct DebugActions
         {
             private @InputMaster m_Wrapper;
             public DebugActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
             public InputAction @Ripple => m_Wrapper.m_Debug_Ripple;
+            public InputAction @LoadScene1 => m_Wrapper.m_Debug_LoadScene1;
             public InputActionMap Get() { return m_Wrapper.m_Debug; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -502,6 +524,9 @@ namespace Catsland.Scripts.Controller
                     @Ripple.started -= m_Wrapper.m_DebugActionsCallbackInterface.OnRipple;
                     @Ripple.performed -= m_Wrapper.m_DebugActionsCallbackInterface.OnRipple;
                     @Ripple.canceled -= m_Wrapper.m_DebugActionsCallbackInterface.OnRipple;
+                    @LoadScene1.started -= m_Wrapper.m_DebugActionsCallbackInterface.OnLoadScene1;
+                    @LoadScene1.performed -= m_Wrapper.m_DebugActionsCallbackInterface.OnLoadScene1;
+                    @LoadScene1.canceled -= m_Wrapper.m_DebugActionsCallbackInterface.OnLoadScene1;
                 }
                 m_Wrapper.m_DebugActionsCallbackInterface = instance;
                 if (instance != null)
@@ -509,6 +534,9 @@ namespace Catsland.Scripts.Controller
                     @Ripple.started += instance.OnRipple;
                     @Ripple.performed += instance.OnRipple;
                     @Ripple.canceled += instance.OnRipple;
+                    @LoadScene1.started += instance.OnLoadScene1;
+                    @LoadScene1.performed += instance.OnLoadScene1;
+                    @LoadScene1.canceled += instance.OnLoadScene1;
                 }
             }
         }
@@ -553,6 +581,7 @@ namespace Catsland.Scripts.Controller
         public interface IDebugActions
         {
             void OnRipple(InputAction.CallbackContext context);
+            void OnLoadScene1(InputAction.CallbackContext context);
         }
     }
 }

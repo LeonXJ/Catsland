@@ -24,7 +24,6 @@ namespace Catsland.Scripts.Bullets {
       rb2d.velocity = damageInfo.repelDirection.normalized
         * Mathf.Clamp(damageInfo.repelIntense * knockbackCoherence, 0f, maxKnockbackSpeed);
 
-      Debug.Log("Repel velocity: " + rb2d.velocity);
       rb2d.drag = knockbackDrag;
 
       yield return new WaitForSeconds(dizzyTimeInS);

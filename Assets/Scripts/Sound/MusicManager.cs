@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Catsland.Scripts.Sound {
 
-
   public class MusicManager : MonoBehaviour {
 
     private static MusicManager instance;
@@ -93,6 +92,7 @@ namespace Catsland.Scripts.Sound {
     }
 
     void Awake() {
+      DontDestroyOnLoad(gameObject);
       // Make sure only has one instance event during scene change.
       if (instance != null) {
         if (instance != this) {
@@ -123,6 +123,11 @@ namespace Catsland.Scripts.Sound {
         return;
       }
 
+      // if the same music is being played, skip
+      if (primary.audioSource.clip == sound.GetAudioClip()) {
+        return;
+      }
+
       MusicTrack secondary = mainSource == 0 ? musicTracks[1] : musicTracks[0];
       if (!secondary.IsPlaying()) {
         // Ramp down primary and ramp up secondary
@@ -133,6 +138,8 @@ namespace Catsland.Scripts.Sound {
         secondary.audioSource.loop = loop;
         secondary.StartTransition(1f, inTransitionInS, inOffsetInS);
       }
+
+      // TODO: what if secondary is playing?
     }
 
     public void Stop(float transitionTimeS) {

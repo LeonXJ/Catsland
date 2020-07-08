@@ -63,7 +63,7 @@ namespace Catsland.Scripts.Misc {
     }
 
     private PlayerController getPlayerController() {
-      return SceneConfig.getSceneConfig().player.GetComponent<PlayerController>();
+      return SceneConfig.getSceneConfig().GetPlayer().GetComponent<PlayerController>();
     }
   }
 

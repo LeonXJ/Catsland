@@ -11,6 +11,7 @@ namespace Catsland.Scripts.Controller.Editor {
 
       GrassModel grassModel = target as GrassModel;
       if(GUILayout.Button("Set Size According to Texture")) {
+        grassModel.initializeMesh();
         grassModel.UpdateSize();
         grassModel.OnAttributeUpdate();
       }

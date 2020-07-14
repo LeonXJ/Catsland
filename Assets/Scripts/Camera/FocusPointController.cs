@@ -14,13 +14,8 @@ namespace Catsland.Scripts.Camera {
 
     // Update is called once per frame
     void Update() {
-      if (topPrioritizedConfig != null) {
-        transform.localPosition =
-          Vector2.Lerp(transform.localPosition, baseOffset + topPrioritizedConfig.offset, topPrioritizedConfig.valueChangeSpeed * Time.deltaTime);
-      } else {
-        transform.localPosition =
-          Vector2.Lerp(transform.localPosition, baseOffset + defaultOffset, defaultChangeSpeed * Time.deltaTime);
-      }
+      transform.localPosition =
+        Vector2.Lerp(transform.localPosition, baseOffset + selectedConfig.offset, selectedConfig.valueChangeSpeed * Time.deltaTime);
     }
   }
 }

@@ -65,6 +65,30 @@ TextureImporter:
   - first:
       213: -2280425472440180360
     second: MidBrunch2
+  - first:
+      213: 5962758084320315739
+    second: MidPillar0
+  - first:
+      213: -7728904283880676492
+    second: MidPillar0
+  - first:
+      213: -5418496426039306816
+    second: MidPillar0
+  - first:
+      213: -5418496426039306816
+    second: FarPillar0
+  - first:
+      213: 5962758084320315739
+    second: FarPillar0
+  - first:
+      213: 5962758084320315739
+    second: FarPillar1
+  - first:
+      213: 7150734692185982949
+    second: FarPillar1
+  - first:
+      213: 282366380172806986
+    second: FarPillar3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -569,7 +593,7 @@ TextureImporter:
         width: 22
         height: 77
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -577,6 +601,111 @@ TextureImporter:
       bones: []
       spriteID: 87163727d1d4a50e0800000000000000
       internalID: -2280425472440180360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FarPillar0
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 224
+        width: 26
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c5143d7532adc4b0800000000000000
+      internalID: -5418496426039306816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MidPillar0
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 96
+        width: 42
+        height: 123
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4732c48d08a6db490800000000000000
+      internalID: -7728904283880676492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FarPillar1
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 224
+        width: 14
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b594089b2e8ffb250800000000000000
+      internalID: 5962758084320315739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FarPillar3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 224
+        width: 15
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e7cecaf0538c3360800000000000000
+      internalID: 7150734692185982949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FarPillar4
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 224
+        width: 25
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4b86ba0aba2be300800000000000000
+      internalID: 282366380172806986
       vertices: []
       indices: 
       edges: []

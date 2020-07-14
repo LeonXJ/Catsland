@@ -4,7 +4,7 @@
             "typeInfo": {
                 "fullName": "UnityEditor.ShaderGraph.Internal.Texture2DShaderProperty"
             },
-            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"21dee262-3d74-49c2-8481-2a1dd0eeab27\"\n    },\n    \"m_Name\": \"Reflection\",\n    \"m_DefaultReferenceName\": \"Texture2D_513B764D\",\n    \"m_OverrideReferenceName\": \"_Reflection\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": {\n        \"m_SerializedTexture\": \"{\\\"texture\\\":{\\\"fileID\\\":8400000,\\\"guid\\\":\\\"30ca2f9d3c2ac0e43b87e1a0d042ce5f\\\",\\\"type\\\":2}}\",\n        \"m_Guid\": \"\"\n    },\n    \"m_Modifiable\": true,\n    \"m_DefaultType\": 0\n}"
+            "JSONnodeData": "{\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"21dee262-3d74-49c2-8481-2a1dd0eeab27\"\n    },\n    \"m_Name\": \"Reflection\",\n    \"m_DefaultReferenceName\": \"Texture2D_513B764D\",\n    \"m_OverrideReferenceName\": \"_Reflection\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Precision\": 0,\n    \"m_GPUInstanced\": false,\n    \"m_Hidden\": false,\n    \"m_Value\": {\n        \"m_SerializedTexture\": \"{\\\"texture\\\":{\\\"fileID\\\":8400000,\\\"guid\\\":\\\"2bb6a9d8dbf277f4abd379964072a691\\\",\\\"type\\\":2}}\",\n        \"m_Guid\": \"\"\n    },\n    \"m_Modifiable\": true,\n    \"m_DefaultType\": 0\n}"
         },
         {
             "typeInfo": {

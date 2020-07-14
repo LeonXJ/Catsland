@@ -153,13 +153,16 @@ namespace Catsland.Scripts.Controller {
         meshRenderer.sharedMaterial = GetMaterial();
       }
       Debug.Assert(meshRenderer.sharedMaterial != null, "Material is null for object: " + gameObject.name);
-      meshRenderer.sharedMaterial.mainTexture = sprite.texture;
+      //meshRenderer.sharedMaterial.mainTexture = sprite.texture;
     }
 
-    private void initializeMesh() {
+    public void initializeMesh() {
       MeshFilter meshFilter = GetComponent<MeshFilter>();
       Mesh mesh = new Mesh();
-      meshFilter.sharedMesh = mesh;
+      meshFilter.mesh = mesh;
+      mesh.name = gameObject.name;
+
+      //meshFilter.sharedMesh = mesh;
 
       int vertexCount = (heightSegment + 1) * 2;
       //vertices = new Vector3[4];
@@ -171,9 +174,13 @@ namespace Catsland.Scripts.Controller {
       float halfWidth = width * 0.5f;
       float segmentHeight = height / heightSegment;
 
-      Vector2 leftBottomUv = sprite.uv[2];
-      Vector2 rightBottomUv = sprite.uv[3];
-      Vector2 leftTopUv = sprite.uv[0];
+      float uvMinX = sprite.textureRect.min.x / sprite.texture.width;
+      float uvMaxX = sprite.textureRect.max.x / sprite.texture.width;
+      float uvMinY = sprite.textureRect.min.y / sprite.texture.height;
+      float uvMaxY = sprite.textureRect.max.y / sprite.texture.height;
+      Vector2 leftBottomUv = new Vector2(uvMinX, uvMinY);
+      Vector2 rightBottomUv = new Vector2(uvMaxX, uvMinY);
+      Vector2 leftTopUv = new Vector2(uvMinX, uvMaxY);
 
       float ky = 1.0f;
       float uvYStart = leftBottomUv.y;
@@ -234,7 +241,7 @@ namespace Catsland.Scripts.Controller {
 
     private void updateVertices() {
 
-      Mesh mesh = GetComponent<MeshFilter>().sharedMesh;
+      Mesh mesh = GetComponent<MeshFilter>().mesh;
 
       float ky = swingCenter == SwingCenter.BOTTOM ? 1.0f : -1.0f;
       float segmentLength = height / heightSegment;

@@ -225,6 +225,10 @@ namespace Catsland.Scripts.Bullets {
       //StartCoroutine(breakArrow());
     }
 
+    public void HitWater() {
+      StartCoroutine(safeDestroy());
+    }
+
     private IEnumerator safeDestroy(float delay = 0.0f) {
       if (status == ArrowStatus.Flying) {
         status = ArrowStatus.Broken;

@@ -22,6 +22,7 @@ namespace Catsland.Scripts.Misc {
       foreach (PortalInfo portal in portals) {
         if (portal.portalName == portalName) {
           setPlayerToPosition(portal.portalPosition.position);
+          checkpoint = portal.portalPosition;
           foundPortal = true;
           break;
         }
@@ -32,6 +33,7 @@ namespace Catsland.Scripts.Misc {
         foreach (Savepoint savepoint in savepoints) {
           if (savepoint.portalName == portalName) {
             setPlayerToPosition(savepoint.transform.position);
+            checkpoint = savepoint.transform;
             foundPortal = true;
             break;
           }

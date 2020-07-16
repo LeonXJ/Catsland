@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Catsland.Scripts.Controller;
+using System;
 
 namespace Catsland.Scripts.Camera {
   public class FocusPointController : StackEffectController<CameraOffsetConfig> {

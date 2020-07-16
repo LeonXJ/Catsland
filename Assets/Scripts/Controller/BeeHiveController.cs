@@ -10,6 +10,7 @@ namespace Catsland.Scripts.Controller {
 
 
     public GameObject beePrefab;
+    public GameObject beePrefabWhenHiveDestroy;
     public Transform generationPosition;
     public float regenerationIntervalS = 5.0f;
     public Transform[] patrolPoints;
@@ -34,14 +35,14 @@ namespace Catsland.Scripts.Controller {
       if(aliveBee == null) {
         regenerationTick += Time.deltaTime;
         if(regenerationTick > regenerationIntervalS) {
-          aliveBee = generateBee(initLockOn);
+          aliveBee = generateBee(beePrefab, initLockOn);
           regenerationTick = 0.0f;
         }
       }
     }
 
-    private GameObject generateBee(bool lockOn) {
-      GameObject bee = Instantiate(beePrefab);
+    private GameObject generateBee(GameObject prefab, bool lockOn) {
+      GameObject bee = Instantiate(prefab);
       bee.transform.position = generationPosition.position;
 
       // Set patrol points
@@ -60,7 +61,7 @@ namespace Catsland.Scripts.Controller {
 
     private void enterDie() {
       for(int i = 0; i < generateBeeNumberWhenDestroy; i++) {
-        generateBee(true);
+        generateBee(beePrefabWhenHiveDestroy != null ? beePrefabWhenHiveDestroy : beePrefab, true);
       }
       Destroy(gameObject);
     }

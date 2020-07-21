@@ -5,7 +5,7 @@ using Catsland.Scripts.Controller;
 
 namespace Catsland.Scripts.Bullets {
   [RequireComponent(typeof(Rigidbody2D))]
-  public class Missile: MonoBehaviour {
+  public class Missile: MonoBehaviour, Bullets.IDamageInterceptor, IMeleeDamageInterceptor {
 
     public enum Status {
       PREPARE = 0,
@@ -79,6 +79,18 @@ namespace Catsland.Scripts.Bullets {
       if(gameObject != null) {
         Destroy(gameObject);
       }
+    }
+
+    public void damage(DamageInfo damageInfo) {
+      ignite();
+    }
+
+    public ArrowResult getArrowResult(ArrowCarrier arrowCarrier) {
+      return ArrowResult.HIT;
+    }
+
+    public MeleeResult getMeleeResult() {
+      return MeleeResult.VOID;
     }
   }
 }

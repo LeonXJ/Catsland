@@ -45,7 +45,7 @@ namespace Catsland.Scripts.Controller {
 
     void Start() {
       if (!useNewRelay) {
-        initCurrentHintScale = currentHintRenderer.transform.localScale.x;
+        // initCurrentHintScale = currentHintRenderer.transform.localScale.x;
       }
     }
 

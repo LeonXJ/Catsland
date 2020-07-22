@@ -579,27 +579,19 @@ namespace Catsland.Scripts.Controller {
         previousParentPosition = currentGround.transform.position;
       }
 
-      if (!isDashing() && !isDashKnockingBack()) {
-        if (!isDizzy && !input.meditation() && !isCliffJumping() && !isApplyingRopeForce()) {
-          if (Mathf.Abs(desiredSpeed) > Mathf.Epsilon
-            && (!groundSensor.isStay() || !isInDrawingCycle())) {
-            rb2d.AddForce(new Vector2(acceleration * desiredSpeed, 0.0f));
-            float maxHorizontalSpeed = isCrouching ? maxCrouchSpeed : maxRunningSpeed;
-            rb2d.velocity = new Vector2(
-              Mathf.Clamp(rb2d.velocity.x, -maxHorizontalSpeed, maxHorizontalSpeed),
-              rb2d.velocity.y);
-          } else {
-            rb2d.velocity = new Vector2(0.0f, rb2d.velocity.y);
-          }
-          // else, keep same speed
+      // Can control horzontal speed?
+      // Should horitonal stop?
+      if (canControlHoritonalSpeed()) {
+        if (shouldHoritontalMove()) {
+          rb2d.AddForce(new Vector2(acceleration * desiredSpeed, 0.0f));
+          float maxHorizontalSpeed = isCrouching ? maxCrouchSpeed : maxRunningSpeed;
+          rb2d.velocity = new Vector2(
+            Mathf.Clamp(rb2d.velocity.x, -maxHorizontalSpeed, maxHorizontalSpeed),
+            rb2d.velocity.y);
         } else {
-          // dizzy, damp on horizontal speed
-          /*
-          rb2d.velocity =
-            new Vector2(rb2d.velocity.x * 0.8f, rb2d.velocity.y);
-            */
+          rb2d.velocity = new Vector2(0.0f, rb2d.velocity.y);
         }
-      }
+      } // else keep current speed
 
       // Apply force
       rb2d.AddForce(appliedForce);
@@ -693,6 +685,26 @@ namespace Catsland.Scripts.Controller {
       }
     }
 
+    private bool canControlHoritonalSpeed() => !isDashing()
+      && !isDashKnockingBack()
+      && !isDizzy
+      && !input.meditation()
+      && !isCliffJumping()
+      && !isApplyingRopeForce();
+
+    // Precondition: canControlHoritonalSpeed() == true.
+    private bool shouldHoritontalMove() {
+      if (Mathf.Abs(input.getHorizontal()) < Mathf.Epsilon) {
+        return false;
+      }
+      if (groundSensor.isStay()) {
+        return !input.timeSlow() && !isInDrawingCycle();
+      } else {
+        // can always control in the air.
+        return true;
+      }
+    }
+
     private bool canNormalJump()
       => (groundSensor.isStay() || (Time.time - lastOnGroundTimestamp) < leaveGroundGracePeroid)
         && !isDizzy && !input.meditation() && !isCliffJumping();
@@ -739,7 +751,7 @@ namespace Catsland.Scripts.Controller {
       currentHealth -= damageInfo.damage;
       if (currentHealth <= 0) {
         isDead = true;
-      } 
+      }
 
       // Dizzy
       cinemachineImpulseSource.GenerateImpulse();

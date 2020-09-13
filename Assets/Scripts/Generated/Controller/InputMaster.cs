@@ -75,6 +75,14 @@ namespace Catsland.Scripts.Controller
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""SceneTransitConfirm"",
+                    ""type"": ""Value"",
+                    ""id"": ""8f17002f-ba91-4879-bcdf-fb38fc7a2f07"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -275,6 +283,17 @@ namespace Catsland.Scripts.Controller
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bb547006-9a0a-4f17-96cf-04c97b6eee4f"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4;Xbox One"",
+                    ""action"": ""SceneTransitConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -370,6 +389,7 @@ namespace Catsland.Scripts.Controller
             m_General_Focus = m_General.FindAction("Focus", throwIfNotFound: true);
             m_General_JumpHigher = m_General.FindAction("JumpHigher", throwIfNotFound: true);
             m_General_Interact = m_General.FindAction("Interact", throwIfNotFound: true);
+            m_General_SceneTransitConfirm = m_General.FindAction("SceneTransitConfirm", throwIfNotFound: true);
             // Debug
             m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
             m_Debug_Ripple = m_Debug.FindAction("Ripple", throwIfNotFound: true);
@@ -430,6 +450,7 @@ namespace Catsland.Scripts.Controller
         private readonly InputAction m_General_Focus;
         private readonly InputAction m_General_JumpHigher;
         private readonly InputAction m_General_Interact;
+        private readonly InputAction m_General_SceneTransitConfirm;
         public struct GeneralActions
         {
             private @InputMaster m_Wrapper;
@@ -441,6 +462,7 @@ namespace Catsland.Scripts.Controller
             public InputAction @Focus => m_Wrapper.m_General_Focus;
             public InputAction @JumpHigher => m_Wrapper.m_General_JumpHigher;
             public InputAction @Interact => m_Wrapper.m_General_Interact;
+            public InputAction @SceneTransitConfirm => m_Wrapper.m_General_SceneTransitConfirm;
             public InputActionMap Get() { return m_Wrapper.m_General; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -471,6 +493,9 @@ namespace Catsland.Scripts.Controller
                     @Interact.started -= m_Wrapper.m_GeneralActionsCallbackInterface.OnInteract;
                     @Interact.performed -= m_Wrapper.m_GeneralActionsCallbackInterface.OnInteract;
                     @Interact.canceled -= m_Wrapper.m_GeneralActionsCallbackInterface.OnInteract;
+                    @SceneTransitConfirm.started -= m_Wrapper.m_GeneralActionsCallbackInterface.OnSceneTransitConfirm;
+                    @SceneTransitConfirm.performed -= m_Wrapper.m_GeneralActionsCallbackInterface.OnSceneTransitConfirm;
+                    @SceneTransitConfirm.canceled -= m_Wrapper.m_GeneralActionsCallbackInterface.OnSceneTransitConfirm;
                 }
                 m_Wrapper.m_GeneralActionsCallbackInterface = instance;
                 if (instance != null)
@@ -496,6 +521,9 @@ namespace Catsland.Scripts.Controller
                     @Interact.started += instance.OnInteract;
                     @Interact.performed += instance.OnInteract;
                     @Interact.canceled += instance.OnInteract;
+                    @SceneTransitConfirm.started += instance.OnSceneTransitConfirm;
+                    @SceneTransitConfirm.performed += instance.OnSceneTransitConfirm;
+                    @SceneTransitConfirm.canceled += instance.OnSceneTransitConfirm;
                 }
             }
         }
@@ -577,6 +605,7 @@ namespace Catsland.Scripts.Controller
             void OnFocus(InputAction.CallbackContext context);
             void OnJumpHigher(InputAction.CallbackContext context);
             void OnInteract(InputAction.CallbackContext context);
+            void OnSceneTransitConfirm(InputAction.CallbackContext context);
         }
         public interface IDebugActions
         {

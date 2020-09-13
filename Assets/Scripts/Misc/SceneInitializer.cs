@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Catsland.Scripts.SceneInitializer;
 
 namespace Catsland.Scripts.Misc {
   public class SceneInitializer : MonoBehaviour {
@@ -13,10 +14,15 @@ namespace Catsland.Scripts.Misc {
     }
 
     public List<PortalInfo> portals;
+    public List<SpecificSceneInitializerBase> specificSceneInitializer;
 
     private Transform checkpoint;
 
     public void initializeScene(string portalName) {
+      if (specificSceneInitializer != null) {
+        specificSceneInitializer.ForEach((initializer) => initializer.process());
+      }
+
       bool foundPortal = false;
       // portal
       foreach (PortalInfo portal in portals) {

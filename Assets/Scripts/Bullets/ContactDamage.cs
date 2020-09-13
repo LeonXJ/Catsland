@@ -89,7 +89,7 @@ namespace Catsland.Scripts.Bullets {
 
     private IEnumerator delayLoadCheckpoint() {
       yield return new WaitForSeconds(throwCheckpointDelay);
-      SceneInitializer sceneInitializer = FindObjectOfType<SceneInitializer>();
+      Misc.SceneInitializer sceneInitializer = FindObjectOfType<Misc.SceneInitializer>();
       Debug.Assert(sceneInitializer != null, "The scene doesn't have ScenenInitializer.");
 
       sceneInitializer.loadCheckpoint();

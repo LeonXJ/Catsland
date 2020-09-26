@@ -103,6 +103,7 @@ namespace Catsland.Scripts.Controller {
     // Attack
     [Header("Arrow")]
     public Party.WeaponPartyConfig weaponPartyConfig;
+    public bool canStrongShoot = false;
     public float maxArrowSpeed = 15.0f;
     public float strongArrowSpeed = 30f;
     public float minArrowSpeed = 5.0f;
@@ -911,7 +912,7 @@ namespace Catsland.Scripts.Controller {
       shootDirection.z += Random.Range(-arrowSpreadAngel, arrowSpreadAngel);
       float drawingRatio =
         Mathf.Clamp(currentDrawingTime, 0.0f, maxDrawingTime) / maxDrawingTime;
-      bool isStrongArrow = drawingRatio > strongArrowDrawingRatio;
+      bool isStrongArrow =  canStrongShoot && (drawingRatio > strongArrowDrawingRatio);
 
       GameObject arrow = Instantiate(
         isStrongArrow ? (isRopeArrow ? ropeArrowPrefab : strongArrowPrefab) : arrowPrefab,

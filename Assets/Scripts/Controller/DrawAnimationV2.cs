@@ -53,17 +53,20 @@ namespace Catsland.Scripts.Controller {
           drawContinousParticle.Play(true);
         }
 
-        if (previousDrawIntensity < startStrongDrawParticleIntensity && intensity > startStrongDrawParticleIntensity) {
+        if (playerController.canStrongShoot &&
+          previousDrawIntensity < startStrongDrawParticleIntensity && intensity > startStrongDrawParticleIntensity) {
           drawContinousParticle.Emit(30);
           strongDrawParticle?.Play(true);
         }
 
-        if (previousDrawIntensity < strongDrawReadyParticleIntensity && intensity > strongDrawReadyParticleIntensity) {
+        if (playerController.canStrongShoot &&
+          previousDrawIntensity < strongDrawReadyParticleIntensity && intensity > strongDrawReadyParticleIntensity) {
           fullDrawParticle?.Play(true);
           fullDrawContinousParticle?.Play(true);
         }
 
-        if (intensity > fullDrawIntesity) {
+        if (playerController.canStrongShoot && 
+          intensity > fullDrawIntesity) {
           playContinousParticle = true;
         }
 

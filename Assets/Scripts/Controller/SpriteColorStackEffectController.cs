@@ -32,6 +32,9 @@ namespace Catsland.Scripts.Controller {
       Color targetColor = selectedConfig.color;
       float colorChangeSpeed = selectedConfig.valueChangeSpeed;
       if (spriteRenderer != null) {
+        Debug.AssertFormat(spriteRenderer.material.HasProperty(Materials.MATERIAL_ATTRIBUTE_TINT),
+          "GameObject ({0})'s material ({1}) doesn't have attribute: {2}.",
+          spriteRenderer.gameObject.name, spriteRenderer.material.name, Materials.MATERIAL_ATTRIBUTE_TINT);
         spriteRenderer.material.SetColor(
           Materials.MATERIAL_ATTRIBUTE_TINT,
           Color.Lerp(spriteRenderer.material.GetColor(Materials.MATERIAL_ATTRIBUTE_TINT), targetColor, colorChangeSpeed * Time.deltaTime));

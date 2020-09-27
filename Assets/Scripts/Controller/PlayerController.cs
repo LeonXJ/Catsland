@@ -51,6 +51,7 @@ namespace Catsland.Scripts.Controller {
     private float cliffJumpRemaining = 0f;
 
     [Header("Dash")]
+    public bool supportDash = true;
     public float dashSpeed = 3.0f;
     public float dashTime = 0.6f;
     public float dashCooldown = 1.0f;
@@ -248,6 +249,9 @@ namespace Catsland.Scripts.Controller {
     [System.Serializable]
     public class Snapshot {
       public int currentHp;
+      public bool canRelayJump;
+      public bool canStrongShoot;
+      public bool canDash;
     }
 
 
@@ -782,7 +786,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     public bool canDash(bool isCliffSliding) {
-      return remainingDash > 0 && dashCooldownRemaining <= 0.0f && !isCliffSliding;
+      return supportDash && remainingDash > 0 && dashCooldownRemaining <= 0.0f && !isCliffSliding;
     }
 
     public void registerRelayPoint(RelayPoint relayPoint) {
@@ -808,11 +812,17 @@ namespace Catsland.Scripts.Controller {
     public Snapshot generateSnapshot() {
       Snapshot snapshot = new Snapshot();
       snapshot.currentHp = currentHealth;
+      snapshot.canRelayJump = supportRelay;
+      snapshot.canStrongShoot = canStrongShoot;
+      snapshot.canDash = supportDash;
       return snapshot;
     }
 
     public void syncToSnapshot(Snapshot snapshot) {
       currentHealth = snapshot.currentHp;
+      supportRelay = snapshot.canRelayJump;
+      canStrongShoot = snapshot.canStrongShoot;
+      supportDash = snapshot.canDash;
     }
 
     private void setTimeScaleLerp(float targetTimeScale, float lerpRatio, bool isAnimatorUnscaled = false) {

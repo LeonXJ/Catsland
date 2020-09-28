@@ -20,6 +20,9 @@ namespace Catsland.Scripts.Controller {
     }
 
     public bool RegisterColor(T color) {
+
+      Debug.LogFormat("Register color: {0}.", color.name);
+
       if(!stackEffectConfigs.ContainsKey(color.name)) {
         stackEffectConfigs.Add(color.name, color);
         updateTopPriority();
@@ -29,6 +32,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     public bool UnregisterColor(T color) {
+      Debug.LogFormat("Unregister color: {0}.", color.name);
       if(stackEffectConfigs.ContainsKey(color.name)) {
         stackEffectConfigs.Remove(color.name);
         updateTopPriority();

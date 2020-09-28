@@ -32,9 +32,15 @@ namespace Catsland.Scripts.Controller {
 
     [Header("Jump")]
     public float jumpForce = 5.0f;
+    public float jumpVelocity = 2f;
     public float doubleJumpForce = 10.0f;
+    public float doubleJumpVelocity = 2f;
     public float cliffInwardJumpForce = 480.0f;
     public float cliffOutwardJumpForce = 800.0f;
+    public float cliffInwardJumpVelocity = 1f;
+    public float cliffOutwardJumpVelocity = 2f;
+    public float cliffOutwardJumpDegree = 45f;
+    public float cliffInwardJumpDegree = 80f;
     public float maxFallingSpeed = 5.0f;
     public float cliffSlidingSpeed = 1.0f;
     public float fallMultiplier = 2.5f;
@@ -211,6 +217,8 @@ namespace Catsland.Scripts.Controller {
     }
 
 
+    private float totalApplyForce = 0f;
+
     private ISensor groundSensor;
     private ISensor backSensor;
     private ISensor frontSensor;
@@ -282,6 +290,7 @@ namespace Catsland.Scripts.Controller {
       float desiredSpeed = input.getHorizontal();
       float currentVerticleVolocity = rb2d.velocity.y;
       Vector2 appliedForce = Vector2.zero;
+      Vector2 appliedVelocity = Vector2.zero;
 
       if (ropeForceRemaining > 0f) {
         ropeForceRemaining -= Time.deltaTime;
@@ -389,6 +398,7 @@ namespace Catsland.Scripts.Controller {
         if (input.jump()) {
           rb2d.velocity = new Vector2(rb2d.velocity.x, 0.0f);
           appliedForce = new Vector2(0.0f, jumpForce);
+          appliedVelocity = new Vector2(0f, jumpVelocity);
           // jump up dust.
           generateJumpUpDust();
         }
@@ -403,6 +413,8 @@ namespace Catsland.Scripts.Controller {
         rb2d.velocity = Vector2.zero;
         //rb2d.AddForce(new Vector2(0.0f, jumpForce));
         appliedForce = new Vector2(0.0f, doubleJumpForce);
+        appliedVelocity = new Vector2(0f, doubleJumpVelocity);
+
         // Reset dash
         remainingDash = 1;
 
@@ -438,7 +450,7 @@ namespace Catsland.Scripts.Controller {
       // TODO: make this parameters
       float ghostLifetime = .15f;
       float ghostInterval = .01f;
-      if (canRelay()) {
+      if (canRelay() && wantTimeSlow()) {
         setTimeScale(timeScaleInRelay);
       } else if (isDizzy) {
         setTimeScale(timeScaleInDizzy);
@@ -486,9 +498,11 @@ namespace Catsland.Scripts.Controller {
           }
           remainingDash = 1;
           rb2d.velocity = Vector2.zero;
-          float degree = Mathf.Deg2Rad * ((desiredSpeed * jumpOrientation > 0f) ? 70f : 50f);
+          float degree = Mathf.Deg2Rad * ((desiredSpeed * jumpOrientation > 0f) ? cliffOutwardJumpDegree : cliffInwardJumpDegree);
           float cliffJumpForce = (desiredSpeed * jumpOrientation > 0f) ? cliffOutwardJumpForce : cliffInwardJumpForce;
+          float cliffJumpVelocity = (desiredSpeed * jumpOrientation > 0f) ? cliffOutwardJumpVelocity : cliffInwardJumpVelocity;
           appliedForce = new Vector2(jumpOrientation * cliffJumpForce * Mathf.Sin(degree), cliffJumpForce * Mathf.Cos(degree));
+          appliedVelocity = new Vector2(jumpOrientation * cliffJumpVelocity * Mathf.Sin(degree), cliffJumpVelocity * Mathf.Cos(degree));
           cliffJumpRemaining = cliffJumpTime;
 
           // cliff jump effect
@@ -599,7 +613,10 @@ namespace Catsland.Scripts.Controller {
       } // else keep current speed
 
       // Apply force
-      rb2d.AddForce(appliedForce);
+      //rb2d.AddForce(appliedForce);
+      if (appliedVelocity.sqrMagnitude > Mathf.Epsilon) {
+        rb2d.velocity = appliedVelocity;
+      }
 
       // Update orientation
       if (Mathf.Abs(desiredSpeed) > Mathf.Epsilon
@@ -690,6 +707,9 @@ namespace Catsland.Scripts.Controller {
       }
     }
 
+    private void FixedUpdate() {
+    }
+
     private bool canControlHoritonalSpeed() => !isDashing()
       && !isDashKnockingBack()
       && !isDizzy
@@ -715,6 +735,10 @@ namespace Catsland.Scripts.Controller {
         && !isDizzy && !input.meditation() && !isCliffJumping();
 
     private bool isApplyingRopeForce() => ropeForceRemaining > 0f;
+
+    private bool wantTimeSlow() {
+      return input.timeSlow();
+    }
 
     public void applyRopeForce(Vector2 force) {
       ropeForceRemaining = ropeForceApplyTime;

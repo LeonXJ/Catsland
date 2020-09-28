@@ -23,6 +23,22 @@ namespace Catsland.Scripts.Controller {
         .globalLightController;
     }
 
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+      if (collision.CompareTag(Tags.PLAYER)) {
+        onPlayerEnter();
+      }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) {
+      if (collision.CompareTag(Tags.PLAYER)) {
+        onPlayerExit();
+      }
+    }
+
+    // Problem of the following solution:
+    // OnTriggerStay2D won't be triggerred if player doesn't move.
+    /*
     private void Update() {
       if (isPlayerDetected) {
         if (lastPlayerDetectTime + playerDetectionHoldTime < Time.time) {
@@ -41,6 +57,7 @@ namespace Catsland.Scripts.Controller {
         isPlayerDetected = true;
       }
     }
+    */
 
     private void onPlayerEnter() {
       if (globalColorConfig != null) {

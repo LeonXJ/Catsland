@@ -260,6 +260,7 @@ namespace Catsland.Scripts.Controller {
       public bool canRelayJump;
       public bool canStrongShoot;
       public bool canDash;
+      public bool canCliffJump;
     }
 
 
@@ -587,6 +588,7 @@ namespace Catsland.Scripts.Controller {
 
       // Move with the platform.
       GameObject currentGround = groundSensor.isStay() ? Common.Utils.getAnyFrom(groundSensor.getTriggerGos()) : null;
+      /*
       if (currentGround != previousParentGameObject) {
         previousParentGameObject = currentGround;
       } else if (currentGround != null) {
@@ -597,6 +599,7 @@ namespace Catsland.Scripts.Controller {
       if (currentGround != null) {
         previousParentPosition = currentGround.transform.position;
       }
+      */
 
       // Can control horzontal speed?
       // Should horitonal stop?
@@ -708,6 +711,17 @@ namespace Catsland.Scripts.Controller {
     }
 
     private void FixedUpdate() {
+      GameObject currentGround = groundSensor.isStay() ? Common.Utils.getAnyFrom(groundSensor.getTriggerGos()) : null;
+      if (currentGround != previousParentGameObject) {
+        previousParentGameObject = currentGround;
+      } else if (currentGround != null) {
+        // else move with the ground
+        Vector3 deltaGroundPosition = currentGround.transform.position - previousParentPosition;
+        gameObject.transform.position += new Vector3(deltaGroundPosition.x, deltaGroundPosition.y);
+      }
+      if (currentGround != null) {
+        previousParentPosition = currentGround.transform.position;
+      }
     }
 
     private bool canControlHoritonalSpeed() => !isDashing()
@@ -839,6 +853,7 @@ namespace Catsland.Scripts.Controller {
       snapshot.canRelayJump = supportRelay;
       snapshot.canStrongShoot = canStrongShoot;
       snapshot.canDash = supportDash;
+      snapshot.canCliffJump = canCliffJump;
       return snapshot;
     }
 
@@ -847,6 +862,7 @@ namespace Catsland.Scripts.Controller {
       supportRelay = snapshot.canRelayJump;
       canStrongShoot = snapshot.canStrongShoot;
       supportDash = snapshot.canDash;
+      canCliffJump = snapshot.canCliffJump;
     }
 
     private void setTimeScaleLerp(float targetTimeScale, float lerpRatio, bool isAnimatorUnscaled = false) {

@@ -18,31 +18,48 @@ namespace Catsland.Scripts.Controller {
       tileRenderer = GetComponent<TilemapRenderer>();
     }
 
+    private void Start() {
+      updateRenderers(true);
+    }
+
     private void Update() {
+      updateRenderers(false);
+    }
+
+    private void updateRenderers(bool isImmediate) {
       if (includeChildren) {
         foreach (SpriteRenderer childRender in GetComponentsInChildren<SpriteRenderer>()) {
-          updateRenderer(childRender, null);
+          updateRenderer(childRender, null, isImmediate);
         }
       } else {
-        updateRenderer(spriteRenderer, tileRenderer);
+        updateRenderer(spriteRenderer, tileRenderer, isImmediate);
       }
     }
 
-    private void updateRenderer(SpriteRenderer spriteRenderer, TilemapRenderer tileRenderer) {
+    private void updateRenderer(SpriteRenderer spriteRenderer, TilemapRenderer tileRenderer, bool isImmediate) {
       Color targetColor = selectedConfig.color;
       float colorChangeSpeed = selectedConfig.valueChangeSpeed;
       if (spriteRenderer != null) {
         Debug.AssertFormat(spriteRenderer.material.HasProperty(Materials.MATERIAL_ATTRIBUTE_TINT),
           "GameObject ({0})'s material ({1}) doesn't have attribute: {2}.",
           spriteRenderer.gameObject.name, spriteRenderer.material.name, Materials.MATERIAL_ATTRIBUTE_TINT);
-        spriteRenderer.material.SetColor(
-          Materials.MATERIAL_ATTRIBUTE_TINT,
-          Color.Lerp(spriteRenderer.material.GetColor(Materials.MATERIAL_ATTRIBUTE_TINT), targetColor, colorChangeSpeed * Time.deltaTime));
+        if (isImmediate) {
+          spriteRenderer.material.SetColor(Materials.MATERIAL_ATTRIBUTE_TINT, targetColor);
+
+        } else {
+          spriteRenderer.material.SetColor(
+            Materials.MATERIAL_ATTRIBUTE_TINT,
+            Color.Lerp(spriteRenderer.material.GetColor(Materials.MATERIAL_ATTRIBUTE_TINT), targetColor, colorChangeSpeed * Time.deltaTime));
+        }
       }
       if (tileRenderer != null) {
-        tileRenderer.material.SetColor(
-          Materials.MATERIAL_ATTRIBUTE_TINT,
-          Color.Lerp(tileRenderer.material.GetColor(Materials.MATERIAL_ATTRIBUTE_TINT), targetColor, colorChangeSpeed * Time.deltaTime));
+        if (isImmediate) {
+          tileRenderer.material.SetColor(Materials.MATERIAL_ATTRIBUTE_TINT, targetColor);
+        } else {
+          tileRenderer.material.SetColor(
+            Materials.MATERIAL_ATTRIBUTE_TINT,
+            Color.Lerp(tileRenderer.material.GetColor(Materials.MATERIAL_ATTRIBUTE_TINT), targetColor, colorChangeSpeed * Time.deltaTime));
+        }
       }
     }
   }

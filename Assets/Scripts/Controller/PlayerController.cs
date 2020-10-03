@@ -257,6 +257,7 @@ namespace Catsland.Scripts.Controller {
     [System.Serializable]
     public class Snapshot {
       public int currentHp;
+      public int maxHp;
       public bool canRelayJump;
       public bool canStrongShoot;
       public bool canDash;
@@ -850,6 +851,7 @@ namespace Catsland.Scripts.Controller {
     public Snapshot generateSnapshot() {
       Snapshot snapshot = new Snapshot();
       snapshot.currentHp = currentHealth;
+      snapshot.maxHp = maxHealth;
       snapshot.canRelayJump = supportRelay;
       snapshot.canStrongShoot = canStrongShoot;
       snapshot.canDash = supportDash;
@@ -859,6 +861,7 @@ namespace Catsland.Scripts.Controller {
 
     public void syncToSnapshot(Snapshot snapshot) {
       currentHealth = snapshot.currentHp;
+      maxHealth = snapshot.maxHp;
       supportRelay = snapshot.canRelayJump;
       canStrongShoot = snapshot.canStrongShoot;
       supportDash = snapshot.canDash;

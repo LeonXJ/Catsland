@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Deprecated.
 public class Campfire : MonoBehaviour
 {
     // Start is called before the first frame update

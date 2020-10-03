@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 
 namespace Catsland.Scripts.Physics {
+
+  /** A physical (and optionally visual) flame.
+   * - Ignite contact ignitable object.
+   */
   public class Flame :MonoBehaviour {
     public int intensity = 1;
 

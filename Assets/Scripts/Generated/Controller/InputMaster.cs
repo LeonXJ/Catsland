@@ -287,10 +287,10 @@ namespace Catsland.Scripts.Controller
                 {
                     ""name"": """",
                     ""id"": ""bb547006-9a0a-4f17-96cf-04c97b6eee4f"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""PS4;Xbox One"",
+                    ""groups"": ""PS4"",
                     ""action"": ""SceneTransitConfirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

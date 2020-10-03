@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using Catsland.Scripts.Common;
 using Catsland.Scripts.Controller;
 
 namespace Catsland.Scripts.Ui {
@@ -59,6 +60,15 @@ namespace Catsland.Scripts.Ui {
 
     public void EnablePlayerControl() {
       playerDeviceInput.enabled = true;
+    }
+
+    public void MaxHealthPlus() {
+      GameObject playerGo = GameObject.FindGameObjectWithTag(Tags.PLAYER);
+      Debug.Assert(playerGo != null, "Cannot find Player GO by tag.");
+      PlayerController playerController = playerGo.GetComponent<PlayerController>();
+      Debug.Assert(playerController != null, "Cannot find PlayerController in player GO.");
+      playerController.maxHealth += 1;
+      playerController.currentHealth = playerController.maxHealth;
     }
 
     private void StartIntro() {

@@ -45,6 +45,19 @@ namespace Catsland.Scripts.Misc {
           }
         }
       }
+
+      // camp fire
+      if (!foundPortal) {
+        Checkpoint[] campfires = FindObjectsOfType<Checkpoint>();
+        foreach (Checkpoint campfire in campfires) {
+          if (campfire.portalName == portalName) {
+            setPlayerToPosition(campfire.transform.position);
+            checkpoint = campfire.transform;
+            foundPortal = true;
+            break;
+          }
+        }
+      }
       Debug.Assert(foundPortal, "Unable to find portal: " + portalName);
 
       // play background music if set

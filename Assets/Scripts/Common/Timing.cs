@@ -4,5 +4,7 @@
 public sealed class Timing : ScriptableObject {
 
   public float DashKnockFreezeTime = 1f;
+  public float EnemyHitShakeTime = 0.2f;
+  public float DiamondDisappearTime = 2f;
 
 }

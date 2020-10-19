@@ -21,6 +21,8 @@ namespace Catsland.Scripts.Controller {
     private GhostSprite ghostSprite;
     public float timeSlowPitch = .5f;
 
+    public GameObject upperBodyGo;
+
     // Locomoation
     [Header("Run")]
     public float maxRunningSpeed = 1.0f;
@@ -126,7 +128,6 @@ namespace Catsland.Scripts.Controller {
     public ParticleSystem quickDrawParticle;
 
     public float jumpAimTimeScale = 0.3f;
-    public bool enableAutoAim = true;
     public float autoAimDetectRadius = 8f;
     public float autoAimCoverAngle = 10f;
 
@@ -209,6 +210,16 @@ namespace Catsland.Scripts.Controller {
 
     [Header("Experiment")]
     public bool fireArrow;
+    // Whether to limit the shooting direction to 0, +_45.
+    public bool discreteShootingDirection = false;
+    public float discreteShootingVerticleThreshold = 0.1f;
+    public bool smoothShootingDirection = false;
+    public float smoothShootingDirectionSpeed = 90f;
+    public GameObject autoAimUiPrefab;
+    private GameObject autoAimUiGo;
+
+    public bool enableAutoAim = true;
+    private GameObject autoAimGo;
 
     public Vector3 footPosition {
       get {
@@ -330,7 +341,8 @@ namespace Catsland.Scripts.Controller {
         StartCoroutine(shoot());
       }
       // clear up shoot direction.
-      if (!isInDrawingCycle()) {
+      // Timeslow will keep the direction
+      if (!isInDrawingCycle() && !input.timeSlow()) {
         // Immediately reset to 0 for non-drawing statuses.
         shootDirectionAngle = 0f;
       }
@@ -351,19 +363,42 @@ namespace Catsland.Scripts.Controller {
             trailIndicator.isShow = false;
           }
         }
-        // direction
+        // shooting direction
+        // 1. raw direction.
         Vector2 desiredDirection = input.timeSlow()
-          ? new Vector2(input.getHorizontal(), input.getVertical())
+          ? getShootingDirection()
           : new Vector2(getOrientation(), 0f);
-        if (desiredDirection.sqrMagnitude < Mathf.Epsilon) {
+
+        // If not in time slow and not indicate shooting direction, use front.
+        // Otherwise keep previous direction.
+        if (desiredDirection.sqrMagnitude < Mathf.Epsilon && !input.timeSlow()) {
           desiredDirection = new Vector2(getOrientation(), 0f);
         }
+        
+        // 2. Adjust direction if autoAim is enabled.
         desiredDirection = autoAim(desiredDirection);
-        if (desiredDirection.x > 0f) {
-          shootDirectionAngle = Mathf.Clamp(Vector2.SignedAngle(Vector2.right, desiredDirection), -maxDirectionAngle, maxDirectionAngle);
+
+        // 3. Direction to rotation angle
+        float desiredDirectionAngle;
+        // In timeslow mode, if not direction input is given, keep current direction.
+        if (desiredDirection.sqrMagnitude < Mathf.Epsilon && input.timeSlow()) {
+          desiredDirectionAngle = shootDirectionAngle;
         } else {
-          shootDirectionAngle = Mathf.Clamp(Vector2.SignedAngle(desiredDirection, Vector2.left), -maxDirectionAngle, maxDirectionAngle);
+          if (desiredDirection.x > 0f) {
+            desiredDirectionAngle = Mathf.Clamp(Vector2.SignedAngle(Vector2.right, desiredDirection), -maxDirectionAngle, maxDirectionAngle);
+          } else {
+            desiredDirectionAngle = Mathf.Clamp(Vector2.SignedAngle(desiredDirection, Vector2.left), -maxDirectionAngle, maxDirectionAngle);
+          }
         }
+        // 4. Smooth angle.
+        if (smoothShootingDirection) {
+          float absoluateDelta = Mathf.Abs(desiredDirectionAngle - shootDirectionAngle);
+          float lerpProgress = absoluateDelta < Mathf.Epsilon
+            ? 1f
+            : Mathf.Clamp01(Time.unscaledDeltaTime * smoothShootingDirectionSpeed);
+          desiredDirectionAngle = Mathf.LerpAngle(shootDirectionAngle, desiredDirectionAngle, lerpProgress);
+        }
+        shootDirectionAngle = desiredDirectionAngle; 
       } else {
         currentDrawingTime = 0.0f;
         if (trailIndicator != null) {
@@ -371,6 +406,11 @@ namespace Catsland.Scripts.Controller {
         }
       }
       isDrawing = currentIsDrawing;
+      // reset autoAim ui if not drawing
+      if (!isDrawing) {
+        autoAimGo = null;
+      }
+      UpdateAutoAimUi();
 
       // Movement
       // vertical movement
@@ -711,6 +751,16 @@ namespace Catsland.Scripts.Controller {
       }
     }
 
+    private Vector2 getShootingDirection() {
+      if (discreteShootingDirection) {
+        if (Mathf.Abs(input.getVertical()) > discreteShootingVerticleThreshold) {
+          return new Vector2(input.getHorizontal(), Mathf.Sign(input.getVertical()) * Mathf.Abs(input.getHorizontal()));
+        }
+        return new Vector2(input.getHorizontal(), 0f);
+      }
+      return new Vector2(input.getHorizontal(), input.getVertical());
+    }
+
     private void FixedUpdate() {
       GameObject currentGround = groundSensor.isStay() ? Common.Utils.getAnyFrom(groundSensor.getTriggerGos()) : null;
       if (currentGround != previousParentGameObject) {
@@ -991,6 +1041,9 @@ namespace Catsland.Scripts.Controller {
 
       float arrowSpeed = isStrongArrow ? strongArrowSpeed : maxArrowSpeed;
 
+      if (enableAutoAim && autoAimGo != null) {
+        arrowCarrier.SetAutoAim(autoAimGo);
+      }
       arrowCarrier.fire(
         (getOrientation() > 0f ? arrow.transform.right.normalized : -arrow.transform.right.normalized) * arrowSpeed,
         isStrongArrow ? maxArrowLifetime : quickArrowLifetime,
@@ -1092,7 +1145,7 @@ namespace Catsland.Scripts.Controller {
 
 
       foreach (Collider2D collider2d in
-        Physics2D.OverlapCircleAll(shootPoint.transform.position, autoAimDetectRadius)) {
+        Physics2D.OverlapCircleAll(upperBodyGo.transform.position, autoAimDetectRadius)) {
 
         if (collider2d.gameObject.CompareTag(Tags.PLAYER)
           || (collider2d.gameObject.transform.parent != null && collider2d.gameObject.transform.parent.CompareTag(Tags.PLAYER))) {
@@ -1103,21 +1156,48 @@ namespace Catsland.Scripts.Controller {
           continue;
         }
 
-        Vector3 delta = collider2d.gameObject.transform.position - shootPoint.transform.position;
+        // Try to find AutoAimTarget component
+        GameObject targetGo = collider2d.gameObject;
+        AutoAimTarget autoAimTarget = targetGo.GetComponentInChildren<AutoAimTarget>();
+        if (autoAimTarget != null) {
+          targetGo = autoAimTarget.gameObject;
+        }
+
+        Vector3 delta = targetGo.transform.position - upperBodyGo.transform.position;
         float curAngle = Vector2.Angle(desireDirection, delta);
         float angleToOrientation = Vector2.Angle(new Vector2(getOrientation(), 0f), delta);
         if (curAngle > autoAimCoverAngle || angleToOrientation > maxDirectionAngle) {
           continue;
         }
         if (curAngle < aimAngle) {
-          aimGO = collider2d.gameObject;
+          aimGO = targetGo;
           aimAngle = curAngle;
         }
       }
+      autoAimGo = aimGO;
       if (aimGO != null) {
-        return aimGO.transform.position - transform.position;
+        return aimGO.transform.position - upperBodyGo.transform.position;
       }
       return desireDirection;
+    }
+
+    private void UpdateAutoAimUi() {
+      if (autoAimUiPrefab == null) {
+        return;
+      }
+
+      // Create auto aim Go if not created.
+      if (autoAimUiGo == null) {
+        autoAimUiGo = Instantiate(autoAimUiPrefab);
+      }
+
+      if (enableAutoAim && autoAimGo != null && input.timeSlow()) {
+        autoAimUiGo.transform.position = 
+          new Vector3(autoAimGo.transform.position.x, autoAimGo.transform.position.y, AxisZ.AUTO_AIM_UI);
+        autoAimUiGo.SetActive(true);
+      } else {
+        autoAimUiGo.SetActive(false);
+      }
     }
 
     public ArrowResult getArrowResult(ArrowCarrier arrowCarrier) {

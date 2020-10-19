@@ -4,11 +4,16 @@ using Catsland.Scripts.Controller;
 
 namespace Catsland.Scripts.Misc {
 
+  // TODO: rename it to campfire.
   [RequireComponent(typeof(Collider2D))]
   public class Checkpoint : MonoBehaviour {
     private const string IS_LIT = "IsLit";
 
     public bool lightOnWake = false;
+    public bool restoreFullHealthWhenSave = true;
+    public string portalName;
+    public SpriteColorStackEffectController uiSpriteColorController;
+
     private bool isInInteractionRange = false;
 
     private Animator animator;
@@ -53,6 +58,7 @@ namespace Catsland.Scripts.Misc {
 
     public void lit() {
       animator?.SetBool(IS_LIT, true);
+      uiSpriteColorController.mute = true;
     }
 
     public void ContinuePlayCampFireSound() {
@@ -71,12 +77,23 @@ namespace Catsland.Scripts.Misc {
       Debug.Log("Progress Saved.");
       GameObject playerGo = GameObject.FindGameObjectWithTag(Tags.PLAYER);
       Debug.Assert(playerGo != null, "Can't find Player GO.");
+
+      if (restoreFullHealthWhenSave) {
+        PlayerController playerController = playerGo.GetComponent<PlayerController>();
+        Debug.Assert(playerController != null, "PlayerController is null.");
+        playerController.currentHealth = playerController.maxHealth;
+      }
+
+      // TODO: clean this up.
       SceneConfig.getSceneConfig().getProgressManager().Save(
         ProgressManager.Progress.Create(playerGo));
+      SceneMaster.getInstance().Save(portalName);
     }
 
     public void unlit() {
       animator?.SetBool(IS_LIT, false);
+      // Enable ui.
+      uiSpriteColorController.mute = false;
     }
     private void OnEnable() {
       inputMaster.Enable();

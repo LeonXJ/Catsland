@@ -23,6 +23,9 @@ namespace Catsland.Scripts.Bullets {
 
     // Arrow broken but still hit
     HIT_AND_BROKEN = 6,
+
+    // Hit and attach to the object.
+    HIT_AND_ATTACH = 7,
   }
 
   public interface IDamageInterceptor {

@@ -73,6 +73,10 @@ namespace Catsland.Scripts.Bullets {
 
     private Vector3 lastTailPosition;
     private Arrow.Rope rope;
+    private GameObject autoAimGo;
+
+    [Header("Experiment")]
+    public float maxTurningAngleInDegree = 5f;
 
     public void Awake() {
       rb2d = GetComponent<Rigidbody2D>();
@@ -98,6 +102,17 @@ namespace Catsland.Scripts.Bullets {
           }
         }
         lastTailPosition = tailPosition.position;
+
+        // AutoAim
+        if (autoAimGo != null) {
+          Vector2 delta = autoAimGo.transform.position - gameObject.transform.position;
+          Vector2 v = rb2d.velocity;
+          float allowedMaxTurningDegree = maxTurningAngleInDegree * Time.deltaTime;
+          float deltaDegree = Vector2.SignedAngle(v, delta);
+          float turningDegree = Mathf.Clamp(deltaDegree, -allowedMaxTurningDegree, allowedMaxTurningDegree);
+          rb2d.velocity = Quaternion.Euler(0.0f, 0.0f, turningDegree) * v;
+          transform.rotation = Quaternion.FromToRotation(Vector2.right, rb2d.velocity);
+        }
       }
     }
 
@@ -114,6 +129,10 @@ namespace Catsland.Scripts.Bullets {
             : -Mathf.Abs(transform.localScale.x),
         1.0f);
       StartCoroutine(expireAndDestroy(lifetime));
+    }
+
+    public void SetAutoAim(GameObject autoAimGo) {
+      this.autoAimGo = autoAimGo;
     }
 
     private IEnumerator expireAndDestroy(float lifetime) {
@@ -166,6 +185,10 @@ namespace Catsland.Scripts.Bullets {
           return false;
           case ArrowResult.IGNORE:
           return false;
+          case ArrowResult.HIT_AND_ATTACH:
+          enterAttach(hit);
+          arrowHit(collider);
+          return true;
         }
       }
 

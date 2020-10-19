@@ -7,12 +7,15 @@ namespace Catsland.Scripts.Controller {
     public Dictionary<string, T> stackEffectConfigs;
 
     public T backupConfig;
+    public bool mute = false;
 
     [Header("Debug")]
     public T debugDiffConfig;
     public bool debugUseDebugDiffConfig = false;
 
-    protected T selectedConfig => debugUseDebugDiffConfig ? debugDiffConfig : topPrioritizedConfig ?? backupConfig;
+    protected T selectedConfig => debugUseDebugDiffConfig
+      ? debugDiffConfig
+      : ((mute || topPrioritizedConfig == null) ? backupConfig : topPrioritizedConfig);
     protected T topPrioritizedConfig;
 
     protected virtual void Awake() {

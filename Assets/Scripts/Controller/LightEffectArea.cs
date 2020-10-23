@@ -61,19 +61,19 @@ namespace Catsland.Scripts.Controller {
 
     private void onPlayerEnter() {
       if (globalColorConfig != null) {
-        globalLightController.RegisterColor(globalColorConfig);
+        globalLightController.RegisterConfig(globalColorConfig);
       }
       if (spriteColorStackEffectController != null & spriteColorConfig != null) {
-        spriteColorStackEffectController.RegisterColor(spriteColorConfig);
+        spriteColorStackEffectController.RegisterConfig(spriteColorConfig);
       }
     }
 
     private void onPlayerExit() {
       if (globalColorConfig != null) {
-        globalLightController.UnregisterColor(globalColorConfig);
+        globalLightController.UnregisterConfig(globalColorConfig);
       }
       if (spriteColorStackEffectController != null && spriteColorConfig != null) {
-        spriteColorStackEffectController.UnregisterColor(spriteColorConfig);
+        spriteColorStackEffectController.UnregisterConfig(spriteColorConfig);
       }
     }
   }

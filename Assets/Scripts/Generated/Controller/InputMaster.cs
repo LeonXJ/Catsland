@@ -83,6 +83,30 @@ namespace Catsland.Scripts.Controller
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Option"",
+                    ""type"": ""Button"",
+                    ""id"": ""42a7d43a-7ec5-4bc0-97b1-6a6afa3a486e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MenuNext"",
+                    ""type"": ""Button"",
+                    ""id"": ""60a98a24-01ed-4bcb-b71b-2ddb1c1ed210"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MenuPrevious"",
+                    ""type"": ""Button"",
+                    ""id"": ""2f5b089c-67b1-445d-a997-a647ae287c24"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -294,6 +318,50 @@ namespace Catsland.Scripts.Controller
                     ""action"": ""SceneTransitConfirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""407d34e1-131c-429b-9b2b-c7a4027a20db"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""Option"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c150d44e-74f7-4062-a1dd-7fadbd8d13ff"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Option"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fd63a772-82e4-4792-9659-07b8099a807c"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4;Xbox One"",
+                    ""action"": ""MenuNext"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""06546cc6-65ee-49d8-98aa-8e6fcb07ce67"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Xbox One;PS4"",
+                    ""action"": ""MenuPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -390,6 +458,9 @@ namespace Catsland.Scripts.Controller
             m_General_JumpHigher = m_General.FindAction("JumpHigher", throwIfNotFound: true);
             m_General_Interact = m_General.FindAction("Interact", throwIfNotFound: true);
             m_General_SceneTransitConfirm = m_General.FindAction("SceneTransitConfirm", throwIfNotFound: true);
+            m_General_Option = m_General.FindAction("Option", throwIfNotFound: true);
+            m_General_MenuNext = m_General.FindAction("MenuNext", throwIfNotFound: true);
+            m_General_MenuPrevious = m_General.FindAction("MenuPrevious", throwIfNotFound: true);
             // Debug
             m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
             m_Debug_Ripple = m_Debug.FindAction("Ripple", throwIfNotFound: true);
@@ -451,6 +522,9 @@ namespace Catsland.Scripts.Controller
         private readonly InputAction m_General_JumpHigher;
         private readonly InputAction m_General_Interact;
         private readonly InputAction m_General_SceneTransitConfirm;
+        private readonly InputAction m_General_Option;
+        private readonly InputAction m_General_MenuNext;
+        private readonly InputAction m_General_MenuPrevious;
         public struct GeneralActions
         {
             private @InputMaster m_Wrapper;
@@ -463,6 +537,9 @@ namespace Catsland.Scripts.Controller
             public InputAction @JumpHigher => m_Wrapper.m_General_JumpHigher;
             public InputAction @Interact => m_Wrapper.m_General_Interact;
             public InputAction @SceneTransitConfirm => m_Wrapper.m_General_SceneTransitConfirm;
+            public InputAction @Option => m_Wrapper.m_General_Option;
+            public InputAction @MenuNext => m_Wrapper.m_General_MenuNext;
+            public InputAction @MenuPrevious => m_Wrapper.m_General_MenuPrevious;
             public InputActionMap Get() { return m_Wrapper.m_General; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -496,6 +573,15 @@ namespace Catsland.Scripts.Controller
                     @SceneTransitConfirm.started -= m_Wrapper.m_GeneralActionsCallbackInterface.OnSceneTransitConfirm;
                     @SceneTransitConfirm.performed -= m_Wrapper.m_GeneralActionsCallbackInterface.OnSceneTransitConfirm;
                     @SceneTransitConfirm.canceled -= m_Wrapper.m_GeneralActionsCallbackInterface.OnSceneTransitConfirm;
+                    @Option.started -= m_Wrapper.m_GeneralActionsCallbackInterface.OnOption;
+                    @Option.performed -= m_Wrapper.m_GeneralActionsCallbackInterface.OnOption;
+                    @Option.canceled -= m_Wrapper.m_GeneralActionsCallbackInterface.OnOption;
+                    @MenuNext.started -= m_Wrapper.m_GeneralActionsCallbackInterface.OnMenuNext;
+                    @MenuNext.performed -= m_Wrapper.m_GeneralActionsCallbackInterface.OnMenuNext;
+                    @MenuNext.canceled -= m_Wrapper.m_GeneralActionsCallbackInterface.OnMenuNext;
+                    @MenuPrevious.started -= m_Wrapper.m_GeneralActionsCallbackInterface.OnMenuPrevious;
+                    @MenuPrevious.performed -= m_Wrapper.m_GeneralActionsCallbackInterface.OnMenuPrevious;
+                    @MenuPrevious.canceled -= m_Wrapper.m_GeneralActionsCallbackInterface.OnMenuPrevious;
                 }
                 m_Wrapper.m_GeneralActionsCallbackInterface = instance;
                 if (instance != null)
@@ -524,6 +610,15 @@ namespace Catsland.Scripts.Controller
                     @SceneTransitConfirm.started += instance.OnSceneTransitConfirm;
                     @SceneTransitConfirm.performed += instance.OnSceneTransitConfirm;
                     @SceneTransitConfirm.canceled += instance.OnSceneTransitConfirm;
+                    @Option.started += instance.OnOption;
+                    @Option.performed += instance.OnOption;
+                    @Option.canceled += instance.OnOption;
+                    @MenuNext.started += instance.OnMenuNext;
+                    @MenuNext.performed += instance.OnMenuNext;
+                    @MenuNext.canceled += instance.OnMenuNext;
+                    @MenuPrevious.started += instance.OnMenuPrevious;
+                    @MenuPrevious.performed += instance.OnMenuPrevious;
+                    @MenuPrevious.canceled += instance.OnMenuPrevious;
                 }
             }
         }
@@ -606,6 +701,9 @@ namespace Catsland.Scripts.Controller
             void OnJumpHigher(InputAction.CallbackContext context);
             void OnInteract(InputAction.CallbackContext context);
             void OnSceneTransitConfirm(InputAction.CallbackContext context);
+            void OnOption(InputAction.CallbackContext context);
+            void OnMenuNext(InputAction.CallbackContext context);
+            void OnMenuPrevious(InputAction.CallbackContext context);
         }
         public interface IDebugActions
         {

@@ -9,7 +9,6 @@ using Catsland.Scripts.Misc;
 using Catsland.Scripts.Physics;
 using Catsland.Scripts.Fx;
 using IDamageInterceptor = Catsland.Scripts.Bullets.IDamageInterceptor;
-using Catsland.Scripts.Bullets.Arrow;
 
 namespace Catsland.Scripts.Controller {
 
@@ -17,11 +16,15 @@ namespace Catsland.Scripts.Controller {
   [RequireComponent(typeof(Animator))]
   public class PlayerController : MonoBehaviour, DustTexture.DustTextureAssignee, IDamageInterceptor {
 
+    private const string TIME_SCALE_CONFIG_NAME = "PlayerController";
+    private const int TIME_SCALE_CONFIG_PRIORITY = 10;
+
     public float timeScaleChangeSpeed = 1f;
     private GhostSprite ghostSprite;
     public float timeSlowPitch = .5f;
 
     public GameObject upperBodyGo;
+    public TimeScaleConfig normalTimeScale;
 
     // Locomoation
     [Header("Run")]
@@ -68,7 +71,7 @@ namespace Catsland.Scripts.Controller {
     public bool dashCameraShakeApplyOrientationImpact = true;
     public int dashKnowbackParticleNumber = 120;
     //public float dashKnowbackTimeslowDuration = 2f;
-    public float dashKnowbackTimeslowScale = 0.6f;
+    public TimeScaleConfig dashKnockbackTimeScale;
     public float dashKnowbackRepelSpeed = 2f;
     public AudioSource dashAudioSource;
     public Sound.Sound dashSound;
@@ -87,7 +90,7 @@ namespace Catsland.Scripts.Controller {
     public bool supportRelay = true;
     public bool canCliffJump = true;
     public bool canDetectCliff = true;
-    public float timeScaleInRelay = 0.6f;
+    public TimeScaleConfig relayTimeScale;
 
     public float relayKickIntensity = 200f;
     public TriggerBasedSensor replyJumpSensor;
@@ -127,7 +130,7 @@ namespace Catsland.Scripts.Controller {
 
     public ParticleSystem quickDrawParticle;
 
-    public float jumpAimTimeScale = 0.3f;
+    public TimeScaleConfig jumpAndAimTimeScale;
     public float autoAimDetectRadius = 8f;
     public float autoAimCoverAngle = 10f;
 
@@ -173,7 +176,7 @@ namespace Catsland.Scripts.Controller {
     public float repelHorizontalVelocity = 1f;
     public float repelVerticalVelocity = 1f;
     public float dizzyTime = 1.0f;
-    public float timeScaleInDizzy = 0.4f;
+    public TimeScaleConfig dizzyTimeScale;
     public float immutableTime = 0.5f;
     public int score = 0;
     public AudioSource damageAudioSource;
@@ -239,6 +242,7 @@ namespace Catsland.Scripts.Controller {
     private BoxCollider2D headCollider;
     private SpriteRenderer spriteRenderer;
     private CinemachineImpulseSource cinemachineImpulseSource;
+    private TimeScaleController timeScaleController;
 
     private GameObject previousParentGameObject;
     private Vector3 previousParentPosition;
@@ -288,6 +292,8 @@ namespace Catsland.Scripts.Controller {
       cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
       audioSource = GetComponent<AudioSource>();
       ghostSprite = GetComponent<GhostSprite>();
+      timeScaleController = GameObject.FindGameObjectWithTag(Tags.TIME_SCALE_CONTROLLER)
+        ?.GetComponent<TimeScaleController>();
 
       rapidShootRemain = rapidShootLimit;
     }
@@ -374,7 +380,7 @@ namespace Catsland.Scripts.Controller {
         if (desiredDirection.sqrMagnitude < Mathf.Epsilon && !input.timeSlow()) {
           desiredDirection = new Vector2(getOrientation(), 0f);
         }
-        
+
         // 2. Adjust direction if autoAim is enabled.
         desiredDirection = autoAim(desiredDirection);
 
@@ -398,7 +404,7 @@ namespace Catsland.Scripts.Controller {
             : Mathf.Clamp01(Time.unscaledDeltaTime * smoothShootingDirectionSpeed);
           desiredDirectionAngle = Mathf.LerpAngle(shootDirectionAngle, desiredDirectionAngle, lerpProgress);
         }
-        shootDirectionAngle = desiredDirectionAngle; 
+        shootDirectionAngle = desiredDirectionAngle;
       } else {
         currentDrawingTime = 0.0f;
         if (trailIndicator != null) {
@@ -479,6 +485,9 @@ namespace Catsland.Scripts.Controller {
             Destroy(effect, 1.0f);
           }
         } else {
+          // Relay point effect
+          nearestRelayPoint?.Kicked();
+
           // effect
           GameObject doubleJumpEffect = Instantiate(doubleJumpEffectPrefab);
           doubleJumpEffect.transform.position = doubleJumpEffectPoint.position;
@@ -493,21 +502,21 @@ namespace Catsland.Scripts.Controller {
       float ghostLifetime = .15f;
       float ghostInterval = .01f;
       if (canRelay() && wantTimeSlow()) {
-        setTimeScale(timeScaleInRelay);
+        setTimeScale(relayTimeScale);
       } else if (isDizzy) {
-        setTimeScale(timeScaleInDizzy);
+        setTimeScale(dizzyTimeScale);
       } else if (dashknowbackTimeslowRemaining > 0f) {
-        setTimeScale(dashKnowbackTimeslowScale);
+        setTimeScale(dashKnockbackTimeScale);
         dashknowbackTimeslowRemaining -= Time.deltaTime;
         if (dashknowbackTimeslowRemaining <= 0f) {
           exitDashKnockback();
         }
       } else if (input.timeSlow() && isInDrawingCycle() && !groundSensor.isStay()) {
-        setTimeScaleLerp(jumpAimTimeScale, timeScaleChangeSpeed, /* Animator unscaled */ true);
+        setTimeScale(jumpAndAimTimeScale, /* Animator unscaled */ true);
         ghostLifetime = .5f;
         ghostInterval = .08f;
       } else {
-        setTimeScaleLerp(1f, timeScaleChangeSpeed);
+        setTimeScale(normalTimeScale);
       }
       // Ghost Fx
       ghostSprite.emit = enableGhost;
@@ -918,13 +927,9 @@ namespace Catsland.Scripts.Controller {
       canCliffJump = snapshot.canCliffJump;
     }
 
-    private void setTimeScaleLerp(float targetTimeScale, float lerpRatio, bool isAnimatorUnscaled = false) {
-      float timeScale = Mathf.Lerp(Time.timeScale, targetTimeScale, lerpRatio * Time.deltaTime);
-      setTimeScale(timeScale, isAnimatorUnscaled);
-    }
-    private void setTimeScale(float timeScale, bool isAnimatorUnscaled = false) {
-      Time.timeScale = timeScale;
-      Time.fixedDeltaTime = timeScale * DEFAULT_PHYSICS_TIMESTAMP;
+    private void setTimeScale(TimeScaleConfig config, bool isAnimatorUnscaled = false) {
+      timeScaleController.RegisterConfig(config);
+      Time.fixedDeltaTime = config.timeScale * DEFAULT_PHYSICS_TIMESTAMP;
       animator.updateMode = isAnimatorUnscaled ? AnimatorUpdateMode.UnscaledTime : AnimatorUpdateMode.Normal;
     }
 
@@ -1015,7 +1020,7 @@ namespace Catsland.Scripts.Controller {
       shootDirection.z += Random.Range(-arrowSpreadAngel, arrowSpreadAngel);
       float drawingRatio =
         Mathf.Clamp(currentDrawingTime, 0.0f, maxDrawingTime) / maxDrawingTime;
-      bool isStrongArrow =  canStrongShoot && (drawingRatio > strongArrowDrawingRatio);
+      bool isStrongArrow = canStrongShoot && (drawingRatio > strongArrowDrawingRatio);
 
       GameObject arrow = Instantiate(
         isStrongArrow ? (isRopeArrow ? ropeArrowPrefab : strongArrowPrefab) : arrowPrefab,
@@ -1192,7 +1197,7 @@ namespace Catsland.Scripts.Controller {
       }
 
       if (enableAutoAim && autoAimGo != null && input.timeSlow()) {
-        autoAimUiGo.transform.position = 
+        autoAimUiGo.transform.position =
           new Vector3(autoAimGo.transform.position.x, autoAimGo.transform.position.y, AxisZ.AUTO_AIM_UI);
         autoAimUiGo.SetActive(true);
       } else {

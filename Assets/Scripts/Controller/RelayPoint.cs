@@ -21,6 +21,8 @@ namespace Catsland.Scripts.Controller {
     public ParticleSystem relayReady;
     public ParticleSystem relayFlash;
 
+    public GameObject OnKickedReceiver;
+
     private GameObject playerGo;
     private PlayerController playerController;
     private SpriteRenderer currentHintRenderer;
@@ -123,6 +125,12 @@ namespace Catsland.Scripts.Controller {
 
     public void HideCircle() {
       targetAlpha = 0.0f;
+    }
+
+    public void Kicked() {
+      if (OnKickedReceiver != null) {
+        OnKickedReceiver?.SendMessage(MessageNames.RELAY_KICKED, null, SendMessageOptions.DontRequireReceiver);
+      }
     }
 
     private static void drawCircle(Vector3 center, float radius, int segments, Color color) {

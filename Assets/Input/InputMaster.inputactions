@@ -68,6 +68,30 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Option",
+                    "type": "Button",
+                    "id": "42a7d43a-7ec5-4bc0-97b1-6a6afa3a486e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "MenuNext",
+                    "type": "Button",
+                    "id": "60a98a24-01ed-4bcb-b71b-2ddb1c1ed210",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "MenuPrevious",
+                    "type": "Button",
+                    "id": "2f5b089c-67b1-445d-a997-a647ae287c24",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -277,6 +301,50 @@
                     "processors": "",
                     "groups": "PS4",
                     "action": "SceneTransitConfirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "407d34e1-131c-429b-9b2b-c7a4027a20db",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PS4",
+                    "action": "Option",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c150d44e-74f7-4062-a1dd-7fadbd8d13ff",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Option",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fd63a772-82e4-4792-9659-07b8099a807c",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PS4;Xbox One",
+                    "action": "MenuNext",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "06546cc6-65ee-49d8-98aa-8e6fcb07ce67",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Xbox One;PS4",
+                    "action": "MenuPrevious",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

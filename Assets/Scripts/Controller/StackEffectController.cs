@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Catsland.Scripts.Controller {
   public abstract class StackEffectController<T>: MonoBehaviour where T : StackEffectConfig {
 
-    public Dictionary<string, T> stackEffectConfigs;
+    public Dictionary<string, T> stackEffectConfigs = new Dictionary<string, T>();
 
     public T backupConfig;
     public bool mute = false;
@@ -18,26 +18,35 @@ namespace Catsland.Scripts.Controller {
       : ((mute || topPrioritizedConfig == null) ? backupConfig : topPrioritizedConfig);
     protected T topPrioritizedConfig;
 
-    protected virtual void Awake() {
-      stackEffectConfigs = new Dictionary<string, T>();
+    private static string getConfigName(T config) {
+      return string.IsNullOrEmpty(config.channelName) ? config.name : config.channelName;
     }
 
-    public bool RegisterColor(T color) {
+    public bool RegisterConfig(T config, bool overwrite = false) {
 
-      Debug.LogFormat("Register color: {0}.", color.name);
-
-      if(!stackEffectConfigs.ContainsKey(color.name)) {
-        stackEffectConfigs.Add(color.name, color);
-        updateTopPriority();
-        return true;
+      Debug.LogFormat("Register config Scriptable object name: {0}.", config.name);
+      string name = getConfigName(config);
+      if (stackEffectConfigs.ContainsKey(name)) {
+        if (!overwrite) {
+          return false;
+        }
+        // Overwrite, then remove the existing key.
+        stackEffectConfigs.Remove(name);
       }
-      return false;
+
+      stackEffectConfigs.Add(name, config);
+      updateTopPriority();
+      return true;
     }
 
-    public bool UnregisterColor(T color) {
-      Debug.LogFormat("Unregister color: {0}.", color.name);
-      if(stackEffectConfigs.ContainsKey(color.name)) {
-        stackEffectConfigs.Remove(color.name);
+    public bool UnregisterConfig(T config) {
+      return UnregisterConfig(getConfigName(config));
+    }
+
+    public bool UnregisterConfig(string name) {
+      Debug.LogFormat("Unregister color: {0}.", name);
+      if(stackEffectConfigs.ContainsKey(name)) {
+        stackEffectConfigs.Remove(name);
         updateTopPriority();
         return true;
       }

@@ -6,5 +6,7 @@
     public static readonly string ARROW_VULNERABLE = "ArrowVulnerable";
     public static readonly string PLAYER = "Player";
     public static readonly string SCENE_CONFIG = "SceneConfig";
+
+    public const string TIME_SCALE_CONTROLLER = "TimeScaleController";
   }
 }

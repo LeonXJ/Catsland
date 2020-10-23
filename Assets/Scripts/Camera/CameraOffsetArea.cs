@@ -7,13 +7,13 @@ namespace Catsland.Scripts.Camera {
 
     public void OnTriggerEnter2D(Collider2D collision) {
       if (collision.CompareTag(Tags.PLAYER)) {
-        SceneConfig.getSceneConfig().GetCameraController().RegisterColor(cameraOffsetConfig);
+        SceneConfig.getSceneConfig().GetCameraController().RegisterConfig(cameraOffsetConfig);
       }
     }
 
     public void OnTriggerExit2D(Collider2D collision) {
       if (collision.CompareTag(Tags.PLAYER)) {
-        SceneConfig.getSceneConfig().GetCameraController().UnregisterColor(cameraOffsetConfig);
+        SceneConfig.getSceneConfig().GetCameraController().UnregisterConfig(cameraOffsetConfig);
       }
     }
 

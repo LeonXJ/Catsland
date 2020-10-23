@@ -369,6 +369,9 @@ namespace Catsland.Scripts.Bullets {
       relay?.HideCircle();
 
       transferFlame(attached);
+      AttachedArrow attachedArrow = attached.GetComponent<AttachedArrow>();
+      attachedArrow?.Shake();
+
 
       if (rope != null) {
         rope.transform.parent = attached.transform;

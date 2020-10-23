@@ -13,7 +13,6 @@ namespace Catsland.Scripts.Controller {
 
 
     private void Awake() {
-      base.Awake();
       spriteRenderer = GetComponent<SpriteRenderer>();
       tileRenderer = GetComponent<TilemapRenderer>();
     }

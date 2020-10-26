@@ -8,5 +8,6 @@
     public static readonly string SCENE_CONFIG = "SceneConfig";
 
     public const string TIME_SCALE_CONTROLLER = "TimeScaleController";
+    public const string GAME_MASTER = "GameMaster";
   }
 }

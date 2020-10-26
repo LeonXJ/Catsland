@@ -23,8 +23,6 @@ namespace Catsland.Scripts.Controller {
     }
 
     public bool RegisterConfig(T config, bool overwrite = false) {
-
-      Debug.LogFormat("Register config Scriptable object name: {0}.", config.name);
       string name = getConfigName(config);
       if (stackEffectConfigs.ContainsKey(name)) {
         if (!overwrite) {

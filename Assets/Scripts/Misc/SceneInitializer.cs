@@ -18,6 +18,7 @@ namespace Catsland.Scripts.Misc {
 
     private Transform checkpoint;
 
+    // Optionally set the save point to current portal. Use for loading from main menu.
     public void initializeScene(string portalName) {
       if (specificSceneInitializer != null) {
         specificSceneInitializer.ForEach((initializer) => initializer.process());

@@ -58,16 +58,24 @@ namespace Catsland.Scripts.Misc {
       inputMaster.Disable();
     }
 
-    public void TransitionToScene(SceneTransitInfo transitTarget) {
-      this.playerSnapshot = generatePlayerSnapshot();
+    // If init player snapshot is not set, then carry over from current scene.
+    public void TransitionToScene(SceneTransitInfo transitTarget, PlayerController.Snapshot initPlayerSnapshot = null) {
+      playerSnapshot = initPlayerSnapshot ?? generatePlayerSnapshot();
       this.transitTarget = transitTarget;
+      // StartFinish() will be called when the animiation is done.
       animator.SetTrigger(PARAM_START);
     }
 
     public void Save(string activeScenePortalName) {
-      savedPlayerSnapshot = generatePlayerSnapshot();
-      savedTransitTarget = new SceneTransitInfo(SceneManager.GetActiveScene().name, activeScenePortalName);
-      Debug.Log("Game saved on portal: " + activeScenePortalName + " with player snapshot: " + savedPlayerSnapshot);
+      Save(
+        new SceneTransitInfo(SceneManager.GetActiveScene().name, activeScenePortalName),
+        generatePlayerSnapshot());
+    }
+
+    public void Save(SceneTransitInfo sceneTransitInfo, PlayerController.Snapshot playerSnapshot) {
+      savedPlayerSnapshot = playerSnapshot;
+      savedTransitTarget = sceneTransitInfo;
+      Debug.Log("Game saved on portal: " + sceneTransitInfo.sceneName + " with player snapshot: " + playerSnapshot);
     }
 
     public void LoadLatest() {
@@ -77,6 +85,7 @@ namespace Catsland.Scripts.Misc {
       animator.SetTrigger(PARAM_START);
     }
 
+    // Called when the start transition animation is done.
     public void StartFinish() {
       SceneManager.LoadSceneAsync(transitTarget.sceneName, LoadSceneMode.Single).completed 
         += SceneMaster_completed;

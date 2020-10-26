@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using Catsland.Scripts.Controller;
 using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Ui {
   public class PauseMenu : MonoBehaviour {
 
+    private const string MAIN_MENU_SCENE_NAME = "MainMenu";
     private static readonly string IS_PAUSE_MENU_SHOWN = "IsPauseMenuShown";
 
     public TimeScaleConfig timeScaleConfig;
@@ -35,6 +37,11 @@ namespace Catsland.Scripts.Ui {
       timeScaleController = GameObject.FindGameObjectWithTag(Tags.TIME_SCALE_CONTROLLER)
         ?.GetComponent<TimeScaleController>();
       inputMaster.General.Option.performed += _ => {
+        // Not show pause menu in main menu.
+        if (SceneManager.GetActiveScene().name == MAIN_MENU_SCENE_NAME) {
+          return;
+        }
+
         if (isMenuShown) {
           HideMenu();
         } else {

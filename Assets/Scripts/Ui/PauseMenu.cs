@@ -12,15 +12,7 @@ namespace Catsland.Scripts.Ui {
 
     public TimeScaleConfig timeScaleConfig;
 
-    public Text[] menuOptions;
-    public Text cursor;
-    public float cursorPending = 30f;
-
     private bool isMenuShown = false;
-
-
-    // Selected index in menuOptions.
-    private int currentSelectedIndex = 0;
 
     private InputMaster inputMaster;
     private Animator animator;
@@ -48,27 +40,6 @@ namespace Catsland.Scripts.Ui {
           ShowMenu();
         }
       };
-      inputMaster.General.MenuNext.performed += _ => {
-        if (isMenuShown) {
-          OnMenuNext();
-        }
-      };
-      inputMaster.General.MenuPrevious.performed += _ => {
-        if (isMenuShown) {
-          OnMenuPrevious();
-        }
-      };
-      inputMaster.General.Shoot.performed += _ => {
-        // Warning: hacky
-        if (currentSelectedIndex == 0) {
-          HideMenu();
-          return;
-        }
-        if (currentSelectedIndex == 1) {
-          Debug.Log("Quit application.");
-          Application.Quit();
-        }
-      };
     }
 
     // Update is called once per frame
@@ -80,23 +51,7 @@ namespace Catsland.Scripts.Ui {
       
     }
 
-    private void OnMenuNext() {
-      currentSelectedIndex = (currentSelectedIndex + 1) % menuOptions.Length;
-      UpdateCursorPosition();
-    }
-
-    private void OnMenuPrevious() {
-      currentSelectedIndex = (currentSelectedIndex - 1) % menuOptions.Length;
-      UpdateCursorPosition();
-    }
-
-    private void UpdateCursorPosition() {
-      Text selectedOption = menuOptions[currentSelectedIndex];
-      cursor.transform.position = selectedOption.transform.position - new Vector3(cursorPending, 0f, 0f);
-    }
-
     private void ShowMenu() {
-      currentSelectedIndex = 0;
       isMenuShown = true;
 
       // Time scale.
@@ -108,11 +63,15 @@ namespace Catsland.Scripts.Ui {
       input.enabled = false;
     }
 
-    private void HideMenu() {
+    public void HideMenu() {
       isMenuShown = false;
       animator.SetBool(IS_PAUSE_MENU_SHOWN, false);
       DeviceInput input = GameObject.FindGameObjectWithTag(Tags.PLAYER)?.GetComponent<DeviceInput>();
       input.enabled = true;
+    }
+
+    public void QuitToMenu() {
+      Debug.Log("Quit to menu");
     }
 
     public void OnHideMenuComplete() {

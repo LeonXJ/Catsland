@@ -56,6 +56,7 @@ namespace Catsland.Scripts.Controller {
     public Sound.Sound landSoftSound;
     public AudioSource jumpAudioSource;
     public float leaveGroundGracePeroid = .1f;
+    public bool supportTimeslow = true;
 
     public float cliffJumpGravatyScale = 0.5f;
     public float cliffJumpTime = 0.5f;
@@ -277,6 +278,7 @@ namespace Catsland.Scripts.Controller {
       public bool canStrongShoot;
       public bool canDash;
       public bool canCliffJump;
+      public bool canTimeslow;
     }
 
 
@@ -501,7 +503,7 @@ namespace Catsland.Scripts.Controller {
       // TODO: make this parameters
       float ghostLifetime = .15f;
       float ghostInterval = .01f;
-      if (canRelay() && wantTimeSlow()) {
+      if (canRelay() && wantTimeSlow() && canTimeSlow()) {
         setTimeScale(relayTimeScale);
       } else if (isDizzy) {
         setTimeScale(dizzyTimeScale);
@@ -511,7 +513,7 @@ namespace Catsland.Scripts.Controller {
         if (dashknowbackTimeslowRemaining <= 0f) {
           exitDashKnockback();
         }
-      } else if (input.timeSlow() && isInDrawingCycle() && !groundSensor.isStay()) {
+      } else if (wantTimeSlow() && canTimeSlow() && isInDrawingCycle() && !groundSensor.isStay()) {
         setTimeScale(jumpAndAimTimeScale, /* Animator unscaled */ true);
         ghostLifetime = .5f;
         ghostInterval = .08f;
@@ -814,6 +816,10 @@ namespace Catsland.Scripts.Controller {
       return input.timeSlow();
     }
 
+    private bool canTimeSlow() {
+      return supportTimeslow;
+    }
+
     public void applyRopeForce(Vector2 force) {
       ropeForceRemaining = ropeForceApplyTime;
     }
@@ -915,6 +921,7 @@ namespace Catsland.Scripts.Controller {
       snapshot.canStrongShoot = canStrongShoot;
       snapshot.canDash = supportDash;
       snapshot.canCliffJump = canCliffJump;
+      snapshot.canTimeslow = supportTimeslow;
       return snapshot;
     }
 
@@ -925,6 +932,7 @@ namespace Catsland.Scripts.Controller {
       canStrongShoot = snapshot.canStrongShoot;
       supportDash = snapshot.canDash;
       canCliffJump = snapshot.canCliffJump;
+      supportTimeslow = snapshot.canTimeslow;
     }
 
     private void setTimeScale(TimeScaleConfig config, bool isAnimatorUnscaled = false) {

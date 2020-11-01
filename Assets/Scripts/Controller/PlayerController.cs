@@ -1169,6 +1169,12 @@ namespace Catsland.Scripts.Controller {
           continue;
         }
 
+        // Ignore if no rigidbody2d, to skip trigger
+        Rigidbody2D colliderRb2d = collider2d.gameObject.GetComponent<Rigidbody2D>();
+        if (colliderRb2d == null) {
+          continue;
+        }
+
         // Try to find AutoAimTarget component
         GameObject targetGo = collider2d.gameObject;
         AutoAimTarget autoAimTarget = targetGo.GetComponentInChildren<AutoAimTarget>();

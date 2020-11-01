@@ -1,9 +1,11 @@
 tree("Root")
   sequence 
     holdIfNotActivate()
+    UnleashIfNeed()
     repeat 3
       mute
         sequence
+          UnleashIfNeed()
           isPlayerInKnifeReachDistance()
           faceToPlayer()
           waitTillCanThrowKnife()
@@ -11,6 +13,7 @@ tree("Root")
           Wait 0.2
     mute
       sequence
+        UnleashIfNeed()
         isPlayerInChargeReachDistance()
         faceToPlayer()
         waitTillCanCharge()
@@ -18,6 +21,7 @@ tree("Root")
         Wait 1
     mute
       sequence
+        UnleashIfNeed()
         isPlayerInJumpSmashReachDistance()
         faceToPlayer()
         waitTillCanJumpSmash()

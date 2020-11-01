@@ -12,6 +12,7 @@ namespace Catsland.Scripts.Controller {
     public Sound.Sound jumpPrepare;
     public Sound.Sound jumpOff;
     public Sound.Sound jumpLand;
+    public Sound.Sound prepareUnleash;
 
     public void PlayChargePrepareSound() {
       chargePrepareSound?.Play(eventAudioSource);
@@ -39,6 +40,10 @@ namespace Catsland.Scripts.Controller {
 
     public void StopContinousSound() {
       continousAudioSource.Stop();
+    }
+
+    public void PlayPrepareUnleash() {
+      prepareUnleash?.Play(eventAudioSource);
     }
   }
 }

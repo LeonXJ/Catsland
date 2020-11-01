@@ -20,6 +20,7 @@ namespace Catsland.Scripts.Bullets {
 
     public bool throwToCheckpoint = false;
     public float throwCheckpointDelay = .5f;
+    public bool breakArrow = false;
 
     public bool presetRepelDirection = false;
     public Vector2 repelDirection;
@@ -84,6 +85,13 @@ namespace Catsland.Scripts.Bullets {
             StartCoroutine(delayLoadCheckpoint());
           }
         }
+      }
+
+      // Arrow
+      ArrowCarrier arrowCarrier = collidingGameObject.GetComponent<ArrowCarrier>();
+      if (breakArrow && arrowCarrier != null) {
+        arrowCarrier.SendMessage(
+          MessageNames.DAMAGE_FUNCTION, new DamageInfo(1, Vector2.zero, Vector2.zero, 1), SendMessageOptions.DontRequireReceiver);
       }
     }
 

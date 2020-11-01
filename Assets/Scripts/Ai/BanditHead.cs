@@ -16,6 +16,7 @@ namespace Catsland.Scripts.Ai {
     public float chargeReachDistance = 6.0f;
     public float jumpSmashReachDistance = 3.0f;
     public float verticalReachDistance = 5.0f;
+    public int unleashWhenTakeDamageMoreThan = 3;
 
     private float horizontal;
     private bool wantJumpSmash;
@@ -23,6 +24,7 @@ namespace Catsland.Scripts.Ai {
     private bool wantCharge;
     private bool wantDisplay;
     private bool hasDisplayed = false;
+    private bool wantUnleash;
 
     private bool taskStarted = false;
 
@@ -107,6 +109,17 @@ namespace Catsland.Scripts.Ai {
           wantDisplay = true;
         },
         controller.status == HeadOfBanditController.Status.DISPLAY_DONE);
+    }
+
+    [Task]
+    public void UnleashIfNeed() {
+      if (controller.GetAccumulateDamageTime() > unleashWhenTakeDamageMoreThan) {
+        resetStatus();
+        wantUnleash = true;
+      } else {
+        wantUnleash = false;
+        Task.current.Succeed();
+      }
     }
 
     [Task]
@@ -247,6 +260,10 @@ namespace Catsland.Scripts.Ai {
 
     public void activate() {
       activated = true;
+    }
+
+    bool HeadOfBanditController.HeadOfBanditInput.unleash() {
+      return wantUnleash;
     }
   }
 }

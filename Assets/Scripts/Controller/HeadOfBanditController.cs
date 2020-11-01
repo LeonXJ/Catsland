@@ -10,7 +10,7 @@ using Catsland.Scripts.Misc;
 using Catsland.Scripts.Ui;
 
 namespace Catsland.Scripts.Controller {
-  public class HeadOfBanditController: MonoBehaviour, Bullets.IDamageInterceptor, IMeleeDamageInterceptor, IHealthBarQuery {
+  public class HeadOfBanditController : MonoBehaviour, Bullets.IDamageInterceptor, IMeleeDamageInterceptor, IHealthBarQuery {
 
     public interface HeadOfBanditInput {
       float getHorizontal();
@@ -18,6 +18,8 @@ namespace Catsland.Scripts.Controller {
       bool jumpSmash();
       bool spell();
       bool display();
+
+      bool unleash();
     }
 
     public enum Status {
@@ -48,6 +50,9 @@ namespace Catsland.Scripts.Controller {
 
       DIE_THROW,
       DIE_STAY,
+
+      // Unleash
+      UNLEASH,
     }
 
     private HashSet<Status> immotalStatuses;
@@ -84,6 +89,8 @@ namespace Catsland.Scripts.Controller {
     public GameObject ripplePrefab;
     public float jumpSmashShakeAmp = 1.5f;
     private bool isLastOnGround = false;
+
+    public ParticleSystem unleashParticle;
 
     // Spell
     public GameObject throwingKnifePrefab;
@@ -125,6 +132,9 @@ namespace Catsland.Scripts.Controller {
     public int maxHealth = 5;
     private int curHealth = 5;
 
+    // number of times got damage. Reset when unleash.
+    private int accumutateDamageTime = 0;
+
     // References
     public GameObject groundSensorGo;
     private ISensor groundSensor;
@@ -145,6 +155,7 @@ namespace Catsland.Scripts.Controller {
     private static readonly string DIE = "Die";
     private static readonly string DISPLAY = "Display";
     private static readonly string IS_DIZZY = "IsDizzy";
+    private const string UNLEASH = "Unleash";
 
     private static readonly Dictionary<Status, int> JUMP_SMASH_STATUS_TO_PHASE =
       new Dictionary<Status, int>();
@@ -243,17 +254,20 @@ namespace Catsland.Scripts.Controller {
         status = (Status)displaySequence.start();
       }
       float desiredSpeed = input.getHorizontal();
-      if(canCharge() && input.charge()) {
+      if (canCharge() && input.charge()) {
         status = (Status)chargeSequence.start();
       }
-      if(canJumpSmash() && input.jumpSmash()) {
+      if (canJumpSmash() && input.jumpSmash()) {
         Debug.Log("Start Jump.");
         status = (Status)jumpSmashSequence.start();
       }
-      if(canSpell() && input.spell()) {
+      if (canSpell() && input.spell()) {
         status = (Status)spellSequence.start();
       }
-      if(canAdjustOrientation()) {
+      if (canUnleash() && input.unleash()) {
+        StartUnleash();
+      }
+      if (canAdjustOrientation()) {
         ControllerUtils.AdjustOrientation(desiredSpeed, gameObject);
       }
 
@@ -265,29 +279,29 @@ namespace Catsland.Scripts.Controller {
       } else {
         startChargeTime = -Mathf.Epsilon;
       }
-      if(status == Status.CHARGE_CHARGING) {
+      if (status == Status.CHARGE_CHARGING) {
         cinemachineImpulseSource.m_ImpulseDefinition.m_AmplitudeGain = chargingShakeAmp;
         cinemachineImpulseSource.GenerateImpulse();
         float v = chargeSpeed * chargeSpeedCurve.Evaluate((Time.time - startChargeTime) / chargeChargingTime);
         rb2d.velocity = new Vector2(getOrientation() * v, rb2d.velocity.y);
-      } else if(status == Status.JUMP_SMASH_JUMPING) {
-        if(oldStatus != status) {
+      } else if (status == Status.JUMP_SMASH_JUMPING) {
+        if (oldStatus != status) {
           rb2d.velocity = Vector2.zero;
           rb2d.AddForce(new Vector2(getOrientation() * jumpSmashJumpForce.x, jumpSmashJumpForce.y));
         }
-      } else if(oldStatus != Status.SPELL_SPELLING && status == Status.SPELL_SPELLING) {
+      } else if (oldStatus != Status.SPELL_SPELLING && status == Status.SPELL_SPELLING) {
         spell();
-      } else if(canWalk()) {
+      } else if (canWalk()) {
         rb2d.velocity = new Vector2(desiredSpeed * walkingSpeed, rb2d.velocity.y);
-      } else if(status == Status.DIE_THROW) {
+      } else if (status == Status.DIE_THROW) {
         // do nothing on die throwing
         // fix on ground on die stay
-      } else if(groundSensor.isStay()) {
+      } else if (groundSensor.isStay()) {
         rb2d.velocity = new Vector2(0.0f, rb2d.velocity.y);
       }
 
       // effect
-      if(!isLastOnGround && groundSensor.isStay()
+      if (!isLastOnGround && groundSensor.isStay()
         && (status == Status.JUMP_SMASH_JUMPING || status == Status.JUMP_SMASH_SMASHING)) {
         if (jumpSmashEffectPrefab != null) {
           GameObject jumpSmashEffect = Instantiate(jumpSmashEffectPrefab);
@@ -317,8 +331,8 @@ namespace Catsland.Scripts.Controller {
         cinemachineImpulseSource.GenerateImpulse();
       }
 
-      if(oldStatus == Status.DIE_THROW && status == Status.DIE_STAY) {
-        if(dieEffectGoPrefab != null) {
+      if (oldStatus == Status.DIE_THROW && status == Status.DIE_STAY) {
+        if (dieEffectGoPrefab != null) {
           GameObject dieEffectGo = Instantiate(dieEffectGoPrefab);
           dieEffectGo.transform.position = hurtEffectPoint.position;
         }
@@ -369,8 +383,22 @@ namespace Catsland.Scripts.Controller {
       return status == Status.IDEAL;
     }
 
+    public bool canUnleash() {
+      return status == Status.IDEAL || status == Status.DIZZY;
+    }
+
     public bool canDisplay() {
       return status == Status.IDEAL;
+    }
+
+    private void StartUnleash() {
+        status = Status.UNLEASH;
+        accumutateDamageTime = 0;
+        animator.SetTrigger(UNLEASH);
+    }
+
+    public void PlayUnleashParticle() {
+      unleashParticle?.Play();
     }
 
     // Called by animator.
@@ -379,7 +407,7 @@ namespace Catsland.Scripts.Controller {
     }
 
     public void damage(DamageInfo damageInfo) {
-      if(isDead()) {
+      if (isDead()) {
         return;
       }
       if (immotalStatuses.Contains(status)) {
@@ -388,7 +416,8 @@ namespace Catsland.Scripts.Controller {
 
       damageInfo.onDamageFeedback?.Invoke(new DamageInfo.DamageFeedback(true));
       curHealth -= damageInfo.damage;
-      if(curHealth <= 0) {
+      accumutateDamageTime++;
+      if (curHealth <= 0) {
         enterDie();
         return;
       }
@@ -401,7 +430,7 @@ namespace Catsland.Scripts.Controller {
     private IEnumerator freezeThen(float time, DamageInfo damageInfo) {
       rb2d.velocity = Vector2.zero;
       rb2d.bodyType = RigidbodyType2D.Kinematic;
-    
+
       transform.DOShakePosition(time, .15f, 30, 120);
 
       yield return new WaitForSeconds(time);
@@ -417,7 +446,7 @@ namespace Catsland.Scripts.Controller {
 
     private void enterDie() {
       ContactDamage[] contactDamages = GetComponentsInChildren<ContactDamage>();
-      foreach(ContactDamage contactDamage in contactDamages) {
+      foreach (ContactDamage contactDamage in contactDamages) {
         contactDamage.enabled = false;
       }
 
@@ -481,10 +510,21 @@ namespace Catsland.Scripts.Controller {
       animator.SetInteger(variableName, phase);
     }
 
+    // Triggerred by animation.
+    public void UnleashDone() {
+      status = Status.IDEAL;
+      animator.ResetTrigger(UNLEASH);
+    }
+
+    public int GetAccumulateDamageTime() {
+      return accumutateDamageTime;
+    }
+
     public ArrowResult getArrowResult(ArrowCarrier arrowCarrier) {
       if (status == Status.CHARGE_CHARGING
         || status == Status.JUMP_SMASH_JUMPING
-        || status == Status.JUMP_SMASH_SMASHING) {
+        || status == Status.JUMP_SMASH_SMASHING
+        || status == Status.UNLEASH) {
         return ArrowResult.BROKEN;
       }
       return ArrowResult.HIT;
@@ -493,7 +533,8 @@ namespace Catsland.Scripts.Controller {
     public MeleeResult getMeleeResult() {
       if (status == Status.CHARGE_CHARGING
         || status == Status.JUMP_SMASH_JUMPING
-        || status == Status.JUMP_SMASH_SMASHING) {
+        || status == Status.JUMP_SMASH_SMASHING
+        || status == Status.UNLEASH) {
         return MeleeResult.VOID;
       }
       return MeleeResult.HIT;

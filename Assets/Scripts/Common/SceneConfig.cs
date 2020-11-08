@@ -20,10 +20,11 @@ namespace Catsland.Scripts.Common {
     public GameObject enemyTitle;
     public Animator enemyTitleBlack;
     public UnityEngine.Camera lightCamera;
-    public OpponentHealthBar opponentHealthBar;
     public GameObject player;
     public ArenaDirector arenaDirector;
     public RippleEffect rippleEffect;
+
+    private OpponentHealthBar opponentHealthBar;
 
     [Header("Sound")]
     public AudioSource uiAudioSource;
@@ -45,7 +46,7 @@ namespace Catsland.Scripts.Common {
       if (playerInitialPosition != null && useDebugInitialPosition) {
         player.transform.position = playerInitialPosition.transform.position;
       }
-    
+      opponentHealthBar = FindObjectOfType<OpponentHealthBar>();
     }
 
     public GameObject GetPlayer() {

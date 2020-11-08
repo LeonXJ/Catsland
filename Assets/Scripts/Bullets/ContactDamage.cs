@@ -18,6 +18,8 @@ namespace Catsland.Scripts.Bullets {
     public bool tryGetPartyTagFromParent = true;
     public bool damageDashStatus = true;
 
+    // When the player is damaged, whether to rest it back to the checkpoint.
+    // This is used for river.
     public bool throwToCheckpoint = false;
     public float throwCheckpointDelay = .5f;
     public bool breakArrow = false;
@@ -77,13 +79,11 @@ namespace Catsland.Scripts.Bullets {
               /* isKick= */false,
               /* owner= */owner,
               /* damageDashStatus= */damageDashStatus,
-              /* onDamageFeedback= */onDamageFeedback),
+              /* onDamageFeedback= */onDamageFeedback,
+              /* isShellBreaking= */false,
+              throwToCheckpoint),
             SendMessageOptions.DontRequireReceiver);
           onHitEvent?.Invoke();
-
-          if (throwToCheckpoint && collidingGameObject.CompareTag(Tags.PLAYER)) {
-            StartCoroutine(delayLoadCheckpoint());
-          }
         }
       }
 
@@ -93,15 +93,6 @@ namespace Catsland.Scripts.Bullets {
         arrowCarrier.SendMessage(
           MessageNames.DAMAGE_FUNCTION, new DamageInfo(1, Vector2.zero, Vector2.zero, 1), SendMessageOptions.DontRequireReceiver);
       }
-    }
-
-    private IEnumerator delayLoadCheckpoint() {
-      yield return new WaitForSeconds(throwCheckpointDelay);
-      Misc.SceneInitializer sceneInitializer = FindObjectOfType<Misc.SceneInitializer>();
-      Debug.Assert(sceneInitializer != null, "The scene doesn't have ScenenInitializer.");
-
-      sceneInitializer.loadCheckpoint();
-
     }
   }
 }

@@ -55,6 +55,7 @@ namespace Catsland.Scripts.Misc {
             setPlayerToPosition(campfire.transform.position);
             checkpoint = campfire.transform;
             foundPortal = true;
+            campfire.lit();
             break;
           }
         }

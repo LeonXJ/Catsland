@@ -123,11 +123,7 @@ namespace Catsland.Scripts.Bullets {
       // velocity and orientation
       rb2d.velocity = direction;
       velocity = direction;
-      transform.localScale = new Vector2(
-        direction.x > 0.0f
-            ? Mathf.Abs(transform.localScale.x)
-            : -Mathf.Abs(transform.localScale.x),
-        1.0f);
+      transform.rotation = Quaternion.FromToRotation(Vector2.right, rb2d.velocity);
       StartCoroutine(expireAndDestroy(lifetime));
     }
 

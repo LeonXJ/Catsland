@@ -864,12 +864,13 @@ namespace Catsland.Scripts.Controller {
 
       // Dizzy
       cinemachineImpulseSource.GenerateImpulse();
-      StartCoroutine(dizzy());
+      StartCoroutine(dizzy(damageInfo.setPositionToLastCheckpoint));
       // Effect
       damageEffectParticleSystem.Play(true);
       if (currentHealth <= 0) {
         // Die
         SceneMaster.getInstance().LoadLatest();
+        return;
       }
     }
 
@@ -1100,11 +1101,16 @@ namespace Catsland.Scripts.Controller {
       });
     }
 
-    private IEnumerator dizzy() {
+    private IEnumerator dizzy(bool setToCheckpointAfterDizzy = false) {
       isDizzy = true;
       yield return new WaitForSeconds(dizzyTime);
       if (currentHealth > 0) {
         isDizzy = false;
+        if (setToCheckpointAfterDizzy) {
+          Misc.SceneInitializer sceneInitializer = FindObjectOfType<Misc.SceneInitializer>();
+          Debug.Assert(sceneInitializer != null, "The scene doesn't have ScenenInitializer.");
+          sceneInitializer.loadCheckpoint();
+        }
       }
     }
 

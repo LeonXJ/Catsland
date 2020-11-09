@@ -78,7 +78,7 @@ namespace Catsland.Scripts.Controller {
 
     // Jump Smash
     [Header("Jump Smash")]
-    public Vector2 jumpSmashJumpForce = new Vector2(50.0f, 200.0f);
+    public PolarVector2 jumpSmashJumpVelocity = PolarVector2.FromVector2(new Vector2(6f, 8f));
     public float jumpSmashPrepareTime = 0.3f;
     public float jumpSmashSmashTime = 0.3f;
     public float jumpSmashRestTime = 0.5f;
@@ -123,7 +123,7 @@ namespace Catsland.Scripts.Controller {
     private float dizzyRemainInS = 0f;
 
     // Die
-    public float throwForceOnDie = 10.0f;
+    public PolarVector2 throwVelocityOnDie = PolarVector2.FromVector2(new Vector2(3f, 3f));
     public GameObject dieEffectGoPrefab;
     public Transform hurtEffectPoint;
     public BattleTrap battleTrap;
@@ -145,6 +145,7 @@ namespace Catsland.Scripts.Controller {
     private CinemachineImpulseSource cinemachineImpulseSource;
     private BanditEventSounds banditEventSounds;
     private DiamondGenerator diamondGenerator;
+    private RippleEffect rippleEffect;
 
     // Animation
     private static readonly string H_SPEED = "HSpeed";
@@ -196,6 +197,9 @@ namespace Catsland.Scripts.Controller {
     }
 
     private void Start() {
+
+      rippleEffect = FindObjectOfType<RippleEffect>();
+
       displaySequence = LinearSequence.newBuilder()
         .append(Status.DISPLAY, displayTimeInS)
         .append(Status.DISPLAY_DONE, 0.2f)
@@ -286,8 +290,7 @@ namespace Catsland.Scripts.Controller {
         rb2d.velocity = new Vector2(getOrientation() * v, rb2d.velocity.y);
       } else if (status == Status.JUMP_SMASH_JUMPING) {
         if (oldStatus != status) {
-          rb2d.velocity = Vector2.zero;
-          rb2d.AddForce(new Vector2(getOrientation() * jumpSmashJumpForce.x, jumpSmashJumpForce.y));
+          rb2d.velocity = new Vector2(getOrientation() * jumpSmashJumpVelocity.x, jumpSmashJumpVelocity.y);
         }
       } else if (oldStatus != Status.SPELL_SPELLING && status == Status.SPELL_SPELLING) {
         spell();
@@ -401,6 +404,10 @@ namespace Catsland.Scripts.Controller {
       unleashParticle?.Play();
     }
 
+    public void PlayUnleashRipple() {
+      rippleEffect?.Emit(UnityEngine.Camera.main.WorldToViewportPoint(transform.position));
+    }
+
     // Called by animator.
     public void selfDestroy() {
       Destroy(gameObject);
@@ -450,9 +457,7 @@ namespace Catsland.Scripts.Controller {
         contactDamage.enabled = false;
       }
 
-      rb2d.velocity = Vector2.zero;
-      rb2d.AddForce(new Vector2(-getOrientation() * throwForceOnDie, throwForceOnDie));
-
+      rb2d.velocity = new Vector2(-getOrientation() * throwVelocityOnDie.x, throwVelocityOnDie.y);
       status = (Status)dieSequence.start();
 
       diamondGenerator?.GenerateDiamond();

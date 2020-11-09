@@ -27,7 +27,10 @@ namespace Catsland.Scripts.Bullets {
     public string tagForAttachable = "";
     public bool isAttached = false;
     public float brokenPartSpinSpeed = 4800.0f;
-    public float brokenPartBounceSpeedRatio = 0.2f;
+    // When the arrow is damaged, the reple on this arrow.
+    public float repelVelocityScale = 1.2f;
+    public float bounceVelocityScale = .2f;
+    public float brokenPartDrag = .2f;
 
     public float frezeTimeInSecond = .08f;
 
@@ -165,7 +168,7 @@ namespace Catsland.Scripts.Bullets {
           return true;
           case ArrowResult.BROKEN:
           playOnlyBrokenSound();
-          breakArrow();
+          breakArrow(hit.normal);
           return true;
           case ArrowResult.DISAPPEAR:
           StartCoroutine(safeDestroy());
@@ -174,7 +177,7 @@ namespace Catsland.Scripts.Bullets {
           arrowHit(collider);
           return true;
           case ArrowResult.HIT_AND_BROKEN:
-          breakArrow();
+          breakArrow(hit.normal);
           arrowHit(collider);
           return true;
           case ArrowResult.SKIP:
@@ -215,7 +218,7 @@ namespace Catsland.Scripts.Bullets {
           return true;
         }
         playOnlyBrokenSound();
-        breakArrow();
+        breakArrow(hit.normal);
         return true;
       }
 
@@ -240,7 +243,7 @@ namespace Catsland.Scripts.Bullets {
     }
 
     public void damage(DamageInfo damageInfo) {
-      breakArrow();
+      breakArrow(Vector2.zero, damageInfo.repelDirection * damageInfo.repelIntense);
       //StartCoroutine(breakArrow());
     }
 
@@ -378,14 +381,15 @@ namespace Catsland.Scripts.Bullets {
       StartCoroutine(safeDestroy());
     }
 
-    private void breakArrow() {
+    private void breakArrow(Vector2 hitSurfaceNormal, Vector2 repelVelocity = default) {
       status = ArrowStatus.Broken;
 
       GameObject debrid = BulletUtils.generateDebrid(
         brokenArrowPrefab,
         transform,
-        -rb2d.velocity.x * brokenPartBounceSpeedRatio,
-        (Random.value - 0.5f) * 2.0f * brokenPartSpinSpeed);
+        GetBounceVelocity(hitSurfaceNormal) + repelVelocity * repelVelocityScale, 
+        (Random.value - 0.5f) * 2.0f * brokenPartSpinSpeed,
+        brokenPartDrag);
 
       // set layer
       debrid.layer = gameObject.layer;
@@ -406,6 +410,12 @@ namespace Catsland.Scripts.Bullets {
       StartCoroutine(safeDestroy());
     }
 
+    private Vector2 GetBounceVelocity(Vector2 hitSurfaceNormal) {
+      if (hitSurfaceNormal == Vector2.zero) {
+        return Vector2.zero;
+      }
+      return Vector2.Reflect(rb2d.velocity, hitSurfaceNormal) * bounceVelocityScale;
+    }
 
     private void transferFlame(GameObject newGO) {
       Flame flame = GetComponentInChildren<Flame>();

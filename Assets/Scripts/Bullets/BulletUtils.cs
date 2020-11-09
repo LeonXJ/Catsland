@@ -3,7 +3,7 @@
 namespace Catsland.Scripts.Bullets {
   public class BulletUtils {
 
-    public static GameObject generateDebrid(GameObject prefab, Transform transform, float horizontalV, float spinSpeed) {
+    public static GameObject generateDebrid(GameObject prefab, Transform transform, Vector2 velocity, float spinSpeed, float drag = .3f) {
       GameObject brokenArrow = GameObject.Instantiate(prefab);
       brokenArrow.transform.position = transform.position;
       brokenArrow.transform.localScale = transform.lossyScale;
@@ -12,7 +12,8 @@ namespace Catsland.Scripts.Bullets {
       Rigidbody2D[] brokenParts = brokenArrow.GetComponentsInChildren<Rigidbody2D>();
       foreach(Rigidbody2D part in brokenParts) {
         part.angularVelocity = spinSpeed;
-        part.velocity = new Vector2(horizontalV, 0.0f);
+        part.velocity = velocity;
+        part.drag = drag;
       }
 
       return brokenArrow;

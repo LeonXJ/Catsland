@@ -5,7 +5,7 @@ namespace Catsland.Scripts.Bullets {
   public class Utils {
 
     public const float MAX_KNOCKBACK_SPEED = 16f;
-    public const float KNOCKBACK_DRAG = 20f;
+    public const float KNOCKBACK_DRAG = 0.3f;
 
     public static void ApplyRepel(DamageInfo damageInfo, Rigidbody2D rb2d, float maxRepelForce = float.MaxValue) {
       rb2d.velocity = Vector2.zero;

@@ -74,20 +74,36 @@ namespace Catsland.Scripts.Bullets {
           MessageNames.DAMAGE_FUNCTION,
           new DamageInfo(damage, collision.bounds.center, new Vector2(Mathf.Sign(repelX), 0.0f), repelInsentive),
           SendMessageOptions.DontRequireReceiver);
-        Destroy(gameObject);
+        HideAndDestroy();
       }
       if(destroyWhenHitAny) {
-        Destroy(gameObject);
+        HideAndDestroy();
       }
     }
 
     private IEnumerator delayDestroy() {
       yield return new WaitForSeconds(lifetimeInSecond);
       if(alsoDestroyGo != null) {
-        Destroy(alsoDestroyGo);
+        HideAndDestroy();
       } else if(gameObject != null) {
-        Destroy(gameObject);
+        HideAndDestroy();
       }
+    }
+
+    // If the GameObject has trail renderer, hide the sprite and disable the contact
+    // function, wait for trail to disappear, then destroy the GameObject.
+    private void HideAndDestroy() {
+      TrailRenderer trailRenderer = GetComponent<TrailRenderer>();
+      if (trailRenderer != null) {
+        GetComponent<SpriteRenderer>().enabled = false;
+        rb2d.velocity = Vector2.zero;
+        rb2d.bodyType = RigidbodyType2D.Kinematic;
+        isEnable = false;
+        // Hide, until the trail disappear then destroy.
+        Destroy(gameObject, trailRenderer.time);
+        return;
+      }
+      Destroy(gameObject);
     }
   }
 }

@@ -25,6 +25,7 @@ namespace Catsland.Scripts.Bullets {
     public bool breakArrow = false;
 
     public bool presetRepelDirection = false;
+    public bool isPresetRepelDirectionLocalSpace = true;
     public Vector2 repelDirection;
 
     public OnHitEvent onHitEvent;
@@ -66,14 +67,19 @@ namespace Catsland.Scripts.Bullets {
 
       bool masked = (includeLayer & (1 << collider.gameObject.layer)) == 0x0;
       Party otherParty = collidingGameObject.GetComponent<Party>();
+      Vector2 delta = collidingGameObject.transform.position - transform.position;
       if (!masked && collidingGameObject != owner && weaponPartyConfig.shouldHitParty(otherParty)) {
         IMeleeDamageInterceptor interceptor = collidingGameObject.GetComponent<IMeleeDamageInterceptor>();
         if (interceptor == null || interceptor.getMeleeResult().status == MeleeResultStatus.HIT) {
-          Vector2 delta = collidingGameObject.transform.position - transform.position;
           collidingGameObject.SendMessage(
             MessageNames.DAMAGE_FUNCTION,
             new DamageInfo(
-              damage, collider.bounds.center, presetRepelDirection ? repelDirection : delta, repelIntensity,
+              damage,
+              collider.bounds.center, 
+              (presetRepelDirection
+                  ? (isPresetRepelDirectionLocalSpace ? Common.Utils.toVector2(transform.TransformDirection(repelDirection)) : repelDirection)
+                  : delta),
+              repelIntensity,
               isSmashAttack && (canSmashAttakInStay || !isStay),
               /* isDash= */isDash,
               /* isKick= */false,
@@ -91,7 +97,13 @@ namespace Catsland.Scripts.Bullets {
       ArrowCarrier arrowCarrier = collidingGameObject.GetComponent<ArrowCarrier>();
       if (breakArrow && arrowCarrier != null) {
         arrowCarrier.SendMessage(
-          MessageNames.DAMAGE_FUNCTION, new DamageInfo(1, Vector2.zero, Vector2.zero, 1), SendMessageOptions.DontRequireReceiver);
+          MessageNames.DAMAGE_FUNCTION,
+          new DamageInfo(
+            damage,
+            collider.bounds.center,
+            presetRepelDirection ? repelDirection : delta,
+            repelIntensity),
+          SendMessageOptions.DontRequireReceiver);
       }
     }
   }

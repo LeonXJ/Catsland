@@ -76,7 +76,7 @@ namespace Catsland.Scripts.Bullets {
       GameObject player = SceneConfig.getSceneConfig().GetPlayer();
       player.SendMessage(
         MessageNames.DAMAGE_FUNCTION,
-        new DamageInfo(damage, player.transform.position, Vector2.up, repelIntense),
+        new DamageInfo(damage, player.transform.position, rb2d.velocity.normalized, repelIntense),
         SendMessageOptions.DontRequireReceiver);
       hasApplied = true;
     }

@@ -45,6 +45,7 @@ namespace Catsland.Scripts.Bullets {
       OnDamageFeedback onDamageFeedback = null,
       bool isShellBreaking = false,
       bool setPositionToLastCheckpoint = false) {
+
       this.damage = damage;
       this.repelDirection = repelDirection;
       this.repelIntense = repelIntense;
@@ -62,6 +63,10 @@ namespace Catsland.Scripts.Bullets {
     public DamageInfo setHitCollider(Collider2D collider) {
       this.hitCollider = collider;
       return this;
+    }
+
+    public Vector2 GetRepelVelocity() {
+      return repelDirection * repelIntense;
     }
   }
 }

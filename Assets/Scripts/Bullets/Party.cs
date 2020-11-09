@@ -26,10 +26,14 @@ namespace Catsland.Scripts.Bullets {
     public class WeaponPartyConfig {
       public PartyTag[] hitPartyTags;
       public PartyTag[] ignorePartyTags;
+      public bool hitNoPartyObject = false;
     
       public bool shouldHitParty(Party party) {
         // In hit and not in ignore
         if (party == null) {
+          if (hitNoPartyObject) {
+            return true;
+          }
           return hitPartyTags.Contains(PartyTag.ALL) && !ignorePartyTags.Contains(PartyTag.ALL);
         }
 

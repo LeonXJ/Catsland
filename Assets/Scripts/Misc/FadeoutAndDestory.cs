@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Misc {
   public class FadeoutAndDestory :MonoBehaviour {
@@ -19,9 +20,9 @@ namespace Catsland.Scripts.Misc {
       } else {
         float alpha = 1.0f - (passedSeconds / fadeOutInSeconds);
         foreach(SpriteRenderer renderer in spriteRenders) {
-          Color color = renderer.material.GetColor("_Color");
+          Color color = renderer.material.GetColor(Materials.MATERIAL_ATTRIBUTE_TINT);
           color.a = alpha;
-          renderer.material.SetColor("_Color", color);
+          renderer.material.SetColor(Materials.MATERIAL_ATTRIBUTE_TINT, color);
         }
       }
     }

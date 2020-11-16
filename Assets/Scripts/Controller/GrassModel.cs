@@ -319,5 +319,30 @@ namespace Catsland.Scripts.Controller {
       Vector3 cameraPosition = UnityEngine.Camera.main.transform.position;
       return Vector2.SqrMagnitude(cameraPosition - transform.position) < stopUpdateDistance * stopUpdateDistance;
     }
+
+    public void Land(float maxDescendDistance, float overlapDistance = .11f) {
+      // Get box
+      Collider2D collider = GetComponent<Collider2D>();
+      if (collider == null) {
+        Debug.LogErrorFormat("Grass {0} doesn't have collider 2d.", gameObject.name);
+        return;
+      }
+
+      // Raycast
+      Vector2 colliderCenter = collider.bounds.center;
+      Vector2 colliderBoxSize = collider.bounds.size;
+      RaycastHit2D hit = Physics2D.BoxCast(colliderCenter, colliderBoxSize, 0f, Vector2.down, maxDescendDistance, LayerMask.GetMask(Layers.LAYER_GROUND_NAME));
+
+      // Place
+      if (hit.point == null) {
+        Debug.LogErrorFormat("Can't find landing ground for {0}.", gameObject.name);
+        return;
+      }
+      float newY = hit.point.y - overlapDistance;
+      transform.position = new Vector3(
+        transform.position.x,
+        newY,
+        transform.position.z);
+    }
   }
 }

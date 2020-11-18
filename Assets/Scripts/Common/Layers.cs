@@ -2,7 +2,7 @@
 
 namespace Catsland.Scripts.Common {
   public class Layers {
-    public static readonly string LAYER_GROUND_NAME = "Ground";
+    public const string LAYER_GROUND_NAME = "Ground";
     private static readonly string LAYER_CHARACTER_NAME = "Character";
     private static readonly string LAYER_BULLET_NAME = "Bullet";
     private static readonly string LAYER_DECORATION = "Decoration";

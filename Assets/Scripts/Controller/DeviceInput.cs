@@ -4,7 +4,8 @@ namespace Catsland.Scripts.Controller {
   public class DeviceInput: MonoBehaviour, IInput,
     RoyalGuardController.RoyalGuardInput,
     EvilFlowerController.EvilFlowerInput,
-    BeeController.BeeInput {
+    BeeController.BeeInput,
+    Crawler.CrawlerController.CrawlerInput {
 
     private InputMaster inputMaster;
 
@@ -19,6 +20,8 @@ namespace Catsland.Scripts.Controller {
     public bool timeSlow() {
       return inputMaster.General.Focus.ReadValue<float>() > Mathf.Epsilon;
     }
+
+    public float GetHorizontal() => getHorizontal();
 
     public float getHorizontal() {
       return inputMaster.General.Move.ReadValue<Vector2>().x;

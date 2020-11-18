@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using DG.Tweening;
 
 namespace Catsland.Scripts.Bullets {
   public class Utils {
@@ -30,6 +31,120 @@ namespace Catsland.Scripts.Bullets {
 
       rb2d.velocity = Vector2.zero;
       rb2d.drag = 0f;
+    }
+
+
+    public class DamageHelper {
+
+      public delegate void OnDie(DamageInfo damageInfo);
+
+      private MonoBehaviour controller;
+      private VulnerableAttribute vulnerableAttribute;
+      private Timing timing;
+      private OnDie onDie;
+
+      // Nullable
+      private Rigidbody2D rb2d;
+      private Animator animator;
+
+      // Call this when the object is damaged.
+      public void OnDamaged(DamageInfo damageInfo) {
+        damageInfo.onDamageFeedback?.Invoke(new DamageInfo.DamageFeedback(true));
+
+        vulnerableAttribute.currentHealth -= damageInfo.damage;
+        if (vulnerableAttribute.currentHealth <= 0) {
+          onDie(damageInfo);
+          return;
+        }
+
+        controller.StartCoroutine(FreezeThen(timing.ArrowShakeTime, damageInfo));
+      }
+
+      private IEnumerator FreezeThen(float time, DamageInfo damageInfo) {
+
+        float repelSpeed = vulnerableAttribute.arrowHitRepelSpeed;
+        if (rb2d != null) {
+          if (damageInfo.isKnockback()) {
+            repelSpeed = vulnerableAttribute.knockbackRepelSpeed;
+          }
+          if (damageInfo.isSmashAttack) {
+            repelSpeed = vulnerableAttribute.strongArrowHitRepelSpeed;
+          }
+
+          rb2d.velocity = new Vector2(-Mathf.Sign(Common.Utils.getOrientation(controller.gameObject)) * repelSpeed, rb2d.velocity.y);
+          rb2d.bodyType = RigidbodyType2D.Kinematic;
+        }
+        if (animator != null) {
+          animator.speed = 0f;
+        }
+
+        controller.transform.DOShakePosition(time, .15f, 30, 120);
+
+        yield return new WaitForSeconds(time);
+
+        if (animator != null) {
+          animator.speed = 1f;
+        }
+        if (rb2d != null) {
+          rb2d.bodyType = RigidbodyType2D.Dynamic;
+          Utils.ApplyVelocityRepel(damageInfo.repelDirection.normalized * repelSpeed, rb2d);
+        }
+      }
+
+      private void DefaultOnDie(DamageInfo damageInfo) {
+        Object.Destroy(controller.gameObject);
+      }
+      public class DamageHelperBuilder {
+        private readonly DamageHelper damageHelper;
+
+        private DamageHelperBuilder(
+          MonoBehaviour controller, VulnerableAttribute vulnerableAttribute, Timing timing) {
+          damageHelper = new DamageHelper {
+            controller = controller,
+            vulnerableAttribute = vulnerableAttribute,
+            timing = timing
+          };
+        }
+
+        public static DamageHelperBuilder NewBuilder(
+          MonoBehaviour controller, VulnerableAttribute vulnerableAttribute, Timing timing) {
+          return new DamageHelperBuilder(controller, vulnerableAttribute, timing);
+        }
+
+        public DamageHelperBuilder SetRigidbody2d(Rigidbody2D rb2d) {
+          damageHelper.rb2d = rb2d;
+          return this;
+        }
+
+        public DamageHelperBuilder SetAnimator(Animator animator) {
+          damageHelper.animator = animator;
+          return this;
+        }
+
+        public DamageHelperBuilder SetTiming(Timing timing) {
+          damageHelper.timing = timing;
+          return this;
+        }
+
+        public DamageHelperBuilder SetOnDie(OnDie onDie) {
+          damageHelper.onDie = onDie;
+          return this;
+        }
+
+
+        public DamageHelper Build() {
+          if (damageHelper.rb2d == null) {
+            damageHelper.rb2d = damageHelper.controller.GetComponent<Rigidbody2D>();
+          }
+          if (damageHelper.animator == null) {
+            damageHelper.animator = damageHelper.controller.GetComponent<Animator>();
+          }
+          if (damageHelper.onDie == null) {
+            damageHelper.onDie = damageHelper.DefaultOnDie;
+          }
+          return damageHelper;
+        }
+      }
     }
   }
 }

@@ -3,6 +3,15 @@ using System.Collections.Generic;
 
 namespace Catsland.Scripts.Common {
   public class Utils {
+
+    public static float SignWithZero(float num) {
+      return num * num > Mathf.Epsilon ? Mathf.Sign(num) : 0f;
+    }
+
+    public static int IntSignWithZero(float num) {
+      return num > Mathf.Epsilon ? 1 : (num < -Mathf.Epsilon ? -1 : 0);
+    }
+
     public static GameObject getAnyFrom(IEnumerable<GameObject> gameObjects) {
       foreach(GameObject gameObject in gameObjects) {
         return gameObject;

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Catsland.Scripts.Bullets;
 
 namespace Catsland.Scripts.Ui {
 
@@ -14,7 +15,12 @@ namespace Catsland.Scripts.Ui {
       this.currentHealth = currentHealth;
       this.name = name;
     }
+
+    public static HealthCondition CreateHealthCondition(VulnerableAttribute vulnerableAttribute, string name = "") {
+      return new HealthCondition(vulnerableAttribute.maxHealth, vulnerableAttribute.currentHealth, name);
+    }
   }
+
   public interface IHealthBarQuery {
     HealthCondition GetHealthCondition();
 

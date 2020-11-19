@@ -3,13 +3,13 @@
 namespace Catsland.Scripts.Common {
   public class Layers {
     public const string LAYER_GROUND_NAME = "Ground";
-    private static readonly string LAYER_CHARACTER_NAME = "Character";
-    private static readonly string LAYER_BULLET_NAME = "Bullet";
-    private static readonly string LAYER_DECORATION = "Decoration";
-    private static readonly string LAYER_LIGHT = "Light";
-    private static readonly string LAYER_VULNERABLE_UNSOLID = "VulnerableUnsolid";
-    private static readonly string LAYER_VULNERABLE_OBJECT = "VulnerableObject";
-    private static readonly string LAYER_SELF_ILLUMINATE = "Self-illuminate";
+    public const string LAYER_CHARACTER_NAME = "Character";
+    public const string LAYER_BULLET_NAME = "Bullet";
+    public const string LAYER_DECORATION = "Decoration";
+    public const string LAYER_LIGHT = "Light";
+    public const string LAYER_VULNERABLE_UNSOLID = "VulnerableUnsolid";
+    public const string LAYER_VULNERABLE_OBJECT = "VulnerableObject";
+    public const string LAYER_SELF_ILLUMINATE = "Self-illuminate";
 
     public static readonly int LayerGround = LayerMask.NameToLayer(LAYER_GROUND_NAME);
     public static readonly int LayerCharacter = LayerMask.NameToLayer(LAYER_CHARACTER_NAME);

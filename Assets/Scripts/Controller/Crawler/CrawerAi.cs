@@ -17,7 +17,8 @@ namespace Catsland.Scripts.Controller.Crawler {
     }
 
     private bool IsGroundDetected(Rect rect) {
-      return Utils.isRectOverlap(rect, transform, LayerMask.GetMask(Layers.LAYER_GROUND_NAME));
+      return Utils.isRectOverlap(
+        rect, transform, LayerMask.GetMask(Layers.LAYER_GROUND_NAME, Layers.LAYER_VULNERABLE_OBJECT));
     }
     void OnDrawGizmosSelected() {
       Utils.drawRectAsGizmos(frontSpaceDetector, IsGroundDetected(frontSpaceDetector) ? Color.white : Color.blue, transform);

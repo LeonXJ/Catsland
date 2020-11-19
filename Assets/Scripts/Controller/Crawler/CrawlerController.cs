@@ -26,6 +26,7 @@ namespace Catsland.Scripts.Controller.Crawler {
     private Animator animator;
     private Bullets.Utils.DamageHelper damageHelper;
     private DebrideGenerator debrideGenerator;
+    private CrawlerEventSounds crawlerEventSounds;
 
 
     // Start is called before the first frame update
@@ -34,6 +35,7 @@ namespace Catsland.Scripts.Controller.Crawler {
       rb2d = GetComponent<Rigidbody2D>();
       animator = GetComponent<Animator>();
       debrideGenerator = GetComponent<DebrideGenerator>();
+      crawlerEventSounds = GetComponent<CrawlerEventSounds>();
 
       damageHelper = Utils.DamageHelper.DamageHelperBuilder.NewBuilder(
         this, vulnerableAttribute, timing)
@@ -50,23 +52,18 @@ namespace Catsland.Scripts.Controller.Crawler {
 
       if (CanMove()) {
         rb2d.velocity = new Vector2(wantOrientation * moveSpeed, rb2d.velocity.y);
+        crawlerEventSounds.ContinuePlayWalkingSound();
+      } else {
+        crawlerEventSounds.PauseWalkingSound();
       }
     }
     public void damage(DamageInfo damageInfo) {
+      crawlerEventSounds.PlayOnDamageSound();
       damageHelper.OnDamaged(damageInfo);
     }
 
     private void EnterDie(DamageInfo damageInfo) {
-      /*
-      if (dieEffectPrefab != null) {
-        GameObject dieEffect = Instantiate(dieEffectPrefab);
-        dieEffect.transform.position = Vector3Builder.From(transform.position).SetZ(AxisZ.SPLASH).Build();
-        dieEffect.GetComponent<ParticleSystem>()?.Play(true);
-      }
-      */
-
-      // slimeEventSounds?.PlayOnDieSound();
-      // diamondGenerator?.GenerateDiamond();
+      crawlerEventSounds.PlayOnDieSound();
       debrideGenerator?.GenerateDebrides(damageInfo.repelDirection);
       Destroy(gameObject);
     }

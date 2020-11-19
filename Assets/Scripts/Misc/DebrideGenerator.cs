@@ -21,18 +21,14 @@ namespace Catsland.Scripts.Misc {
     }
 
     private void RecursiveApplyForce(GameObject go, Vector2 direction) {
-      if (go.transform.childCount == 0) {
-        // child node
-        Rigidbody2D rb2d = go.GetComponent<Rigidbody2D>();
-        if (rb2d != null) {
-          float angle = Random.Range(0f, randomAngleRange) - randomAngleRange * .5f;
-          Vector2 actualDirection = Quaternion.Euler(0f, 0f, angle) * direction;
-          rb2d.velocity = actualDirection * initialSpeed;
-        }
-      } else {
-        for (int i = 0; i < go.transform.childCount; i++) {
-          RecursiveApplyForce(go.transform.GetChild(i).gameObject, direction);
-        }
+      Rigidbody2D rb2d = go.GetComponent<Rigidbody2D>();
+      if (rb2d != null) {
+        float angle = Random.Range(0f, randomAngleRange) - randomAngleRange * .5f;
+        Vector2 actualDirection = Quaternion.Euler(0f, 0f, angle) * direction;
+        rb2d.velocity = actualDirection * initialSpeed;
+      }
+      for (int i = 0; i < go.transform.childCount; i++) {
+        RecursiveApplyForce(go.transform.GetChild(i).gameObject, direction);
       }
     }
   }

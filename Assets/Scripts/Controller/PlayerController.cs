@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using Cinemachine;
+using DG.Tweening;
 
 using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Common;
@@ -18,6 +20,13 @@ namespace Catsland.Scripts.Controller {
 
     private const string TIME_SCALE_CONFIG_NAME = "PlayerController";
     private const int TIME_SCALE_CONFIG_PRIORITY = 10;
+    
+    [System.Serializable]
+    public class PlayerShakeInfo {
+      public float duration;
+      public float strength;
+    }
+
 
     public float timeScaleChangeSpeed = 1f;
     private GhostSprite ghostSprite;
@@ -114,7 +123,7 @@ namespace Catsland.Scripts.Controller {
     private float lastOnGroundTimestamp = 0f;
 
     // Attack
-    [Header("Arrow")]
+    [Header("Shoot")]
     public Party.WeaponPartyConfig weaponPartyConfig;
     public bool canStrongShoot = false;
     public float maxArrowSpeed = 15.0f;
@@ -127,6 +136,11 @@ namespace Catsland.Scripts.Controller {
     public float bowHeatIncreasePerShoot = 1f;
     public float bowHeatCooldownPerSecond = 2f;
     public ParticleSystem shootEffectParticle;
+    public ControllerVibrationStackEffectConfig normalShootVibrateConfig;
+    public ControllerVibrationStackEffectConfig timeSlowDrawVibrateConfig;
+    // Currently only the strength is used.
+    public PlayerShakeInfo normalShootShakeConfig;
+
     private float currentBowHeat = 0f;
 
     public ParticleSystem quickDrawParticle;
@@ -182,6 +196,7 @@ namespace Catsland.Scripts.Controller {
     public int score = 0;
     public AudioSource damageAudioSource;
     public Sound.Sound damageSound;
+    public ControllerVibrationStackEffectConfig takeDamageVibrationConfig;
 
 
     private float ropeForceRemaining = 0f;
@@ -224,6 +239,7 @@ namespace Catsland.Scripts.Controller {
 
     public bool enableAutoAim = true;
     private GameObject autoAimGo;
+    private ControllerVibrationManager controllerVibrationManager;
 
     public Vector3 footPosition {
       get {
@@ -266,7 +282,7 @@ namespace Catsland.Scripts.Controller {
     private const string DRAWING_STATE_NAME = "Drawing";
     private const string PREPARING_STATE_NAME = "Upper_Preparing";
     private const string FAST_RELOAD_STATE_NAME = "Upper_FastReload";
-    private const string NON_DRAWING_CYCLE_STATE = "Empty";
+    private static readonly string[] NON_DRAWING_CYCLE_STATES = { "Empty", "Upper_ShootDone" };
 
     private const float DEFAULT_PHYSICS_TIMESTAMP = .02f;
 
@@ -298,6 +314,7 @@ namespace Catsland.Scripts.Controller {
         ?.GetComponent<TimeScaleController>();
 
       rapidShootRemain = rapidShootLimit;
+      controllerVibrationManager = FindObjectOfType<ControllerVibrationManager>();
     }
 
     public void Awake() {
@@ -361,6 +378,11 @@ namespace Catsland.Scripts.Controller {
           // Use unscaled time so the player gains extra time during time slow.
           currentDrawingTime += Time.unscaledDeltaTime;
         }
+        // vibrate in timeslow mode
+        if (input.timeSlow()) {
+          controllerVibrationManager.RegisterConfig(timeSlowDrawVibrateConfig, true);
+        }
+
         // render indicator
         if (trailIndicator != null) {
           if (input.timeSlow()) {
@@ -836,7 +858,8 @@ namespace Catsland.Scripts.Controller {
 
     private bool isInDrawingCycle() {
       AnimatorStateInfo upperBodySpriteLayerState = animator.GetCurrentAnimatorStateInfo(2);
-      return !upperBodySpriteLayerState.IsName(NON_DRAWING_CYCLE_STATE) || isDrawing;
+      return 
+        !NON_DRAWING_CYCLE_STATES.Any(state => upperBodySpriteLayerState.IsName(state)) || isDrawing;
     }
 
     private bool isCliffJumping() {
@@ -861,6 +884,9 @@ namespace Catsland.Scripts.Controller {
       if (currentHealth <= 0) {
         isDead = true;
       }
+
+      // Vibration
+      controllerVibrationManager.RegisterConfig(takeDamageVibrationConfig, true);
 
       // Dizzy
       cinemachineImpulseSource.GenerateImpulse();
@@ -1064,6 +1090,13 @@ namespace Catsland.Scripts.Controller {
         gameObject.tag,
         weaponPartyConfig);
       isShooting = true;
+
+      // Gamepad Vibration
+      //StartCoroutine(ControllerUtils.Vibrate(normalShootVibrateConfig));
+      controllerVibrationManager?.RegisterConfig(normalShootVibrateConfig);
+      // Player shake
+      // Cannot use DOTween because it totally take over the position during shake.
+      transform.position += -arrow.transform.right * normalShootShakeConfig.strength;
 
       // Bow heat
       if (currentBowHeat < maxBowHeat) {

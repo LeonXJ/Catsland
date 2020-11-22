@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using DG.Tweening;
 using Catsland.Scripts.Bullets;
-using UnityEngine.Rendering.Universal.Internal;
 
 namespace Catsland.Scripts.Controller {
   public static class ControllerUtils {
@@ -62,6 +62,25 @@ namespace Catsland.Scripts.Controller {
       rb2d.bodyType = RigidbodyType2D.Dynamic;
 
       Utils.ApplyVelocityRepel(velocityAfterFreeze, rb2d);
+    }
+
+    [System.Serializable]
+    public class VibrateConfig {
+      public float lowFrequency = .2f;
+      public float hightFrequency = .3f;
+      public float seconds = .2f;
+    }
+
+    public static IEnumerator Vibrate(float lowFrequency, float highFrequency, float seconds) {
+      Gamepad.current.SetMotorSpeeds(lowFrequency, highFrequency);
+
+      yield return new WaitForSeconds(seconds);
+
+      Gamepad.current.SetMotorSpeeds(0f, 0f);
+    }
+
+    public static IEnumerator Vibrate(VibrateConfig vibrateConfig) {
+      return Vibrate(vibrateConfig.lowFrequency, vibrateConfig.hightFrequency, vibrateConfig.seconds);
     }
 
 

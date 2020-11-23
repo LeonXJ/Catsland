@@ -313,6 +313,7 @@ namespace OSP {
       }
 
       prevCameraPosition = MainCamera.transform.position;
+
     }
 
     /// <summary>

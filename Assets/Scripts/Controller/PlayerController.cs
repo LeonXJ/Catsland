@@ -742,7 +742,7 @@ namespace Catsland.Scripts.Controller {
       animator.SetBool(CROUCH, isCrouching);
       animator.SetBool(CLIFF_SLIDING, isCliffSliding && rb2d.velocity.y < Mathf.Epsilon);
       animator.SetBool(DASHING, isDashing() || isDashKnockingBack());
-      animator.SetFloat(DIRECTION, (shootDirectionAngle + maxDirectionAngle) * .5f / maxDirectionAngle);
+      animator.SetFloat(DIRECTION, isInDrawingCycle() ? (shootDirectionAngle + maxDirectionAngle) * .5f / maxDirectionAngle : .5f);
       animator.SetBool(IS_IN_DRAWING_CYCLE, isInDrawingCycle());
 
       // running dust effect

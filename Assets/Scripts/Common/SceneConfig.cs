@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Cinemachine;
 using Catsland.Scripts.Camera;
@@ -10,6 +11,7 @@ namespace Catsland.Scripts.Common {
   public class SceneConfig: MonoBehaviour {
 
     private static SceneConfig sceneConfig;
+    private const string DO_NOT_DESTROY_SCENE_NAME = "NotDestroy";
 
     public UnityEngine.Camera MainCamera;
     public GlobalLightController globalLightController;
@@ -33,6 +35,8 @@ namespace Catsland.Scripts.Common {
     public bool useDebugInitialPosition = true;
     public Transform playerInitialPosition;
 
+    private GameObject gameMaster;
+
     public static SceneConfig getSceneConfig() {
       return sceneConfig;
     }
@@ -40,6 +44,13 @@ namespace Catsland.Scripts.Common {
     SceneConfig() {
       sceneConfig = this;
       progressManager = new ProgressManager();
+    }
+
+    public void Awake() {
+      gameMaster = GameObject.FindGameObjectWithTag(Tags.GAME_MASTER);
+      if (gameMaster == null) {
+        SceneManager.LoadSceneAsync(DO_NOT_DESTROY_SCENE_NAME, LoadSceneMode.Additive);
+      }
     }
 
     public void Start() {

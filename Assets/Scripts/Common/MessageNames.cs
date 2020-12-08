@@ -7,6 +7,9 @@
     public static readonly string APPLY_ROPE_FORCE = "applyRopeForce";
     public static readonly string RELAY_KICKED = "OnRelayKicked";
 
+    // Parameter: OnDestroyInfo.
+    public const string ON_DESTROYED = "OnDestroyed";
+
     // void onShieldDamage(DamageInfo)
     public static readonly string ON_SHIELD_DAMAGE_FUNCTION = "onShieldDamage";
   }

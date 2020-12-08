@@ -470,7 +470,7 @@ namespace Catsland.Scripts.Controller {
         if (input.jump()) {
           rb2d.velocity = new Vector2(rb2d.velocity.x, 0.0f);
           appliedForce = new Vector2(0.0f, jumpForce);
-          appliedVelocity = new Vector2(0f, jumpVelocity);
+          appliedVelocity = new Vector2(rb2d.velocity.x, jumpVelocity);
           // jump up dust.
           generateJumpUpDust();
         }

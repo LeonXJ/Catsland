@@ -1,8 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using Catsland.Scripts.Common;
-using Catsland.Scripts.Misc;
-using Boo.Lang;
-using System.Collections;
 
 namespace Catsland.Scripts.Bullets {
   public class ContactDamage : MonoBehaviour {
@@ -28,6 +27,8 @@ namespace Catsland.Scripts.Bullets {
     public bool isPresetRepelDirectionLocalSpace = true;
     public Vector2 repelDirection;
 
+    public float dedupDamageWithinSecond = .5f;
+
     public OnHitEvent onHitEvent;
     public DamageInfo.OnDamageFeedback onDamageFeedback;
 
@@ -41,14 +42,6 @@ namespace Catsland.Scripts.Bullets {
 
     void OnTriggerEnter2D(Collider2D collider) {
       onHit(collider, false);
-    }
-
-    void OnCollisionStay2D(Collision2D collision) {
-      onHit(collision, true);
-    }
-
-    private void OnTriggerStay2D(Collider2D collision) {
-      onHit(collision, true);
     }
 
     void onHit(Collision2D collision, bool isStay) {

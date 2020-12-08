@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Catsland.Scripts.Common;
 using Catsland.Scripts.Controller;
 
 namespace Catsland.Scripts.Misc {
@@ -11,6 +12,8 @@ namespace Catsland.Scripts.Misc {
     private bool hasTransitionTriggerred = false;
     private bool isTriggerred = false;
 
+    private bool mutatePlayerInput => needInputConfirm;
+
     private void Awake() {
       inputMaster = new InputMaster();
       inputMaster.General.SceneTransitConfirm.performed += SceneTransitConfirm_performed;
@@ -18,8 +21,7 @@ namespace Catsland.Scripts.Misc {
 
     private void SceneTransitConfirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj) {
       if (isTriggerred && !hasTransitionTriggerred && needInputConfirm) {
-        hasTransitionTriggerred = true;
-        SceneMaster.getInstance().TransitionToScene(transiteInfo);
+        StartTransite();
       }
     }
 
@@ -42,8 +44,16 @@ namespace Catsland.Scripts.Misc {
         if (needInputConfirm || hasTransitionTriggerred) {
           return;
         }
-        hasTransitionTriggerred = true;
-        SceneMaster.getInstance().TransitionToScene(transiteInfo);
+        StartTransite();
+      }
+    }
+
+    private void StartTransite() {
+      hasTransitionTriggerred = true;
+      SceneMaster.getInstance().TransitionToScene(transiteInfo);
+      // Mutate player input during tranistion.
+      if (mutatePlayerInput) {
+        SceneConfig.getSceneConfig().GetPlayer().GetComponent<DeviceInput>().enabled = false;
       }
     }
 

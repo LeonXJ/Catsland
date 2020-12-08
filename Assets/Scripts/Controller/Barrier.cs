@@ -13,6 +13,8 @@ namespace Catsland.Scripts.Controller {
     // Consider damage if the health is lower.
     public int damageHealthThreshold = 1;
 
+    public GameObject[] notifyGameObjectsWhenDestroy;
+
     private Animator animator;
     private CharacterEventSounds characterEventSounds;
 
@@ -31,7 +33,19 @@ namespace Catsland.Scripts.Controller {
       if (health <= 0) {
         GetComponent<Misc.DebrideGenerator>()?.GenerateDebrides();
         characterEventSounds.PlayOnDieSound();
+        NotifyGameObjects();
         Destroy(gameObject);
+      }
+    }
+
+    private void NotifyGameObjects() {
+      if (notifyGameObjectsWhenDestroy != null) {
+        foreach (var gameObject in notifyGameObjectsWhenDestroy) {
+          gameObject.SendMessage(
+            Common.MessageNames.ON_DESTROYED,
+            new Common.OnDestroyedInfo(gameObject.name),
+            SendMessageOptions.DontRequireReceiver);
+        }
       }
     }
 

@@ -7,6 +7,7 @@ namespace Catsland.Scripts.Misc {
 
     public Vector2 initVelocity = new Vector2(1.0f, 0.0f);
     public float timeInterval = 0.1f;
+    public float shootingRange = 3f;
     public float gravity = -0.98f;
     public bool isShow = false;
     public float showTransitSpeed = 5.0f;
@@ -29,18 +30,29 @@ namespace Catsland.Scripts.Misc {
         Time.deltaTime * (isShow ? showTransitSpeed : hideTransitSpeed));
       lineRenderer.material.SetColor(Common.Materials.MATERIAL_ATTRIBUTE_TINT, new Color(1.0f, 1.0f, 1.0f, alpha));
 
+      // absolote length: 0 - 1 - 5
+      // alpha: 0 - 1 - 0
+
+
       if(alpha > Mathf.Epsilon) {
         int pointCount = lineRenderer.positionCount;
         Vector3[] positions = new Vector3[pointCount];
         lineRenderer.GetPositions(positions);
 
-        for(int i = 0; i < pointCount; i++) {
-          float x = initVelocity.x * timeInterval * i;
-          float y = initVelocity.y * timeInterval * i +
-            0.5f * gravity * timeInterval * timeInterval * i * i;
-          positions[i] = new Vector3(x, y, 0.0f);
-        }
+        Vector2 originalInWorld = Common.Utils.toVector2(transform.position);
+        Vector2 directionInWorld = transform.TransformDirection(initVelocity);
+        RaycastHit2D hit = Physics2D.Raycast(
+          originalInWorld, 
+          directionInWorld.normalized,
+          shootingRange, 
+          LayerMask.GetMask(Common.Layers.LAYER_GROUND_NAME));
 
+        positions[0] = Vector2.zero;
+        if (hit) {
+          positions[1] = transform.InverseTransformPoint(hit.point);
+        } else {
+          positions[1] = new Vector2(shootingRange, 0f);
+        }
         lineRenderer.SetPositions(positions);
       }
     }

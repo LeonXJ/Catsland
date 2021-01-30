@@ -18,6 +18,7 @@ namespace Catsland.Scripts.Controller.Merchant {
 
     public TextMeshPro dialogText;
     public float commentLastForSeconds = 5f;
+    public float discountHesitateTime = 2f;
 
     private float lastCommentTime;
 
@@ -45,14 +46,12 @@ namespace Catsland.Scripts.Controller.Merchant {
     }
 
     void OnGoodsUnselected(Messages.GoodsMessageInfo info) {
-      Comment("You can't find a better " + info.trademark + " like this.");
     }
 
     void OnGoodsUnaffordable(Messages.GoodsMessageInfo info) {
       foreach (var knowledge in merchantKnowledges) {
         if (knowledge.trademark == info.trademark && knowledge.realPrice < info.price && info.goods != null) {
-          info.goods.UpdatePrice(knowledge.realPrice);
-          Comment("I can give you a discount!");
+          StartCoroutine(HesitateAndDiscount(info.goods, knowledge.realPrice));
           return;
         }
       }
@@ -61,6 +60,13 @@ namespace Catsland.Scripts.Controller.Merchant {
 
     void OnGoodsPurchased(Messages.GoodsMessageInfo info) {
       Comment("Wise choose!");
+    }
+
+    private IEnumerator HesitateAndDiscount(Goods goods, int realPrice) {
+      yield return new WaitForSeconds(discountHesitateTime);
+
+      goods.UpdatePrice(realPrice);
+      Comment("I can give you a discount!");
     }
 
     private void Comment(string text) {

@@ -14,6 +14,14 @@ namespace AnimationImporter {
 		[SerializeField]
 		private bool _automaticImporting = false;
 
+		[SerializeField]
+		private string _customName = "";
+
+		public string customName {
+			get { return _customName; }
+			set { _customName = value; }
+		}
+
 		public bool automaticImporting
 		{
 			get

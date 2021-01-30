@@ -6,6 +6,7 @@ namespace AnimationImporter {
 		private string _assetPath;
 
 		public string name { get { return Path.GetFileNameWithoutExtension(fileName); } }
+
 		public string fileName { get { return Path.GetFileName(_assetPath); } }
 		public string assetDirectory { get { return GetBasePath(_assetPath); } }
 

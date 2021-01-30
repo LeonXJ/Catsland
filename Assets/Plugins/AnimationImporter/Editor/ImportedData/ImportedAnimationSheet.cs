@@ -8,6 +8,7 @@ namespace AnimationImporter {
   public class ImportedAnimationSheet
 	{
 		public string name { get; set; }
+
 		public string assetDirectory { get; set; }
 
 		public int width { get; set; }
@@ -260,7 +261,7 @@ namespace AnimationImporter {
 			return metaData;
 		}
 
-		public void ApplySpriteNamingScheme(SpriteNamingScheme namingScheme)
+		public void ApplySpriteNamingScheme(SpriteNamingScheme namingScheme, string customName)
 		{
 			const string NAME_DELIMITER = "_";
 
@@ -293,6 +294,9 @@ namespace AnimationImporter {
 							case SpriteNamingScheme.AnimationOne:
 								animFrame.name = anim.name + NAME_DELIMITER + (i + 1).ToString();
 								break;
+							case SpriteNamingScheme.CustomAnimationZero:
+                animFrame.name = customName + NAME_DELIMITER + anim.name + NAME_DELIMITER + i.ToString();
+                break;
 						}						
 					}
 				}

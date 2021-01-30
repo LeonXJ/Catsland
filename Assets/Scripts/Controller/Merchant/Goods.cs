@@ -9,6 +9,7 @@ namespace Catsland.Scripts.Controller.Merchant {
 
     public string trademark = "Durable Ij.";
     public int price = 999;
+    public GameObject goodsApplyPrefab;
 
     public float buyConfirmTime = 1f;
     public TextMeshPro nameText;
@@ -111,6 +112,10 @@ namespace Catsland.Scripts.Controller.Merchant {
         Messages.ON_GOODS_PURCHASED,
         new Messages.GoodsMessageInfo { trademark = trademark, price = price },
         SendMessageOptions.DontRequireReceiver);
+
+      // Goods apply
+      GameObject applier = Instantiate(goodsApplyPrefab);
+      applier.transform.position = transform.position;
 
       // Destroy
       Destroy(gameObject);

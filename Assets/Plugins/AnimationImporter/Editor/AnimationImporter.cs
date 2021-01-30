@@ -285,7 +285,7 @@ namespace AnimationImporter {
 				animationSheet.assetDirectory = job.assetDirectory;
 				animationSheet.name = job.name;
 
-				animationSheet.ApplySpriteNamingScheme(sharedData.spriteNamingScheme);
+				animationSheet.ApplySpriteNamingScheme(sharedData.spriteNamingScheme, sharedData.customName);
 
 				CreateSprites(animationSheet, job);
 

@@ -155,9 +155,11 @@ namespace AnimationImporter {
 
 			GUILayout.Space(5f);
 
+
 			importer.sharedData.spriteNamingScheme = (SpriteNamingScheme)EditorGUILayout.IntPopup("Sprite Naming Scheme",
 				(int)importer.sharedData.spriteNamingScheme,
 				SpriteNaming.namingSchemesDisplayValues, SpriteNaming.namingSchemesValues);
+			importer.sharedData.customName = EditorGUILayout.TextField(importer.sharedData.customName);
 
 			GUILayout.Space(25f);
 

@@ -1261,5 +1261,10 @@ namespace Catsland.Scripts.Controller {
     public ArrowResult getArrowResult(ArrowCarrier arrowCarrier) {
       return ArrowResult.HIT;
     }
+
+    public void RecoverHealth(int hp) {
+      int targetHp = currentHealth + hp;
+      currentHealth = targetHp > maxHealth ? maxHealth : targetHp;
+    }
   }
 }

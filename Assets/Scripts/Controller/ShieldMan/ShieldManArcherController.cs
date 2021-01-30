@@ -1,5 +1,5 @@
-﻿using Catsland.Scripts.Bullets;
-using UnityEngine;
+﻿using UnityEngine;
+using Catsland.Scripts.Bullets;
 
 namespace Catsland.Scripts.Controller.ShieldMan {
 

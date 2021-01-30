@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Common;
 
 namespace Catsland.Scripts.Controller.Archer {
@@ -13,6 +14,13 @@ namespace Catsland.Scripts.Controller.Archer {
     private float aimDirection = .5f;
 
     public float aimDirectionRange = 60f;
+
+    [Header("Arrow")]
+    public GameObject arrowPrefab;
+    public Transform arrowShootPoint;
+    public float arrowSpeed = 10f;
+    public float arrowLifetime = 3f;
+    public Party.WeaponPartyConfig weaponPartyConfig;
 
     // References
     public Transform upper;
@@ -60,6 +68,17 @@ namespace Catsland.Scripts.Controller.Archer {
 
       drawAnimation.InEffect = isDrawing;
       drawAnimation.Intensity = Mathf.Clamp01(currentDrawTime / DrawTime);
+    }
+
+    public void Shoot() {
+      GameObject arrow = Instantiate(arrowPrefab);
+      arrow.transform.position = arrowShootPoint.position;
+
+      Vector2 arrowVelocity = arrowSpeed * 
+        (getOrientation() > 0 ? 1f : -1f) * arrowShootPoint.transform.right;
+
+      ArrowCarrier arrowCarrier = arrow.GetComponent<ArrowCarrier>();
+      arrowCarrier.fire(arrowVelocity, arrowLifetime, gameObject.tag, weaponPartyConfig);
     }
 
     private void aimPlayer() {

@@ -9,6 +9,7 @@ namespace Catsland.Scripts.Controller.Archer {
     [Header("Draw")]
     public float DrawTime = 1f;
     private float currentDrawTime = 0f;
+    public float DrawIntense => Mathf.Clamp01(currentDrawTime / DrawTime);
 
     public float aimSpeed = 5f;
     private float aimDirection = .5f;
@@ -75,10 +76,21 @@ namespace Catsland.Scripts.Controller.Archer {
       arrow.transform.position = arrowShootPoint.position;
 
       Vector2 arrowVelocity = arrowSpeed * 
-        (getOrientation() > 0 ? 1f : -1f) * arrowShootPoint.transform.right;
+        (GetOrientation() > 0 ? 1f : -1f) * arrowShootPoint.transform.right;
 
       ArrowCarrier arrowCarrier = arrow.GetComponent<ArrowCarrier>();
       arrowCarrier.fire(arrowVelocity, arrowLifetime, gameObject.tag, weaponPartyConfig);
+    }
+
+    public bool IsShootBlock() {
+      GameObject player = GameObject.FindGameObjectWithTag(Tags.PLAYER);
+      if (player == null) {
+        return true;
+      }
+
+      Vector2 ray = player.transform.position - arrowShootPoint.position;
+      var hit =Physics2D.Raycast(arrowShootPoint.position, ray, ray.magnitude, LayerMask.GetMask(Layers.LAYER_GROUND_NAME));
+      return hit.collider != null;
     }
 
     private void aimPlayer() {
@@ -92,10 +104,10 @@ namespace Catsland.Scripts.Controller.Archer {
 
       // Cap delta with aim direction range
       float proposeAimDirection = Mathf.Clamp(
-        Vector2.SignedAngle(new Vector2(getOrientation(), 0f), delta),
+        Vector2.SignedAngle(new Vector2(GetOrientation(), 0f), delta),
         -aimDirectionRange, aimDirectionRange) * .5f / aimDirectionRange + .5f;
       // Reverse if faces left.
-      if (getOrientation() < 0f) {
+      if (GetOrientation() < 0f) {
         proposeAimDirection = 1f - proposeAimDirection;
       }
 
@@ -103,7 +115,7 @@ namespace Catsland.Scripts.Controller.Archer {
       aimDirection = Mathf.LerpAngle(aimDirection, proposeAimDirection, Time.deltaTime * aimSpeed);
     }
 
-    private float getOrientation() {
+    public float GetOrientation() {
       return transform.lossyScale.x > 0f ? 1f : -1f;
     }
 

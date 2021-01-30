@@ -334,7 +334,7 @@ namespace Catsland.Scripts.Controller {
       RaycastHit2D hit = Physics2D.BoxCast(colliderCenter, colliderBoxSize, 0f, Vector2.down, maxDescendDistance, LayerMask.GetMask(Layers.LAYER_GROUND_NAME));
 
       // Place
-      if (hit.point == null) {
+      if (hit.collider == null) {
         Debug.LogErrorFormat("Can't find landing ground for {0}.", gameObject.name);
         return;
       }

@@ -86,6 +86,29 @@ namespace Catsland.Scripts.Common {
       }
     }
 
+    public static void DrawPieAsGizmos(float radius, Color color, Vector2 center, Vector2 orientation, float angle, int segments = 16) {
+      float topAngle = angle * .5f;
+      Vector2 radiusOrientation = orientation.normalized * radius;
+      Vector2 center2Top = Quaternion.AngleAxis(topAngle, Vector3.forward) * radiusOrientation;
+      float angleStep = angle / (float)segments;
+      
+      Gizmos.color = color;
+
+      // Center to top-side
+      Vector2 currentPoint = center + center2Top;
+      Gizmos.DrawLine(center, currentPoint);
+      // Arc
+      for (int i = 0; i < segments; i++) {
+        float endAngle = topAngle - angleStep * (i + 1);
+        Vector3 center2End = Quaternion.AngleAxis(endAngle, Vector3.forward) * radiusOrientation;
+        Vector2 end = center + Utils.toVector2(center2End);
+        Gizmos.DrawLine(currentPoint, end);
+        currentPoint = end;
+      }
+      // down-side to Center
+      Gizmos.DrawLine(currentPoint, center);
+    }
+
     public static bool isRectOverlap(Rect rect, Transform transform, LayerMask layerMask) {
       return Physics2D.OverlapBox(
         transform.TransformPoint(rect.position),

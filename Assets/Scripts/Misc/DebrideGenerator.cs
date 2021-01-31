@@ -13,6 +13,8 @@ namespace Catsland.Scripts.Misc {
     public void GenerateDebrides(Vector2 direction) {
       GameObject debride = Instantiate(debridePrefab);
       debride.transform.position = transform.position;
+      // Mostly for orientation.
+      debride.transform.localScale = transform.lossyScale;
 
       if (initialSpeed > Mathf.Epsilon) {
         // Only speed on leaf node

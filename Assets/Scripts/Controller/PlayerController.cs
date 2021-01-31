@@ -1215,21 +1215,27 @@ namespace Catsland.Scripts.Controller {
         }
 
         // Try to find AutoAimTarget component
-        GameObject targetGo = collider2d.gameObject;
-        AutoAimTarget autoAimTarget = targetGo.GetComponentInChildren<AutoAimTarget>();
-        if (autoAimTarget != null) {
-          targetGo = autoAimTarget.gameObject;
+        AutoAimTarget[] autoAimTargets = collider2d.gameObject.GetComponentsInChildren<AutoAimTarget>();
+        List<GameObject> targetGos = new List<GameObject>();
+        if (autoAimTargets != null) {
+          foreach (var aimTarget in autoAimTargets) {
+            targetGos.Add(aimTarget.gameObject);
+          }
+        } else {
+          targetGos.Add(collider2d.gameObject);
         }
 
-        Vector3 delta = targetGo.transform.position - upperBodyGo.transform.position;
-        float curAngle = Vector2.Angle(desireDirection, delta);
-        float angleToOrientation = Vector2.Angle(new Vector2(getOrientation(), 0f), delta);
-        if (curAngle > autoAimCoverAngle || angleToOrientation > maxDirectionAngle) {
-          continue;
-        }
-        if (curAngle < aimAngle) {
-          aimGO = targetGo;
-          aimAngle = curAngle;
+        foreach (var targetGo in targetGos) {
+          Vector3 delta = targetGo.transform.position - upperBodyGo.transform.position;
+          float curAngle = Vector2.Angle(desireDirection, delta);
+          float angleToOrientation = Vector2.Angle(new Vector2(getOrientation(), 0f), delta);
+          if (curAngle > autoAimCoverAngle || angleToOrientation > maxDirectionAngle) {
+            continue;
+          }
+          if (curAngle < aimAngle) {
+            aimGO = targetGo;
+            aimAngle = curAngle;
+          }
         }
       }
       autoAimGo = aimGO;

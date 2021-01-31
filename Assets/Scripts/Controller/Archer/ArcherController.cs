@@ -1,10 +1,15 @@
 ﻿using UnityEngine;
 using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Common;
+using Catsland.Scripts.Misc;
+using Catsland.Scripts.Ui;
 
 namespace Catsland.Scripts.Controller.Archer {
-  public class ArcherController : MonoBehaviour {
+  public class ArcherController : MonoBehaviour, IHealthBarQuery {
 
+    [Header("Basic")]
+    public Timing timing;
+    public string displayName = "Archer";
 
     [Header("Draw")]
     public float DrawTime = 1f;
@@ -23,8 +28,23 @@ namespace Catsland.Scripts.Controller.Archer {
     public float arrowLifetime = 3f;
     public Party.WeaponPartyConfig weaponPartyConfig;
 
+    [Header("Health")]
+    public VulnerableAttribute vulnerableAttribute;
+    private Bullets.Utils.DamageHelper damageHelper;
+
+    public DamageBypass bodyDamagePart;
+    public DamageBypass headDamagePart;
+
+    // Whether the last damage is headshot. Used to determine what debris to generate.
+    private bool wasHeadShot = false;
+
+    [Header("Debris")]
+    public DebrideGenerator normalDebrisGenerator;
+    public DebrideGenerator headshotDebrisGenerator;
+
     // References
     public Transform upper;
+    private ArcherEventSounds eventSounds;
 
     private IInput input;
     private Animator animator;
@@ -42,6 +62,12 @@ namespace Catsland.Scripts.Controller.Archer {
       input = GetComponent<IInput>();
       animator = GetComponent<Animator>();
       drawAnimation = GetComponent<DrawAnimation>();
+      eventSounds = GetComponent<ArcherEventSounds>();
+
+      damageHelper = Bullets.Utils.DamageHelper.DamageHelperBuilder.NewBuilder(
+        this, vulnerableAttribute, timing)
+        .SetOnDie(EnterDie)
+        .Build();
     }
 
     // Update is called once per frame
@@ -119,6 +145,26 @@ namespace Catsland.Scripts.Controller.Archer {
       return transform.lossyScale.x > 0f ? 1f : -1f;
     }
 
+    // Damage cause by melee. 
+    public void damage(DamageInfo damageInfo) {
+      eventSounds?.PlayOnDamageSound();
+      damageHelper.OnDamaged(damageInfo);
+    }
+
+    // Arrow damage bypassed from sub-component
+    public void OnDamageByPass(DamageBypassInfo damageBypassInfo) {
+      eventSounds?.PlayOnDamageSound();
+      int damageMultiplier = 1;
+      // Headshot: damage x 2
+      if (damageBypassInfo.byPasser == headDamagePart.gameObject.name) {
+        damageMultiplier = 2;
+        wasHeadShot = true;
+      } else {
+        wasHeadShot = false;
+      }
+      damageHelper.OnDamaged(damageBypassInfo.damageInfo, damageMultiplier);
+    }
+
     private bool canCanOrientation() {
       AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
       return baseState.IsName(ANI_STAND) || baseState.IsName(ANI_LOWER_DRAW);
@@ -132,6 +178,20 @@ namespace Catsland.Scripts.Controller.Archer {
     private bool shouldReleaseDrawEnegy(bool isDrawing) {
       AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
       return !isDrawing && baseState.IsName(ANI_STAND);
+    }
+
+    private void EnterDie(DamageInfo damageInfo) {
+      eventSounds?.PlayOnDieSound();
+      if (wasHeadShot) {
+        headshotDebrisGenerator?.GenerateDebrides(damageInfo.repelDirection);
+      } else {
+        normalDebrisGenerator?.GenerateDebrides(damageInfo.repelDirection);
+      }
+      Destroy(gameObject);
+    }
+
+    public HealthCondition GetHealthCondition() {
+      return HealthCondition.CreateHealthCondition(vulnerableAttribute, displayName);
     }
   }
 }

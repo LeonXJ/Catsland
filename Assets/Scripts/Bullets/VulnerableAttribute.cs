@@ -17,7 +17,7 @@ namespace Catsland.Scripts.Bullets {
 
     public float strongArrowHitRepelSpeed = 1.2f;
 
-
+    public float dashRepelSpeed = 2f;
 
   }
 }

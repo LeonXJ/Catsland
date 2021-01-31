@@ -2,10 +2,11 @@ tree("Root")
   fallback
     while 
       DetectPlayer()
-      parallel
-        FacePlayer()
-        sequence 
-          Draw()
-          CanHitPlayer()
-          Release()
+      mute
+        parallel
+          FacePlayer()
+          sequence 
+            Draw()
+            CanHitPlayer()
+            Release()
     Idle()

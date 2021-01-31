@@ -23,8 +23,7 @@ namespace Catsland.Scripts.Controller.Crawler {
 
     private CrawlerInput input;
     private Rigidbody2D rb2d;
-    private Animator animator;
-    private Bullets.Utils.DamageHelper damageHelper;
+    private Utils.DamageHelper damageHelper;
     private DebrideGenerator debrideGenerator;
     private CrawlerEventSounds crawlerEventSounds;
 
@@ -33,7 +32,6 @@ namespace Catsland.Scripts.Controller.Crawler {
     void Start() {
       input = GetComponent<CrawlerInput>();
       rb2d = GetComponent<Rigidbody2D>();
-      animator = GetComponent<Animator>();
       debrideGenerator = GetComponent<DebrideGenerator>();
       crawlerEventSounds = GetComponent<CrawlerEventSounds>();
 

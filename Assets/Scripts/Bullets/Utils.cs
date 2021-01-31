@@ -48,10 +48,10 @@ namespace Catsland.Scripts.Bullets {
       private Animator animator;
 
       // Call this when the object is damaged.
-      public void OnDamaged(DamageInfo damageInfo) {
+      public void OnDamaged(DamageInfo damageInfo, int damageMultiplier = 1) {
         damageInfo.onDamageFeedback?.Invoke(new DamageInfo.DamageFeedback(true));
 
-        vulnerableAttribute.currentHealth -= damageInfo.damage;
+        vulnerableAttribute.currentHealth -= damageInfo.damage * damageMultiplier;
         if (vulnerableAttribute.currentHealth <= 0) {
           onDie(damageInfo);
           return;
@@ -70,8 +70,12 @@ namespace Catsland.Scripts.Bullets {
           if (damageInfo.isSmashAttack) {
             repelSpeed = vulnerableAttribute.strongArrowHitRepelSpeed;
           }
+          if (damageInfo.isDash) {
+            repelSpeed = vulnerableAttribute.dashRepelSpeed;
+          }
 
-          rb2d.velocity = new Vector2(-Mathf.Sign(Common.Utils.getOrientation(controller.gameObject)) * repelSpeed, rb2d.velocity.y);
+          //rb2d.velocity = new Vector2(-Mathf.Sign(Common.Utils.getOrientation(controller.gameObject)) * repelSpeed, rb2d.velocity.y);
+          rb2d.velocity = damageInfo.repelDirection.normalized * repelSpeed;
           rb2d.bodyType = RigidbodyType2D.Kinematic;
         }
         if (animator != null) {

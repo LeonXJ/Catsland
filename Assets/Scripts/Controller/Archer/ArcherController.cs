@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Common;
+using Catsland.Scripts.Controller.Mine;
 using Catsland.Scripts.Misc;
 using Catsland.Scripts.Ui;
 
@@ -28,6 +29,12 @@ namespace Catsland.Scripts.Controller.Archer {
     public float arrowLifetime = 3f;
     public Party.WeaponPartyConfig weaponPartyConfig;
 
+    [Header("Trap")]
+    public GameObject trapPrefab;
+    public Transform trapGeneratePosition;
+    public float trapThrowSpeed = 1f;
+    public float trapThrowAngle = 0f;
+
     [Header("Health")]
     public VulnerableAttribute vulnerableAttribute;
     private Bullets.Utils.DamageHelper damageHelper;
@@ -52,10 +59,12 @@ namespace Catsland.Scripts.Controller.Archer {
 
     private const string ANI_STAND = "Archer_Stand";
     private const string ANI_LOWER_DRAW = "Archer_Lower_Draw";
+    private const string ANI_SET_TRAP= "Archer_SetTrap";
 
     private const string PAR_IS_DRAWING = "IsDrawing";
     private const string PAR_HAS_ENEGY_TO_SHOOT = "HasEnegyToShoot";
     private const string PAR_UPPER_DIRECTION = "UpperDirection";
+    private const string PAR_SET_TRAP = "SetTrap";
 
     // Start is called before the first frame update
     void Start() {
@@ -86,6 +95,12 @@ namespace Catsland.Scripts.Controller.Archer {
 
       if (canCanOrientation()) {
         ControllerUtils.AdjustOrientation(input.getHorizontal(), gameObject);
+      }
+
+      if (input.interact() && canSetTrap(isDrawing)) {
+        animator.SetTrigger(PAR_SET_TRAP);
+      } else {
+        animator.ResetTrigger(PAR_SET_TRAP);
       }
 
       // Update animator
@@ -151,6 +166,24 @@ namespace Catsland.Scripts.Controller.Archer {
       damageHelper.OnDamaged(damageInfo);
     }
 
+    // Call by animation.
+    public void SetTrap() {
+      GameObject trap = GameObject.Instantiate(trapPrefab);
+      trap.transform.position = trapGeneratePosition.position;
+
+      float orientation = GetOrientation();
+      Vector2 direction;
+      if (orientation > 0f) {
+        direction = Quaternion.AngleAxis(trapThrowAngle, Vector3.forward) * Vector3.right;
+      } else {
+        direction = Quaternion.AngleAxis(trapThrowAngle, Vector3.back) * Vector3.left;
+      }
+
+      Vector2 velocity = direction * trapThrowSpeed;
+      trap.GetComponent<Rigidbody2D>().velocity = velocity;
+      trap.GetComponent<PromixityMine>().isActive = true;
+    }
+
     // Arrow damage bypassed from sub-component
     public void OnDamageByPass(DamageBypassInfo damageBypassInfo) {
       eventSounds?.PlayOnDamageSound();
@@ -165,6 +198,12 @@ namespace Catsland.Scripts.Controller.Archer {
       damageHelper.OnDamaged(damageBypassInfo.damageInfo, damageMultiplier);
     }
 
+    public bool IsSettingTrap() {
+      AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
+      return baseState.IsName(ANI_SET_TRAP);
+    
+    }
+
     private bool canCanOrientation() {
       AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
       return baseState.IsName(ANI_STAND) || baseState.IsName(ANI_LOWER_DRAW);
@@ -173,6 +212,14 @@ namespace Catsland.Scripts.Controller.Archer {
     private bool canDraw() {
       AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
       return baseState.IsName(ANI_STAND) || baseState.IsName(ANI_LOWER_DRAW);
+    }
+
+    private bool canSetTrap(bool isDrawing) {
+      if (isDrawing) {
+        return false;
+      }
+      AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
+      return baseState.IsName(ANI_STAND);
     }
 
     private bool shouldReleaseDrawEnegy(bool isDrawing) {

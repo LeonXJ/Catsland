@@ -9,6 +9,7 @@ namespace Catsland.Scripts.Ai.Archer {
 
     private float horizon = 0f;
     private bool wantAttack = false;
+    private bool wantInteract = false;
 
     [Header("Detect")]
     public float visionDistance = 10f;
@@ -25,6 +26,7 @@ namespace Catsland.Scripts.Ai.Archer {
     [Task]
     public void Idle() {
       wantAttack = false;
+      wantInteract = false;
       Task.current.Succeed();
     }
 
@@ -68,6 +70,16 @@ namespace Catsland.Scripts.Ai.Archer {
       float deltaX = player.transform.position.x - transform.position.x;
       horizon = Mathf.Sign(deltaX);
       Task.current.Succeed();
+    }
+
+    [Task]
+    public void SetTrap() {
+      wantInteract = true;
+      if (controller.IsSettingTrap()) {
+        wantInteract = false;
+        Task.current.Succeed();
+        return;
+      }
     }
 
     [Task]
@@ -123,7 +135,7 @@ namespace Catsland.Scripts.Ai.Archer {
     }
 
     public bool interact() {
-      return false;
+      return wantInteract;
     }
 
     public bool jump() {

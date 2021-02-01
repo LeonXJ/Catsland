@@ -86,6 +86,51 @@ TextureImporter:
   - first:
       213: -4811007747302065559
     second: Archer_Lower_Release_1
+  - first:
+      213: 5200538587968441508
+    second: Archer_Lower_Debrid_0
+  - first:
+      213: 1427708398503613787
+    second: Archer_Lower_SetTrap_0
+  - first:
+      213: -1897373547666423500
+    second: Archer_Lower_SetTrap_1
+  - first:
+      213: -8351360579135305454
+    second: Archer_Lower_SetTrap_2
+  - first:
+      213: -4350284161873331106
+    second: Archer_Lower_SetTrap_3
+  - first:
+      213: 1243071903450087351
+    second: Archer_Lower_SetTrap_4
+  - first:
+      213: -5208711428305837744
+    second: Archer_Lower_SetTrap_5
+  - first:
+      213: 346047972680345304
+    second: Archer_Lower_SetTrap_6
+  - first:
+      213: 5404194527305371970
+    second: Archer_Lower_SetTrap_7
+  - first:
+      213: -6402084020013256316
+    second: Archer_Lower_SetTrap_8
+  - first:
+      213: -1991221933185612390
+    second: Archer_Lower_SetTrap_9
+  - first:
+      213: -4193618009102427349
+    second: Archer_Lower_SetTrap_10
+  - first:
+      213: -8493230779224453744
+    second: Archer_Lower_SetTrap_11
+  - first:
+      213: 5197227431762045152
+    second: Archer_Lower_SetTrap_12
+  - first:
+      213: -3565115917214136646
+    second: Archer_Lower_SetTrap_13
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -540,8 +585,8 @@ TextureImporter:
       name: Archer_Lower_SpecialDraw_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 64
+        x: 144
+        y: 128
         width: 48
         height: 64
       alignment: 9
@@ -561,7 +606,7 @@ TextureImporter:
       name: Archer_Lower_SpecialDraw_5
       rect:
         serializedVersion: 2
-        x: 48
+        x: 0
         y: 64
         width: 48
         height: 64
@@ -582,7 +627,7 @@ TextureImporter:
       name: Archer_Lower_SpecialDraw_6
       rect:
         serializedVersion: 2
-        x: 96
+        x: 48
         y: 64
         width: 48
         height: 64
@@ -603,7 +648,7 @@ TextureImporter:
       name: Archer_Lower_SpecialDraw_7
       rect:
         serializedVersion: 2
-        x: 96
+        x: 48
         y: 64
         width: 48
         height: 64
@@ -624,8 +669,8 @@ TextureImporter:
       name: Archer_Lower_SpecialDraw_8
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 96
+        y: 64
         width: 48
         height: 64
       alignment: 9
@@ -645,8 +690,8 @@ TextureImporter:
       name: Archer_Lower_SpecialDraw_9
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 96
+        y: 64
         width: 48
         height: 64
       alignment: 9
@@ -666,8 +711,8 @@ TextureImporter:
       name: Archer_Lower_SpecialRelease_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 96
+        y: 64
         width: 48
         height: 64
       alignment: 9
@@ -687,8 +732,8 @@ TextureImporter:
       name: Archer_Lower_SpecialRelease_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 96
+        y: 64
         width: 48
         height: 64
       alignment: 9
@@ -742,6 +787,321 @@ TextureImporter:
       bones: []
       spriteID: 96a786291fddb3db0800000000000000
       internalID: -4811007747302065559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Lower_Debrid_0
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 64
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ac0298ca460c2840800000000000000
+      internalID: 5200538587968441508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Lower_SetTrap_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 128
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5556af593d30d310800000000000000
+      internalID: 1427708398503613787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Lower_SetTrap_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 431ce15afcc2ba5e0800000000000000
+      internalID: -1897373547666423500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Lower_SetTrap_2
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2198079fcc10a1c80800000000000000
+      internalID: -8351360579135305454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Lower_SetTrap_3
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5c38838a9fa0a3c0800000000000000
+      internalID: -4350284161873331106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Lower_SetTrap_4
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bf39636f47404110800000000000000
+      internalID: 1243071903450087351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Lower_SetTrap_5
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 051205a8d80f6b7b0800000000000000
+      internalID: -5208711428305837744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Lower_SetTrap_6
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d62bd63cc86dc400800000000000000
+      internalID: 346047972680345304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Lower_SetTrap_7
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24195293a4e8ffa40800000000000000
+      internalID: 5404194527305371970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Lower_SetTrap_8
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 481b7e4e08a3727a0800000000000000
+      internalID: -6402084020013256316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Lower_SetTrap_9
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a954183a332cd54e0800000000000000
+      internalID: -1991221933185612390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Lower_SetTrap_10
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2bd4c3b3a64dc5c0800000000000000
+      internalID: -4193618009102427349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Lower_SetTrap_11
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09d89e8fa9bf12a80800000000000000
+      internalID: -8493230779224453744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Lower_SetTrap_12
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e8a71720d2402840800000000000000
+      internalID: 5197227431762045152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Lower_SetTrap_13
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab64c5b46f9268ec0800000000000000
+      internalID: -3565115917214136646
       vertices: []
       indices: 
       edges: []

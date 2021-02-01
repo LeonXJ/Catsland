@@ -1,5 +1,6 @@
 tree("Root")
   fallback
+    SetTrap()
     while 
       DetectPlayer()
       mute

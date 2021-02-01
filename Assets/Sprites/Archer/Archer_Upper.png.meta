@@ -86,6 +86,51 @@ TextureImporter:
   - first:
       213: 7024695208650342109
     second: Archer_Upper_Release_1
+  - first:
+      213: 1241575661206309097
+    second: Archer_Upper_Debrid_0
+  - first:
+      213: -6072782537767509931
+    second: Archer_Upper_SetTrap_0
+  - first:
+      213: 5293718158424475421
+    second: Archer_Upper_SetTrap_1
+  - first:
+      213: 3162448173943513397
+    second: Archer_Upper_SetTrap_2
+  - first:
+      213: -1922792905749061664
+    second: Archer_Upper_SetTrap_3
+  - first:
+      213: 478707629965677953
+    second: Archer_Upper_SetTrap_4
+  - first:
+      213: 2209182337890539784
+    second: Archer_Upper_SetTrap_5
+  - first:
+      213: 379631313435249984
+    second: Archer_Upper_SetTrap_6
+  - first:
+      213: -5101214806662976181
+    second: Archer_Upper_SetTrap_7
+  - first:
+      213: 750404366230929195
+    second: Archer_Upper_SetTrap_8
+  - first:
+      213: 7177673489096145964
+    second: Archer_Upper_SetTrap_9
+  - first:
+      213: 3645060525988621065
+    second: Archer_Upper_SetTrap_10
+  - first:
+      213: -1622918077757643750
+    second: Archer_Upper_SetTrap_11
+  - first:
+      213: -4115972933586614242
+    second: Archer_Upper_SetTrap_12
+  - first:
+      213: 293579733014294727
+    second: Archer_Upper_SetTrap_13
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -145,7 +190,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 256
+    maxTextureSize: 384
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -163,7 +208,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 192
+        y: 320
         width: 48
         height: 64
       alignment: 9
@@ -184,7 +229,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 48
-        y: 192
+        y: 320
         width: 48
         height: 64
       alignment: 9
@@ -205,7 +250,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 96
-        y: 192
+        y: 320
         width: 48
         height: 64
       alignment: 9
@@ -226,7 +271,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 144
-        y: 192
+        y: 320
         width: 48
         height: 64
       alignment: 9
@@ -247,7 +292,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 192
-        y: 192
+        y: 320
         width: 48
         height: 64
       alignment: 9
@@ -267,8 +312,8 @@ TextureImporter:
       name: Archer_Upper_Prepare_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 128
+        x: 240
+        y: 320
         width: 48
         height: 64
       alignment: 9
@@ -288,8 +333,8 @@ TextureImporter:
       name: Archer_Upper_Prepare_2
       rect:
         serializedVersion: 2
-        x: 48
-        y: 128
+        x: 0
+        y: 256
         width: 48
         height: 64
       alignment: 9
@@ -309,8 +354,8 @@ TextureImporter:
       name: Archer_Upper_Prepare_3
       rect:
         serializedVersion: 2
-        x: 96
-        y: 128
+        x: 48
+        y: 256
         width: 48
         height: 64
       alignment: 9
@@ -330,8 +375,8 @@ TextureImporter:
       name: Archer_Upper_Prepare_4
       rect:
         serializedVersion: 2
-        x: 144
-        y: 128
+        x: 96
+        y: 256
         width: 48
         height: 64
       alignment: 9
@@ -351,8 +396,8 @@ TextureImporter:
       name: Archer_Upper_Draw_0
       rect:
         serializedVersion: 2
-        x: 144
-        y: 128
+        x: 96
+        y: 256
         width: 48
         height: 64
       alignment: 9
@@ -372,8 +417,8 @@ TextureImporter:
       name: Archer_Upper_Draw_1
       rect:
         serializedVersion: 2
-        x: 192
-        y: 128
+        x: 144
+        y: 256
         width: 48
         height: 64
       alignment: 9
@@ -393,8 +438,8 @@ TextureImporter:
       name: Archer_Upper_Draw_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 64
+        x: 192
+        y: 256
         width: 48
         height: 64
       alignment: 9
@@ -414,8 +459,8 @@ TextureImporter:
       name: Archer_Upper_Draw_3
       rect:
         serializedVersion: 2
-        x: 48
-        y: 64
+        x: 240
+        y: 256
         width: 48
         height: 64
       alignment: 9
@@ -435,8 +480,8 @@ TextureImporter:
       name: Archer_Upper_Draw_4
       rect:
         serializedVersion: 2
-        x: 96
-        y: 64
+        x: 0
+        y: 192
         width: 48
         height: 64
       alignment: 9
@@ -456,8 +501,8 @@ TextureImporter:
       name: Archer_Upper_SpecialDraw_0
       rect:
         serializedVersion: 2
-        x: 144
-        y: 128
+        x: 96
+        y: 256
         width: 48
         height: 64
       alignment: 9
@@ -477,8 +522,8 @@ TextureImporter:
       name: Archer_Upper_SpecialDraw_1
       rect:
         serializedVersion: 2
-        x: 144
-        y: 128
+        x: 96
+        y: 256
         width: 48
         height: 64
       alignment: 9
@@ -498,8 +543,8 @@ TextureImporter:
       name: Archer_Upper_SpecialDraw_2
       rect:
         serializedVersion: 2
-        x: 144
-        y: 64
+        x: 48
+        y: 192
         width: 48
         height: 64
       alignment: 9
@@ -519,8 +564,8 @@ TextureImporter:
       name: Archer_Upper_SpecialDraw_3
       rect:
         serializedVersion: 2
-        x: 144
-        y: 64
+        x: 48
+        y: 192
         width: 48
         height: 64
       alignment: 9
@@ -540,8 +585,8 @@ TextureImporter:
       name: Archer_Upper_SpecialDraw_4
       rect:
         serializedVersion: 2
-        x: 192
-        y: 64
+        x: 96
+        y: 192
         width: 48
         height: 64
       alignment: 9
@@ -561,8 +606,8 @@ TextureImporter:
       name: Archer_Upper_SpecialDraw_5
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 144
+        y: 192
         width: 48
         height: 64
       alignment: 9
@@ -582,8 +627,8 @@ TextureImporter:
       name: Archer_Upper_SpecialDraw_6
       rect:
         serializedVersion: 2
-        x: 48
-        y: 0
+        x: 192
+        y: 192
         width: 48
         height: 64
       alignment: 9
@@ -603,8 +648,8 @@ TextureImporter:
       name: Archer_Upper_SpecialDraw_7
       rect:
         serializedVersion: 2
-        x: 48
-        y: 0
+        x: 192
+        y: 192
         width: 48
         height: 64
       alignment: 9
@@ -624,8 +669,8 @@ TextureImporter:
       name: Archer_Upper_SpecialDraw_8
       rect:
         serializedVersion: 2
-        x: 96
-        y: 0
+        x: 240
+        y: 192
         width: 48
         height: 64
       alignment: 9
@@ -645,8 +690,8 @@ TextureImporter:
       name: Archer_Upper_SpecialDraw_9
       rect:
         serializedVersion: 2
-        x: 96
-        y: 0
+        x: 240
+        y: 192
         width: 48
         height: 64
       alignment: 9
@@ -666,8 +711,8 @@ TextureImporter:
       name: Archer_Upper_SpecialRelease_0
       rect:
         serializedVersion: 2
-        x: 144
-        y: 0
+        x: 0
+        y: 128
         width: 48
         height: 64
       alignment: 9
@@ -687,8 +732,8 @@ TextureImporter:
       name: Archer_Upper_SpecialRelease_1
       rect:
         serializedVersion: 2
-        x: 144
-        y: 0
+        x: 0
+        y: 128
         width: 48
         height: 64
       alignment: 9
@@ -708,8 +753,8 @@ TextureImporter:
       name: Archer_Upper_Release_0
       rect:
         serializedVersion: 2
-        x: 192
-        y: 0
+        x: 48
+        y: 128
         width: 48
         height: 64
       alignment: 9
@@ -729,8 +774,8 @@ TextureImporter:
       name: Archer_Upper_Release_1
       rect:
         serializedVersion: 2
-        x: 192
-        y: 0
+        x: 48
+        y: 128
         width: 48
         height: 64
       alignment: 9
@@ -742,6 +787,321 @@ TextureImporter:
       bones: []
       spriteID: ddefdf6e21bbc7160800000000000000
       internalID: 7024695208650342109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Upper_Debrid_0
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 128
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e809f75c76fa3110800000000000000
+      internalID: 1241575661206309097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Upper_SetTrap_0
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 128
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5502c26f47429bba0800000000000000
+      internalID: -6072782537767509931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Upper_SetTrap_1
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 128
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d170de52e90177940800000000000000
+      internalID: 5293718158424475421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Upper_SetTrap_2
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 128
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5316c7cdbd543eb20800000000000000
+      internalID: 3162448173943513397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Upper_SetTrap_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ef9f242a0ed055e0800000000000000
+      internalID: -1922792905749061664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Upper_SetTrap_4
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 64
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1859f5b9d06b4a600800000000000000
+      internalID: 478707629965677953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Upper_SetTrap_5
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 64
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 809580ea1a798ae10800000000000000
+      internalID: 2209182337890539784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Upper_SetTrap_6
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 64
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04d4cee0ba8b44500800000000000000
+      internalID: 379631313435249984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Upper_SetTrap_7
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 64
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4de3e52928d439b0800000000000000
+      internalID: -5101214806662976181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Upper_SetTrap_8
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 64
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2fb8179bc8f96a00800000000000000
+      internalID: 750404366230929195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Upper_SetTrap_9
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 64
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2c705762083c9360800000000000000
+      internalID: 7177673489096145964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Upper_SetTrap_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90ba95c6c3bd59230800000000000000
+      internalID: 3645060525988621065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Upper_SetTrap_11
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1422bb5b9c3a79e0800000000000000
+      internalID: -1622918077757643750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Upper_SetTrap_12
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e18827c9c6021e6c0800000000000000
+      internalID: -4115972933586614242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Archer_Upper_SetTrap_13
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c032933631031400800000000000000
+      internalID: 293579733014294727
       vertices: []
       indices: 
       edges: []

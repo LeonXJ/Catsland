@@ -22,6 +22,7 @@ namespace Catsland.Scripts.Ai.Archer {
 
     // Reference
     private ArcherController controller;
+    private GameObject trap;
 
     [Task]
     public void Idle() {
@@ -71,6 +72,16 @@ namespace Catsland.Scripts.Ai.Archer {
       horizon = Mathf.Sign(deltaX);
       Task.current.Succeed();
     }
+
+    [Task]
+    public void AlreadyHasTrap() {
+      if (controller.GetLastTrap() != null) {
+        Task.current.Succeed();
+        return;
+      }
+      Task.current.Fail();
+    }
+
 
     [Task]
     public void SetTrap() {

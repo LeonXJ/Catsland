@@ -26,6 +26,7 @@ namespace Catsland.Scripts.Controller.Mine {
 
     [Header("Explode")]
     public GameObject explosionPrefab;
+    public float delayExplodeWhenAttack = .1f;
 
     private const string PAR_ACTIVE = "Active";
     private const string PAR_DETECT = "Detect";
@@ -73,6 +74,18 @@ namespace Catsland.Scripts.Controller.Mine {
       animator.SetBool(PAR_DETECT, isDetect);
       animator.speed = flashSpeed;
     }
+
+    public void damage(DamageInfo damageInfo) {
+      // Add delay to simulate more dramatic chain explode.
+      StartCoroutine(delayExplode());
+    }
+
+    private IEnumerator delayExplode() {
+      yield return new WaitForSeconds(delayExplodeWhenAttack);
+      Explode();
+
+    }
+
 
     private void Explode() {
       GameObject explosionGo = Instantiate(explosionPrefab);

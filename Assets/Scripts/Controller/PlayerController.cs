@@ -1204,9 +1204,6 @@ namespace Catsland.Scripts.Controller {
           continue;
         }
 
-        if (collider2d.gameObject.layer != Layers.LayerCharacter) {
-          continue;
-        }
 
         // Ignore if no rigidbody2d, to skip trigger
         Rigidbody2D colliderRb2d = collider2d.gameObject.GetComponent<Rigidbody2D>();
@@ -1222,6 +1219,9 @@ namespace Catsland.Scripts.Controller {
             targetGos.Add(aimTarget.gameObject);
           }
         } else {
+          if (collider2d.gameObject.layer != Layers.LayerCharacter) {
+            continue;
+          }
           targetGos.Add(collider2d.gameObject);
         }
 

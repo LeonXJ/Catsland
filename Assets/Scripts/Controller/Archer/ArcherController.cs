@@ -34,6 +34,8 @@ namespace Catsland.Scripts.Controller.Archer {
     public Transform trapGeneratePosition;
     public float trapThrowSpeed = 1f;
     public float trapThrowAngle = 0f;
+    // Keep reference of the last trap, for AI use.
+    private GameObject lastTrapInstance;
 
     [Header("Health")]
     public VulnerableAttribute vulnerableAttribute;
@@ -182,6 +184,12 @@ namespace Catsland.Scripts.Controller.Archer {
       Vector2 velocity = direction * trapThrowSpeed;
       trap.GetComponent<Rigidbody2D>().velocity = velocity;
       trap.GetComponent<PromixityMine>().isActive = true;
+
+      lastTrapInstance = trap;
+    }
+
+    public GameObject GetLastTrap() {
+      return lastTrapInstance;
     }
 
     // Arrow damage bypassed from sub-component
@@ -201,7 +209,6 @@ namespace Catsland.Scripts.Controller.Archer {
     public bool IsSettingTrap() {
       AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
       return baseState.IsName(ANI_SET_TRAP);
-    
     }
 
     private bool canCanOrientation() {

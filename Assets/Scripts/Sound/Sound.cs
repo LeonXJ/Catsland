@@ -52,7 +52,8 @@ namespace Catsland.Scripts.Sound {
         setting = new SoundSetting(volume, randomVolume, pitch, randomPitch);
       }
 
-      audioSource.volume = setting.volume * (1 + Random.Range(-setting.randomVolume * .5f, setting.randomVolume* .5f));
+      audioSource.volume = setting.volume * (1 + Random.Range(-setting.randomVolume * .5f, setting.randomVolume * .5f));
+
       audioSource.pitch = setting.pitch * (1 + Random.Range(-setting.randomPitch * .5f, setting.randomPitch * .5f));
       audioSource.Play();
       return audioClip.length;
@@ -73,7 +74,7 @@ namespace Catsland.Scripts.Sound {
     public void PlayIfNotPlaying(AudioSource audioSource) {
       // TODO: check whether the clip is within the clip list.
       bool isCurrentClipDesired = false;
-      foreach(AudioClip clip in audioClips) {
+      foreach (AudioClip clip in audioClips) {
         if (clip == audioSource.clip) {
           isCurrentClipDesired = true;
           break;

@@ -31,12 +31,20 @@ namespace Catsland.Scripts.Controller.Mine {
     private const string PAR_ACTIVE = "Active";
     private const string PAR_DETECT = "Detect";
 
+    [Header("Sound")]
+    public Sound.Sound beep;
+    public float minBeepPitch = 1f;
+    public float maxBeepPitch = 1.8f;
+    private float beepPitch = 1f;
+
     // References
     private Animator animator;
+    private AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start() {
       animator = GetComponent<Animator>();
+      audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -44,9 +52,11 @@ namespace Catsland.Scripts.Controller.Mine {
 
       // If active and triggered. Do not care detect.
       flashSpeed = 1f;
+      beepPitch = 1f;
       if (shouldContinueTriggerProcess()) {
         float triggerProgress = Mathf.Clamp01((Time.time - triggerTime) / triggerDelay);
         flashSpeed = Mathf.Lerp(triggerMinFlashSpeed, triggerMaxFlashSpeed, triggerProgress);
+        beepPitch = Mathf.Lerp(minBeepPitch, maxBeepPitch, triggerProgress);
 
         if (Time.time - triggerTime > triggerDelay) {
           Explode();
@@ -80,10 +90,15 @@ namespace Catsland.Scripts.Controller.Mine {
       StartCoroutine(delayExplode());
     }
 
+    // Called by animation.
+    public void PlayBeepSound() {
+      beep.Play(audioSource, new Sound.Sound.SoundSetting(
+        beep.volume, beep.randomVolume, beepPitch, 0f));
+    }
+
     private IEnumerator delayExplode() {
       yield return new WaitForSeconds(delayExplodeWhenAttack);
       Explode();
-
     }
 
 
@@ -92,7 +107,7 @@ namespace Catsland.Scripts.Controller.Mine {
       explosionGo.transform.position = new Vector3(transform.position.x, transform.position.y, explosionGo.transform.position.z);
       Explosion explosion = explosionGo.GetComponent<Explosion>();
       explosion.StartTimer();
-
+      
       Destroy(gameObject);
     }
 

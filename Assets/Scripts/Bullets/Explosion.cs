@@ -16,12 +16,15 @@ namespace Catsland.Scripts.Bullets {
     public int damage = 1;
     public float repel = 100.0f;
 
+    // References
     private ParticleSystem particle;
     private CinemachineImpulseSource cinemachineImpulseSource;
+    private CharacterEventSounds sounds;
 
     void Awake() {
       particle = GetComponent<ParticleSystem>();
       cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
+      sounds = GetComponent<CharacterEventSounds>();
     }
 
     public void StartTimer() {
@@ -43,6 +46,8 @@ namespace Catsland.Scripts.Bullets {
       }
 
       cinemachineImpulseSource.GenerateImpulse();
+
+      sounds?.PlayOnDamageSound();
 
       // Remove relay
       RelayPoint relay = GetComponentInChildren<RelayPoint>();

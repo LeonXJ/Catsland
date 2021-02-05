@@ -1,9 +1,10 @@
 tree("Root")
   fallback
-    not Idle()
     while
       not AlreadyHasTrap()
-      SetTrap()
+      sequence
+        Idle()
+        SetTrap()
     while 
       DetectPlayer()
       mute

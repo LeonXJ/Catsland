@@ -5,6 +5,21 @@ TextureImporter:
   - first:
       213: -1035018544309977424
     second: Shotgun_Debris_Shell
+  - first:
+      213: 5622504186073557410
+    second: Shotgun_Debris_1
+  - first:
+      213: 7242040180587724042
+    second: Shotgun_Debris_2
+  - first:
+      213: -2476063035293735381
+    second: Shotgun_Debris_3
+  - first:
+      213: -2516835766611266851
+    second: Shotgun_Debris_4
+  - first:
+      213: -9087616847292516066
+    second: Shotgun_Debris_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -110,7 +125,7 @@ TextureImporter:
         width: 6
         height: 3
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -118,6 +133,111 @@ TextureImporter:
       bones: []
       spriteID: 0be36722e10e2a1f0800000000000000
       internalID: -1035018544309977424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shotgun_Debris_1
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 51
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a9af0794c5270e40800000000000000
+      internalID: 5622504186073557410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shotgun_Debris_2
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 29
+        width: 27
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0d790d9c25e08460800000000000000
+      internalID: 7242040180587724042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shotgun_Debris_3
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 32
+        width: 17
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2667d3c9c143add0800000000000000
+      internalID: -2476063035293735381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shotgun_Debris_4
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 9
+        width: 13
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd2332d7437621dd0800000000000000
+      internalID: -2516835766611266851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shotgun_Debris_5
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 14
+        width: 33
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e19364a20ac42e180800000000000000
+      internalID: -9087616847292516066
       vertices: []
       indices: 
       edges: []

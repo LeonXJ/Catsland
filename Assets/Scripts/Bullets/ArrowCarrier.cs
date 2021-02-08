@@ -300,6 +300,15 @@ namespace Catsland.Scripts.Bullets {
 
       // show health bar
       IHealthBarQuery healthBarQuery = collider.gameObject.GetComponent<IHealthBarQuery>();
+
+      // Try to get from damage acceptor.
+      if (healthBarQuery == null) {
+        DamageBypass damageBypass = collider.gameObject.GetComponent<DamageBypass>();
+        if (damageBypass != null) {
+          healthBarQuery = damageBypass.damageAcceptor?.GetComponent<IHealthBarQuery>();
+        }
+      }
+
       if (healthBarQuery != null) {
         SceneConfig.getSceneConfig().GetOpponentHealthBar().ShowForQuery(healthBarQuery);
       } 

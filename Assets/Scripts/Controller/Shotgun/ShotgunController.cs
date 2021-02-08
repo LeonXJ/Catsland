@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Catsland.Scripts.Bullets;
+using Catsland.Scripts.Misc;
+using Catsland.Scripts.Ui;
 
 namespace Catsland.Scripts.Controller.Shotgun {
-  public class ShotgunController : MonoBehaviour {
+  public class ShotgunController : MonoBehaviour, IHealthBarQuery {
 
     // Animation state names.
     private const string ANI_IDLE = "Shotgun_Idle";
@@ -15,6 +18,10 @@ namespace Catsland.Scripts.Controller.Shotgun {
     private const string PAR_IS_WALKING = "IsWalking";
     private const string PAR_WANT_SHOOT = "WantShoot";
 
+    [Header("Basic")]
+    public Timing timing;
+    public string displayName = "Shotgun";
+
     [Header("Walk")]
     public float walkSpeed = 1f;
     private float walkSpeedScale = 1f;
@@ -22,6 +29,14 @@ namespace Catsland.Scripts.Controller.Shotgun {
     [Header("Shoot")]
     public ParticleSystem gunfireParticle;
     public ParticleSystem shellParticle;
+
+    [Header("Health")]
+    public VulnerableAttribute vulnerableAttribute;
+    private Bullets.Utils.DamageHelper damageHelper;
+
+    private DebrideGenerator debrideGenerator;
+
+    public DamageBypass weakPointDamagePart;
 
     // References
     private Rigidbody2D rb2d;
@@ -34,7 +49,12 @@ namespace Catsland.Scripts.Controller.Shotgun {
       rb2d = GetComponent<Rigidbody2D>();
       input = GetComponent<IInput>();
       animator = GetComponent<Animator>();
+      debrideGenerator = GetComponent<DebrideGenerator>();
 
+      damageHelper = Bullets.Utils.DamageHelper.DamageHelperBuilder.NewBuilder(
+        this, vulnerableAttribute, timing)
+        .SetOnDie(EnterDie)
+        .Build();
     }
 
     // Update is called once per frame
@@ -76,6 +96,20 @@ namespace Catsland.Scripts.Controller.Shotgun {
       walkSpeedScale = scale;
     }
 
+    public float GetOrientation() {
+      return transform.lossyScale.x > 0f ? 1f : -1f;
+    }
+
+    public void OnDamageByPass(DamageBypassInfo damageBypassInfo) {
+      if (damageBypassInfo.byPasser == weakPointDamagePart.name) {
+        damageHelper.OnDamaged(damageBypassInfo.damageInfo, 1);
+      }
+    }
+    private void EnterDie(DamageInfo damageInfo) {
+      debrideGenerator?.GenerateDebrides();
+      Destroy(gameObject);
+    }
+
     // Whether the the velocity is under control. Otherwise be subject to inertia.
     private bool CanDetermineVelocity() {
       AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
@@ -90,6 +124,10 @@ namespace Catsland.Scripts.Controller.Shotgun {
     private bool CanChangeOrientation() {
       AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
       return !baseState.IsName(ANI_SHOOT) && !baseState.IsName(ANI_RELOAD);
+    }
+
+    public HealthCondition GetHealthCondition() {
+      return HealthCondition.CreateHealthCondition(vulnerableAttribute, displayName);
     }
   }
 }

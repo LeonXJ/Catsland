@@ -36,6 +36,9 @@ namespace Catsland.Scripts.Bullets {
 
     public Party.WeaponPartyConfig weaponPartyConfig;
 
+    [Header("Counter")]
+    public GameObject counterDamageAccepter;
+
     void OnCollisionEnter2D(Collision2D collision) {
       onHit(collision, false);
     }
@@ -83,6 +86,27 @@ namespace Catsland.Scripts.Bullets {
               throwToCheckpoint),
             SendMessageOptions.DontRequireReceiver);
           onHitEvent?.Invoke();
+        }
+        if (interceptor != null && interceptor.getMeleeResult().status == MeleeResultStatus.COUNTER_REPEL) {
+          // Counter repel
+          counterDamageAccepter?.SendMessage(
+            MessageNames.DAMAGE_FUNCTION,
+            new DamageInfo(
+              damage,
+              collider.bounds.center,
+              - (presetRepelDirection
+                  ? (isPresetRepelDirectionLocalSpace ? Common.Utils.toVector2(transform.TransformDirection(repelDirection)) : repelDirection)
+                  : delta),
+              repelIntensity,
+              isSmashAttack && (canSmashAttakInStay || !isStay),
+              /* isDash= */isDash,
+              /* isKick= */false,
+              /* owner= */owner,
+              /* damageDashStatus= */damageDashStatus,
+              /* onDamageFeedback= */onDamageFeedback,
+              /* isShellBreaking= */false,
+              /*throwToCheckpoint= */false),
+            SendMessageOptions.DontRequireReceiver);
         }
       }
 

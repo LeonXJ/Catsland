@@ -1,15 +1,17 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Panda;
+using UnityEngine;
 using Catsland.Scripts.Common;
 using Catsland.Scripts.Controller;
-using Catsland.Scripts.Controller.Archer;
+using Catsland.Scripts.Controller.Shotgun;
 
-namespace Catsland.Scripts.Ai.Archer {
-  public class ArcherAi : MonoBehaviour, IInput {
+namespace Catsland.Scripts.Ai.Shotgun {
+
+  public class ShotgunAi : MonoBehaviour, IInput {
 
     private float horizon = 0f;
     private bool wantAttack = false;
-    private bool wantInteract = false;
 
     [Header("Detect")]
     public float visionDistance = 10f;
@@ -17,16 +19,22 @@ namespace Catsland.Scripts.Ai.Archer {
     public float senseDistance = 5f;
 
     [Header("Shoot")]
-    public float holdFullDrawTime = 1f;
-    private float fullDrawAccumulateTime = 0f;
+    public float openFireDistance = 5f;
 
     // Reference
-    private ArcherController controller;
+    private ShotgunController controller;
+
+    public bool attack() {
+      return wantAttack;
+    }
+
+    public bool dash() {
+      throw new System.NotImplementedException();
+    }
 
     [Task]
     public void Idle() {
       wantAttack = false;
-      wantInteract = false;
       Task.current.Succeed();
     }
 
@@ -59,9 +67,10 @@ namespace Catsland.Scripts.Ai.Archer {
       }
       Task.current.Succeed();
     }
-
+    
     [Task]
-    public void FacePlayer() {
+    public void MoveTowardsPlayer() {
+      wantAttack = false;
       GameObject player = GameObject.FindGameObjectWithTag(Tags.PLAYER);
       if (player == null) {
         Task.current.Fail();
@@ -73,67 +82,27 @@ namespace Catsland.Scripts.Ai.Archer {
     }
 
     [Task]
-    public void AlreadyHasTrap() {
-      if (controller.GetLastTrap() != null) {
-        Task.current.Succeed();
-        return;
-      }
-      Task.current.Fail();
-    }
-
-
-    [Task]
-    public void SetTrap() {
-      wantInteract = true;
-      if (controller.IsSettingTrap()) {
-        wantInteract = false;
-        Task.current.Succeed();
-        return;
-      }
-    }
-
-    [Task]
-    public void Draw() {
-      if (controller.DrawIntense < 1f - Mathf.Epsilon) {
-        wantAttack = true;
-        fullDrawAccumulateTime = 0f;
-        return;
-      }
-      // Full draw
-      if (fullDrawAccumulateTime < holdFullDrawTime) {
-        fullDrawAccumulateTime += Time.deltaTime;
-        return;
-      }
-      // Full draw and hold enough time
-      //wantAttack = false;
-      // TODO: Figure out the NRE insdie of Task.current
-      // No exception if: wantAttack = true
-      //
-      // As a walkaround, we split the Shoot() into Draw() and Release()
+    public void Shoot() {
+      wantAttack = true;
       Task.current.Succeed();
     }
 
     [Task]
     public void CanHitPlayer() {
-      if (controller.IsShootBlock()) {
+      GameObject player = GameObject.FindGameObjectWithTag(Tags.PLAYER);
+      if (player == null) {
+        Task.current.Fail();
+        return;
+      }
+      float orientation = controller.GetOrientation();
+      Vector2 delta = player.transform.position - transform.position;
+
+      if (delta.sqrMagnitude > openFireDistance * openFireDistance
+        || orientation * delta.x < 0f) {
         Task.current.Fail();
         return;
       }
       Task.current.Succeed();
-    }
-
-    [Task]
-    public void Release() {
-      wantAttack = false;
-      Task.current.Succeed();
-    }
-
-    public bool attack() {
-      return wantAttack;
-    }
-
-    public bool dash() {
-      throw new System.NotImplementedException();
     }
 
     public float getHorizontal() {
@@ -141,32 +110,32 @@ namespace Catsland.Scripts.Ai.Archer {
     }
 
     public float getVertical() {
-      return 0f;
+      throw new System.NotImplementedException();
     }
 
     public bool interact() {
-      return wantInteract;
+      throw new System.NotImplementedException();
     }
 
     public bool jump() {
-      return false;
+      throw new System.NotImplementedException();
     }
 
     public bool jumpHigher() {
-      return false;
+      throw new System.NotImplementedException();
     }
 
     public bool meditation() {
-      return false;
+      throw new System.NotImplementedException();
     }
 
     public bool timeSlow() {
-      return false;
+      throw new System.NotImplementedException();
     }
 
     // Start is called before the first frame update
     void Start() {
-      controller = GetComponent<ArcherController>();
+      controller = GetComponent<ShotgunController>();
     }
 
     // Update is called once per frame

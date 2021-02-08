@@ -5,10 +5,15 @@ using UnityEngine;
 namespace Catsland.Scripts.Bullets {
   public class BasicCharacterArrowDammageInterceptor : MonoBehaviour, IDamageInterceptor {
 
+    public ArrowResult normalArrowResult = ArrowResult.HIT;
+    public ArrowResult strongArrowResult = ArrowResult.HIT;
+
     public bool canBeShoot = true;
 
     ArrowResult IDamageInterceptor.getArrowResult(ArrowCarrier arrowCarrier) {
-      return canBeShoot ? ArrowResult.HIT : ArrowResult.SKIP;
+      return canBeShoot 
+        ? (arrowCarrier.isShellBreaking ? strongArrowResult : normalArrowResult)
+        : ArrowResult.SKIP;
     }
   }
 }

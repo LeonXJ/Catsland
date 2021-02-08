@@ -1,0 +1,10 @@
+tree("Root")
+  fallback
+    while
+      DetectPlayer()
+      fallback 
+        while 
+          not CanHitPlayer()
+          MoveTowardsPlayer()
+        Shoot()
+    Idle()

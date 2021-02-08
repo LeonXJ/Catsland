@@ -1,0 +1,95 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Catsland.Scripts.Controller.Shotgun {
+  public class ShotgunController : MonoBehaviour {
+
+    // Animation state names.
+    private const string ANI_IDLE = "Shotgun_Idle";
+    private const string ANI_WALK = "Shotgun_Walk";
+    private const string ANI_SHOOT= "Shotgun_Shoot";
+    private const string ANI_RELOAD = "Shotgun_Reload";
+
+    // Animation parameters.
+    private const string PAR_IS_WALKING = "IsWalking";
+    private const string PAR_WANT_SHOOT = "WantShoot";
+
+    [Header("Walk")]
+    public float walkSpeed = 1f;
+    private float walkSpeedScale = 1f;
+
+    [Header("Shoot")]
+    public ParticleSystem gunfireParticle;
+    public ParticleSystem shellParticle;
+
+    // References
+    private Rigidbody2D rb2d;
+    private IInput input;
+    private Animator animator;
+
+
+    // Start is called before the first frame update
+    void Start() {
+      rb2d = GetComponent<Rigidbody2D>();
+      input = GetComponent<IInput>();
+      animator = GetComponent<Animator>();
+
+    }
+
+    // Update is called once per frame
+    void Update() {
+
+      int wantOrientation = Common.Utils.IntSignWithZero(input.getHorizontal());
+
+      // Shot override walk
+      bool wantShoot = input.attack();
+
+      if (CanChangeOrientation() && wantOrientation != 0) {
+        ControllerUtils.AdjustOrientation(wantOrientation, gameObject);
+      }
+
+      bool isWalking = false;
+      if (CanDetermineVelocity()) {
+        if (CanWalk(wantShoot)) {
+          rb2d.velocity = new Vector2(wantOrientation * walkSpeed * walkSpeedScale, rb2d.velocity.y);
+          isWalking = wantOrientation != 0;
+        } else {
+          rb2d.velocity = new Vector2(0f, rb2d.velocity.y);
+        }
+      }
+
+      // Update animiation parameters.
+      animator.SetBool(PAR_IS_WALKING, isWalking);
+      animator.SetBool(PAR_WANT_SHOOT, wantShoot);
+    }
+
+    public void GenerateGunfileParticle() {
+      gunfireParticle?.Play(true);
+    }
+
+    public void GenerateShell() {
+      shellParticle?.Play();
+    }
+
+    public void SetWalkSpeedScale(float scale) {
+      walkSpeedScale = scale;
+    }
+
+    // Whether the the velocity is under control. Otherwise be subject to inertia.
+    private bool CanDetermineVelocity() {
+      AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
+      return !baseState.IsName(ANI_SHOOT) && !baseState.IsName(ANI_RELOAD);
+    }
+
+    private bool CanWalk(bool wantShoot) {
+      AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
+      return !wantShoot && (baseState.IsName(ANI_IDLE) || baseState.IsName(ANI_WALK));
+    }
+
+    private bool CanChangeOrientation() {
+      AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
+      return !baseState.IsName(ANI_SHOOT) && !baseState.IsName(ANI_RELOAD);
+    }
+  }
+}

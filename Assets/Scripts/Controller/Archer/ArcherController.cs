@@ -132,7 +132,7 @@ namespace Catsland.Scripts.Controller.Archer {
       }
 
       Vector2 ray = player.transform.position - arrowShootPoint.position;
-      var hit =Physics2D.Raycast(arrowShootPoint.position, ray, ray.magnitude, LayerMask.GetMask(Layers.LAYER_GROUND_NAME));
+      var hit = Physics2D.Raycast(arrowShootPoint.position, ray, ray.magnitude, LayerMask.GetMask(Layers.LAYER_GROUND_NAME));
       return hit.collider != null;
     }
 

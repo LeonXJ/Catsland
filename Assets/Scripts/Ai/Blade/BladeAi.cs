@@ -1,41 +1,40 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Panda;
 using Catsland.Scripts.Common;
 using Catsland.Scripts.Controller;
-using Catsland.Scripts.Controller.Shotgun;
+using Catsland.Scripts.Controller.Blade;
 
-namespace Catsland.Scripts.Ai.Shotgun {
-
-  public class ShotgunAi : MonoBehaviour, IInput {
+namespace Catsland.Scripts.Ai.Blade {
+  public class BladeAi : MonoBehaviour, IInput {
 
     private float horizon = 0f;
     private bool wantAttack = false;
+    private bool wantJump = false;
 
     [Header("Detect")]
     public float visionDistance = 10f;
     public float visionAngle = 75f;
     public float senseDistance = 5f;
 
-    [Header("Shoot")]
-    public float openFireDistance = 5f;
+    // Once detect player, Whether to keep in detected status.
+    public bool lockPlayer = true;
+    private bool playerDetected = false;
 
-    // Reference
-    private ShotgunController controller;
+    [Header("Attack")]
+    public float attackDistance = 1f;
 
-    public bool attack() {
-      return wantAttack;
-    }
+    [Header("Spin")]
+    public float spinDistance = 5f;
 
-    public bool dash() {
-      throw new System.NotImplementedException();
-    }
+
+    // References
+    private BladeController controller;
 
     [Task]
     public void Idle() {
       horizon = 0f;
       wantAttack = false;
+      wantJump = false;
       Task.current.Succeed();
     }
 
@@ -46,6 +45,10 @@ namespace Catsland.Scripts.Ai.Shotgun {
         Task.current.Fail();
         return;
       }
+      if (playerDetected) {
+        Task.current.Succeed();
+      }
+
       Vector2 delta = player.transform.position - transform.position;
 
       // Out of range
@@ -57,6 +60,7 @@ namespace Catsland.Scripts.Ai.Shotgun {
       // Inside sense range
       if (delta.sqrMagnitude < senseDistance * senseDistance) {
         Task.current.Succeed();
+        playerDetected = true;
         return;
       }
 
@@ -66,12 +70,14 @@ namespace Catsland.Scripts.Ai.Shotgun {
         Task.current.Fail();
         return;
       }
+      playerDetected = true;
       Task.current.Succeed();
     }
 
     [Task]
     public void MoveTowardsPlayer() {
       wantAttack = false;
+      wantJump = false;
       GameObject player = GameObject.FindGameObjectWithTag(Tags.PLAYER);
       if (player == null) {
         Task.current.Fail();
@@ -83,27 +89,70 @@ namespace Catsland.Scripts.Ai.Shotgun {
     }
 
     [Task]
-    public void Shoot() {
-      wantAttack = true;
-      Task.current.Succeed();
+    public void CanHitPlayer() {
+      if (IsPlayerWithinDistance(attackDistance)) {
+        Task.current.Succeed();
+        return;
+      }
+      Task.current.Fail();
     }
 
     [Task]
-    public void CanHitPlayer() {
+    public void IsPlayerWithinSpinDistance() {
+      if (IsPlayerWithinDistance(spinDistance)) {
+        Task.current.Succeed();
+        return;
+      }
+      Task.current.Fail();
+    }
+
+    private bool IsPlayerWithinDistance(float distance) {
+      GameObject player = GameObject.FindGameObjectWithTag(Tags.PLAYER);
+      if (player == null) {
+        return false;
+      }
+      float orientation = controller.GetOrientation();
+      Vector2 delta = player.transform.position - transform.position;
+
+      return (delta.sqrMagnitude < distance *distance)
+        && (orientation * delta.x > 0f);
+    }
+
+    [Task]
+    public void Attack() {
+      wantJump = false;
+      wantAttack = true;
+
+      if (controller.IsAttacking()) {
+        Task.current.Succeed();
+      }
+    }
+
+    // Spin, if true, spin forward otherwise backward.
+    [Task]
+    public void Spin(bool forward) {
+      wantAttack = false;
+      wantJump = true;
+
       GameObject player = GameObject.FindGameObjectWithTag(Tags.PLAYER);
       if (player == null) {
         Task.current.Fail();
         return;
       }
-      float orientation = controller.GetOrientation();
-      Vector2 delta = player.transform.position - transform.position;
+      float deltaX = player.transform.position.x - transform.position.x;
+      horizon = (forward ? 1f : -1f) * Mathf.Sign(deltaX);
 
-      if (delta.sqrMagnitude > openFireDistance * openFireDistance
-        || orientation * delta.x < 0f) {
-        Task.current.Fail();
-        return;
+      if (controller.IsSpinning()) {
+        Task.current.Succeed();
       }
-      Task.current.Succeed();
+    }
+
+    public bool attack() {
+      return wantAttack;
+    }
+
+    public bool dash() {
+      throw new System.NotImplementedException();
     }
 
     public float getHorizontal() {
@@ -119,7 +168,7 @@ namespace Catsland.Scripts.Ai.Shotgun {
     }
 
     public bool jump() {
-      throw new System.NotImplementedException();
+      return wantJump;
     }
 
     public bool jumpHigher() {
@@ -136,14 +185,13 @@ namespace Catsland.Scripts.Ai.Shotgun {
 
     // Start is called before the first frame update
     void Start() {
-      controller = GetComponent<ShotgunController>();
+      controller = GetComponent<BladeController>();
     }
 
     // Update is called once per frame
     void Update() {
 
     }
-
     private void OnDrawGizmos() {
       // Vision
       Common.Utils.DrawPieAsGizmos(
@@ -159,5 +207,8 @@ namespace Catsland.Scripts.Ai.Shotgun {
         Color.red,
         transform.position);
     }
+
+
+
   }
 }

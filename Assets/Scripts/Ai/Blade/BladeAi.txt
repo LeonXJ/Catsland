@@ -1,0 +1,17 @@
+tree("Root")
+  fallback
+    while
+      DetectPlayer()
+      fallback 
+        while
+          not IsPlayerWithinSpinDistance()
+          MoveTowardsPlayer()
+        while 
+          not CanHitPlayer()
+          random(0.995, 0.005)
+            MoveTowardsPlayer()
+            Spin(true)
+        sequence
+          Attack()
+          Spin(false)
+    Idle()

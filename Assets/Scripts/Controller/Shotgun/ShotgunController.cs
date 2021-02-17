@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Catsland.Scripts.Bullets;
 using Catsland.Scripts.Misc;
 using Catsland.Scripts.Ui;

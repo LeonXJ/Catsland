@@ -25,17 +25,41 @@ namespace Catsland.Scripts.Controller.Blade {
     [Header("Run")]
     public float runSpeed = 6f;
 
+    [Header("Attack")]
+    public float attackSlideSpeed = 6f;
+    public float attackSlideDuration = 0.5f;
+    private float attackSlideRemain = -1f;
+
     [Header("Spin")]
     public float spinJumpSpeed = 8f;
     public float spinJumpDirection = 60f;
     public Rect groundSensor;
 
+    // The character cannot control the speed in spin. The spin happens in the following order:
+    // 1. want spin
+    // 2. start spin, animation status stays in NON-SPIN status
+    // 3. animation status changes to SPIN
+    // 4. animation status changes to NON-SPIN status.
+    //
+    // Ideally, the character cannot control speed in 2. & 3. However, because 3. can be skipped
+    // if the character is blocked, we cannot relay on animation status to cancel the speed control
+    // lock. 
+    // Current solution is to lock the speed control for a short duration since 2., and relay on
+    // animiation status to lock for 3. If 3. is skipped, the lock can still be cancelled.
+    public float startSpinLoseSpeedControlDuration = .5f;
+    private float startSpinLoseSpeedControlRemain = -1f;
+
     [Header("Health")]
     public VulnerableAttribute vulnerableAttribute;
     private Bullets.Utils.DamageHelper damageHelper;
+    public int headShotMultiple = 5;
 
     public DamageBypass bodyDamagePart;
     public DamageBypass headDamagePart;
+
+    [Header("Debris")]
+    public DebrideGenerator normalDebrideGenerator;
+    public DebrideGenerator headShotDebrideGenerator;
 
     // Whether the last damage is headshot. Used to determine what debris to generate.
     private bool wasHeadShot = false;
@@ -70,6 +94,7 @@ namespace Catsland.Scripts.Controller.Blade {
         rb2d.velocity =
           Quaternion.AngleAxis(GetOrientation() * spinJumpDirection, Vector3.forward) *
           new Vector3(GetOrientation() * spinJumpSpeed, 0f, 0f);
+        startSpinLoseSpeedControlRemain = startSpinLoseSpeedControlDuration;
       }
 
       // Attack override run
@@ -80,19 +105,46 @@ namespace Catsland.Scripts.Controller.Blade {
       }
 
       bool isRunning = false;
-      if (CanDetermineVelocity(wantSpin)) {
+      if (CanDetermineVelocity()) {
         if (CanRun(wantAttack, wantSpin)) {
           rb2d.velocity = new Vector2(wantOrientation * runSpeed, rb2d.velocity.y);
           isRunning = wantOrientation != 0;
+        } else if (IsAttackSliding()) {
+          rb2d.velocity = new Vector2(GetOrientation() * attackSlideSpeed, rb2d.velocity.y);
         } else {
           rb2d.velocity = new Vector2(0f, rb2d.velocity.y);
         }
       }
 
+      // Update spin remain.
+      if (startSpinLoseSpeedControlRemain > 0f) {
+        startSpinLoseSpeedControlRemain -= Time.deltaTime;
+      }
+
+      // Update attack sliding remain
+      if (attackSlideRemain > 0f){
+        AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
+        if (baseState.IsName(ANI_ATTACK1) || baseState.IsName(ANI_ATTACK2)) {
+          attackSlideRemain -= Time.deltaTime;
+        } else {
+          attackSlideRemain = -1f;
+        }
+      }
+
       // Update animiation parameters.
+      bool isGrounded = isGroundDetected();
       animator.SetBool(PAR_IS_RUNNING, isRunning);
       animator.SetBool(PAR_WANT_ATTACK, wantAttack);
-      animator.SetBool(PAR_IS_GROUNDED, isGroundDetected());
+      animator.SetBool(PAR_IS_GROUNDED, isGrounded);
+
+      // Update arrow interceptor
+      if (isGrounded) {
+        headDamagePart.gameObject.GetComponent<ArrowInterceptV2>().arrowResult = ArrowResult.HIT;
+        bodyDamagePart.gameObject.GetComponent<ArrowInterceptV2>().arrowResult = ArrowResult.HIT;
+      } else {
+        headDamagePart.gameObject.GetComponent<ArrowInterceptV2>().arrowResult = ArrowResult.BROKEN;
+        bodyDamagePart.gameObject.GetComponent<ArrowInterceptV2>().arrowResult = ArrowResult.BROKEN;
+      }
     }
     private bool CanChangeOrientation() {
       AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
@@ -100,17 +152,25 @@ namespace Catsland.Scripts.Controller.Blade {
     }
 
     // Whether the the velocity is under control. Otherwise be subject to inertia.
-    private bool CanDetermineVelocity(bool wantSpin) {
+    private bool CanDetermineVelocity() {
       AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
-      return !wantSpin && !baseState.IsName(ANI_SPIN);
+      return startSpinLoseSpeedControlRemain < Mathf.Epsilon && !baseState.IsName(ANI_SPIN);
+    }
+
+    private bool IsAttackSliding() {
+      AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
+      return attackSlideRemain > 0f && (baseState.IsName(ANI_ATTACK1) || baseState.IsName(ANI_ATTACK2));
+    }
+
+    public void StartAttackSliding() {
+      attackSlideRemain = attackSlideDuration;
     }
 
     // Arrow damage bypassed from sub-component
     public void OnDamageByPass(DamageBypassInfo damageBypassInfo) {
       int damageMultiplier = 1;
-      // Headshot: damage x 2
       if (damageBypassInfo.byPasser == headDamagePart.gameObject.name) {
-        damageMultiplier = 2;
+        damageMultiplier = headShotMultiple;
         wasHeadShot = true;
       } else {
         wasHeadShot = false;
@@ -119,7 +179,11 @@ namespace Catsland.Scripts.Controller.Blade {
     }
 
     private void EnterDie(DamageInfo damageInfo) {
-      //debrideGenerator?.GenerateDebrides();
+      if (wasHeadShot) {
+        headShotDebrideGenerator?.GenerateDebrides(damageInfo.repelDirection);
+      } else {
+        normalDebrideGenerator?.GenerateDebrides(damageInfo.repelDirection);
+      }
       Destroy(gameObject);
     }
 

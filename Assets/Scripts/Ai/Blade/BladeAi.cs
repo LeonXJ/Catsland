@@ -47,6 +47,7 @@ namespace Catsland.Scripts.Ai.Blade {
       }
       if (playerDetected) {
         Task.current.Succeed();
+        return;
       }
 
       Vector2 delta = player.transform.position - transform.position;

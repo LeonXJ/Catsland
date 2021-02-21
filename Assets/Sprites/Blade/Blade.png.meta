@@ -71,6 +71,12 @@ TextureImporter:
   - first:
       213: 5754930673706083233
     second: Blade_Spin-cw_0
+  - first:
+      213: 2271578897159076036
+    second: Blade_Attack1_4
+  - first:
+      213: 8406236553648447038
+    second: Blade_Attack2_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -396,10 +402,31 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Blade_Attack2_0
+      name: Blade_Attack1_4
       rect:
         serializedVersion: 2
         x: 144
+        y: 128
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c8b07cb8f4468f10800000000000000
+      internalID: 2271578897159076036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Blade_Attack2_0
+      rect:
+        serializedVersion: 2
+        x: 192
         y: 128
         width: 48
         height: 64
@@ -420,8 +447,8 @@ TextureImporter:
       name: Blade_Attack2_1
       rect:
         serializedVersion: 2
-        x: 192
-        y: 128
+        x: 0
+        y: 64
         width: 48
         height: 64
       alignment: 9
@@ -441,7 +468,7 @@ TextureImporter:
       name: Blade_Attack2_2
       rect:
         serializedVersion: 2
-        x: 0
+        x: 48
         y: 64
         width: 48
         height: 64
@@ -459,10 +486,31 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
+      name: Blade_Attack2_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 64
+        width: 48
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3e9e1e7b93f8a470800000000000000
+      internalID: 8406236553648447038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
       name: Blade_Idle_0
       rect:
         serializedVersion: 2
-        x: 48
+        x: 144
         y: 64
         width: 48
         height: 64
@@ -483,7 +531,7 @@ TextureImporter:
       name: Blade_Idle_1
       rect:
         serializedVersion: 2
-        x: 48
+        x: 144
         y: 64
         width: 48
         height: 64
@@ -504,7 +552,7 @@ TextureImporter:
       name: Blade_Idle_2
       rect:
         serializedVersion: 2
-        x: 96
+        x: 192
         y: 64
         width: 48
         height: 64
@@ -525,8 +573,8 @@ TextureImporter:
       name: Blade_Idle_3
       rect:
         serializedVersion: 2
-        x: 144
-        y: 64
+        x: 0
+        y: 0
         width: 48
         height: 64
       alignment: 9
@@ -546,8 +594,8 @@ TextureImporter:
       name: Blade_Idle_4
       rect:
         serializedVersion: 2
-        x: 144
-        y: 64
+        x: 0
+        y: 0
         width: 48
         height: 64
       alignment: 9
@@ -567,8 +615,8 @@ TextureImporter:
       name: Blade_Idle_5
       rect:
         serializedVersion: 2
-        x: 192
-        y: 64
+        x: 48
+        y: 0
         width: 48
         height: 64
       alignment: 9
@@ -588,7 +636,7 @@ TextureImporter:
       name: Blade_Spin-ccw_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 96
         y: 0
         width: 48
         height: 64
@@ -609,7 +657,7 @@ TextureImporter:
       name: Blade_Spin-cw_0
       rect:
         serializedVersion: 2
-        x: 48
+        x: 144
         y: 0
         width: 48
         height: 64

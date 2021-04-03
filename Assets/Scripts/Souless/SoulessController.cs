@@ -11,11 +11,14 @@ namespace Catsland.Scripts.Controller.Souless {
     // Animation state names.
     private const string ANI_STAND = "Souless_Stand";
     private const string ANI_WALK = "Souless_Walk";
+    private const string ANI_LAYDOWN = "Laydown";
+    private const string ANI_RISE = "Rise";
 
     // Animation parameters.
     private const string PAR_IS_WALKING = "IsWalking";
     private const string PAR_WANT_CAST = "WantCast";
     private const string PAR_IS_GROUNDED = "IsGrounded";
+    private const string PAR_IS_LAYING = "IsLaying";
 
     [Header("Basic")]
     public Timing timing;
@@ -28,6 +31,9 @@ namespace Catsland.Scripts.Controller.Souless {
 
     [Header("Cast")]
     public GameObject castGameObject;
+
+    [Header("Laydown")]
+    public bool isLaydown = true;
 
     // Right as the direction
     public Transform castPoint;
@@ -94,7 +100,8 @@ namespace Catsland.Scripts.Controller.Souless {
       // Update animiation parameters.
       bool isGrounded = isGroundDetected();
       animator.SetBool(PAR_IS_WALKING, isWalking);
-      animator.SetBool(PAR_WANT_CAST, wantAttack);
+      animator.SetBool(PAR_WANT_CAST, wantAttack && CanAttack());
+      animator.SetBool(PAR_IS_LAYING, isLaydown);
     }
 
     // Arrow damage bypassed from sub-component
@@ -130,7 +137,8 @@ namespace Catsland.Scripts.Controller.Souless {
 
     // Whether the the velocity is under control. Otherwise be subject to inertia.
     private bool CanDetermineVelocity() {
-      return isGroundDetected();
+      AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
+      return isGroundDetected() && !baseState.IsName(ANI_LAYDOWN);
     }
 
     private bool CanWalk(bool wantAttack) {
@@ -139,6 +147,11 @@ namespace Catsland.Scripts.Controller.Souless {
     }
     private bool isGroundDetected() {
       return Common.Utils.isRectOverlap(groundSensor, transform, LayerMask.GetMask(Common.Layers.LAYER_GROUND_NAME));
+    }
+
+    private bool CanAttack() {
+      AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
+      return isGroundDetected() && !baseState.IsName(ANI_LAYDOWN);
     }
 
     private void EnterDie(DamageInfo damageInfo) {

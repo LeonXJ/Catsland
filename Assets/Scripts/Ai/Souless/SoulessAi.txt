@@ -1,0 +1,10 @@
+tree("Root")
+  fallback
+    while
+      DetectPlayer()
+      sequence
+        RiseIfLying()
+        random(0.995, 0.005)
+          MoveTowardsPlayer()
+          Cast()
+    Idle()

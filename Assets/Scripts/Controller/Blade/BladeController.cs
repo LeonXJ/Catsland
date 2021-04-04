@@ -33,6 +33,7 @@ namespace Catsland.Scripts.Controller.Blade {
     [Header("Spin")]
     public float spinJumpSpeed = 8f;
     public float spinJumpDirection = 60f;
+
     public Rect groundSensor;
 
     // The character cannot control the speed in spin. The spin happens in the following order:

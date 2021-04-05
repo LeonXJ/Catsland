@@ -1,0 +1,13 @@
+tree("Root")
+  fallback
+    while
+      DetectPlayer()
+      fallback
+        not GetAlarmIfNot()
+        while
+          CanJumpHitPlayer()
+          random(0.995, 0.005)
+            MoveTowardsPlayer()
+            Jump()
+        MoveTowardsPlayer()
+    Idle()

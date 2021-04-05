@@ -36,6 +36,9 @@ namespace Catsland.Scripts.Controller.Lunatics {
 
     [Header("Alarm")]
     public ParticleSystem demonAwakeParticle;
+    public bool isInAlarm = false;
+    public float cooldown = 3f;
+    private float lastInAlarmTime = 0f;
 
     [Header("Health")]
     public VulnerableAttribute vulnerableAttribute;
@@ -104,6 +107,13 @@ namespace Catsland.Scripts.Controller.Lunatics {
         }
       }
 
+      // Update alarm cooldown
+      if (IsAlarmState(willAlarm)) {
+        lastInAlarmTime = Time.time;
+      } else if (Time.time - lastInAlarmTime > cooldown) {
+        CancelAlarm();
+      }
+
       animator.SetBool(PAR_IS_RUNNING, isRunning);
       animator.SetBool(PAR_WANT_JUMP, willJump);
       if (willAlarm) {
@@ -123,6 +133,13 @@ namespace Catsland.Scripts.Controller.Lunatics {
     public void EyeFlash() {
       demonAwakeParticle?.Play(true);
     }
+    public void BeAlarm() {
+      isInAlarm = true;
+    }
+
+    public void CancelAlarm() {
+      isInAlarm = false;
+    }
 
     private bool CanChangeOrientation() {
       AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
@@ -137,6 +154,11 @@ namespace Catsland.Scripts.Controller.Lunatics {
     private bool IsJumpSliding() {
       AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
       return baseState.IsName(ANI_JUMP) ;
+    }
+
+    private bool IsAlarmState(bool willAlarm) {
+      AnimatorStateInfo baseState = animator.GetCurrentAnimatorStateInfo(0);
+      return willAlarm || baseState.IsName(ANI_RUN) || baseState.IsName(ANI_JUMP);
     }
 
     private bool CanJump(bool willAlarm) {
